@@ -1,12 +1,14 @@
-[{
+[
+  {
   "modid": "ibhstd",
   "name": "I'm Bored Here's Something To Do",
   "description": "Adds various complicated and tedius things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
-  "version": "1.0.0.0",
-  "mcversion": "1.10.2",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "logoFile": "assets/examplemod/textures/logo.png",
   "url": "cjm721.com/",
   "updateJSON": "minecraftforge.net/versions.json",
   "authorList": ["CJ Miller (cjm721)"],
-  "credits": "Sironin, Braingkk",
-}]
+  "credits": "Sironin, Braingkk"
+}
+]
