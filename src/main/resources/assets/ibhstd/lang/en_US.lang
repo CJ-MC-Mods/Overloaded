@@ -8,5 +8,24 @@ tile.6xCompressed:tile.stonebrick.name=6x Compressed Cobblestone
 tile.7xCompressed:tile.stonebrick.name=7x Compressed Cobblestone
 tile.8xCompressed:tile.stonebrick.name=8x Compressed Cobblestone
 
+tile.1xCompressed:tile.sand.name=1x Compressed Sand
+tile.2xCompressed:tile.sand.name=2x Compressed Sand
+tile.3xCompressed:tile.sand.name=3x Compressed Sand
+tile.4xCompressed:tile.sand.name=4x Compressed Sand
+tile.5xCompressed:tile.sand.name=5x Compressed Sand
+tile.6xCompressed:tile.sand.name=6x Compressed Sand
+tile.7xCompressed:tile.sand.name=7x Compressed Sand
+tile.8xCompressed:tile.sand.name=8x Compressed Sand
+
+tile.1xCompressed:tile.stone.name=1x Compressed Stone
+tile.2xCompressed:tile.stone.name=2x Compressed Stone
+tile.3xCompressed:tile.stone.name=3x Compressed Stone
+tile.4xCompressed:tile.stone.name=4x Compressed Stone
+tile.5xCompressed:tile.stone.name=5x Compressed Stone
+tile.6xCompressed:tile.stone.name=6x Compressed Stone
+tile.7xCompressed:tile.stone.name=7x Compressed Stone
+tile.8xCompressed:tile.stone.name=8x Compressed Stone
 
 
+# Creative Tab
+itemGroup.IBHSTD=IBHSTD

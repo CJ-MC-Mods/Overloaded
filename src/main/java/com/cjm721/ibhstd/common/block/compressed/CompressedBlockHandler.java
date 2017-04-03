@@ -19,21 +19,22 @@ public class CompressedBlockHandler {
         String registryName = toCompress.getRegistryName().getResourcePath();
         String unlocalizedName = toCompress.getUnlocalizedName();
 
-        float hardness = toCompress.getDefaultState().getBlockHardness(null,null);
+        float baseHardness = toCompress.getDefaultState().getBlockHardness(null,null);
         String harvestTool = toCompress.getHarvestTool(toCompress.getDefaultState());
         int harvestLevel = toCompress.getHarvestLevel(toCompress.getDefaultState());
 
 
         compressedBlocks.put(0, toCompress);
         Block previousLevel = toCompress;
+        float currentHardness = baseHardness;
         for(int i = 1; i <= depth; i++) {
             String compRegistryName = String.format("compressed%d%s", i, registryName);
             String compUnlocalizedName = String.format("%dxCompressed:%s", i, unlocalizedName);
-            hardness *= 9;
-            if(hardness < 0) {
-                hardness = Float.MAX_VALUE;
+            currentHardness += baseHardness;
+            if(currentHardness < 0) {
+                currentHardness = Float.MAX_VALUE;
             }
-            CompressedBlock block = new CompressedBlock(previousLevel, material,compRegistryName , compUnlocalizedName, hardness, harvestTool, harvestLevel);
+            CompressedBlock block = new CompressedBlock(toCompress, previousLevel, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
             previousLevel = block;
             compressedBlocks.put(i, block);
         }
