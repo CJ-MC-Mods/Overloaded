@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
-
+apply plugin: 'idea'
 version = "1.0"
 group= "com.cjm721.ibhstd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "ibhstd"

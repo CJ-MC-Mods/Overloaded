@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by CJ on 4/2/2017.
  */
 public final class ModBlocks {
-    public static Map<Integer,CompressedBlock> compressedCobbleStone;
+    public static Map<Integer,Block> compressedCobbleStone;
 
 
     public static void init() {
@@ -18,8 +18,10 @@ public final class ModBlocks {
     }
 
     public static void addRecipes() {
-        for(CompressedBlock b: compressedCobbleStone.values()){
-            b.registerRecipe();
+        for(Block b: compressedCobbleStone.values()){
+            if(b instanceof CompressedBlock) {
+                ((CompressedBlock)b).registerRecipe();
+            }
         }
     }
 }

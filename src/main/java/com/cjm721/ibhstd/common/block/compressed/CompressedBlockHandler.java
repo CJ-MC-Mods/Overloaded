@@ -11,12 +11,12 @@ import java.util.Map;
  */
 public class CompressedBlockHandler {
 
-    public static Map<Integer, CompressedBlock> CreateCompressedBlocks(Block toCompress, int depth) {
-        Map<Integer, CompressedBlock> compressedBlocks = new HashMap<Integer, CompressedBlock>();
+    public static Map<Integer, Block> CreateCompressedBlocks(Block toCompress, int depth) {
+        Map<Integer, Block> compressedBlocks = new HashMap<>();
 
 
         Material material = toCompress.getDefaultState().getMaterial();
-        String registryName = toCompress.getRegistryName().getResourceDomain();
+        String registryName = toCompress.getRegistryName().getResourcePath();
         String unlocalizedName = toCompress.getUnlocalizedName();
 
         float hardness = toCompress.getDefaultState().getBlockHardness(null,null);
@@ -24,11 +24,16 @@ public class CompressedBlockHandler {
         int harvestLevel = toCompress.getHarvestLevel(toCompress.getDefaultState());
 
 
+        compressedBlocks.put(0, toCompress);
         Block previousLevel = toCompress;
-        for(int i = 0; i < depth; i++) {
-            String compRegistryName = String.format("compressed%d%s", i+1, registryName);
-            String compUnlocalizedName = String.format("%dx Compressed %s", i+1, unlocalizedName);
-            CompressedBlock block = new CompressedBlock(previousLevel, material,compRegistryName , compUnlocalizedName, hardness, harvestTool, harvestLevel);
+        for(int i = 1; i <= depth; i++) {
+            String compRegistryName = String.format("compressed%d%s", i, registryName);
+            String compUnlocalizedName = String.format("%dxCompressed:%s", i, unlocalizedName);
+            hardness *= 9;
+            if(hardness < 0) {
+                hardness = Float.MAX_VALUE;
+            }
+            CompressedBlock block = new CompressedBlock(toCompress, previousLevel,i, material,compRegistryName , compUnlocalizedName, hardness, harvestTool, harvestLevel);
             previousLevel = block;
             compressedBlocks.put(i, block);
         }

@@ -3,7 +3,6 @@ package com.cjm721.ibhstd.common.block.compressed;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -12,11 +11,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  */
 public class CompressedBlock extends ModBlock {
     private final Block baseBlock;
+    private final Block previousBlock;
+    private final int compressAmount;
 
-    public CompressedBlock(Block baseBlock, Material materialIn, String registryName, String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
+    public CompressedBlock(Block baseBlock, Block previousBlock, int compressAmount, Material materialIn, String registryName, String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
         super(materialIn);
 
         this.baseBlock = baseBlock;
+        this.previousBlock = previousBlock;
+        this.compressAmount = compressAmount;
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
         setHardness(hardness);
@@ -25,8 +28,7 @@ public class CompressedBlock extends ModBlock {
     }
 
     public void registerRecipe() {
-        GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', baseBlock);
-
-        GameRegistry.addShapelessRecipe(new ItemStack(baseBlock, 9), this);
+        GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
+        GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
     }
 }
