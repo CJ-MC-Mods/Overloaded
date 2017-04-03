@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.common.block.compressed;
+package com.cjm721.ibhstd.client.block.compressed;
 
 
 import com.cjm721.ibhstd.ModStart;

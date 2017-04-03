@@ -1,14 +1,7 @@
 package com.cjm721.ibhstd;
 
 import com.cjm721.ibhstd.common.block.ModBlocks;
-import com.cjm721.ibhstd.common.block.compressed.BakedModelLoader;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraftforge.client.model.ModelLoader;
+import com.cjm721.ibhstd.client.block.compressed.BakedModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -29,9 +22,12 @@ public class ModStart {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Loader.isModLoaded("botania");
-
         ModBlocks.init();
 
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void clientPreInit() {
         ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         ModBlocks.registerModels();
     }

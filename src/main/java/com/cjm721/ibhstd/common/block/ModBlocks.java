@@ -27,8 +27,8 @@ public final class ModBlocks {
 
     public static void addRecipes() {
         for(Block b: compressedCobbleStone.values()){
-            if(b instanceof CompressedBlock) {
-                ((CompressedBlock)b).registerRecipe();
+            if(b instanceof ModBlock) {
+                ((ModBlock)b).registerRecipe();
             }
         }
     }

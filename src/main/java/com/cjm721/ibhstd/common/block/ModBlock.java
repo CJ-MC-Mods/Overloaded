@@ -23,4 +23,6 @@ public abstract class ModBlock extends Block {
     private void registerItemForm() {
         GameRegistry.register(new ItemBlock(this), getRegistryName());
     }
+
+    public abstract void registerRecipe();
 }

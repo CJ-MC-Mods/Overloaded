@@ -1,5 +1,6 @@
 package com.cjm721.ibhstd.common.block.compressed;
 
+import com.cjm721.ibhstd.client.block.compressed.CompressedBaskedModel;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -10,6 +11,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by CJ on 4/2/2017.
@@ -38,6 +41,7 @@ public class CompressedBlock extends ModBlock {
         GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
     }
 
+    @SideOnly(Side.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = getBaseModelLocation();
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
@@ -53,6 +57,7 @@ public class CompressedBlock extends ModBlock {
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
+    @SideOnly(Side.CLIENT)
     public ModelResourceLocation getBaseModelLocation() {
         return new ModelResourceLocation(this.baseBlock.getRegistryName(), null);
     }

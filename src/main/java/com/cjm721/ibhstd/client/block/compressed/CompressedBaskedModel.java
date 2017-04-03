@@ -1,6 +1,7 @@
-package com.cjm721.ibhstd.common.block.compressed;
+package com.cjm721.ibhstd.client.block.compressed;
 
 import com.cjm721.ibhstd.ModStart;
+import com.cjm721.ibhstd.common.block.compressed.CompressedBlock;
 import com.google.common.base.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
