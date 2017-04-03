@@ -34,7 +34,7 @@ public class CompressedBlockHandler {
             if(currentHardness < 0) {
                 currentHardness = Float.MAX_VALUE;
             }
-            CompressedBlock block = new CompressedBlock(toCompress, previousLevel, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
+            CompressedBlock block = new CompressedBlock(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
             previousLevel = block;
             compressedBlocks.put(i, block);
         }

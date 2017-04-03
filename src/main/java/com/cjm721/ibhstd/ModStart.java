@@ -1,6 +1,7 @@
 package com.cjm721.ibhstd;
 
 import com.cjm721.ibhstd.common.block.ModBlocks;
+import com.cjm721.ibhstd.common.block.compressed.BakedModelLoader;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -31,6 +32,7 @@ public class ModStart {
 
         ModBlocks.init();
 
+        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
         ModBlocks.registerModels();
     }
 
