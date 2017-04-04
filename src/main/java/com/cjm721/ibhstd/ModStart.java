@@ -24,6 +24,7 @@ public class ModStart {
         Loader.isModLoaded("botania");
         ModBlocks.init();
 
+        clientPreInit();
     }
 
     @SideOnly(Side.CLIENT)

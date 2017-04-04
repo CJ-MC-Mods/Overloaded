@@ -5,6 +5,7 @@ import com.cjm721.ibhstd.common.block.compressed.CompressedBlock;
 import com.google.common.base.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -93,8 +94,8 @@ public class CompressedBaskedModel implements IBakedModel {
 
         quads = new ArrayList<>();
         CompressedBlock compressedBlock = (CompressedBlock)block;
-        ModelResourceLocation location = compressedBlock.getBaseModelLocation();
-        TextureAtlasSprite sprite = bakedTextureGetter.apply(new ResourceLocation(location.getResourceDomain(), "blocks/" + location.getResourcePath()));
+        Block baseBlock = compressedBlock.getBaseBlock();
+        TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getParticleTexture();
 
         int tilesPerRow = 1;
         for(int i = 0; i < compressedBlock.getCompressionAmount(); i++) {
