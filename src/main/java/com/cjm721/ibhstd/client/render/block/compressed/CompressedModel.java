@@ -1,9 +1,7 @@
-package com.cjm721.ibhstd.client.block.compressed;
+package com.cjm721.ibhstd.client.render.block.compressed;
 
 
-import com.cjm721.ibhstd.ModStart;
 import com.google.common.base.Function;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -19,9 +17,10 @@ import java.util.Collections;
  * Created by CJ on 4/2/2017.
  */
 public class CompressedModel implements IModel {
+
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new CompressedBaskedModel(state, format, bakedTextureGetter);
+        return new CompressedBakedModel(state, format, bakedTextureGetter);
     }
 
     @Override
@@ -31,7 +30,7 @@ public class CompressedModel implements IModel {
 
     @Override
     public Collection<ResourceLocation> getTextures() {
-        return ImmutableSet.of(new ResourceLocation(ModStart.MODID, "blocks/isbmtexture"));
+        return Collections.emptySet();
     }
 
     @Override

@@ -28,4 +28,5 @@ tile.8xCompressed:tile.stone.name=8x Compressed Stone
 
 
 # Creative Tab
-itemGroup.IBHSTD=IBHSTD
+itemGroup.IBHSTD_Compressed=IBHSTD Compressed Blocks
+itemGroup.IBHSTD_Energy=IBHSTD Energy

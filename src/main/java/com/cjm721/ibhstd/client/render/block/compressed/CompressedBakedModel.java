@@ -1,43 +1,40 @@
-package com.cjm721.ibhstd.client.block.compressed;
+package com.cjm721.ibhstd.client.render.block.compressed;
 
-import com.cjm721.ibhstd.ModStart;
-import com.cjm721.ibhstd.common.block.compressed.CompressedBlock;
+import com.cjm721.ibhstd.common.ModStart;
+import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.google.common.base.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.property.IExtendedBlockState;
 
 import java.util.*;
 
 /**
  * Created by CJ on 4/2/2017.
  */
-public class CompressedBaskedModel implements IBakedModel {
+public class CompressedBakedModel implements IBakedModel {
     public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation(ModStart.MODID + ":bakedmodelblock");
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
 
     private VertexFormat format;
     private Map<Block,List<BakedQuad>> cache;
 
-    private TextureAtlasSprite defaultSprite;
+    private IBakedModel defaultModel;
 
-    public CompressedBaskedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public CompressedBakedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         this.format = format;
         this.bakedTextureGetter = bakedTextureGetter;
-        defaultSprite = bakedTextureGetter.apply(new ResourceLocation("minecraft", "blocks/cobblestone"));
+
+        defaultModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(Blocks.COBBLESTONE.getDefaultState());
         cache = new HashMap<>();
     }
 
@@ -93,8 +90,9 @@ public class CompressedBaskedModel implements IBakedModel {
         }
 
         quads = new ArrayList<>();
-        CompressedBlock compressedBlock = (CompressedBlock)block;
+        BlockCompressed compressedBlock = (BlockCompressed)block;
         Block baseBlock = compressedBlock.getBaseBlock();
+        //return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getQuads(baseBlock.getDefaultState(),side,rand);
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getParticleTexture();
 
         int tilesPerRow = 1;
@@ -102,7 +100,7 @@ public class CompressedBaskedModel implements IBakedModel {
             tilesPerRow *= 2;
         }
         float incAmo = 1F/((float)tilesPerRow);
-        //TextureAtlasSprite sprite = defaultSprite;
+
         // z = 0
         for(int x = 0; x < tilesPerRow; x++) {
             for(int y = 0; y < tilesPerRow; y++) {
@@ -157,31 +155,31 @@ public class CompressedBaskedModel implements IBakedModel {
 
     @Override
     public ItemOverrideList getOverrides() {
-        return null;
+        return defaultModel.getOverrides();
     }
 
     @Override
     public boolean isAmbientOcclusion() {
-        return false;
+        return defaultModel.isAmbientOcclusion();
     }
 
     @Override
     public boolean isGui3d() {
-        return false;
+        return defaultModel.isGui3d();
     }
 
     @Override
     public boolean isBuiltInRenderer() {
-        return false;
+        return defaultModel.isBuiltInRenderer();
     }
 
     @Override
     public TextureAtlasSprite getParticleTexture() {
-        return defaultSprite;
+        return defaultModel.getParticleTexture();
     }
 
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
-        return ItemCameraTransforms.DEFAULT;
+        return defaultModel.getItemCameraTransforms();
     }
 }

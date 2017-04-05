@@ -1,6 +1,6 @@
-package com.cjm721.ibhstd.client.block.compressed;
+package com.cjm721.ibhstd.client.render.block.compressed;
 
-import com.cjm721.ibhstd.ModStart;
+import com.cjm721.ibhstd.common.ModStart;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
@@ -11,7 +11,6 @@ import net.minecraftforge.client.model.IModel;
  */
 public class BakedModelLoader implements ICustomModelLoader {
     public static final CompressedModel EXAMPLE_MODEL = new CompressedModel();
-
 
     @Override
     public boolean accepts(ResourceLocation modelLocation) {

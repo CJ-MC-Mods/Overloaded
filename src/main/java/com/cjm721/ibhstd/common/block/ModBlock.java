@@ -1,6 +1,6 @@
 package com.cjm721.ibhstd.common.block;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTab;
+import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
@@ -17,7 +17,6 @@ public abstract class ModBlock extends Block {
     protected void register() {
         GameRegistry.register(this);
         registerItemForm();
-        setCreativeTab(IBHSTDCreativeTab.INSTANCE);
     }
 
     private void registerItemForm() {

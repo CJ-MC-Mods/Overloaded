@@ -31,6 +31,15 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../run/mods/CoFHCore-1.10.2-4.1.0.155-universal.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
           <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.10.2-12.18.3.2254/snapshot/20161111/forgeSrc-1.10.2-12.18.3.2254.jar!/" />
         </CLASSES>
         <JAVADOC />

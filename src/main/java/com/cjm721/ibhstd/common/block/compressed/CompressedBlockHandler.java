@@ -14,7 +14,6 @@ public class CompressedBlockHandler {
     public static Map<Integer, Block> CreateCompressedBlocks(Block toCompress, int depth) {
         Map<Integer, Block> compressedBlocks = new HashMap<>();
 
-
         Material material = toCompress.getDefaultState().getMaterial();
         String registryName = toCompress.getRegistryName().getResourcePath();
         String unlocalizedName = toCompress.getUnlocalizedName();
@@ -34,7 +33,7 @@ public class CompressedBlockHandler {
             if(currentHardness < 0) {
                 currentHardness = Float.MAX_VALUE;
             }
-            CompressedBlock block = new CompressedBlock(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
+            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
             previousLevel = block;
             compressedBlocks.put(i, block);
         }

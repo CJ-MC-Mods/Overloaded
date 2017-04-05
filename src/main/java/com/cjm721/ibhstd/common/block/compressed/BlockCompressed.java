@@ -1,6 +1,7 @@
 package com.cjm721.ibhstd.common.block.compressed;
 
-import com.cjm721.ibhstd.client.block.compressed.CompressedBaskedModel;
+import com.cjm721.ibhstd.client.render.block.compressed.CompressedBakedModel;
+import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -17,22 +18,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * Created by CJ on 4/2/2017.
  */
-public class CompressedBlock extends ModBlock {
+public class BlockCompressed extends ModBlock {
 
     private final Block baseBlock;
     private final Block previousBlock;
     private final int compressionAmount;
 
-    public CompressedBlock(Block baseBlock, Block previousBlock, int compressionAmount, Material materialIn, String registryName, String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
+    public BlockCompressed(Block baseBlock, Block previousBlock, int compressionAmount, Material materialIn, String registryName, String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
         super(materialIn);
-
         this.baseBlock = baseBlock;
         this.previousBlock = previousBlock;
         this.compressionAmount = compressionAmount;
+
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
         setHardness(hardness);
         setHarvestLevel(harvestTool, harvestLevel);
+        setCreativeTab(IBHSTDCreativeTabs.COMPRESSED_BLOCKS);
         register();
     }
 
@@ -51,7 +53,7 @@ public class CompressedBlock extends ModBlock {
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return CompressedBaskedModel.BAKED_MODEL;
+                return CompressedBakedModel.BAKED_MODEL;
             }
         };
         ModelLoader.setCustomStateMapper(this, ignoreState);
@@ -68,5 +70,10 @@ public class CompressedBlock extends ModBlock {
 
     public int getCompressionAmount() {
         return compressionAmount;
+    }
+
+    @Override
+    public String getLocalizedName() {
+        return baseBlock.getLocalizedName();
     }
 }
