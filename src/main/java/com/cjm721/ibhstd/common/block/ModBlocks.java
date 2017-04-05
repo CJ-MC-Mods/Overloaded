@@ -22,7 +22,6 @@ public final class ModBlocks {
 
     public static ModBlock basicGenerator;
 
-
     public static void init() {
         compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
         compressedSand = CompressedBlockHandler.CreateCompressedBlocks(Blocks.SAND, 8);
@@ -46,6 +45,8 @@ public final class ModBlocks {
         registerModels(compressedSand.values());
         registerModels(compressedStone.values());
         registerModels(compressedFurnace.values());
+
+        basicGenerator.registerModel();
     }
 
     @SideOnly(Side.CLIENT)

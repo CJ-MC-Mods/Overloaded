@@ -2,6 +2,7 @@ package com.cjm721.ibhstd.client.render.block.compressed;
 
 
 import com.google.common.base.Function;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -18,9 +19,15 @@ import java.util.Collections;
  */
 public class CompressedModel implements IModel {
 
+    private final IBlockState state;
+
+    public CompressedModel(IBlockState state) {
+        this.state = state;
+    }
+
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new CompressedBakedModel(state, format, bakedTextureGetter);
+        return new CompressedBakedModel(format, this.state);
     }
 
     @Override

@@ -22,19 +22,15 @@ import java.util.*;
  * Created by CJ on 4/2/2017.
  */
 public class CompressedBakedModel implements IBakedModel {
-    public static final ModelResourceLocation BAKED_MODEL = new ModelResourceLocation(ModStart.MODID + ":bakedmodelblock");
-    private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
-
     private VertexFormat format;
     private Map<Block,List<BakedQuad>> cache;
 
     private IBakedModel defaultModel;
 
-    public CompressedBakedModel(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+    public CompressedBakedModel(VertexFormat format, IBlockState state) {
         this.format = format;
-        this.bakedTextureGetter = bakedTextureGetter;
 
-        defaultModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(Blocks.COBBLESTONE.getDefaultState());
+        this.defaultModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
         cache = new HashMap<>();
     }
 
@@ -94,6 +90,7 @@ public class CompressedBakedModel implements IBakedModel {
         Block baseBlock = compressedBlock.getBaseBlock();
         //return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getQuads(baseBlock.getDefaultState(),side,rand);
         TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getParticleTexture();
+        //TextureAtlasSprite sprite = defaultModel.getParticleTexture();
 
         int tilesPerRow = 1;
         for(int i = 0; i < compressedBlock.getCompressionAmount(); i++) {
@@ -117,37 +114,34 @@ public class CompressedBakedModel implements IBakedModel {
             }
         }
 
-//        // y = 1
+        // y = 1
         for(int x = 0; x < tilesPerRow; x++) {
             for(int y = 0; y < tilesPerRow; y++) {
                 quads.add(createQuad(new Vec3d(0 + incAmo * y, 1,0 + incAmo * x), new Vec3d(0 + incAmo * y, 1, incAmo + incAmo * x),
                         new Vec3d(incAmo  + incAmo * y, 1, incAmo + incAmo * x), new Vec3d(incAmo  + incAmo * y, 1,0 + incAmo * x), sprite));
             }
         }
-//        // y = 0
+        // y = 0
         for(int x = 0; x < tilesPerRow; x++) {
             for(int y = 0; y < tilesPerRow; y++) {
                 quads.add(createQuad(new Vec3d(0 + incAmo * y, 0,0 + incAmo * x), new Vec3d(incAmo  + incAmo * y, 0,0 + incAmo * x),
                         new Vec3d(incAmo  + incAmo * y, 0, incAmo + incAmo * x), new Vec3d(0 + incAmo * y, 0, incAmo + incAmo * x), sprite));
             }
         }
-
-//        // x = 1
+        // x = 1
         for(int x = 0; x < tilesPerRow; x++) {
             for(int y = 0; y < tilesPerRow; y++) {
                 quads.add(createQuad(new Vec3d(1,0 + incAmo * y, 0 + incAmo * x), new Vec3d(1, incAmo  + incAmo * y, 0 + incAmo * x),
                         new Vec3d(1, incAmo  + incAmo * y, incAmo + incAmo * x), new Vec3d(1, 0 + incAmo * y, incAmo + incAmo * x), sprite));
             }
         }
-
-//        // x = 0
+        // x = 0
         for(int x = 0; x < tilesPerRow; x++) {
             for(int y = 0; y < tilesPerRow; y++) {
                 quads.add(createQuad(new Vec3d(0,0 + incAmo * y, 0 + incAmo * x),new Vec3d(0, 0 + incAmo * y, incAmo + incAmo * x),
                         new Vec3d(0, incAmo  + incAmo * y, incAmo + incAmo * x), new Vec3d(0, incAmo  + incAmo * y, 0 + incAmo * x), sprite));
             }
         }
-
 
         this.cache.put(block, quads);
         return quads;

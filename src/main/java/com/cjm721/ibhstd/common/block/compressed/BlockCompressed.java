@@ -1,11 +1,13 @@
 package com.cjm721.ibhstd.common.block.compressed;
 
-import com.cjm721.ibhstd.client.render.block.compressed.CompressedBakedModel;
+import com.cjm721.ibhstd.client.render.block.compressed.CompressedModelLoader;
 import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -44,18 +46,28 @@ public class BlockCompressed extends ModBlock {
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerModel() {
         ModelResourceLocation location = getBaseModelLocation();
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
+//        StateMapperBase ignoreState = new StateMapperBase() {
+//            @Override
+//            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+//                return location;
+//            }
+//        };
 
-        // To make sure that our baked model model is chosen for all states we use this custom state mapper:
+        ModelResourceLocation rl = new ModelResourceLocation(this.getRegistryName(), null);
+
+        // To make sure that our baked models models is chosen for all states we use this custom state mapper:
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return CompressedBakedModel.BAKED_MODEL;
+                return rl;
             }
         };
+        CompressedModelLoader.addModel(rl, baseBlock.getDefaultState());
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 

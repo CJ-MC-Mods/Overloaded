@@ -1,7 +1,7 @@
 package com.cjm721.ibhstd.common;
 
 import com.cjm721.ibhstd.common.block.ModBlocks;
-import com.cjm721.ibhstd.client.render.block.compressed.BakedModelLoader;
+import com.cjm721.ibhstd.client.render.block.compressed.CompressedModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -26,13 +26,13 @@ public class ModStart {
         ModBlocks.init();
 
         if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-            preInitClient();
+            initClient();
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void preInitClient() {
-        ModelLoaderRegistry.registerLoader(new BakedModelLoader());
+    public void initClient() {
+        ModelLoaderRegistry.registerLoader(new CompressedModelLoader());
         ModBlocks.registerModels();
     }
 
@@ -40,5 +40,9 @@ public class ModStart {
     public void init(FMLInitializationEvent event)
     {
         ModBlocks.addRecipes();
+
+//        if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+//            initClient();
+//        }
     }
 }
