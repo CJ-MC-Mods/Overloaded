@@ -13,13 +13,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 /**
  * Created by CJ on 4/5/2017.
  */
-public class BlocCreativeGenerator extends ModBlock implements ITileEntityProvider{
+public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvider{
 
-    public BlocCreativeGenerator() {
+    public BlockCreativeGenerator() {
         super(Material.CIRCUITS);
 
-        setRegistryName("BlocCreativeGenerator");
-        setUnlocalizedName("BlocCreativeGenerator");
+        setRegistryName("BlockCreativeGenerator");
+        setUnlocalizedName("BlockCreativeGenerator");
 
         setHardness(10);
         setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);

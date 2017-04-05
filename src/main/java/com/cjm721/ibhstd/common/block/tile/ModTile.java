@@ -1,6 +1,5 @@
 package com.cjm721.ibhstd.common.block.tile;
 
-import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.tileentity.TileEntity;
 
 /**

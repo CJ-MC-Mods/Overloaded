@@ -1,6 +1,6 @@
 package com.cjm721.ibhstd.common.block;
 
-import com.cjm721.ibhstd.common.block.basic.BlocCreativeGenerator;
+import com.cjm721.ibhstd.common.block.basic.BlockCreativeGenerator;
 import com.cjm721.ibhstd.common.block.basic.BlockExampleTileEntity;
 import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
@@ -32,7 +32,7 @@ public final class ModBlocks {
         compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
 
         exampleTileEntity = new BlockExampleTileEntity();
-        basicGenerator = new BlocCreativeGenerator();
+        basicGenerator = new BlockCreativeGenerator();
     }
 
     public static void addRecipes() {
