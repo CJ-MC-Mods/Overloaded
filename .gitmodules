@@ -1,3 +1,3 @@
-[submodule "IBHSTD-Assets"]
-	path = ./src/main/java/resources/assets/ibhstd/
+[submodule "src/main/resources/assets/ibhstd"]
+	path = src/main/resources/assets/ibhstd
 	url = https://github.com/CJ-MC-Mods/IBHSTD-Assets.git
