@@ -1,7 +1,6 @@
 package com.cjm721.ibhstd.common.block;
 
 import com.cjm721.ibhstd.common.block.basic.BlockCreativeGenerator;
-import com.cjm721.ibhstd.common.block.basic.BlockExampleTileEntity;
 import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
 import net.minecraft.block.Block;
@@ -21,7 +20,6 @@ public final class ModBlocks {
     public static Map<Integer,Block> compressedStone;
     public static Map<Integer,Block> compressedFurnace;
 
-    public static ModBlock exampleTileEntity;
     public static ModBlock basicGenerator;
 
 
@@ -31,7 +29,6 @@ public final class ModBlocks {
         compressedStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.STONE, 8);
         compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
 
-        exampleTileEntity = new BlockExampleTileEntity();
         basicGenerator = new BlockCreativeGenerator();
     }
 
