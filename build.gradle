@@ -55,7 +55,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
-    provided files('run/mods/CoFHCore-1.10.2-4.1.0.155-universal.jar')
+//    provided files('run/mods/CoFHCore-1.10.2-4.1.0.155-universal.jar')
 }
 
 processResources

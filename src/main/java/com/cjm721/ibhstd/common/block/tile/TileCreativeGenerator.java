@@ -2,10 +2,10 @@ package com.cjm721.ibhstd.common.block.tile;
 
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import cofh.lib.util.helpers.BlockHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.Arrays;
 
@@ -38,9 +38,9 @@ public class TileCreativeGenerator extends TileEntity implements IEnergyProvider
     public void update() {
         // TODO : Cache nearby blocks and update on block place / break / update events
         Arrays.stream(EnumFacing.values()).forEach(side -> {
-            TileEntity te = BlockHelper.getAdjacentTileEntity(this, side);
+            TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
-            if(te instanceof IEnergyReceiver) {
+            if(te != null && te instanceof IEnergyReceiver) {
                 ((IEnergyReceiver)te).receiveEnergy(EnumFacing.UP, Integer.MAX_VALUE, false);
             }
         });

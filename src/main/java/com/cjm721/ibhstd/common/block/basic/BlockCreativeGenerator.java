@@ -30,7 +30,6 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public BlockCreativeGenerator() {
         super(Material.ROCK);
 
-
         setRegistryName("BlockCreativeGenerator");
         setUnlocalizedName("BlockCreativeGenerator");
 
