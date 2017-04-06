@@ -1,18 +1,18 @@
 package com.cjm721.ibhstd.common.block.basic;
 
-import com.cjm721.ibhstd.client.render.block.compressed.CompressedModelLoader;
 import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.ModStart;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import com.cjm721.ibhstd.common.block.tile.TileCreativeGenerator;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -64,21 +64,14 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
-
-    public boolean isVisuallyOpaque()
+    @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
     {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
-    @Deprecated
-    public boolean isFullCube(IBlockState state)
-    {
-        return true;
-    }
-
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
-    {
-        return true;
-    }
-
 }
