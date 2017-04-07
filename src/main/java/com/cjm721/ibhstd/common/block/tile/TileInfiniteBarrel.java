@@ -3,15 +3,24 @@ package com.cjm721.ibhstd.common.block.tile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
+import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.ParametersAreNullableByDefault;
 
 /**
  * Created by CJ on 4/5/2017.
  */
-public class TileInfiniteBarrel extends TileEntity implements IInventory {
+public class TileInfiniteBarrel extends TileEntity implements IInventory, IDeepStorageUnit {
 
     long storedAmount;
     ItemStack storedItem;
@@ -33,28 +42,30 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
         storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
     }
 
-//    @Override
-//    public ItemStack getStoredItemType() {
-//        if(storedItem == null)
-//            return null;
-//        return new ItemStack(storedItem);
-//    }
-//
-//    @Override
-//    public void setStoredItemCount(int amount) {
-//        this.storedAmount = (long) amount;
-//    }
-//
-//    @Override
-//    public void setStoredItemType(ItemStack type, int amount) {
-//        this.storedItem = type.getItem();
-//        this.storedAmount = (long) amount;
-//    }
-//
-//    @Override
-//    public int getMaxStoredCount() {
-//        return Integer.MAX_VALUE;
-//    }
+    @Override
+    public ItemStack getStoredItemType() {
+        if(storedItem == null)
+            return null;
+        return storedItem;
+    }
+
+    @Override
+    public void setStoredItemCount(int amount) {
+        this.storedAmount = (long) amount;
+    }
+
+    @Override
+    public void setStoredItemType(ItemStack type, int amount) {
+        this.storedItem = type;
+        type.stackSize = 0;
+        this.storedAmount = (long) amount;
+        updateStoredItem();
+    }
+
+    @Override
+    public int getMaxStoredCount() {
+        return Integer.MAX_VALUE;
+    }
 
     @Override
     public int getSizeInventory() {
@@ -68,18 +79,6 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
         }
         return null;
     }
-
-//    private void updateStoredItem() {
-//        if(storedItem == null)
-//            return;
-//
-//        if(storedItem.stackSize < storedItem.getMaxStackSize() && storedAmount > storedItem.stackSize) {
-//            storedAmount += storedItem.stackSize;
-//            storedItem.stackSize = (int) Math.min(storedAmount, (long)storedItem.getMaxStackSize());
-//            storedAmount -= storedItem.stackSize;
-//            this.markDirty();
-//        }
-//    }
 
     @Nullable
     @Override
@@ -130,18 +129,28 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
 
     @Override
     public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
-        if(storedItem != null && !storedItem.isItemEqual(stack)) {
-            // TODO Send Error to console and report what was lost and where
-            // Instead of crashing
-            throw new RuntimeException("Something tried to place an invalid item in me");
-        }
-        storedItem = stack;
+        if(storedItem == null) {
+            storedItem = stack;
+        } else {
+            if(stack != null && !storedItem.isItemEqual(stack) ) {
+                // TODO Send Error to console and report what was lost and where Instead of crashing
+                throw new RuntimeException("Something tried to place an invalid item in me, Stack: " + stack.toString());
+            }
 
-        if(index != 0) {
-            storedAmount += stack.stackSize;
+            if(index == 0) {
+                if(stack == null) {
+                    storedItem.stackSize = 0;
+                    updateStoredItem();
+                } else {
+                    storedItem = stack;
+                }
+            } else {
+                if(stack != null)
+                    storedAmount += stack.stackSize;
+            }
         }
         this.markDirty();
-        System.out.format("INDEX: %d    STACK: %s\n", index, stack.toString());
+        System.out.format("INDEX: %d    STACK: %s\n", index, stack);
     }
 
     @Override
@@ -206,4 +215,26 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
     public boolean hasCustomName() {
         return false;
     }
+
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing)
+    {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing)
+    {
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        {
+            return (T) new InvWrapper(this);
+        }
+        return super.getCapability(capability, facing);
+    }
+
 }
