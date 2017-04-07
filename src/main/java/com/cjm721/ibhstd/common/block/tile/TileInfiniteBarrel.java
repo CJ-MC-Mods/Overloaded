@@ -2,7 +2,6 @@ package com.cjm721.ibhstd.common.block.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,13 +14,13 @@ import javax.annotation.Nullable;
 public class TileInfiniteBarrel extends TileEntity implements IInventory {
 
     long storedAmount;
-    Item storedItem;
+    ItemStack storedItem;
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
         if(storedItem != null)
-            compound.setTag("Item", new ItemStack(storedItem).serializeNBT());
+            compound.setTag("Item", storedItem.serializeNBT());
         compound.setLong("Count", storedAmount);
 
         return compound;
@@ -30,7 +29,7 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")).getItem() : null;
+        storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
         storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
     }
 
@@ -64,14 +63,23 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        if(storedItem == null)
-            return null;
-
         if(slot == 0) {
-            return new ItemStack(storedItem, (int)Math.min(storedAmount, 64));
+            return storedItem;
         }
         return null;
     }
+
+//    private void updateStoredItem() {
+//        if(storedItem == null)
+//            return;
+//
+//        if(storedItem.stackSize < storedItem.getMaxStackSize() && storedAmount > storedItem.stackSize) {
+//            storedAmount += storedItem.stackSize;
+//            storedItem.stackSize = (int) Math.min(storedAmount, (long)storedItem.getMaxStackSize());
+//            storedAmount -= storedItem.stackSize;
+//            this.markDirty();
+//        }
+//    }
 
     @Nullable
     @Override
@@ -80,13 +88,13 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
         if(storedItem == null)
             return null;
         if(index == 0) {
-            ItemStack itemStack = new ItemStack(storedItem, (int)Math.min(storedAmount, count));
-            storedAmount -= itemStack.stackSize;
-            if(storedAmount == 0) {
-                storedItem = null;
-            }
+            ItemStack toReturn = storedItem.copy();
+            toReturn.stackSize = Math.min(count, storedItem.stackSize);
+            storedItem.stackSize -= toReturn.stackSize;
+
+            updateStoredItem();
             this.markDirty();
-            return itemStack;
+            return toReturn;
         }
         return null;
     }
@@ -99,28 +107,37 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
         if(storedItem == null)
             return null;
         if(index == 0) {
-            ItemStack itemStack = new ItemStack(storedItem, (int)Math.min(storedAmount, 64));
-            storedAmount -= itemStack.stackSize;
-            if(storedAmount == 0) {
-                storedItem = null;
-            }
+            ItemStack toReturn = storedItem.copy();
+            storedItem.stackSize = 0;
+            updateStoredItem();
             this.markDirty();
-            return itemStack;
+            return toReturn;
         }
         return null;
     }
 
-    @Override
-    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
-        if(storedItem != null && !storedItem.equals(stack.getItem())) {
-            throw new RuntimeException("Something tried to place an invalid item in me");
+    private void updateStoredItem() {
+        if(storedItem.stackSize < storedItem.getMaxStackSize()) {
+            storedAmount += storedItem.stackSize;
+            storedItem.stackSize = (int) Math.min(storedItem.getMaxStackSize(), storedAmount);
+            storedAmount -= storedItem.stackSize;
         }
 
-        storedItem = stack.getItem();
+        if(storedItem.stackSize == 0) {
+            storedItem = null;
+        }
+    }
 
-        if(index == 0) {
-            storedAmount = stack.stackSize;
-        } else {
+    @Override
+    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
+        if(storedItem != null && !storedItem.isItemEqual(stack)) {
+            // TODO Send Error to console and report what was lost and where
+            // Instead of crashing
+            throw new RuntimeException("Something tried to place an invalid item in me");
+        }
+        storedItem = stack;
+
+        if(index != 0) {
             storedAmount += stack.stackSize;
         }
         this.markDirty();
@@ -148,8 +165,8 @@ public class TileInfiniteBarrel extends TileEntity implements IInventory {
         if(storedItem == null)
             return true;
 
-        if(storedItem.equals(stack.getItem())) {
-            if(index == 0 && storedAmount >= 64) {
+        if(storedItem.isItemEqual(stack)) {
+            if(index == 0 && storedAmount >= storedItem.getMaxStackSize()) {
                 return false;
             }
             return true;
