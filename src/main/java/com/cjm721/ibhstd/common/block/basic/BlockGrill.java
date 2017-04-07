@@ -60,6 +60,7 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
     }
 
 
+    @SideOnly(Side.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "grill"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
