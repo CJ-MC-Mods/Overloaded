@@ -4,13 +4,18 @@ import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import com.cjm721.ibhstd.common.block.tile.TileCreativeGenerator;
 import com.cjm721.ibhstd.common.block.tile.TileGrill;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -28,57 +33,33 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
+import java.util.Random;
+
 import static com.cjm721.ibhstd.IBHSTD.MODID;
 
 /**
  * Created by CJ on 4/7/2017.
  */
-public class BlockGrill extends ModBlock implements ITileEntityProvider {
+public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
 
     public BlockGrill() {
-        super(Material.ROCK);
-
+        super(false);
         setRegistryName("BlockGrill");
         setUnlocalizedName("BlockGrill");
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
-        register();
+        setCreativeTab(IBHSTDCreativeTabs.UTILITY);
+        GameRegistry.register(this);
+        registerItemForm();
         GameRegistry.registerTileEntity(TileCreativeGenerator.class, MODID + ":grill");
     }
 
-    @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileEntityFurnace();
+    private void registerItemForm() {
+        GameRegistry.register(new ItemBlock(this), getRegistryName());
     }
 
-    @Override
-    public void registerRecipe() {
 
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote)
-        {
-            return true;
-        }
-        else
-        {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
-
-            if (tileentity instanceof TileEntityFurnace)
-            {
-                playerIn.displayGUIChest((TileEntityFurnace)tileentity);
-                playerIn.addStat(StatList.FURNACE_INTERACTION);
-            }
-
-            return true;
-        }
-    }
-
-    @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "grill"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
@@ -102,4 +83,14 @@ public class BlockGrill extends ModBlock implements ITileEntityProvider {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
+
+    /**
+     * Get the Item that this Block should drop when harvested.
+     */
+    @Nullable
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    {
+        return Item.getItemFromBlock(this);
+    }
+
 }

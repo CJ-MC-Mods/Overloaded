@@ -25,7 +25,7 @@ public final class ModBlocks {
 
     public static ModBlock basicGenerator;
     public static ModBlock infiniteBarrel;
-    public static ModBlock grill;
+    public static BlockGrill grill;
 
     public static void init() {
         compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
@@ -34,7 +34,7 @@ public final class ModBlocks {
         compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
 
         basicGenerator = new BlockCreativeGenerator();
-       // infiniteBarrel = new BlockInfiniteBarrel();
+        infiniteBarrel = new BlockInfiniteBarrel();
         grill = new BlockGrill();
     }
 
@@ -54,6 +54,7 @@ public final class ModBlocks {
         registerModels(compressedFurnace.values());
 
         basicGenerator.registerModel();
+        infiniteBarrel.registerModel();
         grill.registerModel();
     }
 

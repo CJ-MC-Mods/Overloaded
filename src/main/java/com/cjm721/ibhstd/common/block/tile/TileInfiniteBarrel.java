@@ -1,17 +1,18 @@
 package com.cjm721.ibhstd.common.block.tile;
 
-import com.google.common.math.LongMath;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.items.IItemHandler;
-import powercrystals.minefactoryreloaded.api.IDeepStorageUnit;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by CJ on 4/5/2017.
  */
-public class TileInfiniteBarrel extends TileEntity implements IDeepStorageUnit, IItemHandler {
+public class TileInfiniteBarrel extends TileEntity implements IInventory {
 
     long storedAmount;
     Item storedItem;
@@ -33,74 +34,159 @@ public class TileInfiniteBarrel extends TileEntity implements IDeepStorageUnit, 
         storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
     }
 
-    @Override
-    public ItemStack getStoredItemType() {
-        return new ItemStack(storedItem);
-    }
+//    @Override
+//    public ItemStack getStoredItemType() {
+//        if(storedItem == null)
+//            return null;
+//        return new ItemStack(storedItem);
+//    }
+//
+//    @Override
+//    public void setStoredItemCount(int amount) {
+//        this.storedAmount = (long) amount;
+//    }
+//
+//    @Override
+//    public void setStoredItemType(ItemStack type, int amount) {
+//        this.storedItem = type.getItem();
+//        this.storedAmount = (long) amount;
+//    }
+//
+//    @Override
+//    public int getMaxStoredCount() {
+//        return Integer.MAX_VALUE;
+//    }
 
     @Override
-    public void setStoredItemCount(int amount) {
-        this.storedAmount = (long) amount;
-    }
-
-    @Override
-    public void setStoredItemType(ItemStack type, int amount) {
-        this.storedItem = type.getItem();
-        this.storedAmount = (long) amount;
-    }
-
-    @Override
-    public int getMaxStoredCount() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public int getSlots() {
-        return 1;
+    public int getSizeInventory() {
+        return 200;
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return new ItemStack(storedItem);
+        if(storedItem == null)
+            return null;
+
+        if(slot == 0) {
+            return new ItemStack(storedItem, (int)Math.min(storedAmount, 64));
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack decrStackSize(int index, int count) {
+        System.out.format("Remove Stack of size %d from Slot: %d\n", count, index);
+        if(storedItem == null)
+            return null;
+        if(index == 0) {
+            ItemStack itemStack = new ItemStack(storedItem, (int)Math.min(storedAmount, count));
+            storedAmount -= itemStack.stackSize;
+            if(storedAmount == 0) {
+                storedItem = null;
+            }
+            this.markDirty();
+            return itemStack;
+        }
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public ItemStack removeStackFromSlot(int index) {
+        System.out.format("Remove Stack from Slot: %d\n", index);
+
+        if(storedItem == null)
+            return null;
+        if(index == 0) {
+            ItemStack itemStack = new ItemStack(storedItem, (int)Math.min(storedAmount, 64));
+            storedAmount -= itemStack.stackSize;
+            if(storedAmount == 0) {
+                storedItem = null;
+            }
+            this.markDirty();
+            return itemStack;
+        }
+        return null;
     }
 
     @Override
-    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        return null;
+    public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
+        if(storedItem != null && !storedItem.equals(stack.getItem())) {
+            throw new RuntimeException("Something tried to place an invalid item in me");
+        }
 
-//        if(storedItem == null) {
-//            this.storedItem = stack.getItem();
-//            this.storedAmount = stack.stackSize;
-//            return null;
-//        } else {
-//            if(stack.getItem().equals(storedItem)) {
-//                long newAmount = storedAmount + stack.stackSize;
-//
-//                if(newAmount < 0) {
-//                    long
-//                }
-//                if(!simulate) {
-//
-//                }
-//
-//
-//            } else {
-//                return stack;
-//            }
-//        }
+        storedItem = stack.getItem();
+
+        if(index == 0) {
+            storedAmount = stack.stackSize;
+        } else {
+            storedAmount += stack.stackSize;
+        }
+        this.markDirty();
+        System.out.format("INDEX: %d    STACK: %s\n", index, stack.toString());
     }
 
     @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+    public int getInventoryStackLimit() {
+        return 64;
+    }
+
+    @Override
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return false;
+    }
+
+    @Override
+    public void openInventory(EntityPlayer player) { }
+
+    @Override
+    public void closeInventory(EntityPlayer player) { }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        if(storedItem == null)
+            return true;
+
+        if(storedItem.equals(stack.getItem())) {
+            if(index == 0 && storedAmount >= 64) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int getField(int id) {
+        return 0;
+    }
+
+    @Override
+    public void setField(int id, int value) {
+
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 0;
+    }
+
+    @Override
+    public void clear() {
+        this.storedAmount = 0;
+        this.storedItem = null;
+    }
+
+
+    @Override
+    public String getName() {
         return null;
-//        if(storedItem == null)
-//            return null;
-//
-//        long pulled = Math.min(storedAmount, amount);
-//
-//        if(!simulate) {
-//            storedAmount = Math.max(storedAmount - amount, 0);
-//        }
-//        return new ItemStack(storedItem.getItem(), (int)pulled);
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
     }
 }
