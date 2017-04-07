@@ -1,7 +1,6 @@
 package com.cjm721.ibhstd.common.block.basic;
 
 import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.ModStart;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import com.cjm721.ibhstd.common.block.tile.TileCreativeGenerator;
 import net.minecraft.block.ITileEntityProvider;
@@ -12,15 +11,14 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import static com.cjm721.ibhstd.IBHSTD.MODID;
 
 /**
  * Created by CJ on 4/5/2017.
@@ -37,7 +35,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         setLightOpacity(0);
         setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
         register();
-        GameRegistry.registerTileEntity(TileCreativeGenerator.class, ModStart.MODID + ":creativeGenerator");
+        GameRegistry.registerTileEntity(TileCreativeGenerator.class, MODID + ":creativeGenerator");
     }
 
     @Override
@@ -52,7 +50,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
 
     @SideOnly(Side.CLIENT)
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(ModStart.MODID, "creativeGenerator"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creativeGenerator"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {
