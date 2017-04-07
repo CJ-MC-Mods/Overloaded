@@ -23,7 +23,7 @@ import static com.cjm721.ibhstd.IBHSTD.MODID;
 /**
  * Created by CJ on 4/5/2017.
  */
-public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvider{
+public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvider {
 
     public BlockCreativeGenerator() {
         super(Material.ROCK);

@@ -23,7 +23,7 @@ public class IBHSTD {
     public static IBHSTD instance;
 
     public static final String MODID = "ibhstd";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "${mod_version}";
 
     public static final String PROXY_CLIENT = "com.cjm721.ibhstd.client.ClientProxy";
     public static final String PROXY_SERVER = "com.cjm721.ibhstd.common.CommonProxy";

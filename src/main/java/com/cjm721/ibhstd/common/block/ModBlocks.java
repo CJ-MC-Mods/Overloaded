@@ -1,8 +1,10 @@
 package com.cjm721.ibhstd.common.block;
 
 import com.cjm721.ibhstd.common.block.basic.BlockCreativeGenerator;
+import com.cjm721.ibhstd.common.block.basic.BlockInfiniteBarrel;
 import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
+import com.cjm721.ibhstd.common.block.tile.TileInfiniteBarrel;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,6 +23,7 @@ public final class ModBlocks {
     public static Map<Integer,Block> compressedFurnace;
 
     public static ModBlock basicGenerator;
+    public static ModBlock infiniteBarrel;
 
     public static void init() {
         compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
@@ -29,6 +32,7 @@ public final class ModBlocks {
         compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
 
         basicGenerator = new BlockCreativeGenerator();
+       // infiniteBarrel = new BlockInfiniteBarrel();
     }
 
     public static void addRecipes() {
