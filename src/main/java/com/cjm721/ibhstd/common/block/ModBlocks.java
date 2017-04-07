@@ -1,6 +1,7 @@
 package com.cjm721.ibhstd.common.block;
 
 import com.cjm721.ibhstd.common.block.basic.BlockCreativeGenerator;
+import com.cjm721.ibhstd.common.block.basic.BlockGrill;
 import com.cjm721.ibhstd.common.block.basic.BlockInfiniteBarrel;
 import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
@@ -24,6 +25,7 @@ public final class ModBlocks {
 
     public static ModBlock basicGenerator;
     public static ModBlock infiniteBarrel;
+    public static ModBlock grill;
 
     public static void init() {
         compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
@@ -33,6 +35,7 @@ public final class ModBlocks {
 
         basicGenerator = new BlockCreativeGenerator();
        // infiniteBarrel = new BlockInfiniteBarrel();
+        grill = new BlockGrill();
     }
 
     public static void addRecipes() {
@@ -51,6 +54,7 @@ public final class ModBlocks {
         registerModels(compressedFurnace.values());
 
         basicGenerator.registerModel();
+        grill.registerModel();
     }
 
     @SideOnly(Side.CLIENT)
