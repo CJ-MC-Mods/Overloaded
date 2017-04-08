@@ -45,7 +45,7 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
         setLightOpacity(0);
         setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
         register();
-        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infiniteCapacitor");
+        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infiniteCapacitor");
     }
 
     /**
@@ -86,8 +86,8 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
                 TileInfiniteCapacitor barrel = (TileInfiniteCapacitor) worldIn.getTileEntity(pos);
 
                 // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
-                double percent = (double) barrel.getStoredAmount() / (double) Long.MAX_VALUE;
-                playerIn.addChatComponentMessage(new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", barrel.getStoredAmount(), percent)));
+                double percent = (double) barrel.getStorage().getStoredAmount() / (double) Long.MAX_VALUE;
+                playerIn.addChatComponentMessage(new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", barrel.getStorage().getStoredAmount(), percent)));
                 return true;
             }
         }

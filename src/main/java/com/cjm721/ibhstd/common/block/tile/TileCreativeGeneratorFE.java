@@ -16,6 +16,8 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
  */
 public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IEnergyStorage {
 
+    boolean normalTicks;
+
     private Map<EnumFacing,IEnergyStorage> cache;
 
     public TileCreativeGeneratorFE() {
@@ -27,6 +29,10 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
      */
     @Override
     public void update() {
+        if(!normalTicks) {
+            onPlace();
+        }
+
         cache.values().stream().forEach(te -> {
             te.receiveEnergy(Integer.MAX_VALUE, false);
         });

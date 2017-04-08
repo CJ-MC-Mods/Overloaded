@@ -3,6 +3,8 @@ package com.cjm721.ibhstd.common.block.basic;
 import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.block.ModBlock;
 import com.cjm721.ibhstd.common.block.tile.TileInfiniteBarrel;
+import com.cjm721.ibhstd.common.storage.fluid.LongFluidStorage;
+import com.cjm721.ibhstd.common.storage.item.LongItemStorage;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -73,7 +75,7 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
-                TileInfiniteBarrel barrel = (TileInfiniteBarrel) worldIn.getTileEntity(pos);
+                LongItemStorage barrel = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage();
                 ItemStack storedItem = barrel.getStoredItem();
                 if(storedItem == null) {
                     playerIn.addChatComponentMessage(new TextComponentString(String.format("Item: EMPTY  Amount: %,d", barrel.getStoredItem(), barrel.getStoredAmount())));
