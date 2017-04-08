@@ -3,10 +3,11 @@ package com.cjm721.ibhstd.common.block.tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import java.util.Arrays;
+import java.util.*;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -15,20 +16,19 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
  */
 public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IEnergyStorage {
 
+    private Map<EnumFacing,IEnergyStorage> cache;
+
+    public TileCreativeGeneratorFE() {
+        cache = new HashMap<>();
+    }
+
     /**
      * Like the old updateEntity(), except more generic.
      */
     @Override
     public void update() {
-        // TODO : Cache nearby blocks and update on block place / break / update events
-        Arrays.stream(EnumFacing.values()).forEach(side -> {
-            TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
-
-            if(te != null) {
-                if(te.hasCapability(ENERGY, side.getOpposite())) {
-                    te.getCapability(ENERGY, side.getOpposite()).receiveEnergy(Integer.MAX_VALUE, false);
-                }
-            }
+        cache.values().stream().forEach(te -> {
+            te.receiveEnergy(Integer.MAX_VALUE, false);
         });
     }
 
@@ -104,5 +104,27 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     @Override
     public boolean canReceive() {
         return false;
+    }
+
+    public void onNeighborChange(BlockPos neighbor) {
+        TileEntity te = this.getWorld().getTileEntity(neighbor);
+
+        BlockPos sidePos = this.getPos().subtract(neighbor);
+        EnumFacing side = EnumFacing.getFacingFromVector(sidePos.getX(), sidePos.getY(), sidePos.getZ());
+
+        cache.remove(side);
+        if(te != null) {
+            if(te.hasCapability(ENERGY, side)) {
+                cache.put(side, (IEnergyStorage)te.getCapability(ENERGY,side));
+            }
+        } else {
+            cache.remove(side);
+        }
+    }
+
+    public void onPlace() {
+        Arrays.stream(EnumFacing.values()).forEach((side) -> {
+            onNeighborChange(this.getPos().add(side.getDirectionVec()));
+        });
     }
 }
