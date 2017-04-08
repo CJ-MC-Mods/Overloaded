@@ -27,7 +27,7 @@ public class IBHSTDCreativeTabs {
     public static CreativeTabs UTILITY = new CreativeTabs("IBHSTD_UTILITY") {
         @Override
         public Item getTabIconItem() {
-            return Item.getByNameOrId(("minecraft:stone"));
+            return Item.getItemFromBlock(ModBlocks.infiniteBarrel);
         }
     };
 }

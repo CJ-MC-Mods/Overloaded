@@ -2,7 +2,7 @@ package com.cjm721.ibhstd.common.block.basic;
 
 import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import com.cjm721.ibhstd.common.block.ModBlock;
-import com.cjm721.ibhstd.common.block.tile.TileCreativeGenerator;
+import com.cjm721.ibhstd.common.block.tile.TileCreativeGeneratorFE;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +35,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         setLightOpacity(0);
         setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
         register();
-        GameRegistry.registerTileEntity(TileCreativeGenerator.class, MODID + ":creativeGenerator");
+        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creativeGenerator");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TileCreativeGenerator();
+        return new TileCreativeGeneratorFE();
     }
 
     @SideOnly(Side.CLIENT)
