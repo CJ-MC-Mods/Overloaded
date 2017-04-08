@@ -1,5 +1,6 @@
 package com.cjm721.ibhstd.common.block.tile;
 
+import com.cjm721.ibhstd.common.util.NumberUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -9,6 +10,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import static com.cjm721.ibhstd.common.util.ItemUtil.itemsAreEqual;
+import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
+import static com.cjm721.ibhstd.common.util.NumberUtil.AddReturn;
 
 /**
  * Created by CJ on 4/7/2017.
@@ -76,11 +79,16 @@ public class TileInfiniteBarrel extends TileEntity implements IItemHandler {
         }
 
         if(itemsAreEqual(storedItem,stack)) {
+            AddReturn<Long> result = addToMax(storedAmount, stack.stackSize);
             if(!simulate) {
-                storedAmount += stack.stackSize;
-                updateItemStack();
+                storedAmount = result.result;
             }
-            return null;
+            if(result.overflow.intValue() == 0) {
+                return null;
+            }
+            ItemStack toReturn = stack.copy();
+            toReturn.stackSize = result.overflow.intValue();
+            return toReturn;
         }
 
         return stack;
@@ -106,22 +114,12 @@ public class TileInfiniteBarrel extends TileEntity implements IItemHandler {
 
         if(!simulate) {
             storedAmount -= itemStack.stackSize;
-            updateItemStack();
+            if(storedAmount == 0L)
+                storedItem = null;
         }
 
         return itemStack;
     }
-
-    private void updateItemStack() {
-        if(storedItem == null)
-            return;
-
-        storedItem.stackSize = (int) Math.min(storedItem.getMaxStackSize(), storedAmount);
-
-        if(storedAmount == 0)
-            storedItem = null;
-    }
-
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
@@ -138,7 +136,6 @@ public class TileInfiniteBarrel extends TileEntity implements IItemHandler {
         super.readFromNBT(compound);
         storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
         storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
-        updateItemStack();
     }
 
 
