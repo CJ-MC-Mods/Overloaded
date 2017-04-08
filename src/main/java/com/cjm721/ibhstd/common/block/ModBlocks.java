@@ -3,6 +3,7 @@ package com.cjm721.ibhstd.common.block;
 import com.cjm721.ibhstd.common.block.basic.BlockCreativeGenerator;
 import com.cjm721.ibhstd.common.block.basic.BlockGrill;
 import com.cjm721.ibhstd.common.block.basic.BlockInfiniteBarrel;
+import com.cjm721.ibhstd.common.block.basic.BlockInfiniteTank;
 import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
 import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
 import com.cjm721.ibhstd.common.block.tile.TileInfiniteBarrel;
@@ -25,6 +26,7 @@ public final class ModBlocks {
 
     public static ModBlock basicGenerator;
     public static ModBlock infiniteBarrel;
+    public static ModBlock infiniteTank;
     public static BlockGrill grill;
 
     public static void init() {
@@ -35,6 +37,7 @@ public final class ModBlocks {
 
         basicGenerator = new BlockCreativeGenerator();
         infiniteBarrel = new BlockInfiniteBarrel();
+        infiniteTank = new BlockInfiniteTank();
         grill = new BlockGrill();
     }
 
@@ -55,6 +58,7 @@ public final class ModBlocks {
 
         basicGenerator.registerModel();
         infiniteBarrel.registerModel();
+        infiniteTank.registerModel();
         grill.registerModel();
     }
 
