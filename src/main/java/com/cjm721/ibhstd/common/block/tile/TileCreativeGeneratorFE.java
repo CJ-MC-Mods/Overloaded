@@ -117,8 +117,6 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
             if(te.hasCapability(ENERGY, side)) {
                 cache.put(side, (IEnergyStorage)te.getCapability(ENERGY,side));
             }
-        } else {
-            cache.remove(side);
         }
     }
 
