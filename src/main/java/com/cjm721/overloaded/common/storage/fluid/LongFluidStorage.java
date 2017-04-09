@@ -1,12 +1,17 @@
 package com.cjm721.overloaded.common.storage.fluid;
 
 import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.LongFluidStack;
+import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
+import com.cjm721.overloaded.magic.fluid.IHyperFluidHandler;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.common.util.FluidUtil.fluidsAreEqual;
@@ -15,10 +20,9 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongFluidStorage implements IFluidHandler, INBTConvertable {
+public class LongFluidStorage implements IFluidHandler, IHyperFluidHandler, INBTConvertable {
 
-    long storedAmount;
-    FluidStack storedFluid;
+    LongFluidStack storedFluid;
 
     /**
      * Returns an array of objects which represent the internal tanks.
@@ -40,20 +44,13 @@ public class LongFluidStorage implements IFluidHandler, INBTConvertable {
      */
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        if(storedFluid == null) {
-            storedFluid = resource;
-            if(doFill) storedAmount = resource.amount;
-            return resource.amount;
+        LongFluidStack fluidStack = give(new LongFluidStack(resource, resource.amount), doFill);
+
+        if(fluidStack == null || fluidStack.amount == 0L) {
+            return 0;
         }
 
-        if(fluidsAreEqual(storedFluid, resource)) {
-            NumberUtil.AddReturn<Long> value = addToMax(storedAmount, resource.amount);
-            if(doFill) storedAmount = value.result;
-
-            return resource.amount - value.overflow.intValue();
-        }
-
-        return 0;
+        return (int) fluidStack.amount;
     }
 
     /**
@@ -67,17 +64,17 @@ public class LongFluidStorage implements IFluidHandler, INBTConvertable {
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
-        if(!fluidsAreEqual(storedFluid, resource))
-            return resource;
+        if(storedFluid == null || !fluidsAreEqual(storedFluid.fluidStack, resource))
+            return null;
 
-        FluidStack toReturn = storedFluid.copy();
-        toReturn.amount = (int) Math.min(storedAmount, resource.amount);
+        LongFluidStack result = take(resource.amount, doDrain);
 
-        if(doDrain) {
-            storedAmount -= toReturn.amount;
-            if(storedAmount == 0)
-                storedFluid = null;
+        if(result.amount == 0L) {
+            return null;
         }
+
+        FluidStack toReturn = resource.copy();
+        toReturn.amount = (int) result.amount;
 
         return toReturn;
     }
@@ -95,15 +92,58 @@ public class LongFluidStorage implements IFluidHandler, INBTConvertable {
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        if (storedFluid == null)
+        LongFluidStack result = take(maxDrain, doDrain);
+
+        if(result.amount == 0L) {
             return null;
+        }
 
-        FluidStack toReturn = storedFluid.copy();
-        toReturn.amount = (int) Math.min(storedAmount, maxDrain);
+        FluidStack toReturn = result.fluidStack.copy();
+        toReturn.amount = (int) result.amount;
 
-        if (doDrain) {
-            storedAmount -= toReturn.amount;
-            if (storedAmount == 0)
+        return toReturn;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        FluidStack fluidStack = compound.hasKey("Fluid") ? FluidStack.loadFluidStackFromNBT(compound.getCompoundTag("Fluid")) : null;
+        long amount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
+
+        this.storedFluid = new LongFluidStack(fluidStack, amount);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        if(storedFluid != null) {
+            NBTTagCompound tag = new NBTTagCompound();
+            storedFluid.fluidStack.writeToNBT(tag);
+            compound.setTag("Fluid", tag);
+            compound.setLong("Count", storedFluid.amount);
+        }
+
+        return compound;
+    }
+
+    public LongFluidStack getFluidStack() {
+        return storedFluid;
+    }
+
+    @Override
+    public LongFluidStack status() {
+        return storedFluid;
+    }
+
+    @Override
+    @Nonnull
+    public LongFluidStack take(long aLong, boolean doAction) {
+        if (storedFluid == null)
+            return LongFluidStack.EMPTY_STACK;
+
+        LongFluidStack toReturn = new LongFluidStack(storedFluid.fluidStack,Math.min(storedFluid.amount, aLong));
+
+        if (doAction) {
+            storedFluid.amount -= toReturn.amount;
+            if (storedFluid.amount == 0)
                 storedFluid = null;
         }
 
@@ -111,29 +151,22 @@ public class LongFluidStorage implements IFluidHandler, INBTConvertable {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        storedFluid = compound.hasKey("Fluid") ? FluidStack.loadFluidStackFromNBT(compound.getCompoundTag("Fluid")) : null;
-        storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        if(storedFluid != null) {
-            NBTTagCompound tag = new NBTTagCompound();
-            storedFluid.writeToNBT(tag);
-            compound.setTag("Fluid", tag);
+    @Nonnull
+    public LongFluidStack give(LongFluidStack fluidStack, boolean doAction) {
+        if(storedFluid == null) {
+            if(doAction){
+                storedFluid = fluidStack;
+            }
+            return fluidStack;
         }
 
-        compound.setLong("Count", storedAmount);
+        if(fluidsAreEqual(storedFluid.fluidStack, fluidStack.fluidStack)) {
+            NumberUtil.AddReturn<Long> value = addToMax(storedFluid.amount, fluidStack.amount);
+            if(doAction) storedFluid.amount = value.result;
 
-        return compound;
-    }
+            return new LongFluidStack(storedFluid.fluidStack, fluidStack.amount - value.overflow);
+        }
 
-    public FluidStack getStoredFluid() {
-        return storedFluid;
-    }
-
-    public long getStoredAmount() {
-        return storedAmount;
+        return LongFluidStack.EMPTY_STACK;
     }
 }

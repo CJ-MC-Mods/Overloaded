@@ -10,7 +10,7 @@ public interface IHyperItemHandler extends INBTConvertable {
 
     LongItemStack status();
 
-    LongItemStack give(LongItemStack itemStack, boolean doAction);
-
     LongItemStack take(long aLong, boolean doAction);
+
+    LongItemStack give(LongItemStack itemStack, boolean doAction);
 }

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileInfiniteTank;
+import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -82,12 +83,11 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
-                LongFluidStorage barrel = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage();
-                FluidStack storedFluid = barrel.getStoredFluid();
-                if(storedFluid == null) {
-                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: EMPTY  Amount: %,d", storedFluid, barrel.getStoredAmount())));
+                LongFluidStack storedFluid = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage().getFluidStack();
+                if(storedFluid == null || storedFluid.fluidStack == null) {
+                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: EMPTY")));
                 } else {
-                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.getLocalizedName(), barrel.getStoredAmount())));
+                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)));
                 }
                 return true;
             }

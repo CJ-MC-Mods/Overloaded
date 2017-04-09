@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.storage.item;
 
+import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
 import com.cjm721.overloaded.magic.item.IHyperItemHandler;
@@ -7,13 +8,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.common.util.ItemUtil.itemsAreEqual;
 import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongItemStorage implements IItemHandler, IHyperItemHandler {
+public class LongItemStorage implements IItemHandler, IHyperItemHandler, INBTConvertable {
 
     LongItemStack longItemStack;
 
@@ -131,11 +134,14 @@ public class LongItemStorage implements IItemHandler, IHyperItemHandler {
         return longItemStack == null ? 0L : longItemStack.amount;
     }
 
+
+    // TODO Make this Nonnull
     @Override
     public LongItemStack status() {
         return longItemStack;
     }
 
+    @Nonnull
     @Override
     public LongItemStack give(LongItemStack stack, boolean doAction) {
         if(longItemStack == null) {
@@ -156,6 +162,7 @@ public class LongItemStorage implements IItemHandler, IHyperItemHandler {
         return stack;
     }
 
+    @Nonnull
     @Override
     public LongItemStack take(long aLong, boolean doAction) {
         if(longItemStack == null)

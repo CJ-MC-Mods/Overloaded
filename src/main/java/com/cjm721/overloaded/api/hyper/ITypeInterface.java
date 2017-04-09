@@ -8,23 +8,9 @@ import net.minecraftforge.common.capabilities.Capability;
  */
 public interface ITypeInterface<T,N extends Number> {
 
-    N status();
+    T status();
 
-    /**
-     *
-     * @param t
-     * @param n
-     * @param doAction
-     * @return
-     */
-    N give(T t, N n, boolean doAction);
+    T give(T t, boolean doAction);
 
-    /**
-     *
-     * @param t
-     * @param n
-     * @param doAction
-     * @return
-     */
-    N take(T t, N n, boolean doAction);
+    T take(T t, boolean doAction);
 }
