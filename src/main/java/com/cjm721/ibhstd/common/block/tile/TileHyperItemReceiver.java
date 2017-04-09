@@ -1,6 +1,5 @@
 package com.cjm721.ibhstd.common.block.tile;
 
-import com.cjm721.ibhstd.common.block.tile.bases.AbstractTileHyperItemNode;
 import com.cjm721.ibhstd.common.storage.LongItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +10,7 @@ import static com.cjm721.ibhstd.common.util.CapabilityHyperItem.HYPER_ITEM_HANDL
 /**
  * Created by CJ on 4/8/2017.
  */
-public class TileHyperItemReceiver extends AbstractTileHyperItemNode {
+public class TileHyperItemReceiver extends TileEntity {
 
     public long receiveItems(LongItemStack itemStack) {
         for(EnumFacing side: EnumFacing.values()) {

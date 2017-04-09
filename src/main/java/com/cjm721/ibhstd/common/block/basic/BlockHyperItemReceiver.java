@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.DimensionManager;
@@ -33,7 +34,7 @@ import static com.cjm721.ibhstd.IBHSTD.MODID;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class BlockHyperItemReceiver extends AbstractBlockHyperItemNode implements ITileEntityProvider {
+public class BlockHyperItemReceiver extends ModBlock implements ITileEntityProvider {
 
     public BlockHyperItemReceiver() {
         super(Material.ROCK);
@@ -51,6 +52,30 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperItemNode implement
     @Override
     public void registerRecipe() {
 
+    }
+
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(heldItem != null && heldItem.getItem().equals(ModItems.linkingCard)) {
+            NBTTagCompound tag = heldItem.getTagCompound();
+            if(tag == null) {
+                tag = new NBTTagCompound();
+                writeNodeData(tag, worldIn, pos);
+                heldItem.setTagCompound(tag);
+            }
+            writeNodeData(tag, worldIn, pos);
+            heldItem.setTagCompound(tag);
+            return true;
+        } else {
+            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        }
+    }
+
+    private void writeNodeData(NBTTagCompound tag, World worldIn, BlockPos pos) {
+        tag.setInteger("X", pos.getX());
+        tag.setInteger("Y", pos.getY());
+        tag.setInteger("Z", pos.getZ());
+        tag.setInteger("WORLD", worldIn.provider.getDimension());
     }
 
     @SideOnly(Side.CLIENT)
@@ -77,10 +102,5 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperItemNode implement
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileHyperItemReceiver();
-    }
-
-    @Override
-    protected String getType() {
-        return "Receiver";
     }
 }

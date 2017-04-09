@@ -1,9 +1,6 @@
 package com.cjm721.ibhstd.common.block.tile;
 
-import com.cjm721.ibhstd.common.block.tile.bases.AbstractTileHyperItemNode;
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
 import com.cjm721.ibhstd.common.storage.LongItemStack;
-import com.cjm721.ibhstd.common.storage.item.LongItemStorage;
 import com.cjm721.ibhstd.magic.item.IHyperItemHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -18,9 +15,44 @@ import static com.cjm721.ibhstd.common.util.CapabilityHyperItem.HYPER_ITEM_HANDL
 /**
  * Created by CJ on 4/8/2017.
  */
-public class TileHyperItemSender extends AbstractTileHyperItemNode implements ITickable {
+public class TileHyperItemSender extends TileEntity implements ITickable {
 
     private int delayTicks;
+
+    protected BlockPos partnerBlockPos;
+    protected int partnerWorldID;
+
+    protected boolean partnerLoaded;
+    protected TileHyperItemReceiver partner;
+
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
+
+        if(partnerBlockPos != null) {
+            compound.setInteger("X", partnerBlockPos.getX());
+            compound.setInteger("Y", partnerBlockPos.getY());
+            compound.setInteger("Z", partnerBlockPos.getZ());
+            compound.setInteger("WORLD", partnerWorldID);
+        }
+
+        return compound;
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+
+        if (compound.hasKey("X")) {
+            int x = compound.getInteger("X");
+            int y = compound.getInteger("Y");
+            int z = compound.getInteger("Z");
+
+            partnerBlockPos = new BlockPos(x, y, z);
+            partnerWorldID = compound.getInteger("WORLD");
+        }
+    }
 
     /**
      * Like the old updateEntity(), except more generic.
@@ -43,13 +75,14 @@ public class TileHyperItemSender extends AbstractTileHyperItemNode implements IT
     private void checkForPartner() {
         WorldServer world = DimensionManager.getWorld(partnerWorldID);
         if(world != null && world.isBlockLoaded(partnerBlockPos)) {
-            TileEntity partner = world.getTileEntity(partnerBlockPos);
+            TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
 
-            if(partner == null) {
+            if(partnerTE == null || !(partnerTE instanceof TileHyperItemReceiver)) {
                 this.partnerBlockPos = null;
+                partner = null;
             } else {
                 partnerLoaded = true;
-                this.partner = (AbstractTileHyperItemNode)partner;
+                partner = (TileHyperItemReceiver) partnerTE;
             }
         }
     }
@@ -64,11 +97,23 @@ public class TileHyperItemSender extends AbstractTileHyperItemNode implements IT
             IHyperItemHandler handler = te.getCapability(HYPER_ITEM_HANDLER, side.getOpposite());
             LongItemStack itemStack = handler.take(Long.MAX_VALUE, false);
             if(itemStack != null && itemStack.amount > 0) {
-                long leftOvers = ((TileHyperItemReceiver)this.getPartner()).receiveItems(itemStack);
-                if(leftOvers != Long.MAX_VALUE)
-                    handler.take(Long.MAX_VALUE - leftOvers, true);
+                long leftOvers = partner.receiveItems(itemStack);
+                if(leftOvers != itemStack.amount)
+                    handler.take(itemStack.amount - leftOvers, true);
 
             }
         }
+    }
+
+    public void setPartnetInfo(int partnerWorldId, BlockPos partnerPos) {
+        this.partnerWorldID = partnerWorldId;
+        this.partnerBlockPos = partnerPos;
+    }
+
+    public String getRightClickMessage() {
+        if(partnerBlockPos != null) {
+            return String.format("Bound to Receiver at %d:%d,%d,%d", partnerWorldID, partnerBlockPos.getX(),partnerBlockPos.getY(),partnerBlockPos.getZ());
+        }
+        return "Not bound to anything";
     }
 }
