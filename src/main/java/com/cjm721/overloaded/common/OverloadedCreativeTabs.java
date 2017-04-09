@@ -1,10 +1,8 @@
-package com.cjm721.ibhstd.common;
+package com.cjm721.overloaded.common;
 
-import com.cjm721.ibhstd.common.block.ModBlocks;
+import com.cjm721.overloaded.common.block.ModBlocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-
-import static com.cjm721.ibhstd.IBHSTD.MODID;
 
 /**
  * Created by CJ on 4/2/2017.
