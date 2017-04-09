@@ -1,6 +1,9 @@
 package com.cjm721.ibhstd.common;
 
 import com.cjm721.ibhstd.common.block.ModBlocks;
+import com.cjm721.ibhstd.common.item.ModItems;
+import com.cjm721.ibhstd.common.util.CapabilityHyperEnergy;
+import com.cjm721.ibhstd.common.util.CapabilityHyperItem;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -10,7 +13,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {
+        ModBlocks.init();
+        ModItems.init();
 
+        CapabilityHyperItem.register();
+        CapabilityHyperEnergy.register();
     }
 
     public void init(FMLInitializationEvent event) {

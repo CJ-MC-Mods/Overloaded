@@ -33,9 +33,6 @@ public class IBHSTD {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Loader.isModLoaded("botania");
-        ModBlocks.init();
-
         proxy.preInit(event);
     }
 

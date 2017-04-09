@@ -25,7 +25,14 @@ public final class ModBlocks {
     public static ModBlock infiniteBarrel;
     public static ModBlock infiniteTank;
     public static ModBlock infiniteCapacitor;
+
+    public static ModBlock hyperItemReceiver;
+    public static ModBlock hyperItemSender;
+
+
     public static BlockGrill grill;
+
+
 
     public static void init() {
         compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
@@ -37,6 +44,10 @@ public final class ModBlocks {
         infiniteBarrel = new BlockInfiniteBarrel();
         infiniteTank = new BlockInfiniteTank();
         infiniteCapacitor = new BlockInfiniteCapacitor();
+
+        hyperItemReceiver = new BlockHyperItemReceiver();
+        hyperItemSender = new BlockHyperItemSender();
+
         grill = new BlockGrill();
     }
 
@@ -59,6 +70,10 @@ public final class ModBlocks {
         infiniteBarrel.registerModel();
         infiniteTank.registerModel();
         infiniteCapacitor.registerModel();
+
+        hyperItemReceiver.registerModel();
+        hyperItemSender.registerModel();
+
         grill.registerModel();
     }
 
