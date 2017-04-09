@@ -1,8 +1,8 @@
-package com.cjm721.ibhstd.common.block.basic;
+package com.cjm721.overloaded.common.block.basic;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.block.ModBlock;
-import com.cjm721.ibhstd.common.block.tile.TileCreativeGeneratorFE;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.tile.TileCreativeGeneratorFE;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import static com.cjm721.ibhstd.IBHSTD.MODID;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
  * Created by CJ on 4/5/2017.
@@ -37,7 +37,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
+        setCreativeTab(OverloadedCreativeTabs.ENERGY_BLOCKS);
         register();
         GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creativeGenerator");
     }
@@ -72,6 +72,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Deprecated
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

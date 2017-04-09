@@ -1,9 +1,8 @@
-package com.cjm721.ibhstd.common.block;
+package com.cjm721.overloaded.common.block;
 
-import com.cjm721.ibhstd.common.block.basic.*;
-import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
-import com.cjm721.ibhstd.common.block.compressed.CompressedBlockHandler;
-import com.cjm721.ibhstd.common.block.tile.TileInfiniteBarrel;
+import com.cjm721.overloaded.common.block.basic.*;
+import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
+import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;

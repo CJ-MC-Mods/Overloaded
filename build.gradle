@@ -23,8 +23,8 @@ configFile.withReader {
 
 
 version = "${config.mcversion}-${config.mod_version}"
-group= "com.cjm721.ibhstd" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ibhstd"
+group= "com.cjm721.overloaded" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "overloaded"
 
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {

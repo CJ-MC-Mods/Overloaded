@@ -1,6 +1,6 @@
-package com.cjm721.ibhstd.common.item;
+package com.cjm721.overloaded.common.item;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +20,7 @@ public class ItemLinkingCard extends ModItem {
         setRegistryName("ItemLinkingCard");
         setUnlocalizedName("ItemLinkingCard");
 
-        setCreativeTab(IBHSTDCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.UTILITY);
 
         GameRegistry.register(this);
     }

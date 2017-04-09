@@ -7,22 +7,22 @@ import net.minecraft.item.Item;
 /**
  * Created by CJ on 4/2/2017.
  */
-public class IBHSTDCreativeTabs {
-    public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("IBHSTD_Compressed") {
+public class OverloadedCreativeTabs {
+    public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("Overloaded_Compressed") {
         @Override
         public Item getTabIconItem() {
             return Item.getByNameOrId(("minecraft:stone"));
         }
     };
 
-    public static CreativeTabs ENERGY_BLOCKS = new CreativeTabs("IBHSTD_Energy") {
+    public static CreativeTabs ENERGY_BLOCKS = new CreativeTabs("Overloaded_Energy") {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(ModBlocks.basicGenerator);
         }
     };
 
-    public static CreativeTabs UTILITY = new CreativeTabs("IBHSTD_UTILITY") {
+    public static CreativeTabs UTILITY = new CreativeTabs("Overloaded_Utility") {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(ModBlocks.infiniteBarrel);

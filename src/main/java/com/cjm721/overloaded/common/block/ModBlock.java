@@ -1,6 +1,5 @@
-package com.cjm721.ibhstd.common.block;
+package com.cjm721.overloaded.common.block;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;

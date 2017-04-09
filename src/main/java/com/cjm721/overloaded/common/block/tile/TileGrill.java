@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.common.block.tile;
+package com.cjm721.overloaded.common.block.tile;
 
 import net.minecraft.tileentity.TileEntity;
 

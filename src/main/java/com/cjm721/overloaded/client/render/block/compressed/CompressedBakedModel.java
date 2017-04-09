@@ -1,6 +1,6 @@
-package com.cjm721.ibhstd.client.render.block.compressed;
+package com.cjm721.overloaded.client.render.block.compressed;
 
-import com.cjm721.ibhstd.common.block.compressed.BlockCompressed;
+import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -170,6 +170,7 @@ public class CompressedBakedModel implements IBakedModel {
         return defaultModel.getParticleTexture();
     }
 
+    @Deprecated
     @Override
     public ItemCameraTransforms getItemCameraTransforms() {
         return defaultModel.getItemCameraTransforms();

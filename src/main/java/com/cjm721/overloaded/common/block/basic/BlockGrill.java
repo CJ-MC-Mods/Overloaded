@@ -1,7 +1,7 @@
-package com.cjm721.ibhstd.common.block.basic;
+package com.cjm721.overloaded.common.block.basic;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.block.tile.TileGrill;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.tile.TileGrill;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-import static com.cjm721.ibhstd.IBHSTD.MODID;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
  * Created by CJ on 4/7/2017.
@@ -33,7 +33,7 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(IBHSTDCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.UTILITY);
         GameRegistry.register(this);
         registerItemForm();
         GameRegistry.registerTileEntity(TileGrill.class, MODID + ":grill");
@@ -64,6 +64,7 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Deprecated
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

@@ -1,13 +1,11 @@
-package com.cjm721.ibhstd.common.block.compressed;
+package com.cjm721.overloaded.common.block.compressed;
 
-import com.cjm721.ibhstd.client.render.block.compressed.CompressedModelLoader;
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.block.ModBlock;
+import com.cjm721.overloaded.client.render.block.compressed.CompressedModelLoader;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
@@ -36,7 +34,7 @@ public class BlockCompressed extends ModBlock {
         setUnlocalizedName(unlocalizedName);
         setHardness(hardness);
         setHarvestLevel(harvestTool, harvestLevel);
-        setCreativeTab(IBHSTDCreativeTabs.COMPRESSED_BLOCKS);
+        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
         register();
     }
 

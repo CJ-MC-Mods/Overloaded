@@ -1,22 +1,11 @@
-package com.cjm721.ibhstd.common.block.tile;
+package com.cjm721.overloaded.common.block.tile;
 
-import com.cjm721.ibhstd.common.storage.fluid.LongFluidStorage;
-import com.cjm721.ibhstd.common.util.NumberUtil;
+import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.items.CapabilityItemHandler;
-
-import javax.annotation.Nullable;
-
-import static com.cjm721.ibhstd.common.util.FluidUtil.fluidsAreEqual;
-import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
-import static com.cjm721.ibhstd.common.util.NumberUtil.AddReturn;
 
 /**
  * Created by CJ on 4/8/2017.

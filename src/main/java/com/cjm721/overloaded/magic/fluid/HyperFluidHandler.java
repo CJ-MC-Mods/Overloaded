@@ -1,6 +1,6 @@
-package com.cjm721.ibhstd.magic.fluid;
+package com.cjm721.overloaded.magic.fluid;
 
-import com.cjm721.ibhstd.api.hyper.ITypeInterface;
+import com.cjm721.overloaded.api.hyper.ITypeInterface;
 import net.minecraftforge.fluids.FluidStack;
 
 /**

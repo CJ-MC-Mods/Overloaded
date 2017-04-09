@@ -1,7 +1,7 @@
-package com.cjm721.ibhstd.common.storage.fluid;
+package com.cjm721.overloaded.common.storage.fluid;
 
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
-import com.cjm721.ibhstd.common.util.NumberUtil;
+import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -9,8 +9,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.ibhstd.common.util.FluidUtil.fluidsAreEqual;
-import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
+import static com.cjm721.overloaded.common.util.FluidUtil.fluidsAreEqual;
+import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
 /**
  * Created by CJ on 4/8/2017.

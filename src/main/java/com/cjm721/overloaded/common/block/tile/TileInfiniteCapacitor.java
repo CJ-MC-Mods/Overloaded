@@ -1,6 +1,6 @@
-package com.cjm721.ibhstd.common.block.tile;
+package com.cjm721.overloaded.common.block.tile;
 
-import com.cjm721.ibhstd.common.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.common.storage.energy.LongEnergyStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

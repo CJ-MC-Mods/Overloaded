@@ -9,11 +9,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 /**
  * Created by CJ on 4/2/2017.
  */
-@Mod(modid = OVERLOADED.MODID, version = OVERLOADED.VERSION)
-public class OVERLOADED {
+@Mod(modid = Overloaded.MODID, version = Overloaded.VERSION)
+public class Overloaded {
 
-    @Mod.Instance(OVERLOADED.MODID)
-    public static OVERLOADED instance;
+    @Mod.Instance(Overloaded.MODID)
+    public static Overloaded instance;
 
     public static final String MODID = "overloaded";
     public static final String VERSION = "${mod_version}";
@@ -21,7 +21,7 @@ public class OVERLOADED {
     public static final String PROXY_CLIENT = "com.cjm721.overloaded.client.ClientProxy";
     public static final String PROXY_SERVER = "com.cjm721.overloaded.common.CommonProxy";
 
-    @SidedProxy(clientSide = OVERLOADED.PROXY_CLIENT, serverSide = OVERLOADED.PROXY_SERVER)
+    @SidedProxy(clientSide = Overloaded.PROXY_CLIENT, serverSide = Overloaded.PROXY_SERVER)
     public static CommonProxy proxy;
 
     @Mod.EventHandler

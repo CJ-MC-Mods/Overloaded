@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.magic.energy;
+package com.cjm721.overloaded.magic.energy;
 
 /**
  * Created by CJ on 4/8/2017.

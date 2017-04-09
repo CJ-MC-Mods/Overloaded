@@ -1,6 +1,5 @@
-package com.cjm721.ibhstd.api.hyper;
+package com.cjm721.overloaded.api.hyper;
 
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**

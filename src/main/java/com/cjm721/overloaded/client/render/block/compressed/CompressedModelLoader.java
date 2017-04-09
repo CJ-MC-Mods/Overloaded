@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.client.render.block.compressed;
+package com.cjm721.overloaded.client.render.block.compressed;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.IResourceManager;
@@ -9,7 +9,7 @@ import net.minecraftforge.client.model.IModel;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cjm721.ibhstd.IBHSTD.MODID;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
  * Created by CJ on 4/3/2017.

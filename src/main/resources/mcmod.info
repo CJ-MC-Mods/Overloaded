@@ -1,12 +1,12 @@
 [
   {
-  "modid": "ibhstd",
-  "name": "I'm Bored Here's Something To Do",
+  "modid": "overloaded",
+  "name": "Overloaded",
   "description": "Adds various complicated and tedius things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "logoFile": "logo.png",
-  "url": "cjm721.com/",
+  "url": "https://github.com/CJ-MC-Mods/Overloaded",
   "updateJSON": "minecraftforge.net/versions.json",
   "authorList": ["CJ Miller (cjm721)"],
   "credits": "Assets: Mulletzorz -- Documentation / Thinkers: Sironin, Braingkk"

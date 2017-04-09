@@ -1,19 +1,12 @@
-package com.cjm721.ibhstd.common.block.tile;
+package com.cjm721.overloaded.common.block.tile;
 
-import com.cjm721.ibhstd.common.storage.item.LongItemStorage;
-import com.cjm721.ibhstd.common.util.CapabilityHyperItem;
-import com.cjm721.ibhstd.common.util.NumberUtil;
-import net.minecraft.item.ItemStack;
+import com.cjm721.overloaded.common.storage.item.LongItemStorage;
+import com.cjm721.overloaded.common.util.CapabilityHyperItem;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
-
-import static com.cjm721.ibhstd.common.util.ItemUtil.itemsAreEqual;
-import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
-import static com.cjm721.ibhstd.common.util.NumberUtil.AddReturn;
 
 /**
  * Created by CJ on 4/7/2017.

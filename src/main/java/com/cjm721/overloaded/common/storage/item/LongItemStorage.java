@@ -1,14 +1,14 @@
-package com.cjm721.ibhstd.common.storage.item;
+package com.cjm721.overloaded.common.storage.item;
 
-import com.cjm721.ibhstd.common.storage.LongItemStack;
-import com.cjm721.ibhstd.common.util.NumberUtil;
-import com.cjm721.ibhstd.magic.item.IHyperItemHandler;
+import com.cjm721.overloaded.common.storage.LongItemStack;
+import com.cjm721.overloaded.common.util.NumberUtil;
+import com.cjm721.overloaded.magic.item.IHyperItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
 
-import static com.cjm721.ibhstd.common.util.ItemUtil.itemsAreEqual;
-import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
+import static com.cjm721.overloaded.common.util.ItemUtil.itemsAreEqual;
+import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
 /**
  * Created by CJ on 4/8/2017.

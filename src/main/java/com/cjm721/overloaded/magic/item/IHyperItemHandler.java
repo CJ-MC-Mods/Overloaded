@@ -1,8 +1,7 @@
-package com.cjm721.ibhstd.magic.item;
+package com.cjm721.overloaded.magic.item;
 
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
-import com.cjm721.ibhstd.common.storage.LongItemStack;
-import net.minecraft.item.ItemStack;
+import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.LongItemStack;
 
 /**
  * Created by CJ on 4/8/2017.

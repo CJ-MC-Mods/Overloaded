@@ -1,9 +1,9 @@
-package com.cjm721.ibhstd.common.block.basic;
+package com.cjm721.overloaded.common.block.basic;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.block.ModBlock;
-import com.cjm721.ibhstd.common.block.tile.TileInfiniteTank;
-import com.cjm721.ibhstd.common.storage.fluid.LongFluidStorage;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.tile.TileInfiniteTank;
+import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.ibhstd.IBHSTD.MODID;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
  * Created by CJ on 4/8/2017.
@@ -42,7 +42,7 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(IBHSTDCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.UTILITY);
         register();
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infiniteTank");
     }

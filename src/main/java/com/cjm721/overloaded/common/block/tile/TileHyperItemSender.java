@@ -1,7 +1,7 @@
-package com.cjm721.ibhstd.common.block.tile;
+package com.cjm721.overloaded.common.block.tile;
 
-import com.cjm721.ibhstd.common.storage.LongItemStack;
-import com.cjm721.ibhstd.magic.item.IHyperItemHandler;
+import com.cjm721.overloaded.common.storage.LongItemStack;
+import com.cjm721.overloaded.magic.item.IHyperItemHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-import static com.cjm721.ibhstd.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
+import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 /**
  * Created by CJ on 4/8/2017.

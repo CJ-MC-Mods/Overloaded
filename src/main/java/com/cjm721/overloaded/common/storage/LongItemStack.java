@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.common.storage;
+package com.cjm721.overloaded.common.storage;
 
 import net.minecraft.item.ItemStack;
 

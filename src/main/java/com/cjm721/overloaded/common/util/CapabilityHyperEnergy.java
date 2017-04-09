@@ -1,7 +1,7 @@
-package com.cjm721.ibhstd.common.util;
+package com.cjm721.overloaded.common.util;
 
-import com.cjm721.ibhstd.common.storage.energy.LongEnergyStorage;
-import com.cjm721.ibhstd.magic.energy.IHyperEnergyHandler;
+import com.cjm721.overloaded.common.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.magic.energy.IHyperEnergyHandler;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagLong;

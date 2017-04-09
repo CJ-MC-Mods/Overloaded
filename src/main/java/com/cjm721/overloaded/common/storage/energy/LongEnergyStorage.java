@@ -1,13 +1,11 @@
-package com.cjm721.ibhstd.common.storage.energy;
+package com.cjm721.overloaded.common.storage.energy;
 
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
-import com.cjm721.ibhstd.common.util.NumberUtil;
-import com.cjm721.ibhstd.magic.energy.EnergyType;
-import com.cjm721.ibhstd.magic.energy.IHyperEnergyHandler;
+import com.cjm721.overloaded.common.util.NumberUtil;
+import com.cjm721.overloaded.magic.energy.IHyperEnergyHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
+import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
 /**
  * Created by CJ on 4/8/2017.

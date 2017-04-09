@@ -1,10 +1,8 @@
-package com.cjm721.ibhstd.common.block.basic;
+package com.cjm721.overloaded.common.block.basic;
 
-import com.cjm721.ibhstd.common.IBHSTDCreativeTabs;
-import com.cjm721.ibhstd.common.block.ModBlock;
-import com.cjm721.ibhstd.common.block.tile.TileInfiniteBarrel;
-import com.cjm721.ibhstd.common.block.tile.TileInfiniteCapacitor;
-import com.cjm721.ibhstd.common.block.tile.TileInfiniteTank;
+import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.tile.TileInfiniteCapacitor;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,14 +19,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.ibhstd.IBHSTD.MODID;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
  * Created by CJ on 4/8/2017.
@@ -43,7 +40,7 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(IBHSTDCreativeTabs.ENERGY_BLOCKS);
+        setCreativeTab(OverloadedCreativeTabs.ENERGY_BLOCKS);
         register();
         GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infiniteCapacitor");
     }

@@ -1,4 +1,4 @@
-package com.cjm721.ibhstd.common.block.compressed;
+package com.cjm721.overloaded.common.block.compressed;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

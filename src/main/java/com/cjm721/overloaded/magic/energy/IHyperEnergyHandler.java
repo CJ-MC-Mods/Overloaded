@@ -1,7 +1,6 @@
-package com.cjm721.ibhstd.magic.energy;
+package com.cjm721.overloaded.magic.energy;
 
-import com.cjm721.ibhstd.api.hyper.ITypeInterface;
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.INBTConvertable;
 
 /**
  * Created by CJ on 4/8/2017.
