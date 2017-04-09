@@ -1,46 +1,30 @@
 package com.cjm721.ibhstd.common.block.tile.bases;
 
-import com.cjm721.ibhstd.common.block.ModBlock;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 
 /**
  * Created by CJ on 4/8/2017.
  */
-public abstract class AbstractTileHyperItemNode extends TileEntity implements ITickable {
+public abstract class AbstractTileHyperItemNode extends TileEntity {
 
-    private BlockPos receiverPos;
-    private int worldID;
+    protected BlockPos partnerBlockPos;
+    protected int partnerWorldID;
 
-    private boolean partnerLoaded;
-    private AbstractTileHyperItemNode partner;
+    protected boolean partnerLoaded;
+    protected AbstractTileHyperItemNode partner;
 
-    private int delayTicks;
-
-    /**
-     * Like the old updateEntity(), except more generic.
-     */
-    @Override
-    public void update() {
-        if(delayTicks > 20) {
-            delayTicks = 0;
-
-        } else {
-            delayTicks++;
-        }
-    }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
-        if(receiverPos != null) {
-            compound.setInteger("X", receiverPos.getX());
-            compound.setInteger("Y", receiverPos.getY());
-            compound.setInteger("Z", receiverPos.getZ());
-            compound.setInteger("WORLD", worldID);
+        if(partnerBlockPos != null) {
+            compound.setInteger("X", partnerBlockPos.getX());
+            compound.setInteger("Y", partnerBlockPos.getY());
+            compound.setInteger("Z", partnerBlockPos.getZ());
+            compound.setInteger("WORLD", partnerWorldID);
         }
 
         return compound;
@@ -50,13 +34,13 @@ public abstract class AbstractTileHyperItemNode extends TileEntity implements IT
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        if(compound.hasKey("X")) {
+        if (compound.hasKey("X")) {
             int x = compound.getInteger("X");
             int y = compound.getInteger("Y");
             int z = compound.getInteger("Z");
 
-            receiverPos = new BlockPos(x,y,z);
-            worldID = compound.getInteger("WORLD");
+            partnerBlockPos = new BlockPos(x, y, z);
+            partnerWorldID = compound.getInteger("WORLD");
         }
     }
 
@@ -72,6 +56,12 @@ public abstract class AbstractTileHyperItemNode extends TileEntity implements IT
         this.partner = null;
     }
 
+    protected AbstractTileHyperItemNode getPartner() {
+        return partner;
+    }
 
-
+    public void setPartnetInfo(int partnerWorldId, BlockPos partnerPos) {
+        this.partnerWorldID = partnerWorldId;
+        this.partnerBlockPos = partnerPos;
+    }
 }

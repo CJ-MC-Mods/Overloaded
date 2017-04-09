@@ -1,6 +1,7 @@
 package com.cjm721.ibhstd.common.block.tile;
 
 import com.cjm721.ibhstd.common.storage.item.LongItemStorage;
+import com.cjm721.ibhstd.common.util.CapabilityHyperItem;
 import com.cjm721.ibhstd.common.util.NumberUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,7 +44,7 @@ public class TileInfiniteBarrel extends TileEntity  {
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
             return true;
         }
@@ -53,7 +54,7 @@ public class TileInfiniteBarrel extends TileEntity  {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
             return (T) itemStorage;
         }

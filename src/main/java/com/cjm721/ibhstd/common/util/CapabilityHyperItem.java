@@ -15,8 +15,8 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class CababilityHyperItem {
-    @CapabilityInject(IHyperEnergyHandler.class)
+public class CapabilityHyperItem {
+    @CapabilityInject(IHyperItemHandler.class)
     public static Capability<IHyperItemHandler> HYPER_ITEM_HANDLER = null;
 
     public static void register()

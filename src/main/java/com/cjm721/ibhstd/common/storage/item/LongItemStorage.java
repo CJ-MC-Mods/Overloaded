@@ -1,7 +1,8 @@
 package com.cjm721.ibhstd.common.storage.item;
 
-import com.cjm721.ibhstd.common.storage.INBTConvertable;
+import com.cjm721.ibhstd.common.storage.LongItemStack;
 import com.cjm721.ibhstd.common.util.NumberUtil;
+import com.cjm721.ibhstd.magic.item.IHyperItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
@@ -12,9 +13,9 @@ import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongItemStorage implements IItemHandler, INBTConvertable {
-    long storedAmount;
-    ItemStack storedItem;
+public class LongItemStorage implements IItemHandler, IHyperItemHandler {
+
+    LongItemStack longItemStack;
 
     /**
      * Returns the number of slots available
@@ -47,9 +48,11 @@ public class LongItemStorage implements IItemHandler, INBTConvertable {
      **/
     @Override
     public ItemStack getStackInSlot(int slot) {
-        if(storedItem != null)
-            storedItem.stackSize = (int) Math.min(Integer.MAX_VALUE,storedAmount);
-        return storedItem;
+        if(longItemStack != null) {
+            longItemStack.itemStack.stackSize = (int) Math.min(Integer.MAX_VALUE,longItemStack.amount);
+            return longItemStack.itemStack;
+        }
+        return null;
     }
 
     /**
@@ -65,28 +68,16 @@ public class LongItemStorage implements IItemHandler, INBTConvertable {
      **/
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if(storedItem == null) {
-            if(!simulate) {
-                storedItem = stack;
-                storedAmount = stack.stackSize;
-            }
+        LongItemStack result = give(new LongItemStack(stack,stack.stackSize), !simulate);
+
+        if(result.amount == 0) {
             return null;
         }
 
-        if(itemsAreEqual(storedItem,stack)) {
-            NumberUtil.AddReturn<Long> result = addToMax(storedAmount, stack.stackSize);
-            if(!simulate) {
-                storedAmount = result.result;
-            }
-            if(result.overflow.intValue() == 0) {
-                return null;
-            }
-            ItemStack toReturn = stack.copy();
-            toReturn.stackSize = result.overflow.intValue();
-            return toReturn;
-        }
+        ItemStack toReturn = stack.copy();
+        toReturn.stackSize = (int) result.amount;
 
-        return stack;
+        return toReturn;
     }
 
     /**
@@ -101,41 +92,84 @@ public class LongItemStorage implements IItemHandler, INBTConvertable {
      **/
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if(storedItem == null)
+        LongItemStack result = take(amount, !simulate);
+
+        if(result.amount == 0L) {
             return null;
-
-        ItemStack itemStack = storedItem.copy();
-        itemStack.stackSize = (int) Math.min(amount, storedAmount);
-
-        if(!simulate) {
-            storedAmount -= itemStack.stackSize;
-            if(storedAmount == 0L)
-                storedItem = null;
         }
 
-        return itemStack;
+        ItemStack toReturn = result.itemStack.copy();
+        toReturn.stackSize = (int) result.amount;
+
+        return toReturn;
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        if(storedItem != null)
-            compound.setTag("Item", storedItem.serializeNBT());
-        compound.setLong("Count", storedAmount);
+        if(longItemStack != null) {
+            compound.setTag("Item", longItemStack.itemStack.serializeNBT());
+            compound.setLong("Count", longItemStack.amount);
+        }
 
         return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
-        storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
+        ItemStack storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
+        if(storedItem != null) {
+            long storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
+            longItemStack = new LongItemStack(storedItem, storedAmount);
+        }
     }
 
     public ItemStack getStoredItem() {
-        return storedItem;
+        return longItemStack == null ? null : longItemStack.itemStack;
     }
 
     public long getStoredAmount() {
-        return storedAmount;
+        return longItemStack == null ? 0L : longItemStack.amount;
+    }
+
+    @Override
+    public LongItemStack status() {
+        return longItemStack;
+    }
+
+    @Override
+    public LongItemStack give(LongItemStack stack, boolean doAction) {
+        if(longItemStack == null) {
+            if(doAction) {
+                longItemStack = new LongItemStack(stack.itemStack, stack.amount);
+            }
+            return LongItemStack.EMPTY_STACK;
+        }
+
+        if(itemsAreEqual(longItemStack.itemStack,stack.itemStack)) {
+            NumberUtil.AddReturn<Long> result = addToMax(longItemStack.amount, stack.amount);
+            if(doAction) {
+                longItemStack.amount = result.result;
+            }
+            return new LongItemStack(stack.itemStack, result.overflow);
+        }
+
+        return stack;
+    }
+
+    @Override
+    public LongItemStack take(long aLong, boolean doAction) {
+        if(longItemStack == null)
+            return LongItemStack.EMPTY_STACK;
+
+        long result = Math.min(aLong, longItemStack.amount);
+        LongItemStack toReturn = new LongItemStack(longItemStack.itemStack, result);
+        if(doAction) {
+            longItemStack.amount -= result;
+
+            if(longItemStack.amount == 0L)
+                longItemStack = null;
+        }
+
+        return toReturn;
     }
 }

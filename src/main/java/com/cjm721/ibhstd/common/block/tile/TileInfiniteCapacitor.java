@@ -40,7 +40,7 @@ public class TileInfiniteCapacitor extends TileEntity {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if(capability == ENERGY) {
-            return (T) this;
+            return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
     }

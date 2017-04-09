@@ -1,18 +1,14 @@
 package com.cjm721.ibhstd.common.util;
 
-import com.cjm721.ibhstd.magic.energy.HyperEnergyHandler;
+import com.cjm721.ibhstd.common.storage.energy.LongEnergyStorage;
 import com.cjm721.ibhstd.magic.energy.IHyperEnergyHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import net.minecraftforge.items.ItemStackHandler;
-
-import java.util.concurrent.Callable;
 
 /**
  * Created by CJ on 4/8/2017.
@@ -20,6 +16,25 @@ import java.util.concurrent.Callable;
 public class CapabilityHyperEnergy {
     @CapabilityInject(IHyperEnergyHandler.class)
     public static Capability<IHyperEnergyHandler> HYPER_ENERGY_HANDLER = null;
-    
+
+    public static void register()
+    {
+        CapabilityManager.INSTANCE.register(IHyperEnergyHandler.class,
+            new Capability.IStorage<IHyperEnergyHandler>() {
+                @Override
+                public NBTBase writeNBT(Capability<IHyperEnergyHandler> capability, IHyperEnergyHandler instance, EnumFacing side)
+                {
+                    return new NBTTagLong(instance.status());
+                }
+
+                @Override
+                public void readNBT(Capability<IHyperEnergyHandler> capability, IHyperEnergyHandler instance, EnumFacing side, NBTBase nbt)
+                {
+                    instance.give(((NBTTagInt)nbt).getLong(), true);
+                }
+            },
+            LongEnergyStorage.class
+        );
+    }
 
 }

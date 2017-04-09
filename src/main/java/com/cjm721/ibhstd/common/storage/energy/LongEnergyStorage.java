@@ -2,6 +2,8 @@ package com.cjm721.ibhstd.common.storage.energy;
 
 import com.cjm721.ibhstd.common.storage.INBTConvertable;
 import com.cjm721.ibhstd.common.util.NumberUtil;
+import com.cjm721.ibhstd.magic.energy.EnergyType;
+import com.cjm721.ibhstd.magic.energy.IHyperEnergyHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -10,7 +12,7 @@ import static com.cjm721.ibhstd.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongEnergyStorage implements IEnergyStorage, INBTConvertable{
+public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler{
 
     long storedAmount;
 
@@ -99,5 +101,30 @@ public class LongEnergyStorage implements IEnergyStorage, INBTConvertable{
 
     public long getStoredAmount() {
         return storedAmount;
+    }
+
+    @Override
+    public long status() {
+        return storedAmount;
+    }
+
+    @Override
+    public long give(long aLong, boolean doAction) {
+        NumberUtil.AddReturn<Long> longAddReturn = NumberUtil.addToMax(storedAmount, aLong);
+
+        if(doAction)
+            storedAmount = longAddReturn.result;
+
+        return longAddReturn.overflow;
+    }
+
+    @Override
+    public long take(long aLong, boolean doAction) {
+        long newStoredAmount = Math.max(storedAmount - aLong, 0);
+
+        if(doAction)
+            storedAmount = newStoredAmount;
+
+        return Math.min(storedAmount,aLong);
     }
 }
