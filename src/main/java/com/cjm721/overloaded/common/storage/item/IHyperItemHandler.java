@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.magic.item;
+package com.cjm721.overloaded.common.storage.item;
 
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongItemStack;

@@ -2,7 +2,7 @@ package com.cjm721.overloaded.common.util;
 
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.storage.item.LongItemStorage;
-import com.cjm721.overloaded.magic.item.IHyperItemHandler;
+import com.cjm721.overloaded.common.storage.item.IHyperItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;

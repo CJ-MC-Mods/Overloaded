@@ -3,7 +3,6 @@ package com.cjm721.overloaded.common.storage.item;
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
-import com.cjm721.overloaded.magic.item.IHyperItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;

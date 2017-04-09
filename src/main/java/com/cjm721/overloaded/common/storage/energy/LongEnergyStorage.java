@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.common.storage.energy;
 
 import com.cjm721.overloaded.common.util.NumberUtil;
-import com.cjm721.overloaded.magic.energy.IHyperEnergyHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -10,7 +9,7 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler{
+public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
 
     long storedAmount;
 

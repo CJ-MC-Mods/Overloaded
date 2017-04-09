@@ -1,12 +1,8 @@
 package com.cjm721.overloaded.common.util;
 
 import com.cjm721.overloaded.common.storage.LongFluidStack;
-import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
-import com.cjm721.overloaded.common.storage.item.LongItemStorage;
-import com.cjm721.overloaded.magic.fluid.IHyperFluidHandler;
-import com.cjm721.overloaded.magic.item.IHyperItemHandler;
-import net.minecraft.item.ItemStack;
+import com.cjm721.overloaded.common.storage.fluid.IHyperFluidHandler;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

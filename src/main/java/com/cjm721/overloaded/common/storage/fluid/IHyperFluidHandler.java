@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.magic.fluid;
+package com.cjm721.overloaded.common.storage.fluid;
 
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongFluidStack;

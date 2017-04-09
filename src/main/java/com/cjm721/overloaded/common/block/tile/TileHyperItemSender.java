@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.common.block.tile;
 
 import com.cjm721.overloaded.common.storage.LongItemStack;
-import com.cjm721.overloaded.magic.item.IHyperItemHandler;
+import com.cjm721.overloaded.common.storage.item.IHyperItemHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

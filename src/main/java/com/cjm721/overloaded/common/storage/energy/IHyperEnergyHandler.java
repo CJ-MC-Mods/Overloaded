@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.magic.energy;
+package com.cjm721.overloaded.common.storage.energy;
 
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 
