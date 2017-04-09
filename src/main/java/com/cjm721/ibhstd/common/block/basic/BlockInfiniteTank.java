@@ -55,7 +55,7 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "tank"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infiniteTank"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {

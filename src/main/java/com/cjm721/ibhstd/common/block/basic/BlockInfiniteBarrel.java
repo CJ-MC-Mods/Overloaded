@@ -54,7 +54,7 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "barrel"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infiniteBarrel"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {
