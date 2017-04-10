@@ -16,8 +16,7 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, C exten
     public AbstractTileHyperReceiver(C capability) {
         this.capability = capability;
     }
-
-//    public abstract Type receive(Type stack);
+    
     public Type receive(Type stack) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
