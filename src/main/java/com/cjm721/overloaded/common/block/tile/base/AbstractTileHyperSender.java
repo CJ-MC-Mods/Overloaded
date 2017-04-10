@@ -3,8 +3,6 @@ package com.cjm721.overloaded.common.block.tile.base;
 import com.cjm721.overloaded.common.block.tile.TileHyperItemReceiver;
 import com.cjm721.overloaded.common.storage.IHyperHandler;
 import com.cjm721.overloaded.common.storage.IHyperType;
-import com.cjm721.overloaded.common.storage.LongItemStack;
-import com.cjm721.overloaded.common.storage.item.IHyperHandlerItem;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -14,8 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
-
-import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 /**
  * Created by CJ on 4/10/2017.
