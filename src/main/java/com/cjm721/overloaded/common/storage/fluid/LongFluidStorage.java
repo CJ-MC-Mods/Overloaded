@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.storage.fluid;
 
+import com.cjm721.overloaded.common.storage.IHyperHandler;
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
@@ -17,7 +18,7 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongFluidStorage implements IFluidHandler, IHyperFluidHandler, INBTConvertable {
+public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertable {
 
     LongFluidStack storedFluid;
 
@@ -61,10 +62,11 @@ public class LongFluidStorage implements IFluidHandler, IHyperFluidHandler, INBT
     @Nullable
     @Override
     public FluidStack drain(FluidStack resource, boolean doDrain) {
+        // TODO move this into take
         if(storedFluid == null || !fluidsAreEqual(storedFluid.fluidStack, resource))
             return null;
 
-        LongFluidStack result = take(resource.amount, doDrain);
+        LongFluidStack result = take(new LongFluidStack(resource, resource.amount), doDrain);
 
         if(result.amount == 0L) {
             return null;
@@ -89,7 +91,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperFluidHandler, INBT
     @Nullable
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {
-        LongFluidStack result = take(maxDrain, doDrain);
+        LongFluidStack result = take(new LongFluidStack(null, maxDrain), doDrain);
 
         if(result.amount == 0L) {
             return null;
@@ -132,11 +134,11 @@ public class LongFluidStorage implements IFluidHandler, IHyperFluidHandler, INBT
 
     @Override
     @Nonnull
-    public LongFluidStack take(long aLong, boolean doAction) {
+    public LongFluidStack take(LongFluidStack stack, boolean doAction) {
         if (storedFluid == null)
             return LongFluidStack.EMPTY_STACK;
 
-        LongFluidStack toReturn = new LongFluidStack(storedFluid.fluidStack,Math.min(storedFluid.amount, aLong));
+        LongFluidStack toReturn = new LongFluidStack(storedFluid.fluidStack,Math.min(storedFluid.amount, stack.amount));
 
         if (doAction) {
             storedFluid.amount -= toReturn.amount;

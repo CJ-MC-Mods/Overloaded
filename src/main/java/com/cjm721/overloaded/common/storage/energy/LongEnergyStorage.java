@@ -1,5 +1,8 @@
 package com.cjm721.overloaded.common.storage.energy;
 
+import com.cjm721.overloaded.common.storage.IHyperHandler;
+import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -9,19 +12,19 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
+public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTConvertable {
 
-    long storedAmount;
+    LongEnergyStack energy;
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setLong("Count", storedAmount);
+        compound.setLong("Count", energy.amount);
         return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
+        energy = new LongEnergyStack(compound.hasKey("Count") ? compound.getLong("Count") : 0L);
     }
 
     /**
@@ -33,10 +36,10 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
      */
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        NumberUtil.AddReturn<Long> result = addToMax(storedAmount, maxReceive);
+        NumberUtil.AddReturn<Long> result = addToMax(energy.amount, maxReceive);
 
         if(!simulate)
-            storedAmount = result.result;
+            energy.amount = result.result;
 
         return maxReceive - result.overflow.intValue();
     }
@@ -50,15 +53,15 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
      */
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        long result = Math.max(storedAmount - maxExtract, 0);
+        long result = Math.max(energy.amount - maxExtract, 0);
         try {
-            if(storedAmount > maxExtract) {
+            if(energy.amount > maxExtract) {
                 return maxExtract;
             }
-            return (int) storedAmount;
+            return (int) energy.amount;
         } finally {
             if(!simulate)
-                storedAmount = result;
+                energy.amount = result;
         }
     }
 
@@ -67,7 +70,7 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
      */
     @Override
     public int getEnergyStored() {
-        return (int) (((double)storedAmount/(double)Long.MAX_VALUE) * Integer.MAX_VALUE);
+        return (int) (((double) energy.amount /(double)Long.MAX_VALUE) * Integer.MAX_VALUE);
     }
 
     /**
@@ -96,32 +99,28 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperEnergyHandler {
         return true;
     }
 
-    public long getStoredAmount() {
-        return storedAmount;
+    @Override
+    public LongEnergyStack status() {
+        return energy;
     }
 
     @Override
-    public long status() {
-        return storedAmount;
-    }
-
-    @Override
-    public long give(long aLong, boolean doAction) {
-        NumberUtil.AddReturn<Long> longAddReturn = NumberUtil.addToMax(storedAmount, aLong);
+    public LongEnergyStack give(LongEnergyStack stack, boolean doAction) {
+        NumberUtil.AddReturn<Long> longAddReturn = NumberUtil.addToMax(energy.amount, stack.amount);
 
         if(doAction)
-            storedAmount = longAddReturn.result;
+            energy.amount = longAddReturn.result;
 
-        return longAddReturn.overflow;
+        return new LongEnergyStack(longAddReturn.overflow);
     }
 
     @Override
-    public long take(long aLong, boolean doAction) {
-        long newStoredAmount = Math.max(storedAmount - aLong, 0);
+    public LongEnergyStack take(LongEnergyStack stack, boolean doAction) {
+        long newStoredAmount = Math.max(energy.amount - stack.amount, 0);
 
         if(doAction)
-            storedAmount = newStoredAmount;
+            energy.amount = newStoredAmount;
 
-        return Math.min(storedAmount,aLong);
+        return new LongEnergyStack(Math.min(energy.amount,stack.amount));
     }
 }

@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.common.util;
 
 import com.cjm721.overloaded.common.storage.LongItemStack;
+import com.cjm721.overloaded.common.storage.item.IHyperHandlerItem;
 import com.cjm721.overloaded.common.storage.item.LongItemStorage;
-import com.cjm721.overloaded.common.storage.item.IHyperItemHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,14 +15,14 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
  * Created by CJ on 4/8/2017.
  */
 public class CapabilityHyperItem {
-    @CapabilityInject(IHyperItemHandler.class)
-    public static Capability<IHyperItemHandler> HYPER_ITEM_HANDLER = null;
+    @CapabilityInject(IHyperHandlerItem.class)
+    public static Capability<IHyperHandlerItem> HYPER_ITEM_HANDLER = null;
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IHyperItemHandler.class, new Capability.IStorage<IHyperItemHandler>() {
+        CapabilityManager.INSTANCE.register(IHyperHandlerItem.class, new Capability.IStorage<IHyperHandlerItem>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperItemHandler> capability, IHyperItemHandler instance, EnumFacing side)
+            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, IHyperHandlerItem instance, EnumFacing side)
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongItemStack stack = instance.status();
@@ -34,7 +34,7 @@ public class CapabilityHyperItem {
             }
 
             @Override
-            public void readNBT(Capability<IHyperItemHandler> capability, IHyperItemHandler instance, EnumFacing side, NBTBase nbt)
+            public void readNBT(Capability<IHyperHandlerItem> capability, IHyperHandlerItem instance, EnumFacing side, NBTBase nbt)
             {
                 NBTTagCompound tag = (NBTTagCompound)nbt;
 

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileInfiniteCapacitor;
+import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -80,11 +81,11 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
-                TileInfiniteCapacitor barrel = (TileInfiniteCapacitor) worldIn.getTileEntity(pos);
+                LongEnergyStack stack = ((TileInfiniteCapacitor) worldIn.getTileEntity(pos)).getStorage().status();
 
                 // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
-                double percent = (double) barrel.getStorage().getStoredAmount() / (double) Long.MAX_VALUE;
-                playerIn.addChatComponentMessage(new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", barrel.getStorage().getStoredAmount(), percent)));
+                double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
+                playerIn.addChatComponentMessage(new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", stack.getAmount(), percent)));
                 return true;
             }
         }

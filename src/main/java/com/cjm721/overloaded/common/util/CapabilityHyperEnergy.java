@@ -1,7 +1,8 @@
 package com.cjm721.overloaded.common.util;
 
+import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.storage.energy.LongEnergyStorage;
-import com.cjm721.overloaded.common.storage.energy.IHyperEnergyHandler;
+import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagLong;
@@ -14,23 +15,23 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
  * Created by CJ on 4/8/2017.
  */
 public class CapabilityHyperEnergy {
-    @CapabilityInject(IHyperEnergyHandler.class)
-    public static Capability<IHyperEnergyHandler> HYPER_ENERGY_HANDLER = null;
+    @CapabilityInject(IHyperHandlerEnergy.class)
+    public static Capability<IHyperHandlerEnergy> HYPER_ENERGY_HANDLER = null;
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IHyperEnergyHandler.class,
-            new Capability.IStorage<IHyperEnergyHandler>() {
+        CapabilityManager.INSTANCE.register(IHyperHandlerEnergy.class,
+            new Capability.IStorage<IHyperHandlerEnergy>() {
                 @Override
-                public NBTBase writeNBT(Capability<IHyperEnergyHandler> capability, IHyperEnergyHandler instance, EnumFacing side)
+                public NBTBase writeNBT(Capability<IHyperHandlerEnergy> capability, IHyperHandlerEnergy instance, EnumFacing side)
                 {
-                    return new NBTTagLong(instance.status());
+                    return new NBTTagLong(instance.status().amount);
                 }
 
                 @Override
-                public void readNBT(Capability<IHyperEnergyHandler> capability, IHyperEnergyHandler instance, EnumFacing side, NBTBase nbt)
+                public void readNBT(Capability<IHyperHandlerEnergy> capability, IHyperHandlerEnergy instance, EnumFacing side, NBTBase nbt)
                 {
-                    instance.give(((NBTTagInt)nbt).getLong(), true);
+                    instance.give(new LongEnergyStack(((NBTTagInt)nbt).getLong()), true);
                 }
             },
             LongEnergyStorage.class

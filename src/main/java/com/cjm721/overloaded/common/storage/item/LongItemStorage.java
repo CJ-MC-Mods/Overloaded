@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.storage.item;
 
+import com.cjm721.overloaded.common.storage.IHyperHandler;
 import com.cjm721.overloaded.common.storage.INBTConvertable;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
@@ -15,7 +16,7 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongItemStorage implements IItemHandler, IHyperItemHandler, INBTConvertable {
+public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertable {
 
     LongItemStack longItemStack;
 
@@ -94,7 +95,7 @@ public class LongItemStorage implements IItemHandler, IHyperItemHandler, INBTCon
      **/
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        LongItemStack result = take(amount, !simulate);
+        LongItemStack result = take(new LongItemStack(null,amount), !simulate);
 
         if(result.amount == 0L) {
             return null;
@@ -163,11 +164,11 @@ public class LongItemStorage implements IItemHandler, IHyperItemHandler, INBTCon
 
     @Nonnull
     @Override
-    public LongItemStack take(long aLong, boolean doAction) {
+    public LongItemStack take(@Nonnull LongItemStack stack, boolean doAction) {
         if(longItemStack == null)
             return LongItemStack.EMPTY_STACK;
 
-        long result = Math.min(aLong, longItemStack.amount);
+        long result = Math.min(stack.amount, longItemStack.amount);
         LongItemStack toReturn = new LongItemStack(longItemStack.itemStack, result);
         if(doAction) {
             longItemStack.amount -= result;

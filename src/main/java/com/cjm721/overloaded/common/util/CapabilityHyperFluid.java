@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.common.util;
 
 import com.cjm721.overloaded.common.storage.LongFluidStack;
+import com.cjm721.overloaded.common.storage.fluid.IHyperHandlerFluid;
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
-import com.cjm721.overloaded.common.storage.fluid.IHyperFluidHandler;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -16,14 +16,14 @@ import net.minecraftforge.fluids.FluidStack;
  */
 public class CapabilityHyperFluid {
 
-    @CapabilityInject(IHyperFluidHandler.class)
-    public static Capability<IHyperFluidHandler> HYPER_FLUID_HANDLER = null;
+    @CapabilityInject(IHyperHandlerFluid.class)
+    public static Capability<IHyperHandlerFluid> HYPER_FLUID_HANDLER = null;
 
     public static void register()
     {
-        CapabilityManager.INSTANCE.register(IHyperFluidHandler.class, new Capability.IStorage<IHyperFluidHandler>() {
+        CapabilityManager.INSTANCE.register(IHyperHandlerFluid.class, new Capability.IStorage<IHyperHandlerFluid>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperFluidHandler> capability, IHyperFluidHandler instance, EnumFacing side)
+            public NBTBase writeNBT(Capability<IHyperHandlerFluid> capability, IHyperHandlerFluid instance, EnumFacing side)
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongFluidStack stack = instance.status();
@@ -37,7 +37,7 @@ public class CapabilityHyperFluid {
             }
 
             @Override
-            public void readNBT(Capability<IHyperFluidHandler> capability, IHyperFluidHandler instance, EnumFacing side, NBTBase nbt)
+            public void readNBT(Capability<IHyperHandlerFluid> capability, IHyperHandlerFluid instance, EnumFacing side, NBTBase nbt)
             {
                 NBTTagCompound tag = (NBTTagCompound)nbt;
 

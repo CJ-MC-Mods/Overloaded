@@ -1,10 +1,11 @@
-package com.cjm721.overloaded.common.storage.item;
+package com.cjm721.overloaded.common.storage.fluid;
 
 import com.cjm721.overloaded.common.storage.IHyperHandler;
+import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 
 /**
- * Created by CJ on 4/10/2017.
+ * Used as a concrete type for {@link com.cjm721.overloaded.common.util.CapabilityHyperFluid} registration
  */
-public interface IHyperHandlerItem extends IHyperHandler<LongItemStack> {
+public interface IHyperHandlerFluid extends IHyperHandler<LongFluidStack> {
 }

@@ -7,11 +7,6 @@ import com.cjm721.overloaded.common.storage.LongEnergyStack;
 /**
  * Created by CJ on 4/8/2017.
  */
-public interface IHyperEnergyHandler extends IHyperHandler<LongEnergyStack>, INBTConvertable {
+public interface IHyperHandlerEnergy extends IHyperHandler<LongEnergyStack>, INBTConvertable {
 
-    LongEnergyStack status();
-
-    LongEnergyStack give(LongEnergyStack stack, boolean doAction);
-
-    LongEnergyStack take(LongEnergyStack stack, boolean doAction);
 }

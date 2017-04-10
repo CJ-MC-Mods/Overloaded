@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by CJ on 4/8/2017.
  */
-public class LongItemStack {
+public class LongItemStack implements IHyperType {
 
     public static final LongItemStack EMPTY_STACK = new LongItemStack(null, 0L);
 
@@ -17,4 +17,7 @@ public class LongItemStack {
         this.amount = amount;
     }
 
+    public long getAmount() {
+        return amount;
+    }
 }
