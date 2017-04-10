@@ -2,6 +2,7 @@ package com.cjm721.overloaded.common.block.tile;
 
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.storage.item.IHyperItemHandler;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -10,23 +11,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
+import java.util.Set;
+
 import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 /**
- * Created by CJ on 4/8/2017.
+ * {@link TileEntity That is able to receive items from a remote source}
  */
 public class TileHyperItemSender extends TileEntity implements ITickable {
 
     private int delayTicks;
 
-    protected BlockPos partnerBlockPos;
-    protected int partnerWorldID;
-
-    protected boolean partnerLoaded;
-    protected TileHyperItemReceiver partner;
-
+    private BlockPos partnerBlockPos;
+    private int partnerWorldID;
 
     @Override
+    @MethodsReturnNonnullByDefault
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
@@ -63,31 +63,30 @@ public class TileHyperItemSender extends TileEntity implements ITickable {
             if(partnerBlockPos == null)
                 return;
 
-            if(partnerLoaded) {
-                moveItems();
-            } else if (delayTicks % 200 == 0) {
-                checkForPartner();
+            TileHyperItemReceiver partner = findPartner();
+            if(partner != null) {
+                moveItems(partner);
             }
         }
         delayTicks++;
     }
 
-    private void checkForPartner() {
+    private TileHyperItemReceiver findPartner() {
         WorldServer world = DimensionManager.getWorld(partnerWorldID);
         if(world != null && world.isBlockLoaded(partnerBlockPos)) {
             TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
 
             if(partnerTE == null || !(partnerTE instanceof TileHyperItemReceiver)) {
                 this.partnerBlockPos = null;
-                partner = null;
+                return null;
             } else {
-                partnerLoaded = true;
-                partner = (TileHyperItemReceiver) partnerTE;
+                return (TileHyperItemReceiver) partnerTE;
             }
         }
+        return null;
     }
 
-    private void moveItems() {
+    private void moveItems(TileHyperItemReceiver partner) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
@@ -100,12 +99,11 @@ public class TileHyperItemSender extends TileEntity implements ITickable {
                 long leftOvers = partner.receiveItems(itemStack);
                 if(leftOvers != itemStack.amount)
                     handler.take(itemStack.amount - leftOvers, true);
-
             }
         }
     }
 
-    public void setPartnetInfo(int partnerWorldId, BlockPos partnerPos) {
+    public void setPartnerInfo(int partnerWorldId, BlockPos partnerPos) {
         this.partnerWorldID = partnerWorldId;
         this.partnerBlockPos = partnerPos;
     }

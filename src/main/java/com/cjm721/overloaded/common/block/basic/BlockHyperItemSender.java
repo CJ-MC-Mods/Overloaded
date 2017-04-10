@@ -79,8 +79,12 @@ public class BlockHyperItemSender extends ModBlock implements ITileEntityProvide
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(hand == EnumHand.MAIN_HAND) {
             if (heldItem == null) {
-                String message = ((TileHyperItemSender) worldIn.getTileEntity(pos)).getRightClickMessage();
-                playerIn.addChatComponentMessage(new TextComponentString(message));
+                // SubIf so that Else block does not also need to check for heldItem == null
+                // Should find a cleaner way of showing all of this
+                if(!worldIn.isRemote) {
+                    String message = ((TileHyperItemSender) worldIn.getTileEntity(pos)).getRightClickMessage();
+                    playerIn.addChatComponentMessage(new TextComponentString(message));
+                }
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 NBTTagCompound tag = heldItem.getTagCompound();
                 if (tag != null) {
@@ -103,6 +107,6 @@ public class BlockHyperItemSender extends ModBlock implements ITileEntityProvide
     }
 
     protected void bindToPartner(World world, BlockPos pos, int partnerWorldId, BlockPos partnerPos) {
-        ((TileHyperItemSender)world.getTileEntity(pos)).setPartnetInfo(partnerWorldId, partnerPos);
+        ((TileHyperItemSender)world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 }
