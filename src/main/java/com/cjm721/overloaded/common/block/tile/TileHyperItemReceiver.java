@@ -14,7 +14,7 @@ import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_H
 /**
  * Created by CJ on 4/8/2017.
  */
-public class TileHyperItemReceiver extends AbstractTileHyperReceiver<LongItemStack,IHyperHandlerItem, Capability<IHyperHandlerItem>> {
+public class TileHyperItemReceiver extends AbstractTileHyperReceiver<LongItemStack,IHyperHandlerItem> {
 
     public TileHyperItemReceiver() {
         super(HYPER_ITEM_HANDLER);

@@ -9,7 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 /**
  * Created by CJ on 4/10/2017.
  */
-public class TileHyperFluidReceiver extends AbstractTileHyperReceiver<LongFluidStack,IHyperHandlerFluid, Capability<IHyperHandlerFluid>> {
+public class TileHyperFluidReceiver extends AbstractTileHyperReceiver<LongFluidStack,IHyperHandlerFluid> {
 
     public TileHyperFluidReceiver() {
         super(CapabilityHyperFluid.HYPER_FLUID_HANDLER);

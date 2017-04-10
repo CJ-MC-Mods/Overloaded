@@ -9,11 +9,11 @@ import net.minecraftforge.common.capabilities.Capability;
 /**
  * Created by CJ on 4/10/2017.
  */
-public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extends IHyperHandler<Type>, C extends Capability<H>> extends TileEntity {
+public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extends IHyperHandler<Type>> extends TileEntity {
 
-    private final C capability;
+    private final Capability<H> capability;
 
-    public AbstractTileHyperReceiver(C capability) {
+    public AbstractTileHyperReceiver(Capability<H> capability) {
         this.capability = capability;
     }
 

@@ -13,7 +13,7 @@ import static com.cjm721.overloaded.common.util.CapabilityHyperFluid.HYPER_FLUID
 /**
  * Created by CJ on 4/10/2017.
  */
-public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack,IHyperHandlerFluid, Capability<IHyperHandlerFluid>> {
+public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack,IHyperHandlerFluid> {
 
     public TileHyperFluidSender() {
         super(HYPER_FLUID_HANDLER);

@@ -16,7 +16,7 @@ import net.minecraftforge.common.capabilities.Capability;
 /**
  * Created by CJ on 4/10/2017.
  */
-public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHyperHandler<T>, C extends Capability<H>> extends TileEntity implements ITickable {
+public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHyperHandler<T>> extends TileEntity implements ITickable {
 
     private int delayTicks;
 
@@ -24,9 +24,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
     private int partnerWorldID;
 
 
-    private final C capability;
+    private final Capability<H> capability;
 
-    public AbstractTileHyperSender(C capability) {
+    public AbstractTileHyperSender(Capability<H> capability) {
         this.capability = capability;
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
             if(partnerBlockPos == null)
                 return;
 
-            AbstractTileHyperReceiver<T,H,C> partner = findPartner();
+            AbstractTileHyperReceiver<T,H> partner = findPartner();
             if(partner != null) {
                 send(partner);
             }
@@ -76,7 +76,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
         delayTicks++;
     }
 
-    private AbstractTileHyperReceiver<T,H,C> findPartner() {
+    private AbstractTileHyperReceiver<T,H> findPartner() {
         WorldServer world = DimensionManager.getWorld(partnerWorldID);
         if(world != null && world.isBlockLoaded(partnerBlockPos)) {
             TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
@@ -85,13 +85,13 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
                 this.partnerBlockPos = null;
                 return null;
             } else {
-                return (AbstractTileHyperReceiver<T,H,C>) partnerTE;
+                return (AbstractTileHyperReceiver<T,H>) partnerTE;
             }
         }
         return null;
     }
 
-    protected void send(AbstractTileHyperReceiver<T,H,C> partner) {
+    protected void send(AbstractTileHyperReceiver<T,H> partner) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
@@ -102,7 +102,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
         }
     }
 
-    protected void send(AbstractTileHyperReceiver<T,H, C> partner, TileEntity te, EnumFacing side) {
+    protected void send(AbstractTileHyperReceiver<T,H> partner, TileEntity te, EnumFacing side) {
         H handler = te.getCapability(capability, side.getOpposite());
         T itemStack = handler.take(generate(Long.MAX_VALUE), false);
         if(itemStack != null && itemStack.getAmount() > 0) {
