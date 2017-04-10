@@ -14,26 +14,9 @@ import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_H
 /**
  * Created by CJ on 4/8/2017.
  */
-public class TileHyperItemReceiver extends AbstractTileHyperReceiver<LongItemStack, Capability<IHyperHandlerItem>> {
+public class TileHyperItemReceiver extends AbstractTileHyperReceiver<LongItemStack,IHyperHandlerItem, Capability<IHyperHandlerItem>> {
 
     public TileHyperItemReceiver() {
         super(HYPER_ITEM_HANDLER);
-    }
-
-
-    public LongItemStack receive(LongItemStack stack) {
-        for(EnumFacing side: EnumFacing.values()) {
-            TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
-
-            if(te == null || !te.hasCapability(HYPER_ITEM_HANDLER, side.getOpposite()))
-                continue;
-
-            IHyperHandlerItem temp = te.getCapability(HYPER_ITEM_HANDLER, side.getOpposite());
-            stack = temp.give(stack, true);
-
-            if(stack.getAmount() == 0L)
-                return stack;
-        }
-        return stack;
     }
 }

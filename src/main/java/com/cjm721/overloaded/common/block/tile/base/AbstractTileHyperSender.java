@@ -20,7 +20,7 @@ import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_H
 /**
  * Created by CJ on 4/10/2017.
  */
-public abstract class AbstractTileHyperSender<T extends IHyperType, C extends Capability<? extends IHyperHandler<? extends T>>> extends TileEntity implements ITickable {
+public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHyperHandler<T>, C extends Capability<H>> extends TileEntity implements ITickable {
 
     private int delayTicks;
 
@@ -72,7 +72,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, C extends Ca
             if(partnerBlockPos == null)
                 return;
 
-            AbstractTileHyperReceiver<T,C> partner = findPartner();
+            AbstractTileHyperReceiver<T,H,C> partner = findPartner();
             if(partner != null) {
                 send(partner);
             }
@@ -80,7 +80,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, C extends Ca
         delayTicks++;
     }
 
-    private AbstractTileHyperReceiver<T,C> findPartner() {
+    private AbstractTileHyperReceiver<T,H,C> findPartner() {
         WorldServer world = DimensionManager.getWorld(partnerWorldID);
         if(world != null && world.isBlockLoaded(partnerBlockPos)) {
             TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
@@ -89,13 +89,13 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, C extends Ca
                 this.partnerBlockPos = null;
                 return null;
             } else {
-                return (AbstractTileHyperReceiver<T,C>) partnerTE;
+                return (AbstractTileHyperReceiver<T,H,C>) partnerTE;
             }
         }
         return null;
     }
 
-    protected void send(AbstractTileHyperReceiver<T, C> partner) {
+    protected void send(AbstractTileHyperReceiver<T,H,C> partner) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
@@ -106,7 +106,21 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, C extends Ca
         }
     }
 
-    protected abstract void send(AbstractTileHyperReceiver<T, C> partner, TileEntity te, EnumFacing side);
+    protected void send(AbstractTileHyperReceiver<T,H, C> partner, TileEntity te, EnumFacing side) {
+        H handler = te.getCapability(capability, side.getOpposite());
+        T itemStack = handler.take(generate(Long.MAX_VALUE), false);
+        if(itemStack != null && itemStack.getAmount() > 0) {
+            T leftOvers = partner.receive(itemStack);
+            if(leftOvers.getAmount() != itemStack.getAmount()) {
+                T tookOut = handler.take(generate(itemStack.getAmount() - leftOvers.getAmount()), true);
+                if(tookOut.getAmount() != itemStack.getAmount() - leftOvers.getAmount()) {
+                    new RuntimeException("IHyperHandler Take was not consistent");
+                }
+            }
+        }
+    }
+
+    protected abstract T generate(long amount);
 
     public void setPartnerInfo(int partnerWorldId, BlockPos partnerPos) {
         this.partnerWorldID = partnerWorldId;

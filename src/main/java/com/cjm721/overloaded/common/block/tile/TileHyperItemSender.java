@@ -16,23 +16,15 @@ import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_H
 /**
  * {@link TileEntity That is able to receive items from a remote source}
  */
-public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, Capability<IHyperHandlerItem>> implements ITickable {
+public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack,IHyperHandlerItem, Capability<IHyperHandlerItem>> {
 
     public TileHyperItemSender() {
         super(HYPER_ITEM_HANDLER);
     }
 
-    protected void send(AbstractTileHyperReceiver<LongItemStack, Capability<IHyperHandlerItem>> partner, TileEntity te, EnumFacing side) {
-        IHyperHandlerItem handler = te.getCapability(HYPER_ITEM_HANDLER, side.getOpposite());
-        LongItemStack itemStack = handler.take(new LongItemStack(null,Long.MAX_VALUE), false);
-        if(itemStack != null && itemStack.getAmount() > 0) {
-            LongItemStack leftOvers = partner.receive(itemStack);
-            if(leftOvers.getAmount() != itemStack.getAmount()) {
-                LongItemStack tookOut = handler.take(new LongItemStack(leftOvers.itemStack,itemStack.getAmount() - leftOvers.getAmount()), true);
-                if(tookOut.getAmount() != itemStack.getAmount() - leftOvers.getAmount()) {
-                    new RuntimeException("IHyperHandler Take was not consistent");
-                }
-            }
-        }
+
+    @Override
+    protected LongItemStack generate(long amount) {
+        return new LongItemStack(null,amount);
     }
 }
