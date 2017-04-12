@@ -9,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TileInfiniteBarrel extends TileEntity  {
 
@@ -35,7 +36,7 @@ public class TileInfiniteBarrel extends TileEntity  {
 
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
@@ -46,7 +47,7 @@ public class TileInfiniteBarrel extends TileEntity  {
 
     @Override
     @Nonnull
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing)
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {

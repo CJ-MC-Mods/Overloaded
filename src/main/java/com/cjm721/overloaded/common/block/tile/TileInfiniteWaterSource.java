@@ -75,7 +75,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
 
     @Override
     @Nonnull
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == FLUID_HANDLER_CAPABILITY ) {
             return (T) this;
         }

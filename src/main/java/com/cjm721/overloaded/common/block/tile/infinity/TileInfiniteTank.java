@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.common.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
@@ -41,7 +42,7 @@ public class TileInfiniteTank extends TileEntity {
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability,@Nonnull EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability,@Nullable EnumFacing facing)
     {
         if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {
@@ -52,7 +53,7 @@ public class TileInfiniteTank extends TileEntity {
 
     @Override
     @Nonnull
-    public <T> T getCapability(@Nonnull Capability<T> capability,@Nonnull EnumFacing facing)
+    public <T> T getCapability(@Nonnull Capability<T> capability,@Nullable EnumFacing facing)
     {
         if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {

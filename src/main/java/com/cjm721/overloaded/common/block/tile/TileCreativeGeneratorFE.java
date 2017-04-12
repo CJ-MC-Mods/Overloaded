@@ -8,6 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
 
     @Override
     @Nonnull
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY) {
             return (T) this;
         }
@@ -50,7 +51,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == ENERGY || super.hasCapability(capability, facing);
     }
 

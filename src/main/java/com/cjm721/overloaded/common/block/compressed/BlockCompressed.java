@@ -25,7 +25,7 @@ public class BlockCompressed extends ModBlock {
     private final Block previousBlock;
     private final int compressionAmount;
 
-    BlockCompressed(@Nonnull Block baseBlock,@Nonnull Block previousBlock, int compressionAmount,@Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, float hardness, @Nonnull String harvestTool, int harvestLevel) {
+    BlockCompressed(@Nonnull Block baseBlock, @Nonnull Block previousBlock, int compressionAmount, @Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
         super(materialIn);
         this.baseBlock = baseBlock;
         this.previousBlock = previousBlock;
@@ -34,7 +34,8 @@ public class BlockCompressed extends ModBlock {
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
         setHardness(hardness);
-        setHarvestLevel(harvestTool, harvestLevel);
+        if(harvestTool != null)
+            setHarvestLevel(harvestTool, harvestLevel);
         setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
         register();
     }
