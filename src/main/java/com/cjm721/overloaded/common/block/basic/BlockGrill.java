@@ -29,7 +29,8 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
     public BlockGrill() {
         super(false);
 
-
+        setRegistryName("BlockGrill");
+        setUnlocalizedName("BlockGrill");
 
         setHardness(10);
         setLightOpacity(0);

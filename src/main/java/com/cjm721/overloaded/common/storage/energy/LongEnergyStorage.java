@@ -39,12 +39,9 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
      */
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        NumberUtil.AddReturn<Long> result = addToMax(energy.amount, maxReceive);
+        LongEnergyStack result = give(new LongEnergyStack(maxReceive), !simulate);
 
-        if(!simulate)
-            energy.amount = result.result;
-
-        return maxReceive - result.overflow.intValue();
+        return (int) (maxReceive - result.amount);
     }
 
     /**
@@ -56,16 +53,9 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
      */
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
-        long result = Math.max(energy.amount - maxExtract, 0);
-        try {
-            if(energy.amount > maxExtract) {
-                return maxExtract;
-            }
-            return (int) energy.amount;
-        } finally {
-            if(!simulate)
-                energy.amount = result;
-        }
+        LongEnergyStack result = take(new LongEnergyStack(maxExtract), !simulate);
+
+        return (int) result.amount;
     }
 
     /**
@@ -123,10 +113,11 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     @Nonnull
     public LongEnergyStack take(@Nonnull LongEnergyStack stack, boolean doAction) {
         long newStoredAmount = Math.max(energy.amount - stack.amount, 0);
+        LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount,stack.amount));;
 
         if(doAction)
             energy.amount = newStoredAmount;
 
-        return new LongEnergyStack(Math.min(energy.amount,stack.amount));
+        return result;
     }
 }

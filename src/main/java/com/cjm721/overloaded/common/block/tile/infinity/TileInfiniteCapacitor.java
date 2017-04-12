@@ -8,6 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 
+import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 
@@ -42,7 +43,7 @@ public class TileInfiniteCapacitor extends TileEntity {
 
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-        if(capability == ENERGY) {
+        if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
             return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
@@ -50,7 +51,7 @@ public class TileInfiniteCapacitor extends TileEntity {
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if(capability == ENERGY) {
+        if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
             return true;
         }
         return super.hasCapability(capability, facing);
