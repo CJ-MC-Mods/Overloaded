@@ -1,11 +1,15 @@
 package com.cjm721.overloaded.common.block.tile;
 
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
+import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+
+import static com.cjm721.overloaded.common.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 /**
  * Created by CJ on 4/8/2017.
@@ -39,7 +43,7 @@ public class TileInfiniteTank extends TileEntity {
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing)
     {
-        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {
             return true;
         }
@@ -49,7 +53,7 @@ public class TileInfiniteTank extends TileEntity {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing)
     {
-        if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {
             return (T) fluidStorage;
         }

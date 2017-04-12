@@ -1,9 +1,7 @@
 package com.cjm721.overloaded.common.block.tile.base;
 
-import com.cjm721.overloaded.common.block.tile.TileHyperItemReceiver;
 import com.cjm721.overloaded.common.storage.IHyperHandler;
 import com.cjm721.overloaded.common.storage.IHyperType;
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -12,6 +10,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
+import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by CJ on 4/10/2017.
@@ -31,7 +32,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
     }
 
     @Override
-    @MethodsReturnNonnullByDefault
+    @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
 
@@ -76,12 +77,13 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
         delayTicks++;
     }
 
+    @Nullable
     private AbstractTileHyperReceiver<T,H> findPartner() {
         WorldServer world = DimensionManager.getWorld(partnerWorldID);
         if(world != null && world.isBlockLoaded(partnerBlockPos)) {
             TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
 
-            if(partnerTE == null || !(partnerTE instanceof TileHyperItemReceiver)) {
+            if(partnerTE == null || !isCorrectPartnerType(partnerTE)) {
                 this.partnerBlockPos = null;
                 return null;
             } else {
@@ -105,24 +107,28 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
     protected void send(AbstractTileHyperReceiver<T,H> partner, TileEntity te, EnumFacing side) {
         H handler = te.getCapability(capability, side.getOpposite());
         T itemStack = handler.take(generate(Long.MAX_VALUE), false);
-        if(itemStack != null && itemStack.getAmount() > 0) {
+        if(itemStack.getAmount() > 0) {
             T leftOvers = partner.receive(itemStack);
             if(leftOvers.getAmount() != itemStack.getAmount()) {
                 T tookOut = handler.take(generate(itemStack.getAmount() - leftOvers.getAmount()), true);
                 if(tookOut.getAmount() != itemStack.getAmount() - leftOvers.getAmount()) {
-                    new RuntimeException("IHyperHandler Take was not consistent");
+                    throw new RuntimeException("IHyperHandler Take was not consistent");
                 }
             }
         }
     }
 
+    @Nonnull
     protected abstract T generate(long amount);
+
+    protected abstract boolean isCorrectPartnerType(TileEntity te);
 
     public void setPartnerInfo(int partnerWorldId, BlockPos partnerPos) {
         this.partnerWorldID = partnerWorldId;
         this.partnerBlockPos = partnerPos;
     }
 
+    @Nonnull
     public String getRightClickMessage() {
         if(partnerBlockPos != null) {
             return String.format("Bound to Receiver at %d:%d,%d,%d", partnerWorldID, partnerBlockPos.getX(),partnerBlockPos.getY(),partnerBlockPos.getZ());

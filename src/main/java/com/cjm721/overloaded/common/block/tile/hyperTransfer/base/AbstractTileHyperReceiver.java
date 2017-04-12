@@ -6,6 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by CJ on 4/10/2017.
  */
@@ -17,7 +19,8 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extend
         this.capability = capability;
     }
 
-    public Type receive(Type stack) {
+    @Nonnull
+    public Type receive(@Nonnull Type stack) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
