@@ -54,7 +54,7 @@ public final class ModBlocks {
         hyperItemSender = new BlockHyperItemSender();
         hyperFluidReceiver = new BlockHyperFluidReceiver();
         hyperFluidSender = new BlockHyperFluidSender();
-        hyperEnergyReceiver = new BlockHyperEnderReceiver();
+        hyperEnergyReceiver = new BlockHyperEnergyReceiver();
         hyperEnergySender = new BlockHyperEnergySender();
 
         infiniteWaterSource = new BlockInfiniteWaterSource();
@@ -68,6 +68,8 @@ public final class ModBlocks {
                 ((ModBlock)b).registerRecipe();
             }
         }
+
+        infiniteWaterSource.registerRecipe();
     }
 
     @SideOnly(Side.CLIENT)

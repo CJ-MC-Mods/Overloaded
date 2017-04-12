@@ -12,9 +12,9 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class BlockHyperEnderReceiver extends AbstractBlockHyperReceiver {
+public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
-    public BlockHyperEnderReceiver() {
+    public BlockHyperEnergyReceiver() {
         super(Material.ROCK);
 
         setHardness(10);

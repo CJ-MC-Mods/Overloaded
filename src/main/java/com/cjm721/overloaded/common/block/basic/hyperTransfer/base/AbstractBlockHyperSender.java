@@ -40,15 +40,21 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 NBTTagCompound tag = heldItem.getTagCompound();
                 if (tag != null) {
-                    int worldID = tag.getInteger("WORLD");
-                    int x = tag.getInteger("X");
-                    int y = tag.getInteger("Y");
-                    int z = tag.getInteger("Z");
+                    if(tag.getString("TYPE").equals(this.getType())) {
+                        int worldID = tag.getInteger("WORLD");
+                        int x = tag.getInteger("X");
+                        int y = tag.getInteger("Y");
+                        int z = tag.getInteger("Z");
 
-                    bindToPartner(worldIn, pos, worldID, new BlockPos(x, y, z));
-                    heldItem.setTagCompound(null);
-                    if (worldIn.isRemote) {
-                        playerIn.addChatComponentMessage(new TextComponentString("Bound Hyper Nodes"));
+                        bindToPartner(worldIn, pos, worldID, new BlockPos(x, y, z));
+                        heldItem.setTagCompound(null);
+                        if (worldIn.isRemote) {
+                            playerIn.addChatComponentMessage(new TextComponentString("Bound Hyper Nodes"));
+                        }
+                    } else {
+                        if (worldIn.isRemote) {
+                            playerIn.addChatComponentMessage(new TextComponentString("Incorrect Hyper Node Type to bind."));
+                        }
                     }
                 }
             }
