@@ -8,8 +8,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
-
 public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTConvertable {
 
     @Nonnull

@@ -1,12 +1,10 @@
 package com.cjm721.overloaded.common.block.tile.infinity;
 
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
-import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nonnull;
 

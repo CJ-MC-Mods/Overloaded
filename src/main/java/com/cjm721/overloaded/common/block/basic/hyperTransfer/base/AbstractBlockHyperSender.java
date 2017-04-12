@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.common.block.basic.hyperTransfer.base;
 
-import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.common.item.ModItems;
 import net.minecraft.block.ITileEntityProvider;
@@ -15,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

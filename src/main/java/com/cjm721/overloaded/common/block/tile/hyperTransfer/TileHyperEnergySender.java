@@ -2,11 +2,8 @@ package com.cjm721.overloaded.common.block.tile.hyperTransfer;
 
 import com.cjm721.overloaded.common.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
-import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
-import com.cjm721.overloaded.common.storage.fluid.IHyperHandlerFluid;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 
