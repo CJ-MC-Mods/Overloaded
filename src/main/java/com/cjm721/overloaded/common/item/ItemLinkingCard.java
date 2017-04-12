@@ -8,11 +8,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-/**
- * Created by CJ on 4/9/2017.
- */
 public class ItemLinkingCard extends ModItem {
 
     public ItemLinkingCard() {
@@ -26,7 +24,7 @@ public class ItemLinkingCard extends ModItem {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(@Nonnull ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         NBTTagCompound tag = stack.getTagCompound();
         if(tag != null && tag.hasKey("TYPE")) {
             String type = tag.getString("TYPE");

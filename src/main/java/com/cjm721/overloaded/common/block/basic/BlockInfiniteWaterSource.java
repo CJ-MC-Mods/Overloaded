@@ -30,7 +30,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     public BlockInfiniteWaterSource() {
         super(Material.GLASS);
 
-        defaultRegistery();
+        defaultRegistry();
 
         setHardness(10);
         setLightOpacity(0);

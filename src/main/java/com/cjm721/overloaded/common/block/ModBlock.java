@@ -7,15 +7,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created by CJ on 4/2/2017.
- */
+import javax.annotation.Nonnull;
+
 public abstract class ModBlock extends Block {
-    public ModBlock(Material materialIn) {
+    public ModBlock(@Nonnull Material materialIn) {
         super(materialIn);
     }
 
-    protected void defaultRegistery() {
+    protected void defaultRegistry() {
         String name = this.getClass().getName();
         name = name.substring(name.lastIndexOf('.') + 1);
 

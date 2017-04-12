@@ -4,9 +4,8 @@ import com.cjm721.overloaded.common.block.ModBlocks;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-/**
- * Created by CJ on 4/2/2017.
- */
+import javax.annotation.Nonnull;
+
 public class OverloadedCreativeTabs {
     public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("Overloaded_Compressed") {
         @Override
@@ -17,6 +16,7 @@ public class OverloadedCreativeTabs {
 
     public static CreativeTabs ENERGY_BLOCKS = new CreativeTabs("Overloaded_Energy") {
         @Override
+        @Nonnull
         public Item getTabIconItem() {
             return Item.getItemFromBlock(ModBlocks.basicGenerator);
         }
@@ -24,6 +24,7 @@ public class OverloadedCreativeTabs {
 
     public static CreativeTabs UTILITY = new CreativeTabs("Overloaded_Utility") {
         @Override
+        @Nonnull
         public Item getTabIconItem() {
             return Item.getItemFromBlock(ModBlocks.infiniteBarrel);
         }

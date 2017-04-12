@@ -11,9 +11,8 @@ import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * Created by CJ on 4/9/2017.
- */
+import javax.annotation.Nonnull;
+
 public class CapabilityHyperFluid {
 
     @CapabilityInject(IHyperHandlerFluid.class)
@@ -23,11 +22,11 @@ public class CapabilityHyperFluid {
     {
         CapabilityManager.INSTANCE.register(IHyperHandlerFluid.class, new Capability.IStorage<IHyperHandlerFluid>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperHandlerFluid> capability, IHyperHandlerFluid instance, EnumFacing side)
+            public NBTBase writeNBT(Capability<IHyperHandlerFluid> capability, @Nonnull IHyperHandlerFluid instance, EnumFacing side)
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongFluidStack stack = instance.status();
-                if(stack != null) {
+                if(stack.fluidStack != null) {
                     tag.setLong("Count", stack.amount);
                     NBTTagCompound subTag = new NBTTagCompound();
                     stack.fluidStack.writeToNBT(subTag);
@@ -37,7 +36,7 @@ public class CapabilityHyperFluid {
             }
 
             @Override
-            public void readNBT(Capability<IHyperHandlerFluid> capability, IHyperHandlerFluid instance, EnumFacing side, NBTBase nbt)
+            public void readNBT(Capability<IHyperHandlerFluid> capability,@Nonnull IHyperHandlerFluid instance, EnumFacing side,@Nonnull NBTBase nbt)
             {
                 NBTTagCompound tag = (NBTTagCompound)nbt;
 

@@ -16,14 +16,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/7/2017.
- */
 public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
 
     public BlockGrill() {
@@ -52,7 +50,8 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };
@@ -60,6 +59,8 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
     }
 
     @SideOnly(Side.CLIENT)
+    @Nonnull
+    @Override
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
@@ -71,10 +72,8 @@ public class BlockGrill extends BlockFurnace implements ITileEntityProvider {
         return false;
     }
 
-    /**
-     * Get the Item that this Block should drop when harvested.
-     */
     @Nullable
+    @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(this);

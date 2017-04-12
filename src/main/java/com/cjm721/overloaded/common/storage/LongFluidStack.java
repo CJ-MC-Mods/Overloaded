@@ -2,9 +2,8 @@ package com.cjm721.overloaded.common.storage;
 
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * Created by CJ on 4/9/2017.
- */
+import javax.annotation.Nullable;
+
 public class LongFluidStack implements IHyperType {
 
     public static final LongFluidStack EMPTY_STACK = new LongFluidStack(null, 0L);
@@ -12,13 +11,13 @@ public class LongFluidStack implements IHyperType {
     public long amount;
     public FluidStack fluidStack;
 
-    public LongFluidStack(FluidStack fluidStack, long amount) {
+    public LongFluidStack(@Nullable FluidStack fluidStack, long amount) {
         this.fluidStack = fluidStack;
         this.amount = amount;
     }
 
+    @Override
     public long getAmount() {
         return amount;
     }
-
 }

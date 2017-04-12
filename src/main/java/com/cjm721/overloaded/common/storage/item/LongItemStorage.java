@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.common.storage.item;
 
-import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.INBTConvertible;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
 import net.minecraft.item.ItemStack;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import static com.cjm721.overloaded.common.util.ItemUtil.itemsAreEqual;
 import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
-public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertable {
+public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertible {
 
     @Nonnull
     private LongItemStack longItemStack;

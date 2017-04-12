@@ -8,9 +8,6 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extends IHyperHandler<Type>> extends TileEntity {
 
     private final Capability<H> capability;

@@ -11,6 +11,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by CJ on 4/8/2017.
  */
@@ -23,13 +25,13 @@ public class CapabilityHyperEnergy {
         CapabilityManager.INSTANCE.register(IHyperHandlerEnergy.class,
             new Capability.IStorage<IHyperHandlerEnergy>() {
                 @Override
-                public NBTBase writeNBT(Capability<IHyperHandlerEnergy> capability, IHyperHandlerEnergy instance, EnumFacing side)
+                public NBTBase writeNBT(Capability<IHyperHandlerEnergy> capability, @Nonnull IHyperHandlerEnergy instance, EnumFacing side)
                 {
                     return new NBTTagLong(instance.status().amount);
                 }
 
                 @Override
-                public void readNBT(Capability<IHyperHandlerEnergy> capability, IHyperHandlerEnergy instance, EnumFacing side, NBTBase nbt)
+                public void readNBT(Capability<IHyperHandlerEnergy> capability,@Nonnull IHyperHandlerEnergy instance, EnumFacing side, NBTBase nbt)
                 {
                     instance.give(new LongEnergyStack(((NBTTagInt)nbt).getLong()), true);
                 }

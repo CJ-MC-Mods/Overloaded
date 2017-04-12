@@ -39,7 +39,7 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
     @Override
     @Nonnull
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperEnergyReceiver();
     }
 }

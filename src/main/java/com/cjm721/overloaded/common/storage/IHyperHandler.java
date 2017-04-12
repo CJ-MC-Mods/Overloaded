@@ -2,9 +2,6 @@ package com.cjm721.overloaded.common.storage;
 
 import javax.annotation.Nonnull;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public interface IHyperHandler<T extends IHyperType> {
 
     /**
@@ -22,8 +19,8 @@ public interface IHyperHandler<T extends IHyperType> {
     T take(@Nonnull T stack, boolean doAction);
 
     /**
-     * @param stack
-     * @param doAction
+     * @param stack of Type {@link T} that will be handed to this handler
+     * @param doAction should be actually done
      * @return the Stack that was not able to be absorbed by  the handler
      */
     @Nonnull

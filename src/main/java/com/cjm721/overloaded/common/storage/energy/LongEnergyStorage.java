@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.common.storage.energy;
 
-import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.INBTConvertible;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,7 +8,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTConvertable {
+public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTConvertible {
 
     @Nonnull
     private LongEnergyStack energy;
@@ -111,7 +111,7 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     @Nonnull
     public LongEnergyStack take(@Nonnull LongEnergyStack stack, boolean doAction) {
         long newStoredAmount = Math.max(energy.amount - stack.amount, 0);
-        LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount,stack.amount));;
+        LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount,stack.amount));
 
         if(doAction)
             energy.amount = newStoredAmount;

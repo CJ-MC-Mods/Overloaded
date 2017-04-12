@@ -5,11 +5,10 @@ import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.storage.fluid.IHyperHandlerFluid;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.common.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack,IHyperHandlerFluid> {
 
     public TileHyperFluidSender() {
@@ -17,6 +16,7 @@ public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack
     }
 
     @Override
+    @Nonnull
     protected LongFluidStack generate(long amount) {
         return new LongFluidStack(null,amount);
     }

@@ -14,9 +14,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHyperHandler<T>> extends TileEntity implements ITickable {
 
     private int delayTicks;
@@ -33,7 +30,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
 
     @Override
     @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         if(partnerBlockPos != null) {
@@ -47,7 +44,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         if (compound.hasKey("X")) {

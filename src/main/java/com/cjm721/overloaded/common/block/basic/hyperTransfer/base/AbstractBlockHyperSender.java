@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider {
@@ -23,7 +24,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn,@Nonnull BlockPos pos, IBlockState state,@Nonnull EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(hand == EnumHand.MAIN_HAND) {
             if (heldItem == null) {
                 // SubIf so that Else block does not also need to check for heldItem == null
@@ -59,7 +60,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
-    private void bindToPartner(World world, BlockPos pos, int partnerWorldId, BlockPos partnerPos) {
+    private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId,@Nonnull BlockPos partnerPos) {
         ((AbstractTileHyperSender)world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 

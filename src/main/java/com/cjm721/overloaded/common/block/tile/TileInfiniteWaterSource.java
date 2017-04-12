@@ -13,9 +13,6 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-/**
- * Created by CJ on 4/11/2017.
- */
 public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
 
     /**
@@ -51,7 +48,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
      */
     @Nullable
     @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
+    public FluidStack drain(@Nonnull FluidStack resource, boolean doDrain) {
         return drain(resource.amount, doDrain);
     }
 
@@ -77,7 +74,8 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    @Nonnull
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if(capability == FLUID_HANDLER_CAPABILITY ) {
             return (T) this;
         }

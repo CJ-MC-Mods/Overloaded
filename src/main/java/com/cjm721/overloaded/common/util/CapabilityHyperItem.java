@@ -11,9 +11,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-/**
- * Created by CJ on 4/8/2017.
- */
+import javax.annotation.Nonnull;
+
 public class CapabilityHyperItem {
     @CapabilityInject(IHyperHandlerItem.class)
     public static Capability<IHyperHandlerItem> HYPER_ITEM_HANDLER = null;
@@ -22,11 +21,11 @@ public class CapabilityHyperItem {
     {
         CapabilityManager.INSTANCE.register(IHyperHandlerItem.class, new Capability.IStorage<IHyperHandlerItem>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, IHyperHandlerItem instance, EnumFacing side)
+            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side)
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongItemStack stack = instance.status();
-                if(stack != null) {
+                if(stack.itemStack != null) {
                     tag.setLong("Count", stack.amount);
                     tag.setTag("Item", stack.itemStack.serializeNBT());
                 }
@@ -34,7 +33,7 @@ public class CapabilityHyperItem {
             }
 
             @Override
-            public void readNBT(Capability<IHyperHandlerItem> capability, IHyperHandlerItem instance, EnumFacing side, NBTBase nbt)
+            public void readNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side,@Nonnull NBTBase nbt)
             {
                 NBTTagCompound tag = (NBTTagCompound)nbt;
 

@@ -5,9 +5,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/8/2017.
- */
 public final class FluidUtil {
     public static boolean fluidsAreEqual(@Nullable FluidStack a, @Nullable FluidStack b) {
         if(a == b)

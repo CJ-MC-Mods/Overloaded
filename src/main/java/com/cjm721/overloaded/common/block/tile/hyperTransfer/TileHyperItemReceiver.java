@@ -6,10 +6,6 @@ import com.cjm721.overloaded.common.storage.item.IHyperHandlerItem;
 
 import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
-
-/**
- * Created by CJ on 4/8/2017.
- */
 public class TileHyperItemReceiver extends AbstractTileHyperReceiver<LongItemStack,IHyperHandlerItem> {
 
     public TileHyperItemReceiver() {

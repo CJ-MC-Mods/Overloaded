@@ -17,9 +17,9 @@ import javax.annotation.Nonnull;
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEntityProvider {
-    AbstractBlockHyperNode(Material materialIn) {
+    AbstractBlockHyperNode(@Nonnull Material materialIn) {
         super(materialIn);
-        defaultRegistery();
+        defaultRegistry();
     }
 
     @Nonnull

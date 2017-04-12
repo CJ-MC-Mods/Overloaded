@@ -5,9 +5,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/7/2017.
- */
 public final class ItemUtil {
     public static boolean itemsAreEqual(@Nullable ItemStack a, @Nullable ItemStack b) {
         if(a == b)

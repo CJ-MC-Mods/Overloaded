@@ -12,16 +12,17 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode implements ITileEntityProvider {
 
-    public AbstractBlockHyperReceiver(Material materialIn) {
+    public AbstractBlockHyperReceiver(@Nonnull Material materialIn) {
         super(materialIn);
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn,@Nonnull BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(heldItem != null && heldItem.getItem().equals(ModItems.linkingCard)) {
             NBTTagCompound tag = heldItem.getTagCompound();
             if(tag == null) {
@@ -35,7 +36,8 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
         }
     }
 
-    private void writeNodeData(NBTTagCompound tag, World worldIn, BlockPos pos) {
+    private void writeNodeData(@Nonnull NBTTagCompound tag,@Nonnull World worldIn, @Nonnull BlockPos pos) {
+        assert worldIn.provider != null;
         tag.setInteger("X", pos.getX());
         tag.setInteger("Y", pos.getY());
         tag.setInteger("Z", pos.getZ());

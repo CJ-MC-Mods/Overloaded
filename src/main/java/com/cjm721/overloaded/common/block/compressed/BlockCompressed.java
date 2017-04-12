@@ -15,16 +15,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created by CJ on 4/2/2017.
- */
+import javax.annotation.Nonnull;
+
 public class BlockCompressed extends ModBlock {
 
+    @Nonnull
     private final Block baseBlock;
+    @Nonnull
     private final Block previousBlock;
     private final int compressionAmount;
 
-    public BlockCompressed(Block baseBlock, Block previousBlock, int compressionAmount, Material materialIn, String registryName, String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
+    BlockCompressed(@Nonnull Block baseBlock,@Nonnull Block previousBlock, int compressionAmount,@Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, float hardness, @Nonnull String harvestTool, int harvestLevel) {
         super(materialIn);
         this.baseBlock = baseBlock;
         this.previousBlock = previousBlock;
@@ -38,6 +39,7 @@ public class BlockCompressed extends ModBlock {
         register();
     }
 
+    @Override
     public void registerRecipe() {
         GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
         GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
@@ -49,19 +51,13 @@ public class BlockCompressed extends ModBlock {
         ModelResourceLocation location = getBaseModelLocation();
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-//        StateMapperBase ignoreState = new StateMapperBase() {
-//            @Override
-//            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-//                return location;
-//            }
-//        };
-
         ModelResourceLocation rl = new ModelResourceLocation(this.getRegistryName(), null);
 
         // To make sure that our baked models models is chosen for all states we use this custom state mapper:
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return rl;
             }
         };
@@ -70,10 +66,12 @@ public class BlockCompressed extends ModBlock {
     }
 
     @SideOnly(Side.CLIENT)
-    public ModelResourceLocation getBaseModelLocation() {
+    @Nonnull
+    private ModelResourceLocation getBaseModelLocation() {
         return new ModelResourceLocation(this.baseBlock.getRegistryName(), null);
     }
 
+    @Nonnull
     public Block getBaseBlock() {
         return baseBlock;
     }
@@ -83,6 +81,7 @@ public class BlockCompressed extends ModBlock {
     }
 
     @Override
+    @Nonnull
     public String getLocalizedName() {
         return baseBlock.getLocalizedName();
     }

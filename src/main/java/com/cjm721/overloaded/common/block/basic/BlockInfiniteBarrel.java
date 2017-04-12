@@ -34,7 +34,7 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     public BlockInfiniteBarrel() {
         super(Material.ROCK);
 
-        defaultRegistery();
+        defaultRegistry();
 
         setHardness(10);
         setLightOpacity(0);
@@ -71,7 +71,7 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
                 LongItemStack stack = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage().status();

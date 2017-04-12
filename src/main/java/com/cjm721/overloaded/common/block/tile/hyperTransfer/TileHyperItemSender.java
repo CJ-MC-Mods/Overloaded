@@ -5,6 +5,8 @@ import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.storage.item.IHyperHandlerItem;
 import net.minecraft.tileentity.TileEntity;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.common.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 /**
@@ -17,6 +19,7 @@ public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack,I
     }
 
     @Override
+    @Nonnull
     protected LongItemStack generate(long amount) {
         return new LongItemStack(null,amount);
     }

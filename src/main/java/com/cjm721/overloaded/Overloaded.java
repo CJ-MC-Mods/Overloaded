@@ -6,9 +6,6 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-/**
- * Created by CJ on 4/2/2017.
- */
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION)
 public class Overloaded {
 

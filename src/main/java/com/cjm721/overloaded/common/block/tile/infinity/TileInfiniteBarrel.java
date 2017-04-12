@@ -10,9 +10,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 
-/**
- * Created by CJ on 4/7/2017.
- */
 public class TileInfiniteBarrel extends TileEntity  {
 
     @Nonnull
@@ -23,13 +20,14 @@ public class TileInfiniteBarrel extends TileEntity  {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    @Nonnull
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
         return itemStorage.writeToNBT(compound);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
 
         itemStorage.readFromNBT(compound);
@@ -37,7 +35,7 @@ public class TileInfiniteBarrel extends TileEntity  {
 
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing)
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
@@ -47,7 +45,8 @@ public class TileInfiniteBarrel extends TileEntity  {
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing)
+    @Nonnull
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing)
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {

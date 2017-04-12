@@ -7,23 +7,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-/**
- * Created by CJ on 4/7/2017.
- */
 public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IEnergyStorage {
 
-    boolean normalTicks;
+    private boolean normalTicks;
 
+    @Nonnull
     private Map<EnumFacing,IEnergyStorage> cache;
 
     public TileCreativeGeneratorFE() {
         cache = new HashMap<>();
+        normalTicks = false;
     }
 
     /**
@@ -41,7 +41,8 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    @Nonnull
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if(capability == ENERGY) {
             return (T) this;
         }
@@ -49,11 +50,8 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-        if(capability == ENERGY) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
+        return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     /**
@@ -114,7 +112,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
         return false;
     }
 
-    public void onNeighborChange(BlockPos neighbor) {
+    public void onNeighborChange(@Nonnull BlockPos neighbor) {
         TileEntity te = this.getWorld().getTileEntity(neighbor);
 
         BlockPos sidePos = this.getPos().subtract(neighbor);
@@ -129,8 +127,6 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     public void onPlace() {
-        Arrays.stream(EnumFacing.values()).forEach((side) -> {
-            onNeighborChange(this.getPos().add(side.getDirectionVec()));
-        });
+        Arrays.stream(EnumFacing.values()).forEach((side) -> onNeighborChange(this.getPos().add(side.getDirectionVec())));
     }
 }

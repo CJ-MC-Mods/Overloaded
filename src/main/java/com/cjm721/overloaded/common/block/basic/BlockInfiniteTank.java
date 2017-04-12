@@ -24,19 +24,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/8/2017.
- */
 public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
     public BlockInfiniteTank() {
         super(Material.GLASS);
 
-        defaultRegistery();
+        defaultRegistry();
 
         setHardness(10);
         setLightOpacity(0);
@@ -58,31 +56,27 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nonnull
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileInfiniteTank();
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
                 LongFluidStack storedFluid = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage().getFluidStack();
                 if(storedFluid == null || storedFluid.fluidStack == null) {
-                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: EMPTY")));
+                    playerIn.addChatComponentMessage(new TextComponentString("Fluid: EMPTY"));
                 } else {
                     playerIn.addChatComponentMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)));
                 }

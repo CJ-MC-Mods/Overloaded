@@ -8,9 +8,6 @@ import com.cjm721.overloaded.common.util.CapabilityHyperItem;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-/**
- * Created by CJ on 4/6/2017.
- */
 public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent event) {

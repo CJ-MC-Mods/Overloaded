@@ -11,10 +11,6 @@ import javax.annotation.Nonnull;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-
-/**
- * Created by CJ on 4/8/2017.
- */
 public class TileInfiniteCapacitor extends TileEntity {
 
     @Nonnull
@@ -25,14 +21,16 @@ public class TileInfiniteCapacitor extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    @Nonnull
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
         energyStorage.writeToNBT(compound);
         return compound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    @Nonnull
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
         energyStorage.readFromNBT(compound);
     }
@@ -42,7 +40,8 @@ public class TileInfiniteCapacitor extends TileEntity {
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    @Nonnull
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
             return (T) energyStorage;
         }
@@ -50,7 +49,7 @@ public class TileInfiniteCapacitor extends TileEntity {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
         if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
             return true;
         }

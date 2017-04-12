@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.common.storage.fluid;
 
-import com.cjm721.overloaded.common.storage.INBTConvertable;
+import com.cjm721.overloaded.common.storage.INBTConvertible;
 import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.common.util.FluidUtil.fluidsAreEqual;
 import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
-public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertable {
+public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertible {
 
     @Nonnull
     private LongFluidStack storedFluid;
@@ -58,7 +58,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
      */
     @Nullable
     @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
+    public FluidStack drain(@Nonnull FluidStack resource, boolean doDrain) {
         LongFluidStack result = take(new LongFluidStack(resource, resource.amount), doDrain);
 
         if(result.amount == 0L) {

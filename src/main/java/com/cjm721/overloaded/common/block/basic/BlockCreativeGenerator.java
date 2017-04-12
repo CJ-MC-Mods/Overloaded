@@ -31,7 +31,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public BlockCreativeGenerator() {
         super(Material.ROCK);
 
-        defaultRegistery();
+        defaultRegistry();
 
         setHardness(10);
         setLightOpacity(0);
@@ -52,13 +52,15 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creativeGenerator"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };

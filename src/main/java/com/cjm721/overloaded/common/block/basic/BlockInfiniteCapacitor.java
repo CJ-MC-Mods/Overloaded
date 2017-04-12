@@ -24,19 +24,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/8/2017.
- */
 public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvider {
 
     public BlockInfiniteCapacitor() {
         super(Material.ROCK);
 
-        defaultRegistery();
+        defaultRegistry();
 
         setHardness(10);
         setLightOpacity(0);
@@ -45,14 +43,9 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
         GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infiniteCapacitor");
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nonnull
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileInfiniteCapacitor();
     }
 
@@ -69,7 +62,8 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };

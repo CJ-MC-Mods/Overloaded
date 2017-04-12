@@ -13,6 +13,7 @@ public class LongEnergyStack implements IHyperType {
         this.amount = amount;
     }
 
+    @Override
     public long getAmount() {
         return amount;
     }

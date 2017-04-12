@@ -6,9 +6,6 @@ import net.minecraft.block.material.Material;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by CJ on 4/2/2017.
- */
 public class CompressedBlockHandler {
 
     public static Map<Integer, Block> CreateCompressedBlocks(Block toCompress, int depth) {
