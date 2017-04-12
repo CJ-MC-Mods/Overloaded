@@ -10,9 +10,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/6/2017.
- */
 public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent e) {

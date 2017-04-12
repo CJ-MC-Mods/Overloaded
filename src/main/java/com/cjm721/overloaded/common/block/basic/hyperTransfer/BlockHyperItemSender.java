@@ -7,14 +7,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/8/2017.
- */
 public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
     public BlockHyperItemSender() {
@@ -32,18 +30,13 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
     @Override
     @Nonnull
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperItemSender();
     }
 
+    @NotNull
     @Override
     public String getType() {
         return "Item";

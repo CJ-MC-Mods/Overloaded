@@ -6,14 +6,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/3/2017.
- */
 public class CompressedModelLoader implements ICustomModelLoader {
     private static CompressedModelLoader INSTANCE;
 
@@ -35,7 +33,7 @@ public class CompressedModelLoader implements ICustomModelLoader {
     }
 
     @Override
-    public void onResourceManagerReload(IResourceManager resourceManager) {
+    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
         //resourceMap.clear();
     }
 

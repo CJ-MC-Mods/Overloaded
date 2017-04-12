@@ -8,14 +8,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/12/2017.
- */
 public class BlockHyperEnergySender extends AbstractBlockHyperSender implements ITileEntityProvider {
 
     public BlockHyperEnergySender() {
@@ -34,21 +32,16 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
 
     }
 
+    @NotNull
     @Override
     @Nonnull
     public String getType() {
         return "Energy";
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
     @Override
     @Nonnull
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperEnergySender();
     }
 }

@@ -22,11 +22,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/5/2017.
- */
 public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvider {
 
     public BlockCreativeGenerator() {
@@ -47,7 +46,8 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nonnull
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileCreativeGeneratorFE();
     }
 
@@ -67,6 +67,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
 
     @SideOnly(Side.CLIENT)
     @Override
+    @Nonnull
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;

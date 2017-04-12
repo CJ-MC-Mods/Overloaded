@@ -14,14 +14,11 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- * Created by CJ on 4/2/2017.
- */
 public class CompressedModel implements IModel {
 
     private final IBlockState state;
 
-    public CompressedModel(IBlockState state) {
+    CompressedModel(IBlockState state) {
         this.state = state;
     }
 

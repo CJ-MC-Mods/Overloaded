@@ -16,11 +16,8 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/12/2017.
- */
 public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEntityProvider {
-    public AbstractBlockHyperNode(Material materialIn) {
+    AbstractBlockHyperNode(Material materialIn) {
         super(materialIn);
         defaultRegistery();
     }
@@ -36,7 +33,8 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };

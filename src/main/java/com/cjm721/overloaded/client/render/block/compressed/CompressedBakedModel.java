@@ -14,18 +14,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
-/**
- * Created by CJ on 4/2/2017.
- */
 public class CompressedBakedModel implements IBakedModel {
     private VertexFormat format;
     private Map<Block,List<BakedQuad>> cache;
 
     private IBakedModel defaultModel;
 
-    public CompressedBakedModel(VertexFormat format, IBlockState state) {
+    CompressedBakedModel(VertexFormat format, IBlockState state) {
         this.format = format;
 
         this.defaultModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
@@ -71,6 +69,7 @@ public class CompressedBakedModel implements IBakedModel {
     }
 
     @Override
+    @Nonnull
     public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
         if (side != null) {
             return Collections.emptyList();
@@ -146,6 +145,7 @@ public class CompressedBakedModel implements IBakedModel {
     }
 
     @Override
+    @Nonnull
     public ItemOverrideList getOverrides() {
         return defaultModel.getOverrides();
     }
@@ -166,12 +166,14 @@ public class CompressedBakedModel implements IBakedModel {
     }
 
     @Override
+    @Nonnull
     public TextureAtlasSprite getParticleTexture() {
         return defaultModel.getParticleTexture();
     }
 
     @Deprecated
     @Override
+    @Nonnull
     public ItemCameraTransforms getItemCameraTransforms() {
         return defaultModel.getItemCameraTransforms();
     }

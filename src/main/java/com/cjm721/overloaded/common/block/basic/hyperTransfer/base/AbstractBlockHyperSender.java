@@ -16,9 +16,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider {
 
     public AbstractBlockHyperSender(Material materialIn) {
@@ -62,7 +59,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
-    protected void bindToPartner(World world, BlockPos pos, int partnerWorldId, BlockPos partnerPos) {
+    private void bindToPartner(World world, BlockPos pos, int partnerWorldId, BlockPos partnerPos) {
         ((AbstractTileHyperSender)world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 

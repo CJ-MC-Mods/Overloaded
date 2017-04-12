@@ -14,9 +14,6 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/10/2017.
- */
 public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode implements ITileEntityProvider {
 
     public AbstractBlockHyperReceiver(Material materialIn) {

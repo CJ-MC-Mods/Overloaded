@@ -75,13 +75,8 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         return false;
     }
 
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
     @Override
+    @Nonnull
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileInfiniteWaterSource();
     }
