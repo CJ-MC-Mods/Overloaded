@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.common.block.tile;
+package com.cjm721.overloaded.common.block.tile.infinity;
 
 import com.cjm721.overloaded.common.storage.item.LongItemStorage;
 import com.cjm721.overloaded.common.util.CapabilityHyperItem;
@@ -8,13 +8,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
+
 /**
  * Created by CJ on 4/7/2017.
  */
 public class TileInfiniteBarrel extends TileEntity  {
 
-    LongItemStorage itemStorage;
-
+    @Nonnull
+    private LongItemStorage itemStorage;
 
     public TileInfiniteBarrel() {
         itemStorage = new LongItemStorage();

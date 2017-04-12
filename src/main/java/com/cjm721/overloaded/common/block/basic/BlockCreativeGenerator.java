@@ -32,8 +32,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public BlockCreativeGenerator() {
         super(Material.ROCK);
 
-        setRegistryName("BlockCreativeGenerator");
-        setUnlocalizedName("BlockCreativeGenerator");
+        defaultRegistery();
 
         setHardness(10);
         setLightOpacity(0);
@@ -67,6 +66,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;

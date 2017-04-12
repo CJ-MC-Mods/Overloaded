@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.block;
 
 import com.cjm721.overloaded.common.block.basic.*;
+import com.cjm721.overloaded.common.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
 import net.minecraft.block.Block;
@@ -27,7 +28,12 @@ public final class ModBlocks {
 
     public static ModBlock hyperItemReceiver;
     public static ModBlock hyperItemSender;
+    public static ModBlock hyperFluidReceiver;
+    public static ModBlock hyperFluidSender;
+    public static ModBlock hyperEnergyReceiver;
+    public static ModBlock hyperEnergySender;
 
+    public static ModBlock infiniteWaterSource;
 
     public static BlockGrill grill;
 
@@ -46,6 +52,12 @@ public final class ModBlocks {
 
         hyperItemReceiver = new BlockHyperItemReceiver();
         hyperItemSender = new BlockHyperItemSender();
+        hyperFluidReceiver = new BlockHyperFluidReceiver();
+        hyperFluidSender = new BlockHyperFluidSender();
+        hyperEnergyReceiver = new BlockHyperEnderReceiver();
+        hyperEnergySender = new BlockHyperEnergySender();
+
+        infiniteWaterSource = new BlockInfiniteWaterSource();
 
         grill = new BlockGrill();
     }
@@ -72,6 +84,12 @@ public final class ModBlocks {
 
         hyperItemReceiver.registerModel();
         hyperItemSender.registerModel();
+        hyperFluidReceiver.registerModel();
+        hyperFluidSender.registerModel();
+        hyperEnergyReceiver.registerModel();
+        hyperEnergySender.registerModel();
+
+        infiniteWaterSource.registerModel();
 
         grill.registerModel();
     }

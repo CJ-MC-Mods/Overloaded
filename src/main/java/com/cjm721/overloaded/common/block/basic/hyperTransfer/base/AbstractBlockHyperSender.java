@@ -1,7 +1,7 @@
-package com.cjm721.overloaded.common.block.basic.base;
+package com.cjm721.overloaded.common.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.common.block.ModBlock;
-import com.cjm721.overloaded.common.block.tile.base.AbstractTileHyperSender;
+import com.cjm721.overloaded.common.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.common.item.ModItems;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -15,12 +15,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Created by CJ on 4/10/2017.
  */
-public abstract class AbstractBlockHyperSender extends ModBlock implements ITileEntityProvider {
+public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider {
 
     public AbstractBlockHyperSender(Material materialIn) {
         super(materialIn);
@@ -61,7 +62,6 @@ public abstract class AbstractBlockHyperSender extends ModBlock implements ITile
         ((AbstractTileHyperSender)world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 
-    public abstract String getType();
 }
 
 

@@ -2,9 +2,8 @@ package com.cjm721.overloaded.common.block.basic;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
-import com.cjm721.overloaded.common.block.tile.TileInfiniteTank;
+import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.common.storage.LongFluidStack;
-import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -21,7 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,8 +36,7 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     public BlockInfiniteTank() {
         super(Material.GLASS);
 
-        setRegistryName("BlockInfiniteTank");
-        setUnlocalizedName("BlockInfiniteTank");
+        defaultRegistery();
 
         setHardness(10);
         setLightOpacity(0);

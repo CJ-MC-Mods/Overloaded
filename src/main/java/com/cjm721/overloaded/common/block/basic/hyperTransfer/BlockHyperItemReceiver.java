@@ -1,8 +1,8 @@
-package com.cjm721.overloaded.common.block.basic;
+package com.cjm721.overloaded.common.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
-import com.cjm721.overloaded.common.block.basic.base.AbstractBlockHyperReceiver;
-import com.cjm721.overloaded.common.block.tile.TileHyperItemReceiver;
+import com.cjm721.overloaded.common.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
+import com.cjm721.overloaded.common.block.tile.hyperTransfer.TileHyperItemReceiver;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
@@ -25,9 +27,6 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
     public BlockHyperItemReceiver() {
         super(Material.ROCK);
-
-        setRegistryName("BlockHyperItemReceiver");
-        setUnlocalizedName("BlockHyperItemReceiver");
 
         setHardness(10);
         setLightOpacity(0);
@@ -41,21 +40,6 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "sideTest"), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
-    }
-
     /**
      * Returns a new instance of a block's tile entity class. Called on placing the block.
      *
@@ -63,6 +47,7 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
      * @param meta
      */
     @Override
+    @Nonnull
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileHyperItemReceiver();
     }

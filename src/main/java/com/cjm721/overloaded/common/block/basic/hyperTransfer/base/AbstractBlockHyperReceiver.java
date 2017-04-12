@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.common.block.basic.base;
+package com.cjm721.overloaded.common.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -8,18 +8,18 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Created by CJ on 4/10/2017.
  */
-public abstract class AbstractBlockHyperReceiver extends ModBlock implements ITileEntityProvider {
+public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode implements ITileEntityProvider {
 
     public AbstractBlockHyperReceiver(Material materialIn) {
         super(materialIn);
@@ -47,7 +47,5 @@ public abstract class AbstractBlockHyperReceiver extends ModBlock implements ITi
         tag.setInteger("WORLD", worldIn.provider.getDimension());
         tag.setString("TYPE", getType());
     }
-
-    protected abstract String getType();
 
 }

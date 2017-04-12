@@ -1,8 +1,8 @@
-package com.cjm721.overloaded.common.block.basic;
+package com.cjm721.overloaded.common.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
-import com.cjm721.overloaded.common.block.basic.base.AbstractBlockHyperReceiver;
-import com.cjm721.overloaded.common.block.tile.TileHyperFluidReceiver;
+import com.cjm721.overloaded.common.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
+import com.cjm721.overloaded.common.block.tile.hyperTransfer.TileHyperFluidReceiver;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,6 +16,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 /**
@@ -25,9 +27,6 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
     public BlockHyperFluidReceiver() {
         super(Material.ROCK);
-
-        setRegistryName("BlockHyperFluidReceiver");
-        setUnlocalizedName("BlockHyperFluidReceiver");
 
         setHardness(10);
         setLightOpacity(0);
@@ -42,21 +41,6 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
     }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "sideTest"), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
-    }
-
     @Override
     protected String getType() {
         return "Fluid";
@@ -69,6 +53,7 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
      * @param meta
      */
     @Override
+    @Nonnull
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileHyperFluidReceiver();
     }

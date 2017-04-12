@@ -2,8 +2,8 @@ package com.cjm721.overloaded.common.block.basic;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
-import com.cjm721.overloaded.common.block.tile.TileInfiniteBarrel;
-import com.cjm721.overloaded.common.storage.item.LongItemStorage;
+import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.common.storage.LongItemStack;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,19 +24,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/6/2017.
- */
 public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider {
+
     public BlockInfiniteBarrel() {
         super(Material.ROCK);
 
-        setRegistryName("BlockInfiniteBarrel");
-        setUnlocalizedName("BlockInfiniteBarrel");
+        defaultRegistery();
 
         setHardness(10);
         setLightOpacity(0);
@@ -58,7 +56,8 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
 
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+            @Nonnull
+            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
                 return location;
             }
         };
@@ -66,7 +65,8 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     }
 
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Nonnull
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileInfiniteBarrel();
     }
 
@@ -74,12 +74,11 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             if(heldItem == null && hand == EnumHand.MAIN_HAND) {
-                LongItemStorage barrel = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage();
-                ItemStack storedItem = barrel.getStoredItem();
-                if(storedItem == null) {
-                    playerIn.addChatComponentMessage(new TextComponentString(String.format("Item: EMPTY  Amount: %,d", barrel.getStoredItem(), barrel.getStoredAmount())));
+                LongItemStack stack = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage().status();
+                if(stack.itemStack == null) {
+                    playerIn.addChatComponentMessage(new TextComponentString("Item: EMPTY"));
                 } else {
-                    playerIn.addChatComponentMessage(new TextComponentString("Item: ").appendSibling(barrel.getStoredItem().getTextComponent()).appendText(String.format(" Amount %,d", barrel.getStoredAmount())));
+                    playerIn.addChatComponentMessage(new TextComponentString("Item: ").appendSibling(stack.itemStack.getTextComponent()).appendText(String.format(" Amount %,d", stack.amount)));
                 }
                 return true;
             }

@@ -29,7 +29,6 @@ public class Overloaded {
         proxy.preInit(event);
     }
 
-
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {

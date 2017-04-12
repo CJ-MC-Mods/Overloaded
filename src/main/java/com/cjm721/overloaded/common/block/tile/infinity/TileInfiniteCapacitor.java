@@ -1,10 +1,12 @@
-package com.cjm721.overloaded.common.block.tile;
+package com.cjm721.overloaded.common.block.tile.infinity;
 
 import com.cjm721.overloaded.common.storage.energy.LongEnergyStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+
+import javax.annotation.Nonnull;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -14,7 +16,8 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
  */
 public class TileInfiniteCapacitor extends TileEntity {
 
-    LongEnergyStorage energyStorage;
+    @Nonnull
+    private LongEnergyStorage energyStorage;
 
     public TileInfiniteCapacitor() {
         energyStorage = new LongEnergyStorage();

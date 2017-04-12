@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.common.block.tile;
+package com.cjm721.overloaded.common.block.tile.infinity;
 
 import com.cjm721.overloaded.common.storage.fluid.LongFluidStorage;
 import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
@@ -8,6 +8,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
+import javax.annotation.Nonnull;
+
 import static com.cjm721.overloaded.common.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
@@ -16,7 +18,8 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
  */
 public class TileInfiniteTank extends TileEntity {
 
-    LongFluidStorage fluidStorage;
+    @Nonnull
+    private LongFluidStorage fluidStorage;
 
     public TileInfiniteTank() {
         fluidStorage = new LongFluidStorage();

@@ -1,6 +1,6 @@
-package com.cjm721.overloaded.common.block.tile;
+package com.cjm721.overloaded.common.block.tile.hyperTransfer;
 
-import com.cjm721.overloaded.common.block.tile.base.AbstractTileHyperSender;
+import com.cjm721.overloaded.common.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.common.storage.LongFluidStack;
 import com.cjm721.overloaded.common.storage.fluid.IHyperHandlerFluid;
 import net.minecraft.tileentity.TileEntity;
