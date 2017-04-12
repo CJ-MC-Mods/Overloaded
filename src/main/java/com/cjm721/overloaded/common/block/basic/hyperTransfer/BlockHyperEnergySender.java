@@ -8,7 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -32,7 +31,6 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
 
     }
 
-    @NotNull
     @Override
     @Nonnull
     public String getType() {

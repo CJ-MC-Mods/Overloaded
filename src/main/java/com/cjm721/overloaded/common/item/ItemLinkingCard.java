@@ -33,7 +33,7 @@ public class ItemLinkingCard extends ModItem {
     public void addInformation(@Nonnull ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         NBTTagCompound tag = stack.getTagCompound();
         if(tag != null && tag.hasKey("TYPE")) {
-            String type = tag.getString("TYPE");
+            String type = tag.getString     ("TYPE");
             int x = tag.getInteger("X");
             int y = tag.getInteger("Y");
             int z = tag.getInteger("Z");
