@@ -22,8 +22,8 @@ public class ItemLinkingCard extends ModItem {
 
     public ItemLinkingCard() {
         setMaxStackSize(1);
-        setRegistryName("ItemLinkingCard");
-        setUnlocalizedName("ItemLinkingCard");
+        setRegistryName("itemlinkingcard");
+        setUnlocalizedName("itemlinkingcard");
         setCreativeTab(OverloadedCreativeTabs.UTILITY);
 
         GameRegistry.register(this);

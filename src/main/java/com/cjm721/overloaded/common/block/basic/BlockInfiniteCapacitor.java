@@ -4,6 +4,8 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
+import mcjty.lib.tools.ChatTools;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -71,17 +73,18 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            if(heldItem == null && hand == EnumHand.MAIN_HAND) {
+            ItemStack heldItem = playerIn.getHeldItem(hand);
+            if(ItemStackTools.isEmpty(heldItem) && hand == EnumHand.MAIN_HAND) {
                 LongEnergyStack stack = ((TileInfiniteCapacitor) worldIn.getTileEntity(pos)).getStorage().status();
 
-                // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
+                        // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
                 double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
-                playerIn.addChatComponentMessage(new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", stack.getAmount(), percent)));
+                ChatTools.addChatMessage(playerIn, new TextComponentString(String.format("Emergy Amount: %,d  %,.4f%%", stack.getAmount(), percent)));
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 }

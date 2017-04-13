@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.util;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.storage.item.IHyperHandlerItem;
 import com.cjm721.overloaded.common.storage.item.LongItemStorage;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,7 +39,7 @@ public class CapabilityHyperItem {
                 NBTTagCompound tag = (NBTTagCompound)nbt;
 
                 if(tag.hasKey("Item")) {
-                    LongItemStack stack = new LongItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound) tag.getTag("Item")), tag.getLong("Count"));
+                    LongItemStack stack = new LongItemStack(ItemStackTools.loadFromNBT((NBTTagCompound) tag.getTag("Item")), tag.getLong("Count"));
                     instance.give(stack, false);
                 }
             }

@@ -3,6 +3,8 @@ package com.cjm721.overloaded.common.storage.item;
 import com.cjm721.overloaded.common.storage.INBTConvertible;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
+import mcjty.lib.tools.ItemStackTools;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
@@ -52,12 +54,13 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * @return ItemStack in given slot. May be null.
      **/
     @Override
+    @Nonnull
     public ItemStack getStackInSlot(int slot) {
         if(longItemStack.itemStack != null) {
-            longItemStack.itemStack.stackSize = (int) Math.min(Integer.MAX_VALUE,longItemStack.amount);
+            longItemStack.itemStack.setCount((int) Math.min(Integer.MAX_VALUE,longItemStack.amount));
             return longItemStack.itemStack;
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /**
@@ -72,15 +75,16 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
      **/
     @Override
-    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        LongItemStack result = give(new LongItemStack(stack,stack.stackSize), !simulate);
+    @Nonnull
+    public ItemStack insertItem(int slot,@Nonnull ItemStack stack, boolean simulate) {
+        LongItemStack result = give(new LongItemStack(stack,stack.getCount()), !simulate);
 
         if(result.amount == 0) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         ItemStack toReturn = stack.copy();
-        toReturn.stackSize = (int) result.amount;
+        toReturn.setCount((int) result.amount);
 
         return toReturn;
     }
@@ -96,17 +100,29 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * @return ItemStack extracted from the slot, must be null, if nothing can be extracted
      **/
     @Override
+    @Nonnull
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         LongItemStack result = take(new LongItemStack(null,amount), !simulate);
 
         if(result.amount == 0L) {
-            return null;
+            return ItemStack.EMPTY;
         }
 
         ItemStack toReturn = result.itemStack.copy();
-        toReturn.stackSize = (int) result.amount;
+        toReturn.setCount((int) result.amount);
 
         return toReturn;
+    }
+
+    /**
+     * Retrieves the maximum stack size allowed to exist in the given slot.
+     *
+     * @param slot Slot to query.
+     * @return The maximum stack size allowed in the slot.
+     */
+    @Override
+    public int getSlotLimit(int slot) {
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -121,7 +137,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        ItemStack storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
+        ItemStack storedItem = compound.hasKey("Item") ? ItemStackTools.loadFromNBT(compound.getCompoundTag("Item")) : null;
         if(storedItem != null) {
             long storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
             longItemStack = new LongItemStack(storedItem, storedAmount);

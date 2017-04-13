@@ -2,6 +2,8 @@ package com.cjm721.overloaded.common.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.common.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.common.item.ModItems;
+import mcjty.lib.tools.ChatTools;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,14 +26,15 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn,@Nonnull BlockPos pos, IBlockState state,@Nonnull EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(hand == EnumHand.MAIN_HAND) {
-            if (heldItem == null) {
+            ItemStack heldItem = playerIn.getHeldItem(hand);
+            if (ItemStackTools.isEmpty(heldItem)) {
                 // SubIf so that Else block does not also need to check for heldItem == null
                 // Should find a cleaner way of showing all of this
                 if(!worldIn.isRemote) {
                     String message = ((AbstractTileHyperSender) worldIn.getTileEntity(pos)).getRightClickMessage();
-                    playerIn.addChatComponentMessage(new TextComponentString(message));
+                    ChatTools.addChatMessage(playerIn, new TextComponentString(message));
                 }
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 NBTTagCompound tag = heldItem.getTagCompound();
@@ -45,11 +48,11 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
                         bindToPartner(worldIn, pos, worldID, new BlockPos(x, y, z));
                         heldItem.setTagCompound(null);
                         if (worldIn.isRemote) {
-                            playerIn.addChatComponentMessage(new TextComponentString("Bound Hyper Nodes"));
+                            ChatTools.addChatMessage(playerIn, new TextComponentString("Bound Hyper Nodes"));
                         }
                     } else {
                         if (worldIn.isRemote) {
-                            playerIn.addChatComponentMessage(new TextComponentString("Incorrect Hyper Node Type to bind."));
+                            ChatTools.addChatMessage(playerIn, new TextComponentString("Incorrect Hyper Node Type to bind."));
                         }
                     }
                 }
@@ -57,7 +60,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
             return true;
         }
 
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 
     private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId,@Nonnull BlockPos partnerPos) {

@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.common.item.ModItems;
+import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -22,8 +23,9 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn,@Nonnull BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(heldItem != null && heldItem.getItem().equals(ModItems.linkingCard)) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if(!ItemStackTools.isEmpty(heldItem) && heldItem.getItem().equals(ModItems.linkingCard)) {
             NBTTagCompound tag = heldItem.getTagCompound();
             if(tag == null) {
                 tag = new NBTTagCompound();
@@ -32,7 +34,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
             heldItem.setTagCompound(tag);
             return true;
         } else {
-            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
         }
     }
 

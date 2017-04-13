@@ -28,15 +28,15 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Gradle: deobf.com.github.mcjty:compatlayer:1.11.2-0.2.7" level="project" />
+    <orderEntry type="library" name="Gradle: deobf.com.github.mcjty:compatlayer:1.11.2-0.2.5" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.10.2-12.18.3.2254/snapshot/20161111/forgeSrc-1.10.2-12.18.3.2254.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170411/forgeSrc-1.11.2-13.20.0.2280.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.10.2-12.18.3.2254/snapshot/20161111/forgeSrc-1.10.2-12.18.3.2254-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170411/forgeSrc-1.11.2-13.20.0.2280-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
@@ -54,8 +54,8 @@
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" name="Gradle: net.java.jutils:jutils:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.2.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.mojang:authlib:1.5.22" level="project" />
-    <orderEntry type="library" name="Gradle: com.mojang:realms:1.9.8" level="project" />
+    <orderEntry type="library" name="Gradle: com.mojang:authlib:1.5.24" level="project" />
+    <orderEntry type="library" name="Gradle: com.mojang:realms:1.10.16" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-compress:1.8.1" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.3.3" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.1.3" level="project" />

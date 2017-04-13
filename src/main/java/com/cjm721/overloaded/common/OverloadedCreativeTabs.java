@@ -1,31 +1,31 @@
 package com.cjm721.overloaded.common;
 
 import com.cjm721.overloaded.common.block.ModBlocks;
+import mcjty.lib.compat.CompatCreativeTabs;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
 public class OverloadedCreativeTabs {
-    public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("Overloaded_Compressed") {
+    public static CreativeTabs COMPRESSED_BLOCKS = new CompatCreativeTabs("Overloaded_Compressed") {
         @Override
-        public Item getTabIconItem() {
-            return Item.getByNameOrId(("minecraft:stone"));
+        protected Item getItem() {
+            return Item.getItemFromBlock(ModBlocks.compressedCobbleStone.get(0));
         }
     };
 
-    public static CreativeTabs ENERGY_BLOCKS = new CreativeTabs("Overloaded_Energy") {
+    public static CreativeTabs ENERGY_BLOCKS = new CompatCreativeTabs("Overloaded_Energy") {
         @Override
-        @Nonnull
-        public Item getTabIconItem() {
+        protected Item getItem() {
             return Item.getItemFromBlock(ModBlocks.basicGenerator);
         }
     };
 
-    public static CreativeTabs UTILITY = new CreativeTabs("Overloaded_Utility") {
+    public static CreativeTabs UTILITY = new CompatCreativeTabs("Overloaded_Utility") {
         @Override
-        @Nonnull
-        public Item getTabIconItem() {
+        protected Item getItem() {
             return Item.getItemFromBlock(ModBlocks.infiniteBarrel);
         }
     };
