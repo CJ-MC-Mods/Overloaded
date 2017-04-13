@@ -57,7 +57,7 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infiniteCapacitor"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_capacitor"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {

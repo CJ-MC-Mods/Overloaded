@@ -46,7 +46,7 @@ public class ItemLinkingCard extends ModItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"linkingCard"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"linking_card"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
     }
 }

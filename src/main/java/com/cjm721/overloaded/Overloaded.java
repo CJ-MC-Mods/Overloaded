@@ -6,7 +6,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Overloaded.MODID, version = Overloaded.VERSION)
+@Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
+        acceptedMinecraftVersions = "[1.10.2, 1.11.2]")
 public class Overloaded {
 
     @Mod.Instance(Overloaded.MODID)

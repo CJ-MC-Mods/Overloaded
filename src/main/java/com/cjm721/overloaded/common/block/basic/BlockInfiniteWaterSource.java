@@ -48,7 +48,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infiniteWaterSource"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_water_source"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {

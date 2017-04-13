@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.common.item;
 
-import net.minecraft.item.Item;
+import mcjty.lib.compat.CompatItem;
 
-public abstract class ModItem extends Item {
+public abstract class ModItem extends CompatItem {
     public abstract void registerModel();
 }

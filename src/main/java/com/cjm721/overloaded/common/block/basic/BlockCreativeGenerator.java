@@ -54,7 +54,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creativeGenerator"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creative_generator"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         StateMapperBase ignoreState = new StateMapperBase() {
