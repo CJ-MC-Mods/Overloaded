@@ -1,13 +1,22 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.common.CommonProxy;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
+import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
+import net.minecraftforge.fml.common.versioning.VersionRange;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
-        acceptedMinecraftVersions = "[1.10.2, 1.11.2]")
+        acceptedMinecraftVersions = "[1.10.2, 1.11.2]",
+        dependencies = "required-after:compatlayer@[0.2.5,)",
+        useMetadata = true
+        )
 public class Overloaded {
 
     @Mod.Instance(Overloaded.MODID)
@@ -24,6 +33,33 @@ public class Overloaded {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+//        if(Loader.isModLoaded("forge")) {
+//            for(ModContainer mod :Loader.instance().getModList()) {
+//                if(!"forge".equals(mod.getModId()))
+//                    continue;
+//
+//                try {
+//                    VersionRange range = VersionRange.createFromVersionSpec("[12.18.3.2221,)");
+//                    if(!range.containsVersion(mod.getProcessedVersion())) {
+//                        Set<ArtifactVersion> set = new HashSet<>();
+//                        set.add(new DefaultArtifactVersion("forge",range));
+//                        throw new MissingModsException(set, "forge", "forge");
+//                    }
+//                } catch (InvalidVersionSpecificationException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+        // If there is a certain version of 1.11 forge needed
+//        else if (Loader.isModLoaded("Forge")) {
+//            for(ModContainer mod :Loader.instance().getModList()) {
+//                if(!"Forge".equals(mod.getModId()))
+//                    continue;
+//
+//            }
+//        }
+
+
         proxy.preInit(event);
     }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="Overloaded:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.10.2-0.0.5" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="Overloaded:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.11.2-0.0.6" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../src/main">
@@ -31,11 +31,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170411/forgeSrc-1.11.2-13.20.0.2280.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170413/forgeSrc-1.11.2-13.20.0.2280.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170411/forgeSrc-1.11.2-13.20.0.2280-sources.jar!/" />
+          <root url="jar://$USER_HOME$/.gradle/caches/minecraft/net/minecraftforge/forge/1.11.2-13.20.0.2280/snapshot/20170413/forgeSrc-1.11.2-13.20.0.2280-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>

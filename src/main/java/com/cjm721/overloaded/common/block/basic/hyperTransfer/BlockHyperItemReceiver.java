@@ -19,7 +19,7 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
         GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID + ":hyperItemReceiver");
     }

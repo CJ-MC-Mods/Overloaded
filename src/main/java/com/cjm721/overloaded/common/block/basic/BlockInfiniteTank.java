@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
@@ -40,7 +39,7 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infiniteTank");
     }

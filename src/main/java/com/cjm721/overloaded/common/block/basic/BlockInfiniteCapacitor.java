@@ -27,7 +27,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
@@ -40,7 +39,7 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.ENERGY_BLOCKS);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
         GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infiniteCapacitor");
     }

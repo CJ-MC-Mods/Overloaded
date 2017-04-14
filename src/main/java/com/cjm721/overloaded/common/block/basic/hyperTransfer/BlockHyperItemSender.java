@@ -19,7 +19,7 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
         setHardness(10);
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
         GameRegistry.registerTileEntity(TileHyperItemSender.class, MODID + ":hyperItemSender");
     }

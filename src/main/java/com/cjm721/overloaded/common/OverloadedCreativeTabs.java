@@ -16,17 +16,10 @@ public class OverloadedCreativeTabs {
         }
     };
 
-    public static CreativeTabs ENERGY_BLOCKS = new CompatCreativeTabs("Overloaded_Energy") {
+    public static CreativeTabs TECH = new CompatCreativeTabs("Overloaded_TECH") {
         @Override
         protected Item getItem() {
             return Item.getItemFromBlock(ModBlocks.basicGenerator);
-        }
-    };
-
-    public static CreativeTabs UTILITY = new CompatCreativeTabs("Overloaded_Utility") {
-        @Override
-        protected Item getItem() {
-            return Item.getItemFromBlock(ModBlocks.infiniteBarrel);
         }
     };
 }

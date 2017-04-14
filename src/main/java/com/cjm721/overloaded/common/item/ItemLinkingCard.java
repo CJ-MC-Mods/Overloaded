@@ -1,10 +1,8 @@
 package com.cjm721.overloaded.common.item;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +22,7 @@ public class ItemLinkingCard extends ModItem {
         setMaxStackSize(1);
         setRegistryName("itemlinkingcard");
         setUnlocalizedName("itemlinkingcard");
-        setCreativeTab(OverloadedCreativeTabs.UTILITY);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
     }
