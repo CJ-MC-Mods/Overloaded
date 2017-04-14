@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileGrill;
+import com.cjm721.overloaded.common.util.FacingStateMapper;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockPistonBase;
@@ -12,6 +13,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -36,7 +38,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class BlockGrill extends ModBlock  {
 
-    public static final PropertyDirection FACING = BlockDirectional.FACING;
+    private static final PropertyDirection FACING = BlockDirectional.FACING;
 
     public BlockGrill() {
         super(Material.ROCK);
@@ -80,19 +82,13 @@ public class BlockGrill extends ModBlock  {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "grill"), null);
+        ResourceLocation resourceLocation = new ResourceLocation(MODID, "grill");
+
+        ModelResourceLocation location = new ModelResourceLocation(resourceLocation, null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-
-
-//        StateMapperBase ignoreState = new StateMapperBase() {
-//            @Override
-//            @Nonnull
-//            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-//                return location;
-//            }
-//        };
-//        ModelLoader.setCustomStateMapper(this, ignoreState);
+        FacingStateMapper stateMapper = new FacingStateMapper(resourceLocation);
+        ModelLoader.setCustomStateMapper(this, stateMapper);
     }
 
     @SideOnly(Side.CLIENT)
@@ -123,10 +119,5 @@ public class BlockGrill extends ModBlock  {
     }
 
 
-    public static EnumFacing getFacingFromEntity(BlockPos clickedBlock, EntityLivingBase entity) {
-        return EnumFacing.getFacingFromVector(
-                (float) (entity.posX - clickedBlock.getX()),
-                (float) (entity.posY - clickedBlock.getY()),
-                (float) (entity.posZ - clickedBlock.getZ()));
-    }
+
 }

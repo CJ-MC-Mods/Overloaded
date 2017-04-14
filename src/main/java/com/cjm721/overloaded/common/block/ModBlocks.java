@@ -36,6 +36,7 @@ public final class ModBlocks {
     public static ModBlock infiniteWaterSource;
 
     public static ModBlock grill;
+    public static ModBlock energyExtractor;
 
 
 
@@ -60,6 +61,7 @@ public final class ModBlocks {
         infiniteWaterSource = new BlockInfiniteWaterSource();
 
         grill = new BlockGrill();
+        energyExtractor = new BlockEnergyExtractor();
     }
 
     public static void addRecipes() {
@@ -70,6 +72,7 @@ public final class ModBlocks {
         }
 
         infiniteWaterSource.registerRecipe();
+        energyExtractor.registerRecipe();
     }
 
     @SideOnly(Side.CLIENT)
@@ -94,6 +97,7 @@ public final class ModBlocks {
         infiniteWaterSource.registerModel();
 
         grill.registerModel();
+        energyExtractor.registerModel();
     }
 
     @SideOnly(Side.CLIENT)
