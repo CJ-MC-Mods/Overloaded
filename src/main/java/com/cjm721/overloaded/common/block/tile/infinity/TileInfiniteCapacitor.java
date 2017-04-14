@@ -30,7 +30,6 @@ public class TileInfiniteCapacitor extends TileEntity {
     }
 
     @Override
-    @Nonnull
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
         energyStorage.readFromNBT(compound);

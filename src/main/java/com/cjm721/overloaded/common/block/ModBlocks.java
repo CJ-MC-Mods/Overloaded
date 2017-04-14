@@ -35,7 +35,7 @@ public final class ModBlocks {
 
     public static ModBlock infiniteWaterSource;
 
-    public static BlockGrill grill;
+    public static ModBlock grill;
 
 
 

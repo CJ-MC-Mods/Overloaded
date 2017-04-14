@@ -50,7 +50,7 @@ public class Overloaded {
 //                }
 //            }
 //        }
-        // If there is a certain version of 1.11 forge needed
+//        // If there is a certain version of 1.11 forge needed
 //        else if (Loader.isModLoaded("Forge")) {
 //            for(ModContainer mod :Loader.instance().getModList()) {
 //                if(!"Forge".equals(mod.getModId()))
@@ -58,7 +58,6 @@ public class Overloaded {
 //
 //            }
 //        }
-
 
         proxy.preInit(event);
     }
