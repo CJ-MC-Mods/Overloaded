@@ -60,7 +60,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
             return true;
         }
 
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.clOnBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 
     private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId,@Nonnull BlockPos partnerPos) {

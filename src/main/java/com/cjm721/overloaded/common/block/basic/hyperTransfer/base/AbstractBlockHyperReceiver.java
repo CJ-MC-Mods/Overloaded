@@ -43,7 +43,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
 
             return true;
         } else {
-            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+            return super.clOnBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
         }
     }
 
