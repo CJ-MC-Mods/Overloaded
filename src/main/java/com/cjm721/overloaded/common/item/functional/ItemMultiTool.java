@@ -28,6 +28,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -71,6 +73,10 @@ public class ItemMultiTool extends ModItem {
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
                 Vec3i sideVector = result.sideHit.getDirectionVec();
                 BlockPos newPosition = result.getBlockPos().add(sideVector);
+
+                worldIn.getBlockState(result.getBlockPos()).getBlock();
+
+                IItemHandler handler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
                 if(worldIn.isAirBlock(newPosition)) {
                     worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
@@ -155,8 +161,11 @@ public class ItemMultiTool extends ModItem {
     // Registering only on client side
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
-    public void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getItemStack().getItem().equals(this)) {
+    public void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
+        ItemStack stack = event.getItemStack();
+
+        // 1.10.2 can give null
+        if(stack != null && stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos());
         }
     }
@@ -165,7 +174,10 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
-        if(event.getItemStack().getItem().equals(this)) {
+        ItemStack stack = event.getItemStack();
+
+        // 1.10.2 can give null
+        if(stack != null && stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
             RayTraceResult result = entityLiving.rayTrace(128, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
