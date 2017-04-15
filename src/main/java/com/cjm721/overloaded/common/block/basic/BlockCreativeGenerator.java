@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileCreativeGeneratorFE;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -81,10 +82,11 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         return false;
     }
 
+
     @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        ((TileCreativeGeneratorFE)world.getTileEntity(pos)).onNeighborChange(neighbor);
-        super.onNeighborChange(world, pos, neighbor);
+    protected void clOnNeighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+        ((TileCreativeGeneratorFE)world.getTileEntity(pos)).onPlace();
+        super.clOnNeighborChanged(state,world,pos,block);
     }
 
     @Override

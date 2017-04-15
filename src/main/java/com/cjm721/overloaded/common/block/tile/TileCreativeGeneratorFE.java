@@ -113,7 +113,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
         return false;
     }
 
-    public void onNeighborChange(@Nonnull BlockPos neighbor) {
+    private void onNeighborChange(@Nonnull BlockPos neighbor) {
         TileEntity te = this.getWorld().getTileEntity(neighbor);
 
         BlockPos sidePos = this.getPos().subtract(neighbor);

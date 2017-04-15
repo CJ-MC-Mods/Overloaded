@@ -1,6 +1,7 @@
-package com.cjm721.overloaded.common.item;
+package com.cjm721.overloaded.common.item.functional;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,8 +29,8 @@ public class ItemLinkingCard extends ModItem {
     }
 
     @Override
-    public void addInformation(@Nonnull ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        NBTTagCompound tag = stack.getTagCompound();
+    public void clAddInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+         NBTTagCompound tag = stack.getTagCompound();
         if(tag != null && tag.hasKey("TYPE")) {
             String type = tag.getString     ("TYPE");
             int x = tag.getInteger("X");

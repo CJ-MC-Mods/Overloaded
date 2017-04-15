@@ -72,7 +72,7 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             ItemStack heldItem = playerIn.getHeldItem(hand);
             if(ItemStackTools.isEmpty(heldItem) && hand == EnumHand.MAIN_HAND) {
@@ -85,6 +85,6 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.clOnBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 }

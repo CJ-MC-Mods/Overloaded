@@ -26,7 +26,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(hand == EnumHand.MAIN_HAND) {
             ItemStack heldItem = playerIn.getHeldItem(hand);
             if (ItemStackTools.isEmpty(heldItem)) {

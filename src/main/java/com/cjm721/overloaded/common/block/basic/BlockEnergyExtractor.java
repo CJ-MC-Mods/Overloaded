@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -105,6 +106,7 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void registerModel() {
         ResourceLocation resourceLocation = new ResourceLocation(MODID, "energy_extractor");
 
@@ -117,7 +119,12 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos,placer)));
+        worldIn.setBlockState(pos, state.withProperty(FACING, getFront(placer))); // EnumFacing.getDirectionFromEntityLiving(pos,placer)
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+    }
+
+    private EnumFacing getFront(EntityLivingBase placer) {
+        Vec3d lookVec = placer.getLookVec();
+        return EnumFacing.getFacingFromVector((float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
     }
 }

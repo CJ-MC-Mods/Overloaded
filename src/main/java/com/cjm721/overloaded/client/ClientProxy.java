@@ -6,6 +6,7 @@ import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.item.ModItems;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -21,6 +22,8 @@ public class ClientProxy extends CommonProxy {
         ModelLoaderRegistry.registerLoader(new CompressedModelLoader());
         ModBlocks.registerModels();
         ModItems.registerModels();
+
+        MinecraftForge.EVENT_BUS.register(ModItems.distanceBreaker);
     }
 
     @Override

@@ -50,7 +50,6 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
         return BlockRenderLayer.CUTOUT;
     }
 
-
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
