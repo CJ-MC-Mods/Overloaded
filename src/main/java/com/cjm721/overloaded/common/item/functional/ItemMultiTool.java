@@ -4,6 +4,7 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.network.packets.MultiToolLeftClickMessage;
+import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -68,83 +69,13 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     protected ActionResult<ItemStack> clOnItemRightClick(@Nonnull World worldIn, EntityPlayer player, EnumHand hand) {
-        if(!worldIn.isRemote) {
+        if(worldIn.isRemote) {
+            // TODO Make distance a config option
             RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(128)));
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                Vec3i sideVector = result.sideHit.getDirectionVec();
-                BlockPos newPosition = result.getBlockPos().add(sideVector);
-
-                worldIn.getBlockState(result.getBlockPos()).getBlock();
-
-                IItemHandler handler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-
-                if(worldIn.isAirBlock(newPosition)) {
-                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                }
-
-                if (player.isSneaking()) {
-                    BlockPos playerPos = player.getPosition();
-                    playerPos = playerPos.add(result.sideHit.getOpposite().getDirectionVec());
-                    switch(result.sideHit) {
-                        case UP:
-                            while(newPosition.getY() < playerPos.getY()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                        case DOWN:
-                            while(newPosition.getY() - 1 > playerPos.getY()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                        case NORTH:
-                            while(newPosition.getZ() > playerPos.getZ()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                        case SOUTH:
-                            while(newPosition.getZ() < playerPos.getZ()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                        case EAST:
-                            while(newPosition.getX() < playerPos.getX()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                        case WEST:
-                            while(newPosition.getX() > playerPos.getX()) {
-                                newPosition = newPosition.add(sideVector);
-                                if(worldIn.isAirBlock(newPosition))
-                                    worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
-                                else
-                                    break;
-                            }
-                            break;
-                    }
-                }
+                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit));
             }
         }
-
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
@@ -193,5 +124,79 @@ public class ItemMultiTool extends ModItem {
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos) {
         breakAndDropAtPlayer(world, pos, player.posX, player.posY, player.posZ);
+    }
+
+    public void rightClickWithItem(World worldIn, EntityPlayerMP player, BlockPos pos, EnumFacing sideHit) {
+        Vec3i sideVector = sideHit.getDirectionVec();
+        BlockPos newPosition = pos.add(sideVector);
+
+        worldIn.getBlockState(pos).getBlock();
+
+        IItemHandler handler = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+
+        if(worldIn.isAirBlock(newPosition)) {
+            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+        }
+
+        if (player.isSneaking()) {
+            BlockPos playerPos = player.getPosition();
+            playerPos = playerPos.add(sideHit.getOpposite().getDirectionVec());
+            switch(sideHit) {
+                case UP:
+                    while(newPosition.getY() < playerPos.getY()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+                case DOWN:
+                    while(newPosition.getY() - 1 > playerPos.getY()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+                case NORTH:
+                    while(newPosition.getZ() > playerPos.getZ()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+                case SOUTH:
+                    while(newPosition.getZ() < playerPos.getZ()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+                case EAST:
+                    while(newPosition.getX() < playerPos.getX()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+                case WEST:
+                    while(newPosition.getX() > playerPos.getX()) {
+                        newPosition = newPosition.add(sideVector);
+                        if(worldIn.isAirBlock(newPosition))
+                            worldIn.setBlockState(newPosition, Blocks.IRON_BLOCK.getDefaultState());
+                        else
+                            break;
+                    }
+                    break;
+            }
+        }
     }
 }

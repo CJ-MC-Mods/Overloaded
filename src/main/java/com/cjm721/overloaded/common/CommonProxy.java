@@ -2,8 +2,10 @@ package com.cjm721.overloaded.common;
 
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.item.ModItems;
-import com.cjm721.overloaded.common.network.handler.MultiToolHandler;
+import com.cjm721.overloaded.common.network.handler.MultiToolLeftClickHandler;
+import com.cjm721.overloaded.common.network.handler.MultiToolRightClickHandler;
 import com.cjm721.overloaded.common.network.packets.MultiToolLeftClickMessage;
+import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.common.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.common.util.CapabilityHyperItem;
@@ -29,6 +31,7 @@ public class CommonProxy {
         ModBlocks.addRecipes();
 
         networkWrapper = new SimpleNetworkWrapper("overloaded");
-        networkWrapper.registerMessage(MultiToolHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
+        networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
+        networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
     }
 }
