@@ -26,7 +26,7 @@ public class CompressedBlockHandler {
         for(int i = 1; i <= depth; i++) {
             String compRegistryName = String.format("compressed%d%s", i, registryName);
             String compUnlocalizedName = String.format("%dxCompressed:%s", i, unlocalizedName);
-            currentHardness += baseHardness;
+            currentHardness *= 9;
             if(currentHardness < 0) {
                 currentHardness = Float.MAX_VALUE;
             }
