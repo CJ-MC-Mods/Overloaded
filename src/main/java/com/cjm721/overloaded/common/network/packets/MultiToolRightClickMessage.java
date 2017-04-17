@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -20,13 +21,6 @@ public class MultiToolRightClickMessage implements IMessage {
         this.hitSide = hitSide;
     }
 
-
-
-     /**
-     * Convert from the supplied buffer into your specific message type
-     *
-     * @param buf
-     */
     @Override
     public void fromBytes(ByteBuf buf) {
         int x = buf.readInt();
@@ -38,11 +32,6 @@ public class MultiToolRightClickMessage implements IMessage {
         this.hitSide = EnumFacing.getFront(facing);
     }
 
-    /**
-     * Deconstruct your message into the supplied byte buffer
-     *
-     * @param buf
-     */
     @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(pos.getX());
