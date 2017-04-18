@@ -15,10 +15,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -31,6 +36,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -44,6 +50,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
 public class ItemMultiTool extends ModItem {
@@ -54,17 +61,35 @@ public class ItemMultiTool extends ModItem {
         setUnlocalizedName("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-
         GameRegistry.register(this);
     }
 
     @Override
-    public void registerModel() { }
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment.type == EnumEnchantmentType.DIGGER;
+    }
+
+    @Override
+    public int getItemEnchantability(ItemStack stack) {
+        return 15;
+    }
+
+    @Override
+    public boolean isEnchantable(@Nonnull ItemStack stack) {
+        return this.getItemStackLimit(stack) == 1;
+    }
+
+    @Override
+    public void registerModel() {
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "newtool1.obj"), null);
+        ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    }
 
     @Override
     public void clAddInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);
         tooltip.add("Energy Stored: " + handler.status().getAmount());
+
         super.clAddInformation(stack, playerIn, tooltip, advanced);
     }
 
@@ -100,15 +125,22 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndDropAtPlayer(@Nonnull World worldIn,@Nonnull BlockPos blockPos, double posX, double posY, double posZ, @Nonnull LongEnergyStack energyStack) {
+    private BlockResult breakAndDropAtPlayer(@Nonnull World worldIn,@Nonnull BlockPos blockPos, double posX, double posY, double posZ, @Nonnull LongEnergyStack energyStack, int fortune, int effiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
-        float breakCost = state.getBlockHardness(worldIn, blockPos) + 100;
+
+        float hardness = state.getBlockHardness(worldIn, blockPos);
+
+        if(hardness < 0) {
+            return BlockResult.FAIL_UNBREAKABLE;
+        }
+
+        float breakCost = (hardness / effiency + 1) + (100  / (unbreaking + 1));
 
         if(energyStack.getAmount() < breakCost){
             return BlockResult.FAIL_ENERGY;
         }
 
-        List<ItemStack> drops = state.getBlock().getDrops(worldIn, blockPos, state, 0);
+        List<ItemStack> drops = state.getBlock().getDrops(worldIn, blockPos, state, fortune);
         boolean result = worldIn.setBlockToAir(blockPos);
 
         if(result) {
@@ -126,7 +158,7 @@ public class ItemMultiTool extends ModItem {
             energyStack.amount -= breakCost;
             return BlockResult.SUCCESS;
         }
-        return BlockResult.FAIL_PLACE;
+        return BlockResult.FAIL_REMOVE;
     }
 
     // Registering only on client side
@@ -189,12 +221,20 @@ public class ItemMultiTool extends ModItem {
         } else {
             IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
-            switch(breakAndDropAtPlayer(world, pos, player.posX, player.posY, player.posZ, energyStack)) {
-                case FAIL_PLACE:
+
+            int efficency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
+            int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
+            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+
+            switch(breakAndDropAtPlayer(world, pos, player.posX, player.posY, player.posZ, energyStack,fortune,efficency,unbreaking)) {
+                case FAIL_REMOVE:
                     ChatTools.addChatMessage(player, new TextComponentString("Unable to break block, reason unknown"));
                     break;
                 case FAIL_ENERGY:
                     ChatTools.addChatMessage(player, new TextComponentString("Unable to break block, not enough energy"));
+                    break;
+                case FAIL_UNBREAKABLE:
+                    ChatTools.addChatMessage(player, new TextComponentString("Block is unbreakable"));
                     break;
             }
             energy.give(energyStack,true);

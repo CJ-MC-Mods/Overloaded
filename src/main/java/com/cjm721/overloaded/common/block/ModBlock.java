@@ -32,6 +32,8 @@ public abstract class ModBlock extends CompatBlock {
     protected void register() {
         GameRegistry.register(this);
         registerItemForm();
+
+        ModBlocks.addToSecondaryInit(this);
     }
 
     private void registerItemForm() {

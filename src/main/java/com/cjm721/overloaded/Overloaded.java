@@ -14,7 +14,9 @@ import java.util.Set;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "[1.10.2, 1.11.2]",
-        dependencies = "required-after:compatlayer@[0.2.5,)",
+        dependencies = "required-after:compatlayer@[0.2.5,);" +
+                "after:Forge@[12.18.3.2221,);" + // MC 1.10
+                "after:forge@[13.20.0.2266,)",   // MC 1.11
         useMetadata = true
         )
 public class Overloaded {

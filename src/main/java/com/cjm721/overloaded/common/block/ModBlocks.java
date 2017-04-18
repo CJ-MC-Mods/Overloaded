@@ -10,6 +10,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +40,8 @@ public final class ModBlocks {
     public static ModBlock grill;
     public static ModBlock energyExtractor;
 
+    public static ModBlock netherStarBlock;
+    private static List<ModBlock> registerList = new LinkedList<>();
 
 
     public static void init() {
@@ -62,50 +66,24 @@ public final class ModBlocks {
 
         grill = new BlockGrill();
         energyExtractor = new BlockEnergyExtractor();
+
+        netherStarBlock = new BlockNetherStar();
+    }
+
+    public static void addToSecondaryInit(ModBlock block) {
+        registerList.add(block);
     }
 
     public static void addRecipes() {
-        for(Block b: compressedCobbleStone.values()){
-            if(b instanceof ModBlock) {
-                ((ModBlock)b).registerRecipe();
-            }
+        for(ModBlock block: registerList){
+            block.registerRecipe();
         }
-
-        infiniteWaterSource.registerRecipe();
-        energyExtractor.registerRecipe();
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        registerModels(compressedCobbleStone.values());
-        registerModels(compressedSand.values());
-        registerModels(compressedStone.values());
-        registerModels(compressedFurnace.values());
-
-        basicGenerator.registerModel();
-        infiniteBarrel.registerModel();
-        infiniteTank.registerModel();
-        infiniteCapacitor.registerModel();
-
-        hyperItemReceiver.registerModel();
-        hyperItemSender.registerModel();
-        hyperFluidReceiver.registerModel();
-        hyperFluidSender.registerModel();
-        hyperEnergyReceiver.registerModel();
-        hyperEnergySender.registerModel();
-
-        infiniteWaterSource.registerModel();
-
-        grill.registerModel();
-        energyExtractor.registerModel();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private static void registerModels(Collection<Block> blockList) {
-        for(Block b: blockList){
-            if(b instanceof BlockCompressed) {
-                ((BlockCompressed)b).registerModel();
-            }
+        for(ModBlock block: registerList){
+            block.registerModel();
         }
     }
 }
