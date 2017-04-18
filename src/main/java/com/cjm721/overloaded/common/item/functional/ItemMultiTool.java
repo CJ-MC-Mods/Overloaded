@@ -267,14 +267,11 @@ public class ItemMultiTool extends ModItem {
 
         IHyperHandlerEnergy energy = multiTool.getCapability(HYPER_ENERGY_HANDLER, null);
         LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
-        ChatTools.addChatMessage(player, new TextComponentString("Amount: " + energyStack.getAmount()));
-
 
         IBlockState state = NBTUtil.readBlockState(tagCompound.getCompoundTag("BlockState"));
 
         Vec3i sideVector = sideHit.getDirectionVec();
         BlockPos newPosition = pos.add(sideVector);
-
 
         try {
             if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
