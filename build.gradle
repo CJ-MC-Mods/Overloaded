@@ -18,11 +18,11 @@ apply plugin: 'idea'
 
 ext.configFile = file "build.properties"
 
-repositories {
-    maven {
-        url = "http://maven.k-4u.nl"
-    }
-}
+//repositories {
+//    maven {
+//        url = "http://maven.k-4u.nl"
+//    }
+//}
 
 configFile.withReader {
     // Load config.  It shall from now be referenced as simply config or project.config
@@ -44,17 +44,14 @@ compileJava {
 minecraft {
     version = "1.11.2-13.20.0.2280"
     runDir = "run"
-    
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20170416"
-    // mappings = "snapshot_20161111"
     replace '${mod_version}', project.config.mod_version
     replaceIn "Overloaded.java"
-
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -81,7 +78,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 //    provided files('run/mods/CoFHCore-1.10.2-4.1.0.155-universal.jar')
-    deobfCompile "com.github.mcjty:compatlayer:1.11.2-0.2.5"
+    // deobfCompile "com.github.mcjty:compatlayer:1.11.2-0.2.5"
 }
 
 processResources

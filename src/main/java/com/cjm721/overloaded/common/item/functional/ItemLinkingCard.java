@@ -29,8 +29,8 @@ public class ItemLinkingCard extends ModItem {
     }
 
     @Override
-    public void clAddInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-         NBTTagCompound tag = stack.getTagCompound();
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        NBTTagCompound tag = stack.getTagCompound();
         if(tag != null && tag.hasKey("TYPE")) {
             String type = tag.getString     ("TYPE");
             int x = tag.getInteger("X");
@@ -40,6 +40,7 @@ public class ItemLinkingCard extends ModItem {
 
             tooltip.add(String.format("Bound to %s at %d:%d,%d,%d", type, worldID, x, y, z));
         }
+        super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
     @SideOnly(Side.CLIENT)

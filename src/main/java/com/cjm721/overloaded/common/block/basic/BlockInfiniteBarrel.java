@@ -4,8 +4,6 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteBarrel;
 import com.cjm721.overloaded.common.storage.LongItemStack;
-import mcjty.lib.tools.ChatTools;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -73,19 +71,19 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
 
 
     @Override
-    protected boolean clOnBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
             ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(ItemStackTools.isEmpty(heldItem) && hand == EnumHand.MAIN_HAND) {
+            if(heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
                 LongItemStack stack = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage().status();
                 if(stack.itemStack == null) {
-                    ChatTools.addChatMessage(playerIn, new TextComponentString("Item: EMPTY"));
+                    playerIn.sendStatusMessage(new TextComponentString("Item: EMPTY"), false);
                 } else {
-                    ChatTools.addChatMessage(playerIn, new TextComponentString("Item: ").appendSibling(stack.itemStack.getTextComponent()).appendText(String.format(" Amount %,d", stack.amount)));
+                    playerIn.sendStatusMessage(new TextComponentString("Item: ").appendSibling(stack.itemStack.getTextComponent()).appendText(String.format(" Amount %,d", stack.amount)),false);
                 }
                 return true;
             }
         }
-        return super.clOnBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 }

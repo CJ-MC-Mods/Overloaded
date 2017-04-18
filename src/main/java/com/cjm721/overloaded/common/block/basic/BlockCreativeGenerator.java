@@ -84,9 +84,9 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
 
 
     @Override
-    protected void clOnNeighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         ((TileCreativeGeneratorFE)world.getTileEntity(pos)).onPlace();
-        super.clOnNeighborChanged(state,world,pos,block);
+        super.onNeighborChange(world,pos,neighbor);
     }
 
     @Override

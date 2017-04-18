@@ -3,8 +3,6 @@ package com.cjm721.overloaded.common.storage.item;
 import com.cjm721.overloaded.common.storage.INBTConvertible;
 import com.cjm721.overloaded.common.storage.LongItemStack;
 import com.cjm721.overloaded.common.util.NumberUtil;
-import mcjty.lib.tools.ItemStackTools;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
@@ -137,7 +135,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        ItemStack storedItem = compound.hasKey("Item") ? ItemStackTools.loadFromNBT(compound.getCompoundTag("Item")) : null;
+        ItemStack storedItem = compound.hasKey("Item") ? new ItemStack(compound.getCompoundTag("Item")) : null;
         if(storedItem != null) {
             long storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
             longItemStack = new LongItemStack(storedItem, storedAmount);

@@ -9,8 +9,6 @@ import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.common.util.BlockResult;
 import com.cjm721.overloaded.common.util.EnergyWrapper;
-import mcjty.lib.tools.ChatTools;
-import mcjty.lib.tools.ItemStackTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -85,12 +83,13 @@ public class ItemMultiTool extends ModItem {
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
     }
 
+
     @Override
-    public void clAddInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);
         tooltip.add("Energy Stored: " + handler.status().getAmount());
 
-        super.clAddInformation(stack, playerIn, tooltip, advanced);
+        super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
     @Override
@@ -109,7 +108,8 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Override
-    protected ActionResult<ItemStack> clOnItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, EnumHand hand) {
+    @Nonnull
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
             // TODO Make distance a config option
             RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(128)));
@@ -134,7 +134,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float breakCost = (hardness / effiency + 1) + (100  / (unbreaking + 1));
+        float breakCost = (hardness / (effiency + 1)) + (100  / (unbreaking + 1));
 
         if(energyStack.getAmount() < breakCost){
             return BlockResult.FAIL_ENERGY;
@@ -169,7 +169,7 @@ public class ItemMultiTool extends ModItem {
             return;
 
         ItemStack stack = event.getItemStack();
-        if(!ItemStackTools.isEmpty(stack) && stack.getItem().equals(this)) {
+        if(stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos());
         }
     }
@@ -184,7 +184,7 @@ public class ItemMultiTool extends ModItem {
         ItemStack stack = event.getItemStack();
 
         // 1.10.2 can give null
-        if(!ItemStackTools.isEmpty(stack) && stack.getItem().equals(this)) {
+        if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
             RayTraceResult result = entityLiving.rayTrace(128, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -200,7 +200,7 @@ public class ItemMultiTool extends ModItem {
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos) {
         ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
-        if(ItemStackTools.isEmpty(itemStack) || itemStack.getItem() != this || world.isAirBlock(pos)) {
+        if(itemStack.getItem() != this || world.isAirBlock(pos)) {
             return;
         }
 
@@ -217,7 +217,7 @@ public class ItemMultiTool extends ModItem {
             tag.setTag("BlockState", stateTag);
             itemStack.setTagCompound(tag);
             ITextComponent component = new ItemStack(Item.getItemFromBlock(state.getBlock())).getTextComponent();
-            ChatTools.addChatMessage(player, new TextComponentString("Bound tool to ").appendSibling(component));
+            player.sendStatusMessage( new TextComponentString("Bound tool to ").appendSibling(component), true);
         } else {
             IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
@@ -228,13 +228,13 @@ public class ItemMultiTool extends ModItem {
 
             switch(breakAndDropAtPlayer(world, pos, player.posX, player.posY, player.posZ, energyStack,fortune,efficency,unbreaking)) {
                 case FAIL_REMOVE:
-                    ChatTools.addChatMessage(player, new TextComponentString("Unable to break block, reason unknown"));
+                    player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
                     break;
                 case FAIL_ENERGY:
-                    ChatTools.addChatMessage(player, new TextComponentString("Unable to break block, not enough energy"));
+                    player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
                     break;
                 case FAIL_UNBREAKABLE:
-                    ChatTools.addChatMessage(player, new TextComponentString("Block is unbreakable"));
+                    player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
                     break;
             }
             energy.give(energyStack,true);
@@ -244,21 +244,21 @@ public class ItemMultiTool extends ModItem {
     public void rightClickWithItem(@Nonnull World worldIn, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull EnumFacing sideHit) {
         ItemStack multiTool = player.getHeldItemMainhand();
 
-        if(ItemStackTools.isEmpty(multiTool) || multiTool.getItem() != this) {
+        if(multiTool.getItem() != this) {
             return;
         }
 
         NBTTagCompound tagCompound = multiTool.getTagCompound();
 
         if(tagCompound == null){
-            ChatTools.addChatMessage(player, new TextComponentString("No block type selected to place."));
+            player.sendStatusMessage( new TextComponentString("No block type selected to place."), true);
             return;
         }
 
         Item tempItem = Item.getItemFromBlock(Block.getBlockById(multiTool.getTagCompound().getInteger("Block")));
 
         if(!(tempItem instanceof ItemBlock)) {
-            ChatTools.addChatMessage(player, new TextComponentString("No valid block type selected to place."));
+            player.sendStatusMessage(new TextComponentString("No valid block type selected to place."), true);
             return;
         }
 
@@ -351,9 +351,10 @@ public class ItemMultiTool extends ModItem {
 
 
         boolean result = block.placeBlockAt(foundStack, player,worldIn, newPosition,facing,0.5F,0.5F,0.5F,state);
-        player.inventory.decrStackSize(foundStackSlot, 1);
-        if(result)
+        if(result) {
             energyStack.amount -= 100;
+            player.inventory.decrStackSize(foundStackSlot, 1);
+        }
 
         return result;
     }
