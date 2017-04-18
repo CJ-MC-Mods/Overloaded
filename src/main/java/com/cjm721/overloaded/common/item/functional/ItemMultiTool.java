@@ -81,7 +81,7 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "newtool1.obj"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
     }
 
