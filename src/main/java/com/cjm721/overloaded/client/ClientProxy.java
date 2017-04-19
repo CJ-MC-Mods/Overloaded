@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.client;
 
 import com.cjm721.overloaded.client.render.block.compressed.CompressedModelLoader;
+import com.cjm721.overloaded.client.resource.CompressedTexture;
 import com.cjm721.overloaded.client.resource.OverloadedCustomResourceManager;
 import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.block.ModBlocks;
@@ -29,17 +30,12 @@ public class ClientProxy extends CommonProxy {
 
 //        Minecraft.getMinecraft().renderEngine.loadTexture(new ResourceLocation("overloaded", "testCobble"), ))
 
-        SimpleTexture texture = new SimpleTexture(new ResourceLocation("overloaded", "dynamic/textures/icon.png"));
-        try {
-            texture.loadTexture(Minecraft.getMinecraft().getResourceManager());
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
 
+        //SimpleTexture texture = new SimpleTexture();
         OBJLoader.INSTANCE.addDomain(MODID);
 
-//        ModelLoaderRegistry.registerLoader();
-        new CompressedModelLoader();
+
+        ModelLoaderRegistry.registerLoader(new CompressedModelLoader());
         ModBlocks.registerModels();
         ModItems.registerModels();
 
@@ -49,5 +45,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+
+        CompressedTexture texture = new CompressedTexture();
+        ResourceLocation rl = new ResourceLocation("overloaded", "textures/dynamic/logo");
+        Minecraft.getMinecraft().getTextureManager().loadTexture(rl, texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
     }
 }
