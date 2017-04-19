@@ -278,7 +278,6 @@ public class ItemMultiTool extends ModItem {
                 return;
             if (player.isSneaking()) {
                 BlockPos playerPos = player.getPosition();
-                //playerPos = playerPos.add(sideHit.getOpposite().getDirectionVec());
                 switch (sideHit) {
                     case UP:
                         while (newPosition.getY() < playerPos.getY()) {
