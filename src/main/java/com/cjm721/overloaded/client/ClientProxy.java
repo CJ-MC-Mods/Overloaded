@@ -7,7 +7,9 @@ import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.item.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -16,6 +18,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -46,9 +51,16 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        CompressedTexture texture = new CompressedTexture();
-        ResourceLocation rl = new ResourceLocation("overloaded", "textures/dynamic/logo");
-        Minecraft.getMinecraft().getTextureManager().loadTexture(rl, texture);
+
+        BufferedImage image = null;
+        try {
+            image = TextureUtil.readBufferedImage(new FileInputStream(new File("C:\\Users\\CJ\\Pictures\\Camera Roll\\IMG_4450.JPG")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        DynamicTexture texture = new DynamicTexture(image);
+        ResourceLocation rl = new ResourceLocation("overloaded", "textures/dynamic/logo.png");
+        boolean result = Minecraft.getMinecraft().getTextureManager().loadTexture(rl, texture);
         Minecraft.getMinecraft().getTextureManager().bindTexture(rl);
     }
 }
