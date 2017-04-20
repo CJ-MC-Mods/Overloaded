@@ -32,13 +32,14 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public BlockCreativeGenerator() {
         super(Material.ROCK);
 
-        defaultRegistry();
+        setRegistryName("creative_generator");
+        setUnlocalizedName("creative_generator");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creativeGenerator");
+        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
     }
 
     @Override
@@ -57,15 +58,6 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creative_generator"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @SideOnly(Side.CLIENT)

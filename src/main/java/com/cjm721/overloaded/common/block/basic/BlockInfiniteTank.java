@@ -33,13 +33,14 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     public BlockInfiniteTank() {
         super(Material.GLASS);
 
-        defaultRegistry();
+        setRegistryName("infinite_tank");
+        setUnlocalizedName("infinite_tank");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infiniteTank");
+        GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }
 
     @Override
@@ -52,15 +53,6 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_tank"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @Override

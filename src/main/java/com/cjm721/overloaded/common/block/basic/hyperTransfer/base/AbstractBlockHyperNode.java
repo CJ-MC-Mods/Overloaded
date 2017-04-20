@@ -20,7 +20,6 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEntityProvider {
     AbstractBlockHyperNode(@Nonnull Material materialIn) {
         super(materialIn);
-        defaultRegistry();
     }
 
     @Nonnull

@@ -17,12 +17,15 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
     public BlockHyperFluidReceiver() {
         super(Material.ROCK);
 
+        setRegistryName("hyper_fluid_receiver");
+        setUnlocalizedName("hyper_fluid_receiver");
+
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
 
-        GameRegistry.registerTileEntity(TileHyperFluidReceiver.class, MODID + ":hyperFluidReceiver");
+        GameRegistry.registerTileEntity(TileHyperFluidReceiver.class, MODID + ":hyper_fluid_receiver");
     }
 
     @Override

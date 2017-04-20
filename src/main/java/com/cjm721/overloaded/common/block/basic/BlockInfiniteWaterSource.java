@@ -31,14 +31,15 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     public BlockInfiniteWaterSource() {
         super(Material.GLASS);
 
-        defaultRegistry();
+        setRegistryName("infinite_water_source");
+        setUnlocalizedName("infinite_water_source");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
 
-        GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infiniteWaterSource");
+        GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }
 
     @Override
@@ -53,14 +54,6 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_water_source"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @SideOnly(Side.CLIENT)

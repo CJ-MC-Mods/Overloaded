@@ -17,11 +17,14 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
     public BlockHyperEnergyReceiver() {
         super(Material.ROCK);
 
+        setRegistryName("hyper_energy_receiver");
+        setUnlocalizedName("hyper_energy_receiver");
+
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileHyperEnergyReceiver.class, MODID + ":hyperEnergyReceiver");
+        GameRegistry.registerTileEntity(TileHyperEnergyReceiver.class, MODID + ":hyper_energy_receiver");
     }
 
     @Override

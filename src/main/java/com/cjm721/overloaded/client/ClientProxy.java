@@ -2,21 +2,12 @@ package com.cjm721.overloaded.client;
 
 import com.cjm721.overloaded.client.render.block.compressed.CompressedModelLoader;
 import com.cjm721.overloaded.client.resource.CompressedResoucePack;
-import com.cjm721.overloaded.client.resource.CompressedTexture;
-import com.cjm721.overloaded.client.resource.OverloadedCustomResourceManager;
 import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.item.ModItems;
-import com.google.common.base.Throwables;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -29,12 +20,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import static com.cjm721.overloaded.Overloaded.MODID;

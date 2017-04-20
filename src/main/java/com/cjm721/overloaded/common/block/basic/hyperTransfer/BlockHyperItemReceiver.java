@@ -17,11 +17,14 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
     public BlockHyperItemReceiver() {
         super(Material.ROCK);
 
+        setRegistryName("hyper_item_receiver");
+        setUnlocalizedName("hyper_item_receiver");
+
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID + ":hyperItemReceiver");
+        GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID + ":hyper_item_receiver");
     }
 
     @Override

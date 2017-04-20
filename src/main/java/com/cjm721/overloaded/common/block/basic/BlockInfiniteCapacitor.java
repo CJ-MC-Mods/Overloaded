@@ -33,13 +33,14 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
     public BlockInfiniteCapacitor() {
         super(Material.ROCK);
 
-        defaultRegistry();
+        setRegistryName("infinite_capacitor");
+        setUnlocalizedName("infinite_capacitor");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infiniteCapacitor");
+        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infinite_capacitor");
     }
 
     @Override
@@ -58,15 +59,6 @@ public class BlockInfiniteCapacitor extends ModBlock implements ITileEntityProvi
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_capacitor"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @Override

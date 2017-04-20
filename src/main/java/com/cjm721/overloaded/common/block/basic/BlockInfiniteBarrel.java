@@ -33,13 +33,14 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     public BlockInfiniteBarrel() {
         super(Material.ROCK);
 
-        defaultRegistry();
+        setRegistryName("infinite_barrel");
+        setUnlocalizedName("infinite_barrel");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infiniteBarrel");
+        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
 
     @Override
@@ -52,15 +53,6 @@ public class BlockInfiniteBarrel extends ModBlock implements ITileEntityProvider
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @Override

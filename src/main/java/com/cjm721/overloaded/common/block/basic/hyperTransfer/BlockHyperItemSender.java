@@ -17,11 +17,14 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
     public BlockHyperItemSender() {
         super(Material.ROCK);
 
+        setRegistryName("hyper_item_sender");
+        setUnlocalizedName("hyper_item_sender");
+
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
-        GameRegistry.registerTileEntity(TileHyperItemSender.class, MODID + ":hyperItemSender");
+        GameRegistry.registerTileEntity(TileHyperItemSender.class, MODID + ":hyper_item_sender");
     }
 
     @Override

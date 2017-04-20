@@ -44,15 +44,15 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
     public BlockEnergyExtractor() {
         super(Material.ROCK);
 
-        setRegistryName("energyextractor");
-        setUnlocalizedName("energyextractor");
+        setRegistryName("energy_extractor");
+        setUnlocalizedName("energy_extractor");
 
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         register();
-        GameRegistry.registerTileEntity(TileEnergyExtractor.class, "tile_energy_extractor");
+        GameRegistry.registerTileEntity(TileEnergyExtractor.class, "energy_extractor");
     }
 
     @Override
@@ -71,12 +71,6 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
     }
-
-//    @Override
-//    @Nonnull
-//    public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
-//        return super.getExtendedState(state, world, pos).withProperty(FACING, ((TileEnergyExtractor)world.getTileEntity(pos)).getFacing());
-//    }
 
     @Nullable
     @Override

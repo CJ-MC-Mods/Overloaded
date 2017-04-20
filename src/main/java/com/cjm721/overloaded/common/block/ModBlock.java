@@ -21,14 +21,6 @@ public abstract class ModBlock extends Block {
         super(materialIn);
     }
 
-    protected void defaultRegistry() {
-        String name = this.getClass().getName();
-        name = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
-
-        setRegistryName(name);
-        setUnlocalizedName(name);
-    }
-
     protected void register() {
         GameRegistry.register(this);
         registerItemForm();

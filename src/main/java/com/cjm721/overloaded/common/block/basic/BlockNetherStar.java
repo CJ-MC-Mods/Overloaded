@@ -24,8 +24,8 @@ public class BlockNetherStar extends ModBlock {
     public BlockNetherStar() {
         super(Material.IRON);
 
-        setRegistryName("netherstar_block");
-        setUnlocalizedName("netherstar_block");
+        setRegistryName("nether_star_block");
+        setUnlocalizedName("nether_star_block");
 
         setHardness(10);
         setResistance(20);
@@ -41,16 +41,7 @@ public class BlockNetherStar extends ModBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "netherstar_block"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "nether_star_block"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return location;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 }

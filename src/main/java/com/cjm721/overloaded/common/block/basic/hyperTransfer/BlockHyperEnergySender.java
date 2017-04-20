@@ -18,12 +18,15 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
     public BlockHyperEnergySender() {
         super(Material.ROCK);
 
+        setRegistryName("hyper_energy_sender");
+        setUnlocalizedName("hyper_energy_sender");
+
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
 
-        GameRegistry.registerTileEntity(TileHyperEnergySender.class, MODID + ":hyperEnergySender");
+        GameRegistry.registerTileEntity(TileHyperEnergySender.class, MODID + ":hyper_energy_sender");
     }
 
     @Override

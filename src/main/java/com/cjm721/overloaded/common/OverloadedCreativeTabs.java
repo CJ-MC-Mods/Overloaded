@@ -13,7 +13,7 @@ public class OverloadedCreativeTabs {
         }
     };
 
-    public static CreativeTabs TECH = new CreativeTabs("Overloaded_TECH") {
+    public static CreativeTabs TECH = new CreativeTabs("Overloaded_Tech") {
         @Override
         public ItemStack getTabIconItem() {
             return new ItemStack(ModBlocks.basicGenerator);
