@@ -45,11 +45,6 @@ public final class ModBlocks {
 
 
     public static void init() {
-        compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
-        compressedSand = CompressedBlockHandler.CreateCompressedBlocks(Blocks.SAND, 8);
-        compressedStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.STONE, 8);
-        compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
-
         basicGenerator = new BlockCreativeGenerator();
         infiniteBarrel = new BlockInfiniteBarrel();
         infiniteTank = new BlockInfiniteTank();
@@ -68,6 +63,8 @@ public final class ModBlocks {
         energyExtractor = new BlockEnergyExtractor();
 
         netherStarBlock = new BlockNetherStar();
+
+        CompressedBlockHandler.initFromConfig();
     }
 
     public static void addToSecondaryInit(ModBlock block) {

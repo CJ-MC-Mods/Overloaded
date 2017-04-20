@@ -1,16 +1,13 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.common.CommonProxy;
-import net.minecraftforge.fml.common.*;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.versioning.ArtifactVersion;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
-import net.minecraftforge.fml.common.versioning.VersionRange;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "1.11.2",
@@ -33,31 +30,12 @@ public class Overloaded {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-//        if(Loader.isModLoaded("forge")) {
-//            for(ModContainer mod :Loader.instance().getModList()) {
-//                if(!"forge".equals(mod.getModId()))
-//                    continue;
-//
-//                try {
-//                    VersionRange range = VersionRange.createFromVersionSpec("[12.18.3.2221,)");
-//                    if(!range.containsVersion(mod.getProcessedVersion())) {
-//                        Set<ArtifactVersion> set = new HashSet<>();
-//                        set.add(new DefaultArtifactVersion("forge",range));
-//                        throw new MissingModsException(set, "forge", "forge");
-//                    }
-//                } catch (InvalidVersionSpecificationException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//        // If there is a certain version of 1.11 forge needed
-//        else if (Loader.isModLoaded("Forge")) {
-//            for(ModContainer mod :Loader.instance().getModList()) {
-//                if(!"Forge".equals(mod.getModId()))
-//                    continue;
-//
-//            }
-//        }
+        Configuration configuration = new Configuration(event.getSuggestedConfigurationFile());
+        OverloadedConfig.I.init(configuration);
+
+        if(configuration.hasChanged()) {
+            configuration.save();
+        }
 
         proxy.preInit(event);
     }
@@ -66,5 +44,10 @@ public class Overloaded {
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
     }
 }

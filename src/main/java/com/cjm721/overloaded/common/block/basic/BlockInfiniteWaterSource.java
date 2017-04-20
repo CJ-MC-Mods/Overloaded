@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileInfiniteWaterSource;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +43,8 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
 
     @Override
     public void registerRecipe() {
-        GameRegistry.addRecipe(new ItemStack(this), "WGW", "GDG", "GGG", 'G', Blocks.GLASS, 'W', Items.WATER_BUCKET, 'D', Items.DIAMOND);
+        if(RecipeEnabledConfig.infiniteWaterSource)
+            GameRegistry.addRecipe(new ItemStack(this), "WGW", "GDG", "GGG", 'G', Blocks.GLASS, 'W', Items.WATER_BUCKET, 'D', Items.DIAMOND);
     }
 
     @SideOnly(Side.CLIENT)

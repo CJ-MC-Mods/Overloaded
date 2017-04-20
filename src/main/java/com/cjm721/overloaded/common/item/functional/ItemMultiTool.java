@@ -2,6 +2,7 @@ package com.cjm721.overloaded.common.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.config.MultiToolConfig;
 import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
@@ -30,6 +31,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -112,7 +114,7 @@ public class ItemMultiTool extends ModItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
             // TODO Make distance a config option
-            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(128)));
+            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(MultiToolConfig.reach)));
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 //                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit));
@@ -134,9 +136,13 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float breakCost = (hardness / (effiency + 1)) + (100  / (unbreaking + 1));
+        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (effiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)posX,(int)posY,(int)posZ);
+        if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
+            return BlockResult.FAIL_ENERGY;
 
-        if(energyStack.getAmount() < breakCost){
+        long breakCost = Math.round(floatBreakCost);
+
+        if(breakCost < 0 || energyStack.getAmount() < breakCost){
             return BlockResult.FAIL_ENERGY;
         }
 
@@ -171,6 +177,23 @@ public class ItemMultiTool extends ModItem {
         ItemStack stack = event.getItemStack();
         if(stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos());
+
+//            EntityPlayer player = event.getEntityPlayer();
+//
+//
+//            int distance = (int)player.getDistanceSq(event.getPos());
+//
+//            double x = player.posX;
+//            double y = player.posY + 1.5;
+//            double z = player.posZ;
+//            Vec3d lookVec = player.getLookVec();
+//            for(int i = 0; i < distance; i++) {
+//                x += lookVec.xCoord;
+//                y += lookVec.yCoord;
+//                z += lookVec.zCoord;
+//                event.getWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y,z, 0,0,0);
+//            }
+
         }
     }
 
@@ -186,9 +209,25 @@ public class ItemMultiTool extends ModItem {
         // 1.10.2 can give null
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result = entityLiving.rayTrace(128, 0);
+            RayTraceResult result = entityLiving.rayTrace(MultiToolConfig.reach, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
                 leftClickOnBlockClient(result.getBlockPos());
+
+//                EntityPlayer player = event.getEntityPlayer();
+//
+//
+//                int distance = (int)player.getDistanceSq(result.getBlockPos());
+//
+//                double x = player.posX;
+//                double y = player.posY + 1.5;
+//                double z = player.posZ;
+//                Vec3d lookVec = player.getLookVec();
+//                for(int i = 0; i < distance; i++) {
+//                    x += lookVec.xCoord;
+//                    y += lookVec.yCoord;
+//                    z += lookVec.zCoord;
+//                    event.getWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y,z, 0,0,0);
+//                }
             }
         }
     }
@@ -236,8 +275,11 @@ public class ItemMultiTool extends ModItem {
                 case FAIL_UNBREAKABLE:
                     player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
                     break;
+                case SUCCESS:
+                    break;
             }
             energy.give(energyStack,true);
+
         }
     }
 
@@ -335,7 +377,10 @@ public class ItemMultiTool extends ModItem {
             return false;
         }
 
-        if(energyStack.amount < 100)
+        long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
+        long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
+
+        if(cost < 0 || energyStack.amount < cost)
             return false;
 
         ItemStack searchStack = new ItemStack(block);
@@ -351,8 +396,12 @@ public class ItemMultiTool extends ModItem {
 
         boolean result = block.placeBlockAt(foundStack, player,worldIn, newPosition,facing,0.5F,0.5F,0.5F,state);
         if(result) {
-            energyStack.amount -= 100;
+            energyStack.amount -= cost;
             player.inventory.decrStackSize(foundStackSlot, 1);
+
+            SoundType soundType = state.getBlock().getSoundType(state,worldIn,newPosition,null);
+
+            worldIn.playSound(null,newPosition,soundType.getPlaceSound(), SoundCategory.BLOCKS, soundType.getVolume(), soundType.getPitch());
         }
 
         return result;

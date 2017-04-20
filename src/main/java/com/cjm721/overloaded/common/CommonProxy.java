@@ -10,6 +10,7 @@ import com.cjm721.overloaded.common.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.common.util.CapabilityHyperItem;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,5 +34,9 @@ public class CommonProxy {
         networkWrapper = new SimpleNetworkWrapper("overloaded");
         networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
         networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
+    }
+
+    public void postInit(FMLPostInitializationEvent event) {
+
     }
 }

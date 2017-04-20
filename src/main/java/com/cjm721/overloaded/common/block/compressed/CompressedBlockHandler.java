@@ -1,7 +1,13 @@
 package com.cjm721.overloaded.common.block.compressed;
 
+import com.cjm721.overloaded.common.config.CompressedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,4 +43,24 @@ public class CompressedBlockHandler {
         return compressedBlocks;
     }
 
+    public static void initFromConfig() {
+        IForgeRegistry<Block> registry = GameRegistry.findRegistry(Block.class);
+
+        for(String setting: CompressedConfig.compressedBlocks) {
+            String[] split = setting.split(":");
+
+            String domain = split[0];
+            String blockName = split[1];
+            int depth = Integer.parseInt(split[2]);
+
+            Block block = registry.getValue(new ResourceLocation(domain,blockName));
+            CompressedBlockHandler.CreateCompressedBlocks(block, depth);
+        }
+
+//        compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
+//        compressedSand = CompressedBlockHandler.CreateCompressedBlocks(Blocks.SAND, 8);
+//        compressedStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.STONE, 8);
+//        compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
+
+    }
 }

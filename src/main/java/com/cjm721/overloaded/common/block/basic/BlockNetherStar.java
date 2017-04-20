@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
@@ -36,6 +38,7 @@ public class BlockNetherStar extends ModBlock {
         GameRegistry.addRecipe(new ItemStack(this), "NNN", "NNN", "NNN", 'N', Items.NETHER_STAR);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "netherstar_block"), null);

@@ -24,17 +24,17 @@ public class CompressedModel implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-        return new CompressedBakedModel(format, this.state);
+        return new CompressedBakedModel(format, this.state, bakedTextureGetter);
     }
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
-        return Collections.emptySet();
+        return Collections.singleton(new ResourceLocation("overloaded", "dynamic/logo"));
     }
 
     @Override
     public Collection<ResourceLocation> getTextures() {
-        return Collections.emptySet();
+        return Collections.singleton(new ResourceLocation("overloaded", "dynamic/logo"));
     }
 
     @Override

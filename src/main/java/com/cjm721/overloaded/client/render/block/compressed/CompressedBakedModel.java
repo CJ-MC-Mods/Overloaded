@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.client.render.block.compressed;
 
+import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
+import com.google.common.base.Function;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -10,24 +12,29 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CompressedBakedModel implements IBakedModel {
-    private VertexFormat format;
-    private Map<Block,List<BakedQuad>> cache;
+    private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;
+    private final VertexFormat format;
+    private final Map<Block,List<BakedQuad>> cache;
 
-    private IBakedModel defaultModel;
+    private final IBakedModel defaultModel;
 
-    CompressedBakedModel(VertexFormat format, IBlockState state) {
+    CompressedBakedModel(VertexFormat format, IBlockState state, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         this.format = format;
 
         this.defaultModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
         cache = new HashMap<>();
+        this.bakedTextureGetter = bakedTextureGetter;
     }
 
     private void putVertex(UnpackedBakedQuad.Builder builder, Vec3d normal, double x, double y, double z, float u, float v, TextureAtlasSprite sprite) {
@@ -70,78 +77,68 @@ public class CompressedBakedModel implements IBakedModel {
 
     @Override
     @Nonnull
-    public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-        if (side != null) {
-            return Collections.emptyList();
+    public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+        Block block;
+        if(state == null) {
+            block = ModBlocks.compressedCobbleStone.get(1);
+        } else  {
+            block = state.getBlock();
         }
-
-        Block block = state.getBlock();
-        List<BakedQuad> quads = cache.get(block);
-
-        if(quads != null){
-            return quads;
-        }
+        List<BakedQuad> quads; // = cache.get(block);
+//
+//        if(quads != null){
+//            return quads;
+//        }
 
         quads = new ArrayList<>();
         BlockCompressed compressedBlock = (BlockCompressed)block;
-        Block baseBlock = compressedBlock.getBaseBlock();
-        //return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getQuads(baseBlock.getDefaultState(),side,rand);
-        TextureAtlasSprite sprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(baseBlock.getDefaultState()).getParticleTexture();
-        //TextureAtlasSprite sprite = defaultModel.getParticleTexture();
+        IBakedModel tempModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(compressedBlock.getBaseBlock().getDefaultState());
 
-        int tilesPerRow = 1;
-        for(int i = 0; i < compressedBlock.getCompressionAmount(); i++) {
-            tilesPerRow *= 2;
-        }
-        float incAmo = 1F/((float)tilesPerRow);
 
-        // z = 0
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(0 + incAmo * y, 0 + incAmo * x, 0), new Vec3d(0 + incAmo * y, incAmo + incAmo * x, 0),
-                        new Vec3d(incAmo  + incAmo * y, incAmo + incAmo * x, 0), new Vec3d(incAmo  + incAmo * y, 0 + incAmo * x, 0), sprite));
+        if(side == null) {
+            for(EnumFacing face: EnumFacing.values()) {
+                getQuadsForSide(face, quads, compressedBlock, tempModel);
             }
+        } else {
+            getQuadsForSide(side,quads,compressedBlock,tempModel);
         }
 
-        // z = 1
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(0 + incAmo * y, 0 + incAmo * x, 1), new Vec3d(incAmo  + incAmo * y, 0 + incAmo * x, 1),
-                        new Vec3d(incAmo  + incAmo * y, incAmo + incAmo * x, 1), new Vec3d(0 + incAmo * y, incAmo + incAmo * x, 1), sprite));
-            }
-        }
 
-        // y = 1
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(0 + incAmo * y, 1,0 + incAmo * x), new Vec3d(0 + incAmo * y, 1, incAmo + incAmo * x),
-                        new Vec3d(incAmo  + incAmo * y, 1, incAmo + incAmo * x), new Vec3d(incAmo  + incAmo * y, 1,0 + incAmo * x), sprite));
-            }
-        }
-        // y = 0
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(0 + incAmo * y, 0,0 + incAmo * x), new Vec3d(incAmo  + incAmo * y, 0,0 + incAmo * x),
-                        new Vec3d(incAmo  + incAmo * y, 0, incAmo + incAmo * x), new Vec3d(0 + incAmo * y, 0, incAmo + incAmo * x), sprite));
-            }
-        }
-        // x = 1
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(1,0 + incAmo * y, 0 + incAmo * x), new Vec3d(1, incAmo  + incAmo * y, 0 + incAmo * x),
-                        new Vec3d(1, incAmo  + incAmo * y, incAmo + incAmo * x), new Vec3d(1, 0 + incAmo * y, incAmo + incAmo * x), sprite));
-            }
-        }
-        // x = 0
-        for(int x = 0; x < tilesPerRow; x++) {
-            for(int y = 0; y < tilesPerRow; y++) {
-                quads.add(createQuad(new Vec3d(0,0 + incAmo * y, 0 + incAmo * x),new Vec3d(0, 0 + incAmo * y, incAmo + incAmo * x),
-                        new Vec3d(0, incAmo  + incAmo * y, incAmo + incAmo * x), new Vec3d(0, incAmo  + incAmo * y, 0 + incAmo * x), sprite));
-            }
-        }
-
-        this.cache.put(block, quads);
+//        this.cache.put(block, quads);
         return quads;
+    }
+
+    private void getQuadsForSide(@Nonnull EnumFacing side, @Nonnull List<BakedQuad> quads, @Nonnull BlockCompressed compressedBlock,@Nonnull IBakedModel tempModel) {
+        List<BakedQuad> baseQuads = tempModel.getQuads(compressedBlock.getBaseBlock().getDefaultState(), side,0); // .get(0).getSprite(); //.getFrameTextureData(0);
+
+        if(baseQuads.size() == 0) {
+            return;
+        }
+
+        TextureAtlasSprite sprite;// = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(new ResourceLocation("overloaded", "dynamic/logo").toString());
+        sprite = baseQuads.get(0).getSprite();
+
+        // z == 0
+        switch(side) {
+            case WEST: // X == 0
+                quads.add(createQuad(new Vec3d(0, 1  , 0 ), new Vec3d(0,0 , 0 ),
+                        new Vec3d(0, 0 , 1 ),new Vec3d(0, 1  , 1 ), sprite));
+            case EAST: // X == 1
+                quads.add(createQuad(new Vec3d(1, 1  , 1 ), new Vec3d(1, 0 , 1 ),
+                        new Vec3d(1,0 , 0 ), new Vec3d(1, 1  , 0 ), sprite));
+            case NORTH: // Z = 0
+                quads.add(createQuad(new Vec3d(1, 1, 0), new Vec3d(1, 0, 0),
+                        new Vec3d(0, 0, 0), new Vec3d(0, 1, 0), sprite));
+            case SOUTH: // Z == 1
+                quads.add(createQuad(new Vec3d(0, 1, 1), new Vec3d(0, 0, 1),
+                        new Vec3d(1, 0, 1), new Vec3d(1, 1, 1), sprite));
+            case UP:
+                quads.add(createQuad(new Vec3d(0, 1,0), new Vec3d(0, 1, 1),
+                        new Vec3d(1, 1, 1), new Vec3d(1, 1,0), sprite));
+            case DOWN:
+                quads.add(createQuad(new Vec3d(0 , 0, 1 ),new Vec3d(0 , 0,0 ),
+                        new Vec3d(1  , 0,0 ), new Vec3d(1  , 0, 1 ),sprite));
+        }
     }
 
     @Override
