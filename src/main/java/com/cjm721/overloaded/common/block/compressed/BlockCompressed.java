@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.block.compressed;
 
+import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.block.compressed.CompressedModelLoader;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
@@ -52,6 +53,8 @@ public class BlockCompressed extends ModBlock {
         ModelResourceLocation location = getBaseModelLocation();
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
+
+        CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), getRegistryName(), getCompressionAmount()));
         ModelResourceLocation rl = new ModelResourceLocation(this.getRegistryName(), null);
 
         // To make sure that our baked models models is chosen for all states we use this custom state mapper:
@@ -62,7 +65,7 @@ public class BlockCompressed extends ModBlock {
                 return rl;
             }
         };
-        CompressedModelLoader.addModel(rl, baseBlock.getDefaultState());
+//        CompressedModelLoader.addModel(rl, baseBlock.getDefaultState());
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 

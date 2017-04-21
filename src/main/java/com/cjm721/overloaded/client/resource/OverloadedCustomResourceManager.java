@@ -31,22 +31,22 @@ public class OverloadedCustomResourceManager implements IReloadableResourceManag
     }
 
     @Override
-    public IResource getResource(ResourceLocation location) throws IOException {
+    public IResource getResource(@Nonnull ResourceLocation location) throws IOException {
         return null;
     }
 
     @Override
-    public List<IResource> getAllResources(ResourceLocation location) throws IOException {
+    public List<IResource> getAllResources(@Nonnull ResourceLocation location) throws IOException {
         return null;
     }
 
     @Override
-    public void reloadResources(List<IResourcePack> resourcesPacksList) {
+    public void reloadResources(@Nonnull List<IResourcePack> resourcesPacksList) {
 
     }
 
     @Override
     public void registerReloadListener(IResourceManagerReloadListener reloadListener) {
-
+        // TODO Reload base resouce pack
     }
 }

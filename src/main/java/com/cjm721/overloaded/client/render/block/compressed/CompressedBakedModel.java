@@ -80,7 +80,7 @@ public class CompressedBakedModel implements IBakedModel {
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         Block block;
         if(state == null) {
-            block = ModBlocks.compressedCobbleStone.get(1);
+            block = Blocks.COBBLESTONE;
         } else  {
             block = state.getBlock();
         }

@@ -11,6 +11,7 @@ public enum CompressedConfig implements IConfig {
     private static final String category = "compressedBlocks";
 
     public static String[] compressedBlocks;
+    public static int maxTextureWidth;
 
     @Override
     public void init(@Nonnull Configuration config) {
@@ -21,5 +22,7 @@ public enum CompressedConfig implements IConfig {
                 "minecraft:sand:8",
                 "minecraft:stone:8"
         }, "Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>", Pattern.compile(".+:.+:\\d+")).getStringList();
+
+        maxTextureWidth = config.get(category, "maxTextureWidth", 512).getInt();
     }
 }

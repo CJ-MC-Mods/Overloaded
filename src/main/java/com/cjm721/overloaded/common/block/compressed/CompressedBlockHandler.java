@@ -9,12 +9,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CompressedBlockHandler {
 
-    public static Map<Integer, Block> CreateCompressedBlocks(Block toCompress, int depth) {
+    public static Map<Integer, Block> CreateCompressedBlocks(@Nonnull Block toCompress, int depth) {
         Map<Integer, Block> compressedBlocks = new HashMap<>();
 
         Material material = toCompress.getDefaultState().getMaterial();
@@ -54,6 +55,10 @@ public class CompressedBlockHandler {
             int depth = Integer.parseInt(split[2]);
 
             Block block = registry.getValue(new ResourceLocation(domain,blockName));
+
+            if(block == Blocks.AIR)
+                continue;
+
             CompressedBlockHandler.CreateCompressedBlocks(block, depth);
         }
 

@@ -18,10 +18,6 @@ import java.util.Map;
  * Created by CJ on 4/2/2017.
  */
 public final class ModBlocks {
-    public static Map<Integer,Block> compressedCobbleStone;
-    public static Map<Integer,Block> compressedSand;
-    public static Map<Integer,Block> compressedStone;
-    public static Map<Integer,Block> compressedFurnace;
 
     public static ModBlock basicGenerator;
     public static ModBlock infiniteBarrel;

@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -44,4 +45,6 @@ public class BlockNetherStar extends ModBlock {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "nether_star_block"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
     }
+
+
 }
