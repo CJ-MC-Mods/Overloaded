@@ -3,13 +3,11 @@ package com.cjm721.overloaded.client.resource;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.typesafe.config.ConfigException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.*;
+import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nonnull;
@@ -20,14 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public enum CompressedResourcePack implements IResourcePack, IResourceManagerReloadListener {
+public enum CompressedResourcePack implements IResourcePack {
     INSTANCE;
 
-
-    @Override
-    public void onResourceManagerReload(@Nonnull IResourceManager resourceManager) {
-        inject();
-    }
 
     private Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
     private Map<ResourceLocation, String> blockStates = Maps.newHashMap();
@@ -64,11 +57,8 @@ public enum CompressedResourcePack implements IResourcePack, IResourceManagerRel
     }
 
     public void inject() {
-//        List<IResourcePack> defaultResourcePacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "field_110449_ao",  "defaultResourcePacks");
-//        defaultResourcePacks.add(this);
-
-        Map<String, FallbackResourceManager> domainResourceManagers = ReflectionHelper.getPrivateValue(SimpleReloadableResourceManager.class, (SimpleReloadableResourceManager)Minecraft.getMinecraft().getResourceManager(), "","domainResourceManagers");
-        domainResourceManagers.get("overloaded").addResourcePack(this);
+        List<IResourcePack> defaultResourcePacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "field_110449_ao",  "defaultResourcePacks");
+        defaultResourcePacks.add(this);
     }
 
     @Override

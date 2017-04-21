@@ -5,7 +5,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
@@ -31,7 +30,7 @@ public class CompressedBlockHandler {
         Block previousLevel = toCompress;
         float currentHardness = baseHardness;
         for(int i = 1; i <= depth; i++) {
-            String compRegistryName = String.format("compressed%d%s", i, registryName);
+            String compRegistryName = String.format("compressed%s%d", registryName, i);
             String compUnlocalizedName = String.format("%dxCompressed:%s", i, unlocalizedName);
             currentHardness *= 9;
             if(currentHardness < 0) {

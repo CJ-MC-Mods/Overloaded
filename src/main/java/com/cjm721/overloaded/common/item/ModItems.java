@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.common.item;
 
-import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.common.item.functional.ItemLinkingCard;
+import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

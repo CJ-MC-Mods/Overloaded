@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.common.block.compressed;
 
 import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
-import com.cjm721.overloaded.client.render.block.compressed.CompressedModelLoader;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import net.minecraft.block.Block;
@@ -34,6 +33,7 @@ public class BlockCompressed extends ModBlock {
 
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
+        setSoundType(baseBlock.getSoundType());
         setHardness(hardness);
         if(harvestTool != null)
             setHarvestLevel(harvestTool, harvestLevel);
@@ -50,12 +50,12 @@ public class BlockCompressed extends ModBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = getBaseModelLocation();
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
+        //ModelResourceLocation location = getBaseModelLocation();
 
         CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), getRegistryName(), getCompressionAmount()));
         ModelResourceLocation rl = new ModelResourceLocation(this.getRegistryName(), null);
+
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, rl);
 
         // To make sure that our baked models models is chosen for all states we use this custom state mapper:
         StateMapperBase ignoreState = new StateMapperBase() {

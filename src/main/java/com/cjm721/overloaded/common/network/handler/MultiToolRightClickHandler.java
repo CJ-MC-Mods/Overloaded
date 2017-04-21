@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.common.network.handler;
 
 import com.cjm721.overloaded.common.item.ModItems;
-import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldServer;

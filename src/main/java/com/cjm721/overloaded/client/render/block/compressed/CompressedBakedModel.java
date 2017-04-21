@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.client.render.block.compressed;
 
-import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
 import com.google.common.base.Function;
 import net.minecraft.block.Block;
@@ -20,7 +19,10 @@ import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CompressedBakedModel implements IBakedModel {
     private final Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter;

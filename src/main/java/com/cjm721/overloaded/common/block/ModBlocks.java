@@ -2,17 +2,12 @@ package com.cjm721.overloaded.common.block;
 
 import com.cjm721.overloaded.common.block.basic.*;
 import com.cjm721.overloaded.common.block.basic.hyperTransfer.*;
-import com.cjm721.overloaded.common.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by CJ on 4/2/2017.
