@@ -3,12 +3,15 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteTank;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
+import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.storage.LongFluidStack;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -44,7 +47,8 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
     @Override
     public void registerRecipe() {
-
+        if(RecipeEnabledConfig.infinityTank)
+            GameRegistry.addRecipe(new ItemStack(this), "GDG", "DCD", "GDG", 'G', Blocks.IRON_BLOCK, 'D', Blocks.DIAMOND_BLOCK, 'C', ModItems.fluidCore);
     }
 
     @SideOnly(Side.CLIENT)

@@ -9,9 +9,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -19,7 +17,6 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
 
     private boolean normalTicks;
 
-    @Nonnull
     private Map<EnumFacing,IEnergyStorage> cache;
 
     public TileCreativeGeneratorFE() {
@@ -36,8 +33,13 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
             onPlace();
         }
 
-        cache.values().stream().forEach(te -> {
-            te.receiveEnergy(Integer.MAX_VALUE, false);
+        if(cache.isEmpty())
+            return;
+
+        ArrayList<IEnergyStorage> tes = new ArrayList<>(cache.values());
+        tes.stream().forEach(te -> {
+            if(cache.containsValue(te))
+                te.receiveEnergy(Integer.MAX_VALUE, false);
         });
     }
 
@@ -119,11 +121,10 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
         BlockPos sidePos = this.getPos().subtract(neighbor);
         EnumFacing side = EnumFacing.getFacingFromVector(sidePos.getX(), sidePos.getY(), sidePos.getZ());
 
-        cache.remove(side);
-        if(te != null) {
-            if(te.hasCapability(ENERGY, side)) {
-                cache.put(side, te.getCapability(ENERGY,side));
-            }
+        if(te != null && te.hasCapability(ENERGY, side)) {
+            cache.put(side, te.getCapability(ENERGY,side));
+        } else {
+            cache.remove(side);
         }
     }
 

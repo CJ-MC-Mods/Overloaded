@@ -54,7 +54,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "creative_generator"), null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
     }
 

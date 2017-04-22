@@ -32,7 +32,7 @@ public class CompressedBlockAssets {
     }
 
     private static String getBlockState(@Nonnull ResourceLocation location) {
-        return String.format("{ \"forge_marker\": 1, \"variants\": { \"normal\": { \"model\": \"cube_all\", \"textures\": { \"all\": \"%s\" } } } }", getBlocksPath(location));
+        return String.format("{ \"forge_marker\": 1, \"variants\": { \"normal\": { \"model\": \"cube_all\", \"textures\": { \"all\": \"%1$s\" } }, \"inventory\": { \"model\": \"cube_all\", \"textures\": { \"all\": \"%1$s\" } } } }", getBlocksPath(location));
     }
 
     private static ResourceLocation getBlocksPath(@Nonnull ResourceLocation base) {
@@ -61,6 +61,9 @@ public class CompressedBlockAssets {
     }
 
     private static boolean generateTexture(CompressedResourceLocation locations) {
+        String state = getBlockState(locations.compressed);
+        CompressedResourcePack.INSTANCE.addBlockState(getJsonPath(locations.compressed), state);
+
         BufferedImage image;
         try {
             image = TextureUtil.readBufferedImage(getTextureInputStream(locations.base));
@@ -91,9 +94,6 @@ public class CompressedBlockAssets {
         ResourceLocation rl = getTexturePath(locations.compressed);
         CompressedResourcePack.INSTANCE.addImage(rl, compressedImage);
 
-
-        String state = getBlockState(locations.compressed);
-        CompressedResourcePack.INSTANCE.addBlockState(getJsonPath(locations.compressed), state);
         return true;
     }
 

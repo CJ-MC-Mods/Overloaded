@@ -1,9 +1,14 @@
 package com.cjm721.overloaded.common.item.functional;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlocks;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItem;
+import com.cjm721.overloaded.common.item.ModItems;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -47,5 +52,11 @@ public class ItemLinkingCard extends ModItem {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"linking_card"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    }
+
+    @Override
+    public void registerRecipe() {
+        if(RecipeEnabledConfig.linkingCard)
+            GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
     }
 }

@@ -32,8 +32,8 @@ public final class ModBlocks {
     public static ModBlock energyExtractor;
 
     public static ModBlock netherStarBlock;
-    private static List<ModBlock> registerList = new LinkedList<>();
 
+    private static List<ModBlock> registerList = new LinkedList<>();
 
     public static void init() {
         basicGenerator = new BlockCreativeGenerator();

@@ -2,8 +2,11 @@ package com.cjm721.overloaded.common.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.config.MultiToolConfig;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItem;
+import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
@@ -22,7 +25,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -65,7 +70,7 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment.type == EnumEnchantmentType.DIGGER;
+        return enchantment != null && enchantment.type == EnumEnchantmentType.DIGGER;
     }
 
     @Override
@@ -78,10 +83,17 @@ public class ItemMultiTool extends ModItem {
         return this.getItemStackLimit(stack) == 1;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    }
+
+    @Override
+    public void registerRecipe() {
+        if(RecipeEnabledConfig.multiTool)
+            GameRegistry.addRecipe(new ItemStack(this), "NI ", "IES", " SB", 'N', Items.NETHER_STAR, 'I', Items.IRON_INGOT, 'E', ModItems.energyCore, 'B', Blocks.IRON_BLOCK, 'S', ModBlocks.netherStarBlock);
     }
 
 

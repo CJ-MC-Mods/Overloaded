@@ -2,7 +2,10 @@ package com.cjm721.overloaded.common.block.basic;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
+import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.util.FacingStateMapper;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -12,8 +15,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.RecipesCrafting;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -31,9 +37,6 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-/**
- * Created by CJ on 4/13/2017.
- */
 public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvider {
 
     private static final PropertyDirection FACING = BlockDirectional.FACING;
@@ -93,7 +96,8 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
     @Override
     public void registerRecipe() {
-
+        if(RecipeEnabledConfig.energyExtractor)
+            GameRegistry.addRecipe(new ItemStack(this), "IRI", "RBR", "IRI", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT, 'B', Blocks.REDSTONE_BLOCK);
     }
 
     @Override

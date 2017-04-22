@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class CompressedBlockHandler {
 
-    public static Map<Integer, Block> CreateCompressedBlocks(@Nonnull Block toCompress, int depth) {
+    public static Map<Integer, Block> CreateCompressedBlocks(@Nonnull Block toCompress, int depth, boolean recipeEnabled) {
         Map<Integer, Block> compressedBlocks = new HashMap<>();
 
         Material material = toCompress.getDefaultState().getMaterial();
@@ -36,7 +36,7 @@ public class CompressedBlockHandler {
             if(currentHardness < 0) {
                 currentHardness = Float.MAX_VALUE;
             }
-            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel);
+            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel, recipeEnabled);
             previousLevel = block;
             compressedBlocks.put(i, block);
         }
@@ -52,19 +52,14 @@ public class CompressedBlockHandler {
             String domain = split[0];
             String blockName = split[1];
             int depth = Integer.parseInt(split[2]);
+            boolean recipeEnabled = Boolean.parseBoolean(split[3]);
 
             Block block = registry.getValue(new ResourceLocation(domain,blockName));
 
             if(block == Blocks.AIR)
                 continue;
 
-            CompressedBlockHandler.CreateCompressedBlocks(block, depth);
+            CompressedBlockHandler.CreateCompressedBlocks(block, depth, recipeEnabled);
         }
-
-//        compressedCobbleStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.COBBLESTONE, 8);
-//        compressedSand = CompressedBlockHandler.CreateCompressedBlocks(Blocks.SAND, 8);
-//        compressedStone = CompressedBlockHandler.CreateCompressedBlocks(Blocks.STONE, 8);
-//        compressedFurnace = CompressedBlockHandler.CreateCompressedBlocks(Blocks.FURNACE, 8);
-
     }
 }

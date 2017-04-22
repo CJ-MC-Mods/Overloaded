@@ -3,11 +3,10 @@ package com.cjm721.overloaded.common.block.compressed;
 import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
@@ -19,17 +18,18 @@ import javax.annotation.Nonnull;
 
 public class BlockCompressed extends ModBlock {
 
-    @Nonnull
     private final Block baseBlock;
-    @Nonnull
     private final Block previousBlock;
     private final int compressionAmount;
+    private final boolean recipeEnabled;
 
-    BlockCompressed(@Nonnull Block baseBlock, @Nonnull Block previousBlock, int compressionAmount, @Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, float hardness, String harvestTool, int harvestLevel) {
+    BlockCompressed(@Nonnull Block baseBlock, @Nonnull Block previousBlock, int compressionAmount, @Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, float hardness, String harvestTool, int harvestLevel, boolean recipeEnabled) {
         super(materialIn);
         this.baseBlock = baseBlock;
         this.previousBlock = previousBlock;
         this.compressionAmount = compressionAmount;
+
+        this.recipeEnabled = recipeEnabled;
 
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
@@ -43,30 +43,19 @@ public class BlockCompressed extends ModBlock {
 
     @Override
     public void registerRecipe() {
-        GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
-        GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
+        if(RecipeEnabledConfig.compressedBlocks && recipeEnabled) {
+            GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
+            GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
+        }
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        //ModelResourceLocation location = getBaseModelLocation();
-
         CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), getRegistryName(), getCompressionAmount()));
-        ModelResourceLocation rl = new ModelResourceLocation(this.getRegistryName(), null);
+        ModelResourceLocation rl = new ModelResourceLocation(getRegistryName(), "inventory");
 
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, rl);
-
-        // To make sure that our baked models models is chosen for all states we use this custom state mapper:
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            @Nonnull
-            protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState iBlockState) {
-                return rl;
-            }
-        };
-//        CompressedModelLoader.addModel(rl, baseBlock.getDefaultState());
-        ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
     @SideOnly(Side.CLIENT)
