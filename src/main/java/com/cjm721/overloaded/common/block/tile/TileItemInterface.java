@@ -129,4 +129,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
 
+    public ItemStack getStoredItem() {
+        return storedItem;
+    }
 }

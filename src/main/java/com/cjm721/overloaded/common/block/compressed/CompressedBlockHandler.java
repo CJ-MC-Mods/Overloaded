@@ -3,10 +3,15 @@ package com.cjm721.overloaded.common.block.compressed;
 import com.cjm721.overloaded.common.config.CompressedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.LoaderException;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import scala.tools.nsc.Global;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -48,6 +53,10 @@ public class CompressedBlockHandler {
 
         for(String setting: CompressedConfig.compressedBlocks) {
             String[] split = setting.split(":");
+
+            if(split.length < 4) {
+                throw new LoaderException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting);
+            }
 
             String domain = split[0];
             String blockName = split[1];
