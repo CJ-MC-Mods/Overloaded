@@ -3,14 +3,20 @@ package com.cjm721.overloaded.common.block.compressed;
 import com.cjm721.overloaded.common.config.CompressedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.LoaderException;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.tools.nsc.Global;
 
 import javax.annotation.Nonnull;
@@ -55,7 +61,11 @@ public class CompressedBlockHandler {
             String[] split = setting.split(":");
 
             if(split.length < 4) {
-                throw new LoaderException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting);
+                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+                    throwClientSideError(setting);
+                } else {
+                    throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
+                }
             }
 
             String domain = split[0];
@@ -70,5 +80,19 @@ public class CompressedBlockHandler {
 
             CompressedBlockHandler.CreateCompressedBlocks(block, depth, recipeEnabled);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void throwClientSideError(String setting) {
+        throw new CustomModLoadingErrorDisplayException() {
+            @Override
+            public void initGui(GuiErrorScreen errorScreen, FontRenderer fontRenderer) {
+            }
+
+            @Override
+            public void drawScreen(GuiErrorScreen errorScreen, FontRenderer fontRenderer, int mouseRelX, int mouseRelY, float tickTime) {
+                errorScreen.drawString(fontRenderer, "Compressed Blocks Config is invalid. Looking at compressed block: " + setting, errorScreen.width/2, errorScreen.width/2, 0);
+            }
+        };
     }
 }

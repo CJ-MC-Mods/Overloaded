@@ -70,6 +70,8 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
 
         GlStateManager.translate(.5, .5, .5);
         GlStateManager.scale(.5f,.5f,.5f);
+        long angle = (System.currentTimeMillis() / 10) % 360;
+        GlStateManager.rotate(angle, 0, 1, 0);
 
         Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
 

@@ -1,11 +1,13 @@
 package com.cjm721.overloaded.common.block.tile;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -35,7 +37,28 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
         super.readFromNBT(compound);
     }
-    
+
+
+    @Override
+    @Nonnull
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+
+        return new SPacketUpdateTileEntity(getPos(),1,tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        this.readFromNBT(pkt.getNbtCompound());
+    }
+
     @Override
     public int getSlots() {
         return 1;
@@ -65,6 +88,8 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
             if(stack.getCount() == 1) {
                 if(!simulate) {
                     this.storedItem = stack;
+                    updateClient();
+                    markDirty();
                 }
                 return ItemStack.EMPTY;
             }
@@ -76,8 +101,11 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
             returnCopy.setCount(stack.getCount() - 1);
 
-            if(!simulate)
+            if(!simulate) {
                 this.storedItem = storedCopy;
+                updateClient();
+                markDirty();
+            }
 
             return returnCopy;
         }
@@ -95,9 +123,16 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
             if(storedItem.getCount() == 0) {
                 storedItem = ItemStack.EMPTY;
             }
+            markDirty();
+            updateClient();
         }
 
         return copy;
+    }
+
+    private void updateClient() {
+        IBlockState state = getWorld().getBlockState(getPos());
+        getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
     @Override
