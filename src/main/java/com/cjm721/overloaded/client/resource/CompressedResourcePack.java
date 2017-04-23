@@ -31,27 +31,10 @@ public enum CompressedResourcePack implements IResourcePack {
 
     public void addImage(@Nonnull ResourceLocation res,@Nonnull BufferedImage image) {
         images.put(res, image);
-        try {
-            File file = new File("C:\\Users\\CJ\\Desktop\\Temp\\",res.toString().replace(":","/"));
-            file.mkdirs();
-            ImageIO.write(image, "png", file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void addBlockState(ResourceLocation res, String state) {
         blockStates.put(res,state);
-
-        File file = new File("C:\\Users\\CJ\\Desktop\\Temp\\",res.toString().replace(":","/"));
-        file.getParentFile().mkdirs();
-        try {
-            PrintWriter temp = new PrintWriter(file);
-            temp.println(state);
-            temp.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public void addDomain(String domain) {

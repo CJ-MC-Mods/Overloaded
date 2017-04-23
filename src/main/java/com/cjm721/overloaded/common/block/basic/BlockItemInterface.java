@@ -3,8 +3,12 @@ package com.cjm721.overloaded.common.block.basic;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileItemInterface;
+import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -12,9 +16,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Created by CJ on 4/22/2017.
- */
 public class BlockItemInterface extends ModBlock implements ITileEntityProvider {
 
     public BlockItemInterface() {
@@ -32,7 +33,9 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
 
     @Override
     public void registerRecipe() {
-
+        if(RecipeEnabledConfig.itemInterface) {
+            GameRegistry.addRecipe(new ItemStack(this), "NDN", "NEN", "NNN", 'N', Items.NETHER_STAR, 'E', Blocks.CHEST, 'D', Blocks.DRAGON_EGG);
+        }
     }
 
     @Override
