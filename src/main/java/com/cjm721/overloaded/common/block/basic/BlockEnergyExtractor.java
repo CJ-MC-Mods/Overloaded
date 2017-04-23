@@ -52,7 +52,7 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         register();
-        GameRegistry.registerTileEntity(TileEnergyExtractor.class, "energy_extractor");
+        GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID + ":energy_extractor");
     }
 
     @Override

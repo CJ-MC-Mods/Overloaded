@@ -34,6 +34,7 @@ public final class ModBlocks {
     public static ModBlock netherStarBlock;
     public static ModBlock playerInterface;
     public static ModBlock itemInterface;
+    public static ModBlock fusionCore;
 
 
     private static List<ModBlock> registerList = new LinkedList<>();
@@ -59,6 +60,7 @@ public final class ModBlocks {
         netherStarBlock = new BlockNetherStar();
         playerInterface = new BlockPlayerInterface();
         itemInterface = new BlockItemInterface();
+        fusionCore = new BlockFusionCore();
 
         CompressedBlockHandler.initFromConfig();
     }

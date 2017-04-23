@@ -3,6 +3,8 @@ package com.cjm721.overloaded.common.block.tile;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -14,6 +16,26 @@ import java.util.UUID;
 public class TilePlayerInterface extends TileEntity {
 
     private UUID placer;
+
+    @Override
+    @Nonnull
+    public NBTTagCompound getUpdateTag() {
+        return writeToNBT(new NBTTagCompound());
+    }
+
+    @Nullable
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        NBTTagCompound tag = new NBTTagCompound();
+        writeToNBT(tag);
+
+        return new SPacketUpdateTileEntity(getPos(),1,tag);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        this.readFromNBT(pkt.getNbtCompound());
+    }
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {

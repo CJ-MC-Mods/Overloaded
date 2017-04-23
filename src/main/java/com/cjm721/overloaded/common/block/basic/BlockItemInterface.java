@@ -28,6 +28,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
+
 public class BlockItemInterface extends ModBlock implements ITileEntityProvider {
 
     public BlockItemInterface() {
@@ -40,7 +42,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
 
-        GameRegistry.registerTileEntity(TileItemInterface.class, "item_interface");
+        GameRegistry.registerTileEntity(TileItemInterface.class, MODID + ":item_interface");
     }
 
     @Override

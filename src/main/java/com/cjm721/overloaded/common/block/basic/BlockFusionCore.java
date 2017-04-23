@@ -1,21 +1,15 @@
 package com.cjm721.overloaded.common.block.basic;
 
-import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
-import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
+import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.tile.TileFusionCore;
 import com.cjm721.overloaded.common.block.tile.TileItemInterface;
-import com.cjm721.overloaded.common.block.tile.TilePlayerInterface;
-import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -33,46 +27,41 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class BlockPlayerInterface extends ModBlock implements ITileEntityProvider {
+/**
+ * Created by CJ on 4/23/2017.
+ */
+public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
 
-    public BlockPlayerInterface() {
-        super(Material.WOOD);
+    public BlockFusionCore() {
+        super(Material.ROCK);
 
-        setRegistryName("player_interface");
-        setUnlocalizedName("player_interface");
+        setRegistryName("fusion_core");
+        setUnlocalizedName("fusion_core");
 
-        setHardness(50);
+        setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
 
-        GameRegistry.registerTileEntity(TilePlayerInterface.class, MODID + ":player_interface");
-    }
-
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TilePlayerInterface();
+        GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_core");
     }
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.playerInterface) {
-            GameRegistry.addRecipe(new ItemStack(this), "NDN", "NEN", "NNN", 'N', Items.NETHER_STAR, 'E', Blocks.ENDER_CHEST, 'D', Blocks.DRAGON_EGG);
-        }
+
     }
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        ((TilePlayerInterface)worldIn.getTileEntity(pos)).setPlacer(placer);
-
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
+    @Override
     public void registerModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePlayerInterface.class, new PlayerInterfaceRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileFusionCore.class, new FusionCoreRenderer());
+    }
+
+
+    @Nullable
+    @Override
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return new TileFusionCore();
     }
 
     @Override
