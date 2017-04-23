@@ -54,9 +54,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     @Override
     public void registerModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-
         ClientRegistry.bindTileEntitySpecialRenderer(TileItemInterface.class, new ItemInterfaceRenderer());
-
     }
 
     @Nullable

@@ -63,4 +63,8 @@ public class TilePlayerInterface extends TileEntity {
 
         return super.getCapability(capability, facing);
     }
+
+    public UUID getPlacer() {
+        return placer;
+    }
 }
