@@ -51,6 +51,7 @@ public class TileInfiniteBarrel extends TileEntity  {
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
+            markDirty();
             return (T) itemStorage;
         }
         return super.getCapability(capability, facing);

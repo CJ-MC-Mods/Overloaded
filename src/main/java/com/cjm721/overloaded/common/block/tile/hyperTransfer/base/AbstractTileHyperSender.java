@@ -62,6 +62,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
      */
     @Override
     public void update() {
+        if(getWorld().isRemote)
+            return;
+
         if(delayTicks % 20 == 0) {
             if(partnerBlockPos == null)
                 return;
@@ -90,7 +93,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
         return null;
     }
 
-    protected void send(AbstractTileHyperReceiver<T,H> partner) {
+    protected void send(@Nonnull AbstractTileHyperReceiver<T,H> partner) {
         for(EnumFacing side: EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
@@ -101,7 +104,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType,H extends IHy
         }
     }
 
-    protected void send(AbstractTileHyperReceiver<T,H> partner, TileEntity te, EnumFacing side) {
+    protected void send(@Nonnull AbstractTileHyperReceiver<T,H> partner, @Nonnull TileEntity te, @Nonnull EnumFacing side) {
         H handler = te.getCapability(capability, side.getOpposite());
         T itemStack = handler.take(generate(Long.MAX_VALUE), false);
         if(itemStack.getAmount() > 0) {

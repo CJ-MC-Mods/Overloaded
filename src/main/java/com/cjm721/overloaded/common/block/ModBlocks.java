@@ -32,6 +32,9 @@ public final class ModBlocks {
     public static ModBlock energyExtractor;
 
     public static ModBlock netherStarBlock;
+    public static ModBlock playerInterface;
+    public static ModBlock itemInterface;
+
 
     private static List<ModBlock> registerList = new LinkedList<>();
 
@@ -54,6 +57,8 @@ public final class ModBlocks {
         energyExtractor = new BlockEnergyExtractor();
 
         netherStarBlock = new BlockNetherStar();
+        playerInterface = new BlockPlayerInterface();
+        itemInterface = new BlockItemInterface();
 
         CompressedBlockHandler.initFromConfig();
     }

@@ -71,17 +71,4 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-
-
-    @Override
-    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
-        ((TileCreativeGeneratorFE)world.getTileEntity(pos)).onPlace();
-        super.onNeighborChange(world,pos,neighbor);
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        ((TileCreativeGeneratorFE)worldIn.getTileEntity(pos)).onPlace();
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
 }

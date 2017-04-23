@@ -35,6 +35,8 @@ public class BlockCompressed extends ModBlock {
         setUnlocalizedName(unlocalizedName);
         setSoundType(baseBlock.getSoundType());
         setHardness(hardness);
+
+
         if(harvestTool != null)
             setHarvestLevel(harvestTool, harvestLevel);
         setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);

@@ -19,13 +19,14 @@ public enum CompressedConfig implements IConfig {
         config.addCustomCategoryComment(category, "Register Compressed Blocks and their settings here");
 
         compressedBlocks = config.get(category, "toCompress", new String[] {
-                "minecraft:cobblestone:8:true",
-                "minecraft:sand:8:true",
-                "minecraft:stone:8:true",
-                "minecraft:obsidian:8:true",
-                "minecraft:netherrack:8:true",
-                "minecraft:dirt:8:true"
-        }, "Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<recipe enabled>", Pattern.compile(".+:.+:\\d+:.+")).getValidValues();
+                "minecraft:cobblestone:16:true",
+                "minecraft:sand:16:true",
+                "minecraft:stone:16:true",
+                "minecraft:obsidian:16:true",
+                "minecraft:netherrack:16:true",
+                "minecraft:dirt:16:true",
+                "minecraft:gravel:16:true"
+        }, "Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<recipe enabled>", Pattern.compile(".+:.+:\\d+:.+")).getStringList();
 
         maxTextureWidth = config.get(category, "maxTextureWidth", 512, "Maximum Texture Resolution of a single block, WARNING setting this to high can break your game's textures / cause you to crash. Higher number also means more memory usage").getInt();
 

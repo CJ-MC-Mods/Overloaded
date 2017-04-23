@@ -72,10 +72,11 @@ public class CompressedBlockAssets {
             return false;
         }
 
-        int scale = 1;
-        for(int i = 0; i < locations.compressionAmount; i++) {
-            scale *= 2;
-        }
+        int scale = 1 + locations.compressionAmount;
+
+//        for(int i = 0; i < locations.compressionAmount; i++) {
+//            scale *= 2;
+//        }
 
         WritableRaster raster = image.getColorModel().createCompatibleWritableRaster(image.getWidth()*scale,image.getHeight()*scale);
         int[] pixels = image.getData().getPixels(0,0,image.getWidth(), image.getHeight(), (int[])null);

@@ -29,6 +29,7 @@ public enum RecipeEnabledConfig implements IConfig {
     public static boolean hyperEnergyNodes;
     public static boolean hyperFluidNodes;
     public static boolean hyperItemNodes;
+    public static boolean playerInterface;
 
     @Override
     public void init(@Nonnull Configuration config) {
@@ -52,5 +53,6 @@ public enum RecipeEnabledConfig implements IConfig {
         hyperEnergyNodes = config.get(category, "hyperEnergyNodes", true).getBoolean();
         hyperFluidNodes = config.get(category, "hyperFluidNodes", true).getBoolean();
         hyperItemNodes = config.get(category, "hyperItemNodes", true).getBoolean();
+        playerInterface = config.get(category, "playerInterface", true).getBoolean();
     }
 }

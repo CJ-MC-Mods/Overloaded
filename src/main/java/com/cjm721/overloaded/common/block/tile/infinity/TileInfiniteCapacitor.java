@@ -43,6 +43,7 @@ public class TileInfiniteCapacitor extends TileEntity {
     @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
+            markDirty();
             return (T) energyStorage;
         }
         return super.getCapability(capability, facing);

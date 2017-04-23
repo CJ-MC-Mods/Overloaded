@@ -15,32 +15,28 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IEnergyStorage {
 
-    private boolean normalTicks;
-
-    private Map<EnumFacing,IEnergyStorage> cache;
-
-    public TileCreativeGeneratorFE() {
-        cache = new HashMap<>();
-        normalTicks = false;
-    }
-
     /**
      * Like the old updateEntity(), except more generic.
      */
     @Override
     public void update() {
-        if(!normalTicks) {
-            onPlace();
-        }
-
-        if(cache.isEmpty())
+        if(getWorld().isRemote)
             return;
 
-        ArrayList<IEnergyStorage> tes = new ArrayList<>(cache.values());
-        tes.stream().forEach(te -> {
-            if(cache.containsValue(te))
-                te.receiveEnergy(Integer.MAX_VALUE, false);
-        });
+        BlockPos pos = this.getPos();
+        for(EnumFacing facing: EnumFacing.values()) {
+            TileEntity te = world.getTileEntity(pos.add(facing.getDirectionVec()));
+
+            if(te == null)
+                continue;
+
+            IEnergyStorage storage = te.getCapability(ENERGY, facing.getOpposite());
+
+            if(storage == null)
+                continue;
+
+            storage.receiveEnergy(Integer.MAX_VALUE, false);
+        }
     }
 
     @Override
@@ -113,22 +109,5 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     @Override
     public boolean canReceive() {
         return false;
-    }
-
-    private void onNeighborChange(@Nonnull BlockPos neighbor) {
-        TileEntity te = this.getWorld().getTileEntity(neighbor);
-
-        BlockPos sidePos = this.getPos().subtract(neighbor);
-        EnumFacing side = EnumFacing.getFacingFromVector(sidePos.getX(), sidePos.getY(), sidePos.getZ());
-
-        if(te != null && te.hasCapability(ENERGY, side)) {
-            cache.put(side, te.getCapability(ENERGY,side));
-        } else {
-            cache.remove(side);
-        }
-    }
-
-    public void onPlace() {
-        Arrays.stream(EnumFacing.values()).forEach((side) -> onNeighborChange(this.getPos().add(side.getDirectionVec())));
     }
 }

@@ -57,6 +57,7 @@ public class TileInfiniteTank extends TileEntity {
     {
         if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {
+            markDirty();
             return (T) fluidStorage;
         }
         return super.getCapability(capability, facing);
