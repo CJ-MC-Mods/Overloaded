@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.block.tile;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -166,5 +167,10 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
     public ItemStack getStoredItem() {
         return storedItem;
+    }
+
+    public void breakBlock() {
+        if(!storedItem.isEmpty())
+            this.getWorld().spawnEntity(new EntityItem(this.getWorld(),getPos().getX(), getPos().getY(),getPos().getZ(),storedItem));
     }
 }

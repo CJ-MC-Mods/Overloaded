@@ -55,8 +55,14 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
         ClientRegistry.bindTileEntitySpecialRenderer(TileItemInterface.class, new ItemInterfaceRenderer());
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        ((TileItemInterface)worldIn.getTileEntity(pos)).breakBlock();
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Nullable

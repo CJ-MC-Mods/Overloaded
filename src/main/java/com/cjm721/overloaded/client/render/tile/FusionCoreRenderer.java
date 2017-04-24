@@ -62,23 +62,23 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
     private void renderCore(TileFusionCore te) {
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(.5, 0, .5);
+        GlStateManager.translate(0.5, 0.5, 0.5);
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);
 
-        if(growing) {
-            scale += 0.0001;
-
-            if(scale >= 2)
-                growing = false;
-        } else {
-            scale -= 0.0001;
-
-            if(scale <= 0.5)
-                growing = true;
-        }
-
-        GlStateManager.scale(scale, scale, scale);
+//        if(growing) {
+//            scale += 0.0001;
+//
+//            if(scale >= 2)
+//                growing = false;
+//        } else {
+//            scale -= 0.0001;
+//
+//            if(scale <= 0.5)
+//                growing = true;
+//        }
+//
+//        GlStateManager.scale(scale, scale, scale);
 
         RenderHelper.disableStandardItemLighting();
         this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
