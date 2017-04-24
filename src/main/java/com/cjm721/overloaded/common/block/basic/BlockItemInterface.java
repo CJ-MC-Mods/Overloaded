@@ -93,6 +93,6 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     @Override
     public BlockRenderLayer getBlockLayer()
     {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
 }
