@@ -53,7 +53,7 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
         ClientRegistry.bindTileEntitySpecialRenderer(TileFusionCore.class, new FusionCoreRenderer());
     }
 

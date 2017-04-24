@@ -50,7 +50,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         GlStateManager.translate(x,y,z);
         GlStateManager.disableRescaleNormal();
 
-        renderCore(te);
+      //  renderCore(te);
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
@@ -87,6 +87,8 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         } else {
             GlStateManager.shadeModel(GL11.GL_FLAT);
         }
+
+        GlStateManager.disableLighting();
 
         World world = te.getWorld();
         // Translate back to local view coordinates so that we can do the acual rendering here
