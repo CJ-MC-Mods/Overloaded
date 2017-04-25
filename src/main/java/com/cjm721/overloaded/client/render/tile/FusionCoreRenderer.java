@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +31,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         // for rendering
         if (bakedModel == null) {
             try {
-                model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/sphere.obj"));
+                model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/sun.obj"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -50,7 +49,10 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         GlStateManager.translate(x,y,z);
         GlStateManager.disableRescaleNormal();
 
-      //  renderCore(te);
+        renderCore(te,90,-1, 1, new ResourceLocation("overloaded", "textures/blocks/sun/light_yellow.png"));
+        renderCore(te,0,1,0.98f, new ResourceLocation("overloaded", "textures/blocks/sun/yellow.png"));
+        renderCore(te,0,-1, 0.99f, new ResourceLocation("overloaded", "textures/blocks/sun/red.png"));
+        renderCore(te,90,1, 0.97f, new ResourceLocation("overloaded", "textures/blocks/sun/orange.png"));
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
@@ -59,29 +61,19 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
     private boolean growing = true;
     private float scale = 1;
 
-    private void renderCore(TileFusionCore te) {
+    private void renderCore(TileFusionCore te, long offset, float direction, float scale, ResourceLocation texture) {
+        GlStateManager.pushAttrib();
+
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(0.5, 0.5, 0.5);
-        long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
+        long angle = ((System.currentTimeMillis() / 50) + offset) % 360;
+        GlStateManager.rotate(angle, 0, direction, 0);
 
-//        if(growing) {
-//            scale += 0.0001;
-//
-//            if(scale >= 2)
-//                growing = false;
-//        } else {
-//            scale -= 0.0001;
-//
-//            if(scale <= 0.5)
-//                growing = true;
-//        }
-//
-//        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.scale(scale, scale, scale);
 
         RenderHelper.disableStandardItemLighting();
-        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        this.bindTexture(texture);
         if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
         } else {
@@ -89,6 +81,9 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         }
 
         GlStateManager.disableLighting();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.enableBlend();
+        GlStateManager.disableDepth();
 
         World world = te.getWorld();
         // Translate back to local view coordinates so that we can do the acual rendering here
@@ -104,20 +99,13 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
                 Tessellator.getInstance().getBuffer(),
                 false);
         tessellator.draw();
+        
+        GlStateManager.enableDepth();
+        GlStateManager.disableBlend();
 
         RenderHelper.enableStandardItemLighting();
         GlStateManager.popMatrix();
-//        RenderHelper.enableStandardItemLighting();
-//        GlStateManager.enableLighting();
-//        GlStateManager.pushMatrix();
-//
-//        GlStateManager.translate(.5, .3, .5);
-//        GlStateManager.scale(.2f,.2f,.2f);
-//        long angle = (System.currentTimeMillis() / 10) % 360;
-//        GlStateManager.rotate(angle, 0, 1, 0);
-//
-//        Minecraft.getMinecraft().getRenderManager().doRenderEntity(player, 0, 0, 0, 0, 1, false);
-//
-//        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
     }
 }
+

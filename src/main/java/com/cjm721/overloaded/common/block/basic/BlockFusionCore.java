@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static net.minecraft.util.BlockRenderLayer.TRANSLUCENT;
 
 /**
  * Created by CJ on 4/23/2017.
@@ -38,9 +40,11 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
         setRegistryName("fusion_core");
         setUnlocalizedName("fusion_core");
 
+        setLightLevel(1);
         setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
         register();
+
 
         GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_core");
     }
@@ -85,6 +89,12 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     @Override
     public BlockRenderLayer getBlockLayer()
     {
-        return BlockRenderLayer.CUTOUT;
+        return TRANSLUCENT;
+    }
+
+    @Override
+    @Nonnull
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
     }
 }

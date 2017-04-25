@@ -76,7 +76,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.enableLighting();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(.5, .5, .5);
+        GlStateManager.translate(.5, .65, .5);
         GlStateManager.scale(.5f,.5f,.5f);
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);

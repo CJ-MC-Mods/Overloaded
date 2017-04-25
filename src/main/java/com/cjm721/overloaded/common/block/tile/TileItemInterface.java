@@ -56,7 +56,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, @Nonnull SPacketUpdateTileEntity pkt) {
         this.readFromNBT(pkt.getNbtCompound());
     }
 
