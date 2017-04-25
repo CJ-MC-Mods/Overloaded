@@ -99,7 +99,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
                 Tessellator.getInstance().getBuffer(),
                 false);
         tessellator.draw();
-        
+
         GlStateManager.enableDepth();
         GlStateManager.disableBlend();
 

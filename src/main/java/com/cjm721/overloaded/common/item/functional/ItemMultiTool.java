@@ -97,6 +97,7 @@ public class ItemMultiTool extends ModItem {
     }
 
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);

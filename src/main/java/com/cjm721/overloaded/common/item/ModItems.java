@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.item;
 import com.cjm721.overloaded.common.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.common.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.common.item.crafting.ItemItemCore;
+import com.cjm721.overloaded.common.item.functional.ItemEnergyShield;
 import com.cjm721.overloaded.common.item.functional.ItemLinkingCard;
 import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,6 +15,8 @@ import java.util.List;
 public class ModItems {
     public static ModItem linkingCard;
     public static ItemMultiTool distanceBreaker;
+
+    public static ItemEnergyShield energyShield;
 
     public static ModItem energyCore;
     public static ModItem fluidCore;
@@ -28,6 +31,8 @@ public class ModItems {
     public static void init() {
         linkingCard = new ItemLinkingCard();
         distanceBreaker = new ItemMultiTool();
+
+        energyShield = new ItemEnergyShield();
 
         energyCore = new ItemEnergyCore();
         fluidCore = new ItemFluidCore();
