@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.item;
 
+import com.cjm721.overloaded.common.config.DevelopmentConfig;
 import com.cjm721.overloaded.common.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.common.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.common.item.crafting.ItemItemCore;
@@ -32,11 +33,12 @@ public class ModItems {
         linkingCard = new ItemLinkingCard();
         distanceBreaker = new ItemMultiTool();
 
-        energyShield = new ItemEnergyShield();
-
         energyCore = new ItemEnergyCore();
         fluidCore = new ItemFluidCore();
         itemCore = new ItemItemCore();
+
+        if(DevelopmentConfig.I.wipStuff)
+            energyShield = new ItemEnergyShield();
     }
 
     @SideOnly(Side.CLIENT)

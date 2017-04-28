@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="Overloaded:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.11.2-0.0.12" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="Overloaded:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.11.2-0.0.14" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -9,6 +9,20 @@
         </autoDetectTypes>
       </configuration>
     </facet>
+  </component>
+  <component name="McpModuleSettings">
+    <option name="mappingFiles">
+      <set>
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\mcp-notch.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\mcp-srg.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\mcp.exc" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\notch-mcp.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\notch-srg.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20170416\1.11.2\srgs\srg.exc" />
+      </set>
+    </option>
+    <option name="mcpVersion" value="snapshot_20170416" />
+    <option name="minecraftVersion" value="1.11.2" />
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
     <exclude-output />

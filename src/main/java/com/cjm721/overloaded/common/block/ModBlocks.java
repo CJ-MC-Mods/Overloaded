@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block;
 import com.cjm721.overloaded.common.block.basic.*;
 import com.cjm721.overloaded.common.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
+import com.cjm721.overloaded.common.config.DevelopmentConfig;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -60,7 +61,11 @@ public final class ModBlocks {
         netherStarBlock = new BlockNetherStar();
         playerInterface = new BlockPlayerInterface();
         itemInterface = new BlockItemInterface();
-        fusionCore = new BlockFusionCore();
+
+        if(DevelopmentConfig.I.wipStuff) {
+            fusionCore = new BlockFusionCore();
+        }
+
 
         CompressedBlockHandler.initFromConfig();
     }

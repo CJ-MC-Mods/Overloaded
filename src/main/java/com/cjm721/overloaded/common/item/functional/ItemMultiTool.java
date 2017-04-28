@@ -36,6 +36,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -139,7 +140,7 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndDropAtPlayer(@Nonnull World worldIn,@Nonnull BlockPos blockPos, double posX, double posY, double posZ, @Nonnull LongEnergyStack energyStack, int fortune, int effiency, int unbreaking) {
+    private BlockResult breakAndDropAtPlayer(@Nonnull World worldIn,@Nonnull BlockPos blockPos, EntityPlayer player, @Nonnull LongEnergyStack energyStack, int fortune, int effiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
 
         float hardness = state.getBlockHardness(worldIn, blockPos);
@@ -148,7 +149,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (effiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)posX,(int)posY,(int)posZ);
+        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (effiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
         if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
             return BlockResult.FAIL_ENERGY;
 
@@ -158,9 +159,10 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_ENERGY;
         }
 
+        drawParticleStreamTo(player, worldIn,blockPos.getX(),blockPos.getY(), blockPos.getZ());
+
         List<ItemStack> drops = state.getBlock().getDrops(worldIn, blockPos, state, fortune);
         boolean result = worldIn.setBlockToAir(blockPos);
-
         if(result) {
             SoundType soundType = state.getBlock().getSoundType(state,worldIn,blockPos,null);
 
@@ -168,9 +170,9 @@ public class ItemMultiTool extends ModItem {
 
             int xp = state.getBlock().getExpDrop(state,worldIn,blockPos,0);
             if(xp > 0)
-                worldIn.spawnEntity(new EntityXPOrb(worldIn, posX,posY,posZ,xp));
+                worldIn.spawnEntity(new EntityXPOrb(worldIn, player.posX,player.posY,player.posZ,xp));
             for (ItemStack droppedStack : drops) {
-                EntityItem entity = new EntityItem(worldIn, posX, posY, posZ, droppedStack);
+                EntityItem entity = new EntityItem(worldIn, player.posX, player.posY, player.posZ, droppedStack);
                 worldIn.spawnEntity(entity);
             }
             energyStack.amount -= breakCost;
@@ -178,6 +180,32 @@ public class ItemMultiTool extends ModItem {
         }
         return BlockResult.FAIL_REMOVE;
     }
+
+    public void drawParticleStreamTo(EntityPlayer source, World world, double x, double y, double z) {
+        Vec3d direction = source.getLookVec().normalize();
+        double scale = 1.0;
+        double xoffset = 1.3f;
+        double yoffset = -.2;
+        double zoffset = 0.3f;
+        Vec3d horzdir = direction.normalize();
+        horzdir = new Vec3d(horzdir.xCoord, 0, horzdir.zCoord);
+        horzdir = horzdir.normalize();
+        double cx = source.posX + direction.xCoord * xoffset - direction.yCoord * horzdir.xCoord * yoffset - horzdir.zCoord * zoffset;
+        double cy = source.posY + source.getEyeHeight() + direction.yCoord * xoffset + (1 - Math.abs(direction.yCoord)) * yoffset;
+        double cz = source.posZ + direction.zCoord * xoffset - direction.yCoord * horzdir.zCoord * yoffset + horzdir.xCoord * zoffset;
+        double dx = x - cx;
+        double dy = y - cy;
+        double dz = z - cz;
+        double ratio = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        while (Math.abs(cx - x) > Math.abs(dx / ratio)) {
+            world.spawnParticle(EnumParticleTypes.TOWN_AURA, cx, cy, cz, 0.0D, 0.0D, 0.0D);
+            cx += dx * 0.1 / ratio;
+            cy += dy * 0.1 / ratio;
+            cz += dz * 0.1 / ratio;
+        }
+    }
+
 
     // Registering only on client side
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -277,7 +305,7 @@ public class ItemMultiTool extends ModItem {
             int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
 
-            switch(breakAndDropAtPlayer(world, pos, player.posX, player.posY, player.posZ, energyStack,fortune,efficency,unbreaking)) {
+            switch(breakAndDropAtPlayer(world, pos, player, energyStack,fortune,efficency,unbreaking)) {
                 case FAIL_REMOVE:
                     player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
                     break;

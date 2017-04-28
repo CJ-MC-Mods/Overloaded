@@ -12,5 +12,6 @@ public enum OverloadedConfig implements IConfig {
         CompressedConfig.I.init(configuration);
         MultiToolConfig.I.init(configuration);
         RecipeEnabledConfig.I.init(configuration);
+        DevelopmentConfig.I.init(configuration);
     }
 }
