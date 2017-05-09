@@ -106,14 +106,4 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         }
         return null;
     }
-
-    @Override
-    public void onBlockPlacedBy(@Nonnull World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileEntity te = world.getTileEntity(pos);
-
-        if (stack != null && stack.getTagCompound() != null && te != null && te instanceof TileInfiniteBarrel) {
-            te.readFromNBT(stack.getTagCompound());
-        }
-        super.onBlockPlacedBy(world, pos, state, placer, stack);
-    }
 }

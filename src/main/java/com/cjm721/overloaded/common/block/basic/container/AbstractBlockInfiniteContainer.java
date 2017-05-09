@@ -48,7 +48,7 @@ public abstract class AbstractBlockInfiniteContainer extends ModBlock {
     protected abstract IHyperType getHyperStack(IBlockAccess world, BlockPos pos);
 
     @Override
-    public void onBlockPlacedBy(@Nonnull World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+    public final void onBlockPlacedBy(@Nonnull World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileEntity te = world.getTileEntity(pos);
 
         if (stack != null && stack.getTagCompound() != null && te != null) {
