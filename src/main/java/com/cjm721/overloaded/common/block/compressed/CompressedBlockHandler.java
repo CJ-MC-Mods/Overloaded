@@ -58,6 +58,8 @@ public class CompressedBlockHandler {
         IForgeRegistry<Block> registry = GameRegistry.findRegistry(Block.class);
 
         for(String setting: CompressedConfig.compressedBlocks) {
+            if(setting.isEmpty())
+                continue;
             String[] split = setting.split(":");
 
             if(split.length < 4) {
