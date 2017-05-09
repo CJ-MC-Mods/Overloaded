@@ -25,9 +25,9 @@ public class CapabilityHyperItem {
             {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongItemStack stack = instance.status();
-                if(stack.itemStack != null) {
-                    tag.setLong("Count", stack.amount);
-                    tag.setTag("Item", stack.itemStack.serializeNBT());
+                if(!stack.getItemStack().isEmpty()) {
+                    tag.setLong("Count", stack.getAmount());
+                    tag.setTag("Item", stack.getItemStack().serializeNBT());
                 }
                 return tag;
             }

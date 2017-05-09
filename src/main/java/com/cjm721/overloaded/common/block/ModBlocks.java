@@ -1,6 +1,9 @@
 package com.cjm721.overloaded.common.block;
 
 import com.cjm721.overloaded.common.block.basic.*;
+import com.cjm721.overloaded.common.block.basic.container.BlockInfiniteBarrel;
+import com.cjm721.overloaded.common.block.basic.container.BlockInfiniteCapacitor;
+import com.cjm721.overloaded.common.block.basic.container.BlockInfiniteTank;
 import com.cjm721.overloaded.common.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
 import com.cjm721.overloaded.common.config.DevelopmentConfig;

@@ -2,19 +2,16 @@ package com.cjm721.overloaded.common.storage;
 
 import net.minecraft.item.ItemStack;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
-/**
- * Created by CJ on 4/8/2017.
- */
 public class LongItemStack implements IHyperType {
 
-    public static final LongItemStack EMPTY_STACK = new LongItemStack(null, 0L);
+    public static final LongItemStack EMPTY_STACK = new LongItemStack(ItemStack.EMPTY, 0L);
 
-    public long amount;
-    public ItemStack itemStack;
+    private long amount;
+    private ItemStack itemStack;
 
-    public LongItemStack(@Nullable ItemStack itemStack, long amount) {
+    public LongItemStack(@Nonnull ItemStack itemStack, long amount) {
         this.itemStack = itemStack;
         this.amount = amount;
     }
@@ -22,5 +19,20 @@ public class LongItemStack implements IHyperType {
     @Override
     public long getAmount() {
         return amount;
+    }
+
+    @Nonnull
+    public ItemStack getItemStack() {return itemStack; }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
+    }
+
+    public void removeAmount(long amount) {
+        this.amount -= amount;
+    }
+
+    public void setItemStack(ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 }

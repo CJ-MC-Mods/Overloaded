@@ -19,7 +19,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
 
     public LongItemStorage() {
-        longItemStack = new LongItemStack(null,0);
+        longItemStack = new LongItemStack(ItemStack.EMPTY,0);
     }
 
     /**
@@ -54,9 +54,9 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Override
     @Nonnull
     public ItemStack getStackInSlot(int slot) {
-        if(longItemStack.itemStack != null) {
-            longItemStack.itemStack.setCount((int) Math.min(Integer.MAX_VALUE,longItemStack.amount));
-            return longItemStack.itemStack;
+        if(!longItemStack.getItemStack().isEmpty()) {
+            longItemStack.getItemStack().setCount((int) Math.min(Integer.MAX_VALUE,longItemStack.getAmount()));
+            return longItemStack.getItemStack();
         }
         return ItemStack.EMPTY;
     }
@@ -77,12 +77,12 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     public ItemStack insertItem(int slot,@Nonnull ItemStack stack, boolean simulate) {
         LongItemStack result = give(new LongItemStack(stack,stack.getCount()), !simulate);
 
-        if(result.amount == 0) {
+        if(result.getAmount() == 0) {
             return ItemStack.EMPTY;
         }
 
         ItemStack toReturn = stack.copy();
-        toReturn.setCount((int) result.amount);
+        toReturn.setCount((int) result.getAmount());
 
         return toReturn;
     }
@@ -100,14 +100,14 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Override
     @Nonnull
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        LongItemStack result = take(new LongItemStack(null,amount), !simulate);
+        LongItemStack result = take(new LongItemStack(ItemStack.EMPTY,amount), !simulate);
 
-        if(result.amount == 0L) {
+        if(result.getAmount() == 0L) {
             return ItemStack.EMPTY;
         }
 
-        ItemStack toReturn = result.itemStack.copy();
-        toReturn.setCount((int) result.amount);
+        ItemStack toReturn = result.getItemStack().copy();
+        toReturn.setCount((int) result.getAmount());
 
         return toReturn;
     }
@@ -125,9 +125,9 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        if(longItemStack.itemStack != null) {
-            compound.setTag("Item", longItemStack.itemStack.serializeNBT());
-            compound.setLong("Count", longItemStack.amount);
+        if(!longItemStack.getItemStack().isEmpty()) {
+            compound.setTag("Item", longItemStack.getItemStack().serializeNBT());
+            compound.setLong("Count", longItemStack.getAmount());
         }
 
         return compound;
@@ -151,19 +151,19 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Nonnull
     @Override
     public LongItemStack give(@Nonnull LongItemStack stack, boolean doAction) {
-        if(longItemStack.itemStack == null) {
+        if(longItemStack.getItemStack().isEmpty()) {
             if(doAction) {
-                longItemStack = new LongItemStack(stack.itemStack, stack.amount);
+                longItemStack = new LongItemStack(stack.getItemStack(), stack.getAmount());
             }
             return LongItemStack.EMPTY_STACK;
         }
 
-        if(itemsAreEqual(longItemStack.itemStack,stack.itemStack)) {
-            NumberUtil.AddReturn<Long> result = addToMax(longItemStack.amount, stack.amount);
+        if(itemsAreEqual(longItemStack.getItemStack(),stack.getItemStack())) {
+            NumberUtil.AddReturn<Long> result = addToMax(longItemStack.getAmount(), stack.getAmount());
             if(doAction) {
-                longItemStack.amount = result.result;
+                longItemStack.setAmount(result.result);
             }
-            return new LongItemStack(stack.itemStack, result.overflow);
+            return new LongItemStack(stack.getItemStack(), result.overflow);
         }
 
         return stack;
@@ -172,16 +172,16 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Nonnull
     @Override
     public LongItemStack take(@Nonnull LongItemStack stack, boolean doAction) {
-        if(longItemStack.itemStack == null)
+        if(longItemStack.getItemStack() == null)
             return LongItemStack.EMPTY_STACK;
 
-        long result = Math.min(stack.amount, longItemStack.amount);
-        LongItemStack toReturn = new LongItemStack(longItemStack.itemStack, result);
+        long result = Math.min(stack.getAmount(), longItemStack.getAmount());
+        LongItemStack toReturn = new LongItemStack(longItemStack.getItemStack(), result);
         if(doAction) {
-            longItemStack.amount -= result;
+            longItemStack.removeAmount(result);
 
-            if(longItemStack.amount == 0L)
-                longItemStack.itemStack = null;
+            if(longItemStack.getAmount() == 0L)
+                longItemStack.setItemStack(ItemStack.EMPTY);
         }
 
         return toReturn;

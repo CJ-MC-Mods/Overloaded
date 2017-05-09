@@ -14,7 +14,6 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteTank extends TileEntity {
 
-    @Nonnull
     private LongFluidStorage fluidStorage;
 
     public TileInfiniteTank() {
