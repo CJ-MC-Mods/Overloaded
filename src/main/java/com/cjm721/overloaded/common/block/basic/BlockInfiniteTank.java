@@ -2,6 +2,7 @@ package com.cjm721.overloaded.common.block.basic;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.block.tile.TileInfiniteWaterSource;
 import com.cjm721.overloaded.common.block.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -22,6 +23,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,6 +33,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
 
@@ -75,9 +80,16 @@ public class BlockInfiniteTank extends ModBlock implements ITileEntityProvider{
                 } else {
                     playerIn.sendStatusMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)), false);
                 }
-                return true;
+            } else {
+                TileEntity te = worldIn.getTileEntity(pos);
+                if (te != null && te instanceof TileInfiniteTank) {
+                    IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, side);
+                    FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, handler,playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
+                    if(result.isSuccess())
+                        playerIn.setHeldItem(hand, result.getResult());
+                }
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return true;
     }
 }
