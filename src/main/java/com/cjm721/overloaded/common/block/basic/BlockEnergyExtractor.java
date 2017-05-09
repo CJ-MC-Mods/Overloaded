@@ -103,12 +103,10 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
     @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
-        ResourceLocation resourceLocation = new ResourceLocation(MODID, "energy_extractor");
-
-        ModelResourceLocation location = new ModelResourceLocation(resourceLocation, null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-        FacingStateMapper stateMapper = new FacingStateMapper(resourceLocation);
+        FacingStateMapper stateMapper = new FacingStateMapper(getRegistryName());
         ModelLoader.setCustomStateMapper(this, stateMapper);
     }
 

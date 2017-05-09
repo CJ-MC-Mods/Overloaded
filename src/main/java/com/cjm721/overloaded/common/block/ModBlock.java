@@ -27,7 +27,6 @@ public abstract class ModBlock extends Block {
 
     public abstract void registerRecipe();
 
-
     @SideOnly(Side.CLIENT)
     public abstract void registerModel();
 }
