@@ -5,6 +5,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
@@ -15,6 +16,10 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
 
+    private static IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[] {
+        new FluidTankProperties(FluidRegistry.getFluidStack("water", Integer.MAX_VALUE), Integer.MAX_VALUE, false, true)
+    };
+
     /**
      * Returns an array of objects which represent the internal tanks.
      * These objects cannot be used to manipulate the internal tanks.
@@ -23,7 +28,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
      */
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new IFluidTankProperties[0];
+        return fluidTankProperties;
     }
 
     /**
@@ -49,7 +54,9 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
     @Nullable
     @Override
     public FluidStack drain(@Nonnull FluidStack resource, boolean doDrain) {
-        return drain(resource.amount, doDrain);
+        if(resource.isFluidEqual(FluidRegistry.getFluidStack("water", 0)))
+            return drain(resource.amount, doDrain);
+        return new FluidStack(resource.getFluid(), 0);
     }
 
     /**
