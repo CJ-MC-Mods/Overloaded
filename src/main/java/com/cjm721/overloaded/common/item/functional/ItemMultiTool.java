@@ -150,7 +150,7 @@ public class ItemMultiTool extends ModItem {
     @Nonnull
     private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull LongEnergyStack energyStack, EntityPlayer player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
-        state = state.getBlock().getExtendedState(state, worldIn,blockPos);
+        //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
         float hardness = state.getBlockHardness(worldIn, blockPos);
 
@@ -451,19 +451,20 @@ public class ItemMultiTool extends ModItem {
 
         ItemStack foundStack = player.inventory.getStackInSlot(foundStackSlot);
 
-        worldIn.setBlockState()
 
-        boolean result = block.placeBlockAt(foundStack, player,worldIn, newPosition,facing,0.5F,0.5F,0.5F,state);
-        if(result) {
-            energyStack.amount -= cost;
-            player.inventory.decrStackSize(foundStackSlot, 1);
 
-            SoundType soundType = state.getBlock().getSoundType(state,worldIn,newPosition,null);
+        int i = this.getMetadata(foundStack.getMetadata());
+        IBlockState iblockstate1 = block.block.getStateForPlacement(worldIn, newPosition, facing, 0.5f, 0.5f, 0.5F, i, player, EnumHand.MAIN_HAND);
 
-            worldIn.playSound(null,newPosition,soundType.getPlaceSound(), SoundCategory.BLOCKS, soundType.getVolume(), soundType.getPitch());
+        if (block.placeBlockAt(foundStack, player, worldIn, newPosition, facing, 0.5F, 0.5f, 0.5f, iblockstate1))
+        {
+            SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
+            worldIn.playSound(player, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+            foundStack.shrink(1);
+            return true;
         }
 
-        return result;
+        return false;
     }
 
     private int findItemStack(@Nonnull ItemStack item, @Nonnull EntityPlayerMP player) {
