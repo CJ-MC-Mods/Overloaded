@@ -4,9 +4,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-/**
- * Created by CJ on 4/14/2017.
- */
 public class MultiToolLeftClickMessage implements IMessage {
 
     private BlockPos pos;
@@ -27,8 +24,7 @@ public class MultiToolLeftClickMessage implements IMessage {
         int x = buf.readInt();
         int y = buf.readInt();
         int z = buf.readInt();
-
-        this.pos = new BlockPos(x,y,z);
+        pos = new BlockPos(x,y,z);
     }
 
     /**

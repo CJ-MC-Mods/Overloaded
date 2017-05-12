@@ -12,12 +12,18 @@ public class MultiToolRightClickMessage implements IMessage {
 
     private EnumFacing hitSide;
     private BlockPos pos;
+    private float hitX;
+    private float hitY;
+    private float hitZ;
 
     public MultiToolRightClickMessage() { }
 
-    public MultiToolRightClickMessage(BlockPos pos, EnumFacing hitSide) {
+    public MultiToolRightClickMessage(BlockPos pos, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
         this.pos = pos;
         this.hitSide = hitSide;
+        this.hitX = hitX;
+        this.hitY = hitY;
+        this.hitZ = hitZ;
     }
 
     @Override
@@ -29,6 +35,11 @@ public class MultiToolRightClickMessage implements IMessage {
 
         this.pos = new BlockPos(x,y,z);
         this.hitSide = EnumFacing.getFront(facing);
+
+
+        hitX = buf.readFloat();
+        hitY = buf.readFloat();
+        hitZ = buf.readFloat();
     }
 
     @Override
@@ -37,6 +48,10 @@ public class MultiToolRightClickMessage implements IMessage {
         buf.writeInt(pos.getY());
         buf.writeInt(pos.getZ());
         buf.writeInt(hitSide.getIndex());
+
+        buf.writeFloat(hitX);
+        buf.writeFloat(hitY);
+        buf.writeFloat(hitZ);
     }
 
     public BlockPos getPos() {
@@ -45,5 +60,17 @@ public class MultiToolRightClickMessage implements IMessage {
 
     public EnumFacing getHitSide() {
         return hitSide;
+    }
+
+    public float getHitX() {
+        return hitX;
+    }
+
+    public float getHitY() {
+        return hitY;
+    }
+
+    public float getHitZ() {
+        return hitZ;
     }
 }

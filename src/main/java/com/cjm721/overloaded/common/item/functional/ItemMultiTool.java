@@ -22,7 +22,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -138,7 +137,8 @@ public class ItemMultiTool extends ModItem {
             RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(MultiToolConfig.reach)));
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 //                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit));
+                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
+
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -225,23 +225,6 @@ public class ItemMultiTool extends ModItem {
         ItemStack stack = event.getItemStack();
         if(stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos());
-
-//            EntityPlayer player = event.getEntityPlayer();
-//
-//
-//            int distance = (int)player.getDistanceSq(event.getPos());
-//
-//            double x = player.posX;
-//            double y = player.posY + 1.5;
-//            double z = player.posZ;
-//            Vec3d lookVec = player.getLookVec();
-//            for(int i = 0; i < distance; i++) {
-//                x += lookVec.xCoord;
-//                y += lookVec.yCoord;
-//                z += lookVec.zCoord;
-//                event.getWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y,z, 0,0,0);
-//            }
-
         }
     }
 
@@ -337,7 +320,7 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
-    public void rightClickWithItem(@Nonnull World worldIn, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull EnumFacing sideHit) {
+    public void rightClickWithItem(@Nonnull World worldIn, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull EnumFacing sideHit, float hitX, float hitY, float hitZ) {
         ItemStack multiTool = player.getHeldItemMainhand();
 
         if(multiTool.getItem() != this) {
@@ -364,13 +347,11 @@ public class ItemMultiTool extends ModItem {
         IHyperHandlerEnergy energy = multiTool.getCapability(HYPER_ENERGY_HANDLER, null);
         LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
 
-        IBlockState state = NBTUtil.readBlockState(tagCompound.getCompoundTag("BlockState"));
-
         Vec3i sideVector = sideHit.getDirectionVec();
         BlockPos newPosition = pos.add(sideVector);
 
         try {
-            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                 return;
             if (player.isSneaking()) {
                 BlockPos playerPos = player.getPosition();
@@ -378,42 +359,42 @@ public class ItemMultiTool extends ModItem {
                     case UP:
                         while (newPosition.getY() < playerPos.getY()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case DOWN:
                         while (newPosition.getY() > playerPos.getY()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case NORTH:
                         while (newPosition.getZ() > playerPos.getZ()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case SOUTH:
                         while (newPosition.getZ() < playerPos.getZ()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case EAST:
                         while (newPosition.getX() < playerPos.getX()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case WEST:
                         while (newPosition.getX() > playerPos.getX()) {
                             newPosition = newPosition.add(sideVector);
-                            if (!placeBlock(blockToPlace, state, player, worldIn, newPosition, sideHit, energyStack))
+                            if (!placeBlock(blockToPlace, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
@@ -425,7 +406,7 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
-    private boolean placeBlock(@Nonnull ItemBlock block, @Nonnull IBlockState state, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack) {
+    private boolean placeBlock(@Nonnull ItemBlock block, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         if(!worldIn.mayPlace(block.getBlock(), newPosition, false,facing, null)) {
             return false;
@@ -454,9 +435,9 @@ public class ItemMultiTool extends ModItem {
 
 
         int i = this.getMetadata(foundStack.getMetadata());
-        IBlockState iblockstate1 = block.block.getStateForPlacement(worldIn, newPosition, facing, 0.5f, 0.5f, 0.5F, i, player, EnumHand.MAIN_HAND);
+        IBlockState iblockstate1 = block.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
 
-        if (block.placeBlockAt(foundStack, player, worldIn, newPosition, facing, 0.5F, 0.5f, 0.5f, iblockstate1))
+        if (block.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1))
         {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(player, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);

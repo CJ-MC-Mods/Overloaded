@@ -24,7 +24,6 @@ public class MultiToolLeftClickHandler implements IMessageHandler<MultiToolLeftC
     public IMessage onMessage(MultiToolLeftClickMessage message, MessageContext ctx) {
         EntityPlayerMP player = ctx.getServerHandler().player;
 
-
         player.getServerWorld().addScheduledTask(() -> ModItems.distanceBreaker.leftClickOnBlockServer(player.getEntityWorld(), player, message.getPos()));
         // Nothing to send to client from here
         return null;
