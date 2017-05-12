@@ -33,6 +33,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -42,8 +43,12 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -54,11 +59,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
 public class ItemMultiTool extends ModItem {
+
+    private BlockPos lastBrokenBlockPos;
 
     public ItemMultiTool() {
         setMaxStackSize(1);
@@ -140,8 +148,9 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndDropAtPlayer(@Nonnull World worldIn,@Nonnull BlockPos blockPos, EntityPlayer player, @Nonnull LongEnergyStack energyStack, int fortune, int effiency, int unbreaking) {
+    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull LongEnergyStack energyStack, EntityPlayer player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
+        state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
         float hardness = state.getBlockHardness(worldIn, blockPos);
 
@@ -149,7 +158,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (effiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
+        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
         if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
             return BlockResult.FAIL_ENERGY;
 
@@ -159,22 +168,21 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_ENERGY;
         }
 
-        drawParticleStreamTo(player, worldIn,blockPos.getX(),blockPos.getY(), blockPos.getZ());
 
-        List<ItemStack> drops = state.getBlock().getDrops(worldIn, blockPos, state, fortune);
+        BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
+        MinecraftForge.EVENT_BUS.post(event);
+
+        if(event.isCanceled())
+            return BlockResult.FAIL_REMOVE;
+
+        drawParticleStreamTo(player, worldIn, blockPos.getX(), blockPos.getY(), blockPos.getZ());
+
         boolean result = worldIn.setBlockToAir(blockPos);
-        if(result) {
-            SoundType soundType = state.getBlock().getSoundType(state,worldIn,blockPos,null);
+        if (result) {
+            SoundType soundType = state.getBlock().getSoundType(state, worldIn, blockPos, null);
 
-            worldIn.playSound(null,blockPos,soundType.getBreakSound(), SoundCategory.BLOCKS, soundType.getVolume(), soundType.getPitch());
+            worldIn.playSound(null, blockPos, soundType.getBreakSound(), SoundCategory.BLOCKS, soundType.getVolume(), soundType.getPitch());
 
-            int xp = state.getBlock().getExpDrop(state,worldIn,blockPos,0);
-            if(xp > 0)
-                worldIn.spawnEntity(new EntityXPOrb(worldIn, player.posX,player.posY,player.posZ,xp));
-            for (ItemStack droppedStack : drops) {
-                EntityItem entity = new EntityItem(worldIn, player.posX, player.posY, player.posZ, droppedStack);
-                worldIn.spawnEntity(entity);
-            }
             energyStack.amount -= breakCost;
             return BlockResult.SUCCESS;
         }
@@ -246,30 +254,32 @@ public class ItemMultiTool extends ModItem {
 
         ItemStack stack = event.getItemStack();
 
-        // 1.10.2 can give null
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
             RayTraceResult result = entityLiving.rayTrace(MultiToolConfig.reach, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
                 leftClickOnBlockClient(result.getBlockPos());
-
-//                EntityPlayer player = event.getEntityPlayer();
-//
-//
-//                int distance = (int)player.getDistanceSq(result.getBlockPos());
-//
-//                double x = player.posX;
-//                double y = player.posY + 1.5;
-//                double z = player.posZ;
-//                Vec3d lookVec = player.getLookVec();
-//                for(int i = 0; i < distance; i++) {
-//                    x += lookVec.xCoord;
-//                    y += lookVec.yCoord;
-//                    z += lookVec.zCoord;
-//                    event.getWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y,z, 0,0,0);
-//                }
             }
         }
+    }
+
+    @SubscribeEvent
+    public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
+        if(event.isCanceled())
+            return;
+        EntityPlayer player = event.getHarvester();
+        if(player == null || event.getHarvester().getHeldItemMainhand().getItem() != this)
+            return;
+
+        World world = event.getWorld();
+        float chance = event.getDropChance();
+        for(ItemStack stack: event.getDrops()) {
+            if (world.rand.nextFloat() <= chance) {
+                EntityItem toSpawn = new EntityItem(world, player.posX, player.posY, player.posZ, stack);
+                world.spawnEntity(toSpawn);
+            }
+        }
+        event.getDrops().clear();
     }
 
     private void leftClickOnBlockClient(BlockPos pos) {
@@ -282,6 +292,8 @@ public class ItemMultiTool extends ModItem {
         if(itemStack.getItem() != this || world.isAirBlock(pos)) {
             return;
         }
+
+        player.setActiveHand(EnumHand.MAIN_HAND);
 
         if(player.isSneaking()) {
             NBTTagCompound tag  = itemStack.getTagCompound();
@@ -301,11 +313,11 @@ public class ItemMultiTool extends ModItem {
             IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
 
-            int efficency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
-            int fortune = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, itemStack);
+            int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
-
-            switch(breakAndDropAtPlayer(world, pos, player, energyStack,fortune,efficency,unbreaking)) {
+            IBlockState state = world.getBlockState(pos);
+            TileEntity tileEntity = world.getTileEntity(pos);
+            switch(breakAndUseEnergy(world, pos, energyStack,player,efficiency,unbreaking)) {
                 case FAIL_REMOVE:
                     player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
                     break;
@@ -316,6 +328,8 @@ public class ItemMultiTool extends ModItem {
                     player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
                     break;
                 case SUCCESS:
+                    lastBrokenBlockPos = pos;
+                    state.getBlock().harvestBlock(world, player,pos,state,tileEntity, itemStack);
                     break;
             }
             energy.give(energyStack,true);
@@ -417,6 +431,10 @@ public class ItemMultiTool extends ModItem {
             return false;
         }
 
+        BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player,new BlockSnapshot(worldIn,newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
+        if(event.isCanceled())
+            return false;
+
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
         long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
 
@@ -433,6 +451,7 @@ public class ItemMultiTool extends ModItem {
 
         ItemStack foundStack = player.inventory.getStackInSlot(foundStackSlot);
 
+        worldIn.setBlockState()
 
         boolean result = block.placeBlockAt(foundStack, player,worldIn, newPosition,facing,0.5F,0.5F,0.5F,state);
         if(result) {
@@ -462,5 +481,22 @@ public class ItemMultiTool extends ModItem {
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new EnergyWrapper(stack);
+    }
+
+    private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
+      "pickaxe",
+        "shovel",
+        "axe"
+    );
+
+    @Override
+    @Nonnull
+    public Set<String> getToolClasses(ItemStack stack) {
+        return toolClasses;
+    }
+
+    @Override
+    public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
+        return true;
     }
 }

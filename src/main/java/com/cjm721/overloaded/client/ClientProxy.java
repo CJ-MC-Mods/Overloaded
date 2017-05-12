@@ -23,8 +23,6 @@ public class ClientProxy extends CommonProxy {
         super.preInit(e);
 
         OBJLoader.INSTANCE.addDomain(MODID);
-
-        MinecraftForge.EVENT_BUS.register(ModItems.distanceBreaker);
         MinecraftForge.EVENT_BUS.register(new CompressedBlockAssets());
 
         ModBlocks.registerModels();

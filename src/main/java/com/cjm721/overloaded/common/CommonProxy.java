@@ -9,6 +9,7 @@ import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.common.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.common.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.common.util.CapabilityHyperItem;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -26,6 +27,8 @@ public class CommonProxy {
         CapabilityHyperItem.register();
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
+
+        MinecraftForge.EVENT_BUS.register(ModItems.distanceBreaker);
     }
 
     public void init(FMLInitializationEvent event) {
