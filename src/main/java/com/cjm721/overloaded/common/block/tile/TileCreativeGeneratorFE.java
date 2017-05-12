@@ -54,11 +54,11 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     /**
-     * Adds energy to the storage. Returns quantity of energy that was accepted.
+     * Adds energy to the fluidStorage. Returns quantity of energy that was accepted.
      *
      * @param maxReceive Maximum amount of energy to be inserted.
      * @param simulate   If TRUE, the insertion will only be simulated.
-     * @return Amount of energy that was (or would have been, if simulated) accepted by the storage.
+     * @return Amount of energy that was (or would have been, if simulated) accepted by the fluidStorage.
      */
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -66,11 +66,11 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     /**
-     * Removes energy from the storage. Returns quantity of energy that was removed.
+     * Removes energy from the fluidStorage. Returns quantity of energy that was removed.
      *
      * @param maxExtract Maximum amount of energy to be extracted.
      * @param simulate   If TRUE, the extraction will only be simulated.
-     * @return Amount of energy that was (or would have been, if simulated) extracted from the storage.
+     * @return Amount of energy that was (or would have been, if simulated) extracted from the fluidStorage.
      */
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
@@ -94,7 +94,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     /**
-     * Returns if this storage can have energy extracted.
+     * Returns if this fluidStorage can have energy extracted.
      * If this is false, then any calls to extractEnergy will return 0.
      */
     @Override
@@ -103,7 +103,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     /**
-     * Used to determine if this storage can receive energy.
+     * Used to determine if this fluidStorage can receive energy.
      * If this is false, then any calls to receiveEnergy will return 0.
      */
     @Override

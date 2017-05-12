@@ -38,6 +38,8 @@ public final class ModBlocks {
     public static ModBlock netherStarBlock;
     public static ModBlock playerInterface;
     public static ModBlock itemInterface;
+
+    public static ModBlock matterPurifier;
     public static ModBlock fusionCore;
 
 
@@ -67,8 +69,8 @@ public final class ModBlocks {
 
         if(DevelopmentConfig.I.wipStuff) {
             fusionCore = new BlockFusionCore();
+            matterPurifier = new BlockMatterPurifier();
         }
-
 
         CompressedBlockHandler.initFromConfig();
     }

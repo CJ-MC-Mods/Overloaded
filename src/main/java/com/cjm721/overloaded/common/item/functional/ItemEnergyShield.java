@@ -13,10 +13,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -65,14 +63,11 @@ public class ItemEnergyShield extends ModItem {
     @Override
     @Nonnull
     public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BLOCK;
-//        IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);
-//
-//        LongEnergyStack energy = handler.take(new LongEnergyStack(constantUseCost), true);
-//
+//        return EnumAction.BLOCK;
+
 //        if(energy.amount == constantUseCost) {
-//            System.out.println("Blocking");
-//            return EnumAction.BLOCK;
+            System.out.println("Blocking");
+            return EnumAction.BLOCK;
 //        }
 //        System.out.println("None");
 //        return EnumAction.NONE;
@@ -83,6 +78,33 @@ public class ItemEnergyShield extends ModItem {
         return 72000;
     }
 
+    @Override
+    @Nonnull
+    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(!worldIn.isRemote) {
+            System.out.println("On Item Use");
+            IHyperHandlerEnergy handler = player.getHeldItem(hand).getCapability(HYPER_ENERGY_HANDLER, null);
+            LongEnergyStack energy = handler.take(new LongEnergyStack(constantUseCost), true);
+            if(energy.amount == constantUseCost) {
+                System.out.println("On Item Use Success");
+                return EnumActionResult.SUCCESS;
+            }
+
+            return EnumActionResult.FAIL;
+        }
+
+        return EnumActionResult.PASS;
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+        if(player.isActiveItemStackBlocking()) {
+            System.out.println("On Using Tick Blocking: " + count);
+            return;
+        }
+        System.out.println("On Using Tick Not Blocking: " + count);
+    }
+
     @Nonnull
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn)
@@ -90,17 +112,15 @@ public class ItemEnergyShield extends ModItem {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);
 
-        if(!worldIn.isRemote) {
-            IHyperHandlerEnergy handler = itemstack.getCapability(HYPER_ENERGY_HANDLER, null);
-            LongEnergyStack energy = handler.take(new LongEnergyStack(initialUseCost), true);
+        IHyperHandlerEnergy handler = itemstack.getCapability(HYPER_ENERGY_HANDLER, null);
+        LongEnergyStack energy = handler.take(new LongEnergyStack(initialUseCost), true);
+        if(energy.amount == initialUseCost) {
+            System.out.println("Right click Success");
+            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
+        } else {
+            System.out.println("Right click FAIL");
+            return new ActionResult<>(EnumActionResult.FAIL, itemstack);
         }
-//
-//        if(energy.amount == initialUseCost) {
-//            System.out.println("Right click Success");
-//            return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
-//        }
-        System.out.println("Right click: " + worldIn.isRemote);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
     }
 
     @Nullable
@@ -148,6 +168,6 @@ public class ItemEnergyShield extends ModItem {
 
     @Override
     public boolean updateItemStackNBT(NBTTagCompound nbt) {
-        return true;
+        return false;
     }
 }

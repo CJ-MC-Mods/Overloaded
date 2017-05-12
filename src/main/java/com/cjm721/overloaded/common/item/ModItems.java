@@ -4,6 +4,7 @@ import com.cjm721.overloaded.common.config.DevelopmentConfig;
 import com.cjm721.overloaded.common.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.common.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.common.item.crafting.ItemItemCore;
+import com.cjm721.overloaded.common.item.functional.ItemAmountSelector;
 import com.cjm721.overloaded.common.item.functional.ItemEnergyShield;
 import com.cjm721.overloaded.common.item.functional.ItemLinkingCard;
 import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
@@ -18,6 +19,7 @@ public class ModItems {
     public static ItemMultiTool distanceBreaker;
 
     public static ItemEnergyShield energyShield;
+    public static ItemAmountSelector amountSelector;
 
     public static ModItem energyCore;
     public static ModItem fluidCore;
@@ -37,8 +39,10 @@ public class ModItems {
         fluidCore = new ItemFluidCore();
         itemCore = new ItemItemCore();
 
-        if(DevelopmentConfig.I.wipStuff)
+        if(DevelopmentConfig.I.wipStuff) {
             energyShield = new ItemEnergyShield();
+            amountSelector = new ItemAmountSelector();
+        }
     }
 
     @SideOnly(Side.CLIENT)
