@@ -14,6 +14,8 @@ import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.common.util.BlockResult;
 import com.cjm721.overloaded.common.util.EnergyWrapper;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCommandBlock;
+import net.minecraft.block.BlockStructure;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -32,6 +34,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -64,8 +67,6 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
 public class ItemMultiTool extends ModItem {
-
-    private BlockPos lastBrokenBlockPos;
 
     public ItemMultiTool() {
         setMaxStackSize(1);
@@ -148,7 +149,7 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull LongEnergyStack energyStack, EntityPlayer player, int efficiency, int unbreaking) {
+    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull LongEnergyStack energyStack, EntityPlayerMP player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
@@ -177,16 +178,79 @@ public class ItemMultiTool extends ModItem {
 
         drawParticleStreamTo(player, worldIn, blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
-        boolean result = worldIn.setBlockToAir(blockPos);
+        boolean result = tryHarvestBlock(player,worldIn,blockPos);
         if (result) {
-            SoundType soundType = state.getBlock().getSoundType(state, worldIn, blockPos, null);
-
-            worldIn.playSound(null, blockPos, soundType.getBreakSound(), SoundCategory.BLOCKS, soundType.getVolume(), soundType.getPitch());
-
             energyStack.amount -= breakCost;
             return BlockResult.SUCCESS;
         }
         return BlockResult.FAIL_REMOVE;
+    }
+
+
+    public boolean tryHarvestBlock(EntityPlayerMP player, World world, BlockPos pos)
+    {
+        int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(world, player.interactionManager.getGameType(), player, pos);
+        if (exp == -1)
+        {
+            return false;
+        }
+        else
+        {
+            IBlockState iblockstate = world.getBlockState(pos);
+            TileEntity tileentity = world.getTileEntity(pos);
+            Block block = iblockstate.getBlock();
+
+            if ((block instanceof BlockCommandBlock || block instanceof BlockStructure) && !player.canUseCommandBlock())
+            {
+                world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
+                return false;
+            }
+            else
+            {
+                world.playEvent(player, 2001, pos, Block.getStateId(iblockstate));
+                boolean flag1 = false;
+
+                if (player.interactionManager.isCreative())
+                {
+                    flag1 = removeBlock(world,pos,player,false);
+                    player.connection.sendPacket(new SPacketBlockChange(world, pos));
+                }
+                else
+                {
+                    ItemStack itemstack1 = player.getHeldItemMainhand();
+                    ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
+                    boolean flag = iblockstate.getBlock().canHarvestBlock(world, pos, player);
+
+                    itemstack1.onBlockDestroyed(world, iblockstate, pos, player);
+
+                    flag1 = removeBlock(world,pos,player, flag);
+                    if (flag1 && flag)
+                    {
+                        iblockstate.getBlock().harvestBlock(world, player, pos, iblockstate, tileentity, itemstack2);
+                    }
+                }
+
+                // Drop experience
+                if (!player.isCreative() && flag1 && exp > 0)
+                {
+                    iblockstate.getBlock().dropXpOnBlockBreak(world, player.getPosition(), exp);
+                }
+                return flag1;
+            }
+        }
+    }
+
+    private boolean removeBlock(World world, BlockPos pos, EntityPlayer player,boolean canHarvest)
+    {
+        IBlockState iblockstate = world.getBlockState(pos);
+        boolean flag = iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest);
+
+        if (flag)
+        {
+            iblockstate.getBlock().onBlockDestroyedByPlayer(world, pos, iblockstate);
+        }
+
+        return flag;
     }
 
     public void drawParticleStreamTo(EntityPlayer source, World world, double x, double y, double z) {
@@ -270,7 +334,7 @@ public class ItemMultiTool extends ModItem {
         Overloaded.proxy.networkWrapper.sendToServer(message);
     }
 
-    public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos) {
+    public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
         ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
         if(itemStack.getItem() != this || world.isAirBlock(pos)) {
             return;
@@ -311,8 +375,6 @@ public class ItemMultiTool extends ModItem {
                     player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
                     break;
                 case SUCCESS:
-                    lastBrokenBlockPos = pos;
-                    state.getBlock().harvestBlock(world, player,pos,state,tileEntity, itemStack);
                     break;
             }
             energy.give(energyStack,true);
