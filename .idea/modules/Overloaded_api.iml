@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="Overloaded:api" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.11.2-0.0.14" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="Overloaded:api" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.cjm721.overloaded" external.system.module.type="sourceSet" external.system.module.version="1.11.2-0.0.16" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="minecraft" name="Minecraft">
       <configuration>
@@ -50,6 +50,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Gradle: codechicken:CodeChickenLib:universal:1.11.2-2.6.0.254" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

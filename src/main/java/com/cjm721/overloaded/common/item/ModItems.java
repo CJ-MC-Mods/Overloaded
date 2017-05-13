@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.item;
 
 import com.cjm721.overloaded.common.config.DevelopmentConfig;
+import com.cjm721.overloaded.common.item.armor.CustomHelmet;
 import com.cjm721.overloaded.common.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.common.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.common.item.crafting.ItemItemCore;
@@ -25,6 +26,9 @@ public class ModItems {
     public static ModItem fluidCore;
     public static ModItem itemCore;
 
+    public static CustomHelmet customHelmet;
+
+
     private static List<ModItem> registerList = new LinkedList<>();
 
     public static void addToSecondaryInit(ModItem item) {
@@ -42,6 +46,8 @@ public class ModItems {
         if(DevelopmentConfig.I.wipStuff) {
             energyShield = new ItemEnergyShield();
             amountSelector = new ItemAmountSelector();
+
+            customHelmet = new CustomHelmet();
         }
     }
 

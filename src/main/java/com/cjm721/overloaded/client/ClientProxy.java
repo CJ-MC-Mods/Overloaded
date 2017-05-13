@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.client;
 
+import codechicken.lib.texture.TextureUtils;
 import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
+import com.cjm721.overloaded.client.render.entity.ArmorModelHelper;
 import com.cjm721.overloaded.client.resource.CompressedResourcePack;
 import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.block.ModBlocks;
@@ -30,6 +32,8 @@ public class ClientProxy extends CommonProxy {
 
         CompressedResourcePack.INSTANCE.addDomain("overloaded");
         CompressedResourcePack.INSTANCE.inject();
+
+        TextureUtils.addIconRegister(new ArmorModelHelper());
     }
 
     @Override
