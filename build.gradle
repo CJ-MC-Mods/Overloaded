@@ -17,13 +17,6 @@ apply plugin: 'maven'
 apply plugin: 'idea'
 
 
-repositories  {
-    maven {
-        name 'CB Maven'
-        url "http://chickenbones.net/maven/"
-    }
-}
-
 ext.configFile = file "build.properties"
 
 //repositories {
@@ -88,8 +81,6 @@ dependencies {
 
 //    provided files('run/mods/CoFHCore-1.10.2-4.1.0.155-universal.jar')
     // deobfCompile "com.github.mcjty:compatlayer:1.11.2-0.2.5"
-
-    compile "codechicken:CodeChickenLib:${project.config.mcversion}-${project.config.CCLIB_version}:universal"
 }
 
 processResources

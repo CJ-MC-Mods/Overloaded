@@ -29,7 +29,5 @@ public enum CompressedConfig implements IConfig {
         }, "Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<recipe enabled>", Pattern.compile(".+:.+:\\d+:.+")).getStringList();
 
         maxTextureWidth = config.get(category, "maxTextureWidth", 512, "Maximum Texture Resolution of a single block, WARNING setting this to high can break your game's textures / cause you to crash. Higher number also means more memory usage").getInt();
-
-
     }
 }
