@@ -13,16 +13,16 @@
   <component name="McpModuleSettings">
     <option name="mappingFiles">
       <set>
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\mcp-notch.srg" />
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\mcp-srg.srg" />
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\mcp.exc" />
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\notch-mcp.srg" />
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\notch-srg.srg" />
-        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot_nodoc\20161111\1.11.2\srgs\srg.exc" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\mcp-notch.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\mcp-srg.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\mcp.exc" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\notch-mcp.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\notch-srg.srg" />
+        <option value="C:\Users\CJ\.gradle\caches\minecraft\de\oceanlabs\mcp\mcp_snapshot\20161111\1.10.2\srgs\srg.exc" />
       </set>
     </option>
-    <option name="mcpVersion" value="snapshot_nodoc_20161111" />
-    <option name="minecraftVersion" value="1.11.2" />
+    <option name="mcpVersion" value="snapshot_20161111" />
+    <option name="minecraftVersion" value="1.10.2" />
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="true">
     <exclude-output />

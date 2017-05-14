@@ -273,7 +273,7 @@ public class ItemMultiTool extends ModItem {
             return;
 
         ItemStack stack = event.getItemStack();
-        if(stack.getItem().equals(this)) {
+        if(stack != null && stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos());
         }
     }
@@ -287,7 +287,7 @@ public class ItemMultiTool extends ModItem {
 
         ItemStack stack = event.getItemStack();
 
-        if(stack.getItem().equals(this)) {
+        if(stack != null && stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
             RayTraceResult result = entityLiving.rayTrace(MultiToolConfig.reach, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -452,6 +452,8 @@ public class ItemMultiTool extends ModItem {
     private boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
+        if(!worldIn.canBlockBePlaced(itemBlock.getBlock(), newPosition, false,facing,player,searchStack))
+            return false;
 
         BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player,new BlockSnapshot(worldIn,newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
         if(event.isCanceled())
@@ -481,6 +483,9 @@ public class ItemMultiTool extends ModItem {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
             foundStack.splitStack(1);
+            if(foundStack.stackSize == 0) {
+                player.inventory.removeStackFromSlot(foundStackSlot);
+            }
             return true;
         }
 
@@ -491,7 +496,7 @@ public class ItemMultiTool extends ModItem {
         int size = player.inventory.getSizeInventory();
         for(int i = 0; i < size; i++) {
             ItemStack stack = player.inventory.getStackInSlot(i);
-            if(stack.isItemEqual(item))
+            if(stack != null  && stack.isItemEqual(item))
                 return i;
         }
 

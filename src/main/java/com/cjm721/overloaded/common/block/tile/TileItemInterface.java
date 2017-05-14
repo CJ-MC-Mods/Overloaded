@@ -29,14 +29,16 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     @Override
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        compound.setTag("StoredItem", storedItem.serializeNBT());
+        if(storedItem != null)
+            compound.setTag("StoredItem", storedItem.serializeNBT());
 
         return super.writeToNBT(compound);
     }
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        storedItem = ItemStack.loadItemStackFromNBT((NBTTagCompound)compound.getTag("StoredItem"));
+        if(compound.hasKey("StoredItem"))
+            storedItem = ItemStack.loadItemStackFromNBT((NBTTagCompound)compound.getTag("StoredItem"));
 
         super.readFromNBT(compound);
     }
@@ -116,9 +118,11 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         return stack;
     }
 
-    @Nonnull
+    @Nullable
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if(storedItem == null)
+            return null;
         ItemStack copy = storedItem.copy();
         copy.stackSize = Math.min(copy.stackSize, amount);
 
@@ -148,14 +152,13 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         return storedItem.hasCapability(capability,facing) || super.hasCapability(capability, facing);
     }
 
-    @Nonnull
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
             return (T) this;
         }
 
-        T t = storedItem.getCapability(capability, facing);
+        T t = storedItem == null ? null : storedItem.getCapability(capability, facing);
 
         if(t == null)
             return super.getCapability(capability, facing);
