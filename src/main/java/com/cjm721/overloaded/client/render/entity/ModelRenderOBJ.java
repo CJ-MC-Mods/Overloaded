@@ -21,24 +21,20 @@ import org.lwjgl.opengl.GL11;
 @SideOnly(Side.CLIENT)
 public class ModelRenderOBJ extends ModelRenderer {
     //    private CCModel model;
-    public ResourceLocation texture;
     private int displayList;
     private boolean compiled = false;
     private IBakedModel objModel;
     public float scale = 0;
 
-    public ModelRenderOBJ(ModelBase baseModel, ResourceLocation customModel, ResourceLocation texture) {
+    public ModelRenderOBJ(ModelBase baseModel, ResourceLocation customModel) {
         super(baseModel);
 
         try {
             objModel = OBJLoader.INSTANCE.loadModel(customModel).bake(TransformUtils.DEFAULT_TOOL, DefaultVertexFormats.ITEM, TextureUtils.bakedTextureGetter);
-
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.texture = texture;
     }
 
     @Override

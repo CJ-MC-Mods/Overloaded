@@ -21,7 +21,7 @@ public class ModelCustomArmor extends ModelBiped {
     public ModelCustomArmor(float modelSize) {
         super(modelSize);
 
-        this.head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/armor/custom_helmet.obj"),        new ResourceLocation(MODID,"armor/custom_helmet"));
+        this.head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/armor/custom_helmet.obj"));
 
         this.textureHeight = 1024;
         this.textureWidth = 1024;
