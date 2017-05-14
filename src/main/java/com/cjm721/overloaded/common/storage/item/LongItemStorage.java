@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.common.util.ItemUtil.itemsAreEqual;
 import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
@@ -19,7 +20,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
 
     public LongItemStorage() {
-        longItemStack = new LongItemStack(ItemStack.EMPTY,0);
+        longItemStack = new LongItemStack(null,0);
     }
 
     /**
@@ -52,13 +53,13 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * @return ItemStack in given slot. May be null.
      **/
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack getStackInSlot(int slot) {
-        if(!longItemStack.getItemStack().isEmpty()) {
-            longItemStack.getItemStack().setCount((int) Math.min(Integer.MAX_VALUE,longItemStack.getAmount()));
+        if(longItemStack.getItemStack() != null) {
+            longItemStack.getItemStack().stackSize = (int) Math.min(Integer.MAX_VALUE,longItemStack.getAmount());
             return longItemStack.getItemStack();
         }
-        return ItemStack.EMPTY;
+        return null;
     }
 
     /**
@@ -73,16 +74,16 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
      **/
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack insertItem(int slot,@Nonnull ItemStack stack, boolean simulate) {
-        LongItemStack result = give(new LongItemStack(stack,stack.getCount()), !simulate);
+        LongItemStack result = give(new LongItemStack(stack,stack.stackSize), !simulate);
 
         if(result.getAmount() == 0) {
-            return ItemStack.EMPTY;
+            return null;
         }
 
         ItemStack toReturn = stack.copy();
-        toReturn.setCount((int) result.getAmount());
+        toReturn.stackSize = (int) result.getAmount();
 
         return toReturn;
     }
@@ -98,34 +99,23 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
      * @return ItemStack extracted from the slot, must be null, if nothing can be extracted
      **/
     @Override
-    @Nonnull
+    @Nullable
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        LongItemStack result = take(new LongItemStack(ItemStack.EMPTY,amount), !simulate);
+        LongItemStack result = take(new LongItemStack(null,amount), !simulate);
 
         if(result.getAmount() == 0L) {
-            return ItemStack.EMPTY;
+            return null;
         }
 
         ItemStack toReturn = result.getItemStack().copy();
-        toReturn.setCount((int) result.getAmount());
+        toReturn.stackSize = (int) result.getAmount();
 
         return toReturn;
     }
 
-    /**
-     * Retrieves the maximum stack size allowed to exist in the given slot.
-     *
-     * @param slot Slot to query.
-     * @return The maximum stack size allowed in the slot.
-     */
-    @Override
-    public int getSlotLimit(int slot) {
-        return Integer.MAX_VALUE;
-    }
-
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        if(!longItemStack.getItemStack().isEmpty()) {
+        if(longItemStack.getItemStack() != null) {
             compound.setTag("Item", longItemStack.getItemStack().serializeNBT());
             compound.setLong("Count", longItemStack.getAmount());
         }
@@ -135,7 +125,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        ItemStack storedItem = compound.hasKey("Item") ? new ItemStack(compound.getCompoundTag("Item")) : null;
+        ItemStack storedItem = compound.hasKey("Item") ? ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item")) : null;
         if(storedItem != null) {
             long storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
             longItemStack = new LongItemStack(storedItem, storedAmount);
@@ -151,7 +141,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Nonnull
     @Override
     public LongItemStack give(@Nonnull LongItemStack stack, boolean doAction) {
-        if(longItemStack.getItemStack().isEmpty()) {
+        if(longItemStack.getItemStack() == null) {
             if(doAction) {
                 longItemStack = new LongItemStack(stack.getItemStack(), stack.getAmount());
             }
@@ -181,7 +171,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
             longItemStack.removeAmount(result);
 
             if(longItemStack.getAmount() == 0L)
-                longItemStack.setItemStack(ItemStack.EMPTY);
+                longItemStack.setItemStack(null);
         }
 
         return toReturn;

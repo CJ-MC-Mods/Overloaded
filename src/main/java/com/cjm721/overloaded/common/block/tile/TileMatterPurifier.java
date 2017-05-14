@@ -27,14 +27,11 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
     public TileMatterPurifier() {
         fluidStorage = new LongFluidStorage();
         energyStorage = new LongEnergyStorage();
-        input = ItemStack.EMPTY;
+        input = null;
     }
 
     @Override
     public void update() {
-        if(!input.isEmpty()) {
-
-        }
     }
 
     @Override
@@ -43,7 +40,7 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
 
         fluidStorage.readFromNBT(compound.getCompoundTag("Fluid"));
         energyStorage.readFromNBT(compound.getCompoundTag("Energy"));
-        input = new ItemStack(compound.getCompoundTag("Item"));
+        input = ItemStack.loadItemStackFromNBT(compound.getCompoundTag("Item"));
     }
 
     @Override

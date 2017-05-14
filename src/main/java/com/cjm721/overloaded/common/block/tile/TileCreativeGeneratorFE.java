@@ -25,7 +25,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
 
         BlockPos pos = this.getPos();
         for(EnumFacing facing: EnumFacing.values()) {
-            TileEntity te = world.getTileEntity(pos.add(facing.getDirectionVec()));
+            TileEntity te = getWorld().getTileEntity(pos.add(facing.getDirectionVec()));
 
             if(te == null)
                 continue;

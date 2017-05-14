@@ -71,19 +71,18 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            if(heldItem == null && hand == EnumHand.MAIN_HAND) {
                 LongEnergyStack stack = ((TileInfiniteCapacitor) worldIn.getTileEntity(pos)).getStorage().status();
 
                         // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
                 double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
-                playerIn.sendStatusMessage(new TextComponentString(String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)),false);
+                playerIn.addChatMessage(new TextComponentString(String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)));
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Nullable

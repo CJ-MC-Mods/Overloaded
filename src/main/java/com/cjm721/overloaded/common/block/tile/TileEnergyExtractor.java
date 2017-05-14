@@ -57,7 +57,7 @@ public class TileEnergyExtractor extends TileEntity implements ITickable {
             if(facing == front)
                 continue;
 
-            TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
+            TileEntity te = getWorld().getTileEntity(me.add(facing.getDirectionVec()));
             if(te == null || !te.hasCapability(ENERGY, facing.getOpposite()))
                 continue;
 

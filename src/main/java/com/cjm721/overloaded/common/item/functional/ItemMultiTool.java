@@ -76,20 +76,16 @@ public class ItemMultiTool extends ModItem {
         GameRegistry.register(this);
     }
 
-    @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-        return enchantment != null && enchantment.type == EnumEnchantmentType.DIGGER;
-    }
+//    @Override
+//    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+//        return enchantment != null && enchantment.type == EnumEnchantmentType.DIGGER;
+//    }
 
     @Override
     public int getItemEnchantability(ItemStack stack) {
         return 15;
     }
 
-    @Override
-    public boolean isEnchantable(@Nonnull ItemStack stack) {
-        return this.getItemStackLimit(stack) == 1;
-    }
 
     @SideOnly(Side.CLIENT)
     @Override
@@ -120,26 +116,18 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Override
-    public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
-        return false;
-    }
-
-    @Override
     public boolean canHarvestBlock(IBlockState blockIn) {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-        if(worldIn.isRemote) {
-            // TODO Make distance a config option
-            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(MultiToolConfig.reach)));
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-//                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
+    public ActionResult<ItemStack> onItemRightClick(@Nonnull ItemStack itemStackIn, World worldIn, EntityPlayer player, EnumHand hand) {
+        RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(MultiToolConfig.reach)));
+        if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
 
-            }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
@@ -217,7 +205,6 @@ public class ItemMultiTool extends ModItem {
                 else
                 {
                     ItemStack itemstack1 = player.getHeldItemMainhand();
-                    ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
                     boolean flag = iblockstate.getBlock().canHarvestBlock(world, pos, player);
 
                     itemstack1.onBlockDestroyed(world, iblockstate, pos, player);
@@ -225,7 +212,7 @@ public class ItemMultiTool extends ModItem {
                     flag1 = removeBlock(world,pos,player, flag);
                     if (flag1 && flag)
                     {
-                        iblockstate.getBlock().harvestBlock(world, player, pos, iblockstate, tileentity, itemstack2);
+                        iblockstate.getBlock().harvestBlock(world, player, pos, iblockstate, tileentity, itemstack1.copy());
                     }
                 }
 
@@ -282,7 +269,7 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
+        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().thePlayer)
             return;
 
         ItemStack stack = event.getItemStack();
@@ -295,7 +282,7 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
-        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
+        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().thePlayer)
             return;
 
         ItemStack stack = event.getItemStack();
@@ -322,7 +309,7 @@ public class ItemMultiTool extends ModItem {
         for(ItemStack stack: event.getDrops()) {
             if (world.rand.nextFloat() <= chance) {
                 EntityItem toSpawn = new EntityItem(world, player.posX, player.posY, player.posZ, stack);
-                world.spawnEntity(toSpawn);
+                world.spawnEntityInWorld(toSpawn);
             }
         }
         event.getDrops().clear();
@@ -354,7 +341,7 @@ public class ItemMultiTool extends ModItem {
             tag.setTag("Item", blockTag);
             itemStack.setTagCompound(tag);
             ITextComponent component = stackToPlace.getTextComponent();
-            player.sendStatusMessage( new TextComponentString("Bound tool to ").appendSibling(component), true);
+            player.addChatMessage( new TextComponentString("Bound tool to ").appendSibling(component));
         } else {
             IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
@@ -363,13 +350,13 @@ public class ItemMultiTool extends ModItem {
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
             switch(breakAndUseEnergy(world, pos, energyStack,player,efficiency,unbreaking)) {
                 case FAIL_REMOVE:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
+                    player.addChatMessage( new TextComponentString("Unable to break block, reason unknown"));
                     break;
                 case FAIL_ENERGY:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
+                    player.addChatMessage( new TextComponentString("Unable to break block, not enough energy"));
                     break;
                 case FAIL_UNBREAKABLE:
-                    player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
+                    player.addChatMessage( new TextComponentString("Block is unbreakable"));
                     break;
                 case SUCCESS:
                     break;
@@ -389,14 +376,14 @@ public class ItemMultiTool extends ModItem {
         NBTTagCompound tagCompound = multiTool.getTagCompound();
 
         if(tagCompound == null || !tagCompound.hasKey("Item")){
-            player.sendStatusMessage( new TextComponentString("No block type selected to place."), true);
+            player.addChatMessage( new TextComponentString("No block type selected to place."));
             return;
         }
 
         NBTTagCompound itemTag = tagCompound.getCompoundTag("Item");
-        ItemStack blockStack = new ItemStack(itemTag);
-        if(!(blockStack.getItem() instanceof ItemBlock)) {
-            player.sendStatusMessage(new TextComponentString("No valid block type selected to place."), true);
+        ItemStack blockStack = ItemStack.loadItemStackFromNBT(itemTag);
+        if(blockStack == null || !(blockStack.getItem() instanceof ItemBlock)) {
+            player.addChatMessage(new TextComponentString("No valid block type selected to place."));
             return;
         }
 
@@ -465,9 +452,6 @@ public class ItemMultiTool extends ModItem {
     private boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
-        if(!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false,facing, null)) {
-            return false;
-        }
 
         BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player,new BlockSnapshot(worldIn,newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
         if(event.isCanceled())
@@ -490,13 +474,13 @@ public class ItemMultiTool extends ModItem {
 
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
-        IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
+        IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, foundStack);
 
         if (itemBlock.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1))
         {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-            foundStack.shrink(1);
+            foundStack.splitStack(1);
             return true;
         }
 
@@ -514,8 +498,8 @@ public class ItemMultiTool extends ModItem {
         return -1;
     }
 
-    @Nullable
     @Override
+    @Nonnull
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
         return new EnergyWrapper(stack);
     }

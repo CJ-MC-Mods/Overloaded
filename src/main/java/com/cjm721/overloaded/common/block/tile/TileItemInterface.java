@@ -9,6 +9,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -21,7 +23,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     private ItemStack storedItem;
 
     public TileItemInterface() {
-        storedItem = ItemStack.EMPTY;
+        storedItem = null;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        storedItem = new ItemStack((NBTTagCompound)compound.getTag("StoredItem"));
+        storedItem = ItemStack.loadItemStackFromNBT((NBTTagCompound)compound.getTag("StoredItem"));
 
         super.readFromNBT(compound);
     }
@@ -56,6 +58,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void onDataPacket(NetworkManager net, @Nonnull SPacketUpdateTileEntity pkt) {
         this.readFromNBT(pkt.getNbtCompound());
     }
@@ -82,25 +85,25 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
      * @return The remaining ItemStack that was not inserted (if the entire stack is accepted, then return null).
      * May be the same as the input ItemStack if unchanged, otherwise a new ItemStack.
      **/
-    @Nonnull
+    @Nullable
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        if(storedItem.isEmpty()) {
-            if(stack.getCount() == 1) {
+        if(storedItem == null) {
+            if(stack.stackSize == 1) {
                 if(!simulate) {
                     this.storedItem = stack;
                     updateClient();
                     markDirty();
                 }
-                return ItemStack.EMPTY;
+                return null;
             }
 
             ItemStack storedCopy = stack.copy();
-            storedCopy.setCount(1);
+            storedCopy.stackSize = 1;
 
             ItemStack returnCopy = stack.copy();
 
-            returnCopy.setCount(stack.getCount() - 1);
+            returnCopy.stackSize = stack.stackSize - 1;
 
             if(!simulate) {
                 this.storedItem = storedCopy;
@@ -117,12 +120,12 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         ItemStack copy = storedItem.copy();
-        copy.setCount(Math.min(copy.getCount(), amount));
+        copy.stackSize = Math.min(copy.stackSize, amount);
 
         if(!simulate) {
-            storedItem.setCount(storedItem.getCount() - copy.getCount());
-            if(storedItem.getCount() == 0) {
-                storedItem = ItemStack.EMPTY;
+            storedItem.stackSize = storedItem.stackSize - copy.stackSize;
+            if(storedItem.stackSize == 0) {
+                storedItem = null;
             }
             markDirty();
             updateClient();
@@ -137,11 +140,6 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
     @Override
-    public int getSlotLimit(int slot) {
-        return 1;
-    }
-
-    @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
         if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
             return true;
@@ -150,7 +148,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         return storedItem.hasCapability(capability,facing) || super.hasCapability(capability, facing);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
@@ -170,7 +168,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
     public void breakBlock() {
-        if(!storedItem.isEmpty())
-            this.getWorld().spawnEntity(new EntityItem(this.getWorld(),getPos().getX(), getPos().getY(),getPos().getZ(),storedItem));
+        if(storedItem != null)
+            this.getWorld().spawnEntityInWorld(new EntityItem(this.getWorld(),getPos().getX(), getPos().getY(),getPos().getZ(),storedItem));
     }
 }

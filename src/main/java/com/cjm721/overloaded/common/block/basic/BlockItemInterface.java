@@ -63,12 +63,12 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         ((TileItemInterface)worldIn.getTileEntity(pos)).breakBlock();
         super.breakBlock(worldIn, pos, state);
     }
 
-    @Nullable
+    @Nonnull
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileItemInterface();
@@ -100,7 +100,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(worldIn.isRemote)
             return true;
 
@@ -112,23 +112,23 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
         TileItemInterface anInterface = (TileItemInterface)te;
 
         ItemStack stack = anInterface.getStoredItem();
-        if(stack.isEmpty()) {
+        if(stack == null) {
             ItemStack handStack = playerIn.getHeldItem(hand);
 
-            if(handStack.isEmpty())
+            if(handStack == null)
                 return true;
 
             ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
             playerIn.setHeldItem(hand,returnedItem);
         } else {
-            if(!playerIn.getHeldItem(hand).isEmpty())
+            if(playerIn.getHeldItem(hand) != null)
                 return true;
 
             ItemStack toSpawn = anInterface.extractItem(0, 1,false);
-            if(toSpawn.isEmpty())
+            if(toSpawn == null)
                return true;
 
-            worldIn.spawnEntity(new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, toSpawn));
+            worldIn.spawnEntityInWorld(new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, toSpawn));
         }
 
         return true;

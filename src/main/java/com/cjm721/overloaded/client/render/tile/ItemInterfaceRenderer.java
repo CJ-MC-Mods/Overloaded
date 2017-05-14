@@ -27,7 +27,7 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
     private void renderItem(TileItemInterface te) {
         ItemStack stack = te.getStoredItem();
 
-        if(stack.isEmpty())
+        if(stack == null)
             return;
 
         RenderHelper.enableStandardItemLighting();

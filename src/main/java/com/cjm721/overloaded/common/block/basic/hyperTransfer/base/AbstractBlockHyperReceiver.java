@@ -14,6 +14,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode implements ITileEntityProvider {
 
@@ -22,9 +23,8 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack heldItem = playerIn.getHeldItem(hand);
-        if(heldItem.getItem().equals(ModItems.linkingCard)) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if(heldItem != null && heldItem.getItem().equals(ModItems.linkingCard)) {
             NBTTagCompound tag = heldItem.getTagCompound();
             if(tag == null) {
                 tag = new NBTTagCompound();
@@ -35,12 +35,12 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
             heldItem.setTagCompound(tag);
 
             if(worldIn.isRemote) {
-                playerIn.sendStatusMessage(new TextComponentString(String.format("Recorded: World: %d Position: %s", worldId, pos.toString())), false);
+                playerIn.addChatMessage(new TextComponentString(String.format("Recorded: World: %d Position: %s", worldId, pos.toString())));
             }
 
             return true;
         } else {
-            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+            return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem,side, hitX, hitY, hitZ);
         }
     }
 

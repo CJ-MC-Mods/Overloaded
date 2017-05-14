@@ -80,20 +80,19 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            if(heldItem == null && hand == EnumHand.MAIN_HAND) {
                 LongItemStack stack = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage().status();
-                if(stack.getItemStack().isEmpty()) {
-                    playerIn.sendStatusMessage(new TextComponentString("Item: EMPTY"), false);
+                if(stack.getItemStack() == null) {
+                    playerIn.addChatMessage(new TextComponentString("Item: EMPTY"));
                 } else {
-                    playerIn.sendStatusMessage(new TextComponentString("Item: ").appendSibling(stack.getItemStack().getTextComponent()).appendText(String.format(" Amount %,d", stack.getAmount())),false);
+                    playerIn.addChatMessage(new TextComponentString("Item: ").appendSibling(stack.getItemStack().getTextComponent()).appendText(String.format(" Amount %,d", stack.getAmount())));
                 }
                 return true;
             }
         }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
     }
 
     @Override

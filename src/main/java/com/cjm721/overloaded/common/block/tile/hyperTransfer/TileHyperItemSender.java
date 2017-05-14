@@ -22,7 +22,7 @@ public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack,I
     @Override
     @Nonnull
     protected LongItemStack generate(long amount) {
-        return new LongItemStack(ItemStack.EMPTY,amount);
+        return new LongItemStack(null,amount);
     }
 
     @Override

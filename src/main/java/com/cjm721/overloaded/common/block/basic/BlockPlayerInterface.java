@@ -103,7 +103,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
             TileEntity te = worldIn.getTileEntity(pos);
 
@@ -115,13 +115,13 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
 
                 if(profile == null){
-                    playerIn.sendMessage(new TextComponentString(String.format("Bound to offline player: %s", placer.toString())));
+                    playerIn.addChatMessage(new TextComponentString(String.format("Bound to offline player: %s", placer.toString())));
                 } else {
-                    playerIn.sendMessage(new TextComponentString("Bound to player: " + profile.getName()));
+                    playerIn.addChatMessage(new TextComponentString("Bound to player: " + profile.getName()));
                 }
             }
         }
 
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, facing, hitX, hitY, hitZ);
     }
 }

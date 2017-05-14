@@ -21,7 +21,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -29,6 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
@@ -84,15 +84,12 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te != null && te instanceof TileInfiniteWaterSource) {
                 IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, facing);
-                FluidActionResult result = FluidUtil.tryFillContainerAndStow(playerIn.getHeldItem(hand), handler,null, Integer.MAX_VALUE, playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
-
-                if(result.isSuccess())
-                    playerIn.setHeldItem(hand, result.getResult());
+                FluidUtil.tryFillContainerAndStow(playerIn.getHeldItem(hand), handler,null, Integer.MAX_VALUE, playerIn);
             }
         }
         return true;

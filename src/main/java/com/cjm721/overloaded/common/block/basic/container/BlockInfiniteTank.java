@@ -10,7 +10,6 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -24,7 +23,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -73,23 +71,20 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            if(heldItem == null && hand == EnumHand.MAIN_HAND) {
                 LongFluidStack storedFluid = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage().getFluidStack();
                 if(storedFluid == null || storedFluid.fluidStack == null) {
-                    playerIn.sendStatusMessage(new TextComponentString("Fluid: EMPTY"), false);
+                    playerIn.addChatMessage(new TextComponentString("Fluid: EMPTY"));
                 } else {
-                    playerIn.sendStatusMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)), false);
+                    playerIn.addChatMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)));
                 }
             } else {
                 TileEntity te = worldIn.getTileEntity(pos);
                 if (te != null && te instanceof TileInfiniteTank) {
                     IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, side);
-                    FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, handler,playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
-                    if(result.isSuccess())
-                        playerIn.setHeldItem(hand, result.getResult());
+                    FluidUtil.interactWithFluidHandler(heldItem, handler,playerIn);
                 }
             }
         }
