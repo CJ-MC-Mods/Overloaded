@@ -78,7 +78,6 @@ public class TileItemManipulator extends TileEntity implements ITickable {
 //                        blockPos,this.facing.getOpposite(),0.5f,0.5f,0.5f);
                 break;
             }
-            world.getChunkFromChunkCoords(0,0)
         }
     }
 
