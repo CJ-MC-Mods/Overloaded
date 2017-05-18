@@ -49,10 +49,12 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         GlStateManager.translate(x,y,z);
         GlStateManager.disableRescaleNormal();
 
-        renderCore(te,90,-1, 1, new ResourceLocation("overloaded", "textures/blocks/sun/light_yellow.png"));
-        renderCore(te,0,1,0.98f, new ResourceLocation("overloaded", "textures/blocks/sun/yellow.png"));
-        renderCore(te,0,-1, 0.99f, new ResourceLocation("overloaded", "textures/blocks/sun/red.png"));
-        renderCore(te,90,1, 0.97f, new ResourceLocation("overloaded", "textures/blocks/sun/orange.png"));
+        renderCore(te,0,1, 11f, new ResourceLocation("overloaded", "textures/blocks/test.png"));
+
+//        renderCore(te,90,-1, 1, new ResourceLocation("overloaded", "textures/blocks/sun/light_yellow.png"));
+//        renderCore(te,0,1,0.98f, new ResourceLocation("overloaded", "textures/blocks/sun/yellow.png"));
+//        renderCore(te,0,-1, 0.99f, new ResourceLocation("overloaded", "textures/blocks/sun/red.png"));
+//        renderCore(te,90,1, 0.97f, new ResourceLocation("overloaded", "textures/blocks/sun/orange.png"));
 
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
@@ -83,7 +85,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         GlStateManager.disableLighting();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.enableBlend();
-        GlStateManager.disableDepth();
+        //GlStateManager.disableDepth();
 
         World world = te.getWorld();
         // Translate back to local view coordinates so that we can do the acual rendering here
@@ -100,7 +102,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
                 false);
         tessellator.draw();
 
-        GlStateManager.enableDepth();
+        //GlStateManager.enableDepth();
         GlStateManager.disableBlend();
 
         RenderHelper.enableStandardItemLighting();

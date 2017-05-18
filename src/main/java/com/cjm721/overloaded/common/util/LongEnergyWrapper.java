@@ -16,11 +16,11 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class EnergyWrapper implements ICapabilityProvider, IEnergyStorage, IHyperHandlerEnergy {
+public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IHyperHandlerEnergy {
 
     private final ItemStack stack;
 
-    public EnergyWrapper(ItemStack stack) {
+    public LongEnergyWrapper(ItemStack stack) {
         this.stack = stack;
 
         NBTTagCompound tagCompound = this.stack.getTagCompound();

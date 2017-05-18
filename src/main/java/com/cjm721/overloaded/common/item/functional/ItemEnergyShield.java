@@ -4,7 +4,7 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
-import com.cjm721.overloaded.common.util.EnergyWrapper;
+import com.cjm721.overloaded.common.util.LongEnergyWrapper;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
@@ -126,7 +126,7 @@ public class ItemEnergyShield extends ModItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new EnergyWrapper(stack);
+        return new LongEnergyWrapper(stack);
     }
 
     @SideOnly(Side.CLIENT)

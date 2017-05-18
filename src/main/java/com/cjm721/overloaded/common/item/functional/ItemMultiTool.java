@@ -12,11 +12,8 @@ import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.common.util.BlockResult;
-import com.cjm721.overloaded.common.util.EnergyWrapper;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCommandBlock;
-import net.minecraft.block.BlockStructure;
-import net.minecraft.block.SoundType;
+import com.cjm721.overloaded.common.util.LongEnergyWrapper;
+import com.cjm721.overloaded.common.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -33,8 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketBlockChange;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -46,8 +41,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.BlockSnapshot;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -64,6 +57,7 @@ import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.common.util.PlayerInteractionUtil.placeBlock;
 
 public class ItemMultiTool extends ModItem {
 
@@ -120,13 +114,13 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Override
-    public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
-        return false;
+    public boolean canHarvestBlock(IBlockState blockIn) {
+        return true;
     }
 
     @Override
-    public boolean canHarvestBlock(IBlockState blockIn) {
-        return false;
+    public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+        return super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
     }
 
     @Override
@@ -168,16 +162,13 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_ENERGY;
         }
 
-
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
         MinecraftForge.EVENT_BUS.post(event);
 
         if(event.isCanceled())
             return BlockResult.FAIL_REMOVE;
 
-        drawParticleStreamTo(player, worldIn, blockPos.getX(), blockPos.getY(), blockPos.getZ());
-
-        boolean result = tryHarvestBlock(player,worldIn,blockPos);
+        boolean result = PlayerInteractionUtil.tryHarvestBlock(player,worldIn,blockPos);
         if (result) {
             energyStack.amount -= breakCost;
             return BlockResult.SUCCESS;
@@ -185,96 +176,23 @@ public class ItemMultiTool extends ModItem {
         return BlockResult.FAIL_REMOVE;
     }
 
+    public void drawParticleStreamTo(EntityPlayer source, Vec3d endingLocation, EnumParticleTypes type) {
+        double xOffset = 0;//0.25;
+        double yOffset = -.25;
+        double zOffset = 0;//.25;
 
-    public boolean tryHarvestBlock(EntityPlayerMP player, World world, BlockPos pos)
-    {
-        int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(world, player.interactionManager.getGameType(), player, pos);
-        if (exp == -1)
-        {
-            return false;
+        Vec3d startingLocation = source.getPositionEyes(1).addVector(xOffset,yOffset,zOffset);
+        startingLocation = startingLocation.add(source.getLookVec().rotateYaw((float)(Math.PI/-2.0D)).scale(0.5D));
+        Vec3d direction = endingLocation.subtract(startingLocation).normalize();
+
+        startingLocation = startingLocation.add(direction);
+        World world = source.getEntityWorld();
+        double distanceToEnd = endingLocation.distanceTo(startingLocation);
+        while (distanceToEnd > 0.3D) {
+            world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, direction.xCoord, direction.yCoord, direction.zCoord);
+            startingLocation = startingLocation.add(direction.scale(0.25D));
+            distanceToEnd = endingLocation.distanceTo(startingLocation);
         }
-        else
-        {
-            IBlockState iblockstate = world.getBlockState(pos);
-            TileEntity tileentity = world.getTileEntity(pos);
-            Block block = iblockstate.getBlock();
-
-            if ((block instanceof BlockCommandBlock || block instanceof BlockStructure) && !player.canUseCommandBlock())
-            {
-                world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
-                return false;
-            }
-            else
-            {
-                world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
-                boolean flag1;
-
-                if (player.interactionManager.isCreative())
-                {
-                    flag1 = removeBlock(world,pos,player,false);
-                    player.connection.sendPacket(new SPacketBlockChange(world, pos));
-                }
-                else
-                {
-                    ItemStack itemstack1 = player.getHeldItemMainhand();
-                    ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
-                    boolean flag = iblockstate.getBlock().canHarvestBlock(world, pos, player);
-
-                    itemstack1.onBlockDestroyed(world, iblockstate, pos, player);
-
-                    flag1 = removeBlock(world,pos,player, flag);
-                    if (flag1 && flag)
-                    {
-                        iblockstate.getBlock().harvestBlock(world, player, pos, iblockstate, tileentity, itemstack2);
-                    }
-                }
-
-                // Drop experience
-                if (!player.isCreative() && flag1 && exp > 0)
-                {
-                    iblockstate.getBlock().dropXpOnBlockBreak(world, player.getPosition(), exp);
-                }
-                return flag1;
-            }
-        }
-    }
-
-    private boolean removeBlock(World world, BlockPos pos, EntityPlayer player,boolean canHarvest)
-    {
-        IBlockState iblockstate = world.getBlockState(pos);
-        boolean flag = iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest);
-
-        if (flag)
-        {
-            iblockstate.getBlock().onBlockDestroyedByPlayer(world, pos, iblockstate);
-        }
-
-        return flag;
-    }
-
-    public void drawParticleStreamTo(EntityPlayer source, World world, double x, double y, double z) {
-//        Vec3d direction = source.getLookVec().normalize();
-//        double scale = 1.0;
-//        double xoffset = 1.3f;
-//        double yoffset = -.2;
-//        double zoffset = 0.3f;
-//        Vec3d horzdir = direction.normalize();
-//        horzdir = new Vec3d(horzdir.xCoord, 0, horzdir.zCoord);
-//        horzdir = horzdir.normalize();
-//        double cx = source.posX + direction.xCoord * xoffset - direction.yCoord * horzdir.xCoord * yoffset - horzdir.zCoord * zoffset;
-//        double cy = source.posY + source.getEyeHeight() + direction.yCoord * xoffset + (1 - Math.abs(direction.yCoord)) * yoffset;
-//        double cz = source.posZ + direction.zCoord * xoffset - direction.yCoord * horzdir.zCoord * yoffset + horzdir.xCoord * zoffset;
-//        double dx = x - cx;
-//        double dy = y - cy;
-//        double dz = z - cz;
-//        double ratio = Math.sqrt(dx * dx + dy * dy + dz * dz);
-//
-//        while (Math.abs(cx - x) > Math.abs(dx / ratio)) {
-//            world.spawnParticle(EnumParticleTypes.TOWN_AURA, cx, cy, cz, 0.0D, 0.0D, 0.0D);
-//            cx += dx * 0.1 / ratio;
-//            cy += dy * 0.1 / ratio;
-//            cz += dz * 0.1 / ratio;
-//        }
     }
 
 
@@ -287,7 +205,7 @@ public class ItemMultiTool extends ModItem {
 
         ItemStack stack = event.getItemStack();
         if(stack.getItem().equals(this)) {
-            leftClickOnBlockClient(event.getPos());
+            leftClickOnBlockClient(event.getPos(), event.getHitVec());
         }
     }
 
@@ -304,12 +222,12 @@ public class ItemMultiTool extends ModItem {
             EntityPlayer entityLiving = event.getEntityPlayer();
             RayTraceResult result = entityLiving.rayTrace(MultiToolConfig.reach, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                leftClickOnBlockClient(result.getBlockPos());
+                leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
         if(event.isCanceled())
             return;
@@ -328,9 +246,13 @@ public class ItemMultiTool extends ModItem {
         event.getDrops().clear();
     }
 
-    private void leftClickOnBlockClient(BlockPos pos) {
+    @SideOnly(Side.CLIENT)
+    private void leftClickOnBlockClient(BlockPos pos, Vec3d hitVec) {
         IMessage message = new MultiToolLeftClickMessage(pos);
         Overloaded.proxy.networkWrapper.sendToServer(message);
+
+        //EntityPlayerSP player = Minecraft.getMinecraft().player;
+        // drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
     }
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
@@ -404,8 +326,7 @@ public class ItemMultiTool extends ModItem {
         LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
 
         Vec3i sideVector = sideHit.getDirectionVec();
-        BlockPos newPosition = pos.add(sideVector);
-
+        BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
         try {
             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                 return;
@@ -414,42 +335,42 @@ public class ItemMultiTool extends ModItem {
                 switch (sideHit) {
                     case UP:
                         while (newPosition.getY() < playerPos.getY()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case DOWN:
                         while (newPosition.getY() > playerPos.getY()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case NORTH:
                         while (newPosition.getZ() > playerPos.getZ()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case SOUTH:
                         while (newPosition.getZ() < playerPos.getZ()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case EAST:
                         while (newPosition.getX() < playerPos.getX()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
                         break;
                     case WEST:
                         while (newPosition.getX() > playerPos.getX()) {
-                            newPosition = newPosition.add(sideVector);
+                            newPosition.move(sideHit);
                             if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
                                 break;
                         }
@@ -462,66 +383,14 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
-    private boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack, float hitX, float hitY, float hitZ) {
-        // Can we place a block at this Pos
-        ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
-        if(!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false,facing, null)) {
-            return false;
-        }
-
-        BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player,new BlockSnapshot(worldIn,newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
-        if(event.isCanceled())
-            return false;
-
-        long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
-        long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
-
-        if(cost < 0 || energyStack.amount < cost)
-            return false;
-
-        int foundStackSlot = findItemStack(searchStack, player);
-        if(foundStackSlot == -1)
-            return false;
-
-        player.inventory.getStackInSlot(foundStackSlot);
-
-        ItemStack foundStack = player.inventory.getStackInSlot(foundStackSlot);
-
-
-
-        int i = itemBlock.getMetadata(foundStack.getMetadata());
-        IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
-
-        if (itemBlock.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1))
-        {
-            SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
-            worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-            foundStack.shrink(1);
-            return true;
-        }
-
-        return false;
-    }
-
-    private int findItemStack(@Nonnull ItemStack item, @Nonnull EntityPlayerMP player) {
-        int size = player.inventory.getSizeInventory();
-        for(int i = 0; i < size; i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
-            if(stack.isItemEqual(item))
-                return i;
-        }
-
-        return -1;
-    }
-
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new EnergyWrapper(stack);
+        return new LongEnergyWrapper(stack);
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
-      "pickaxe",
+        "pickaxe",
         "shovel",
         "axe"
     );
@@ -536,4 +405,20 @@ public class ItemMultiTool extends ModItem {
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
     }
+
+//
+//    @SubscribeEvent
+//    @SideOnly(Side.CLIENT)
+//    public void renderBlockOverlayEvent(RenderBlockOverlayEvent event) {
+//        EntityPlayer player = event.getPlayer();
+//        if(player == null || player.getHeldItemMainhand().getItem() != this)
+//            return;
+//
+//        RayTraceResult result = player.rayTrace(128,event.getRenderPartialTicks());
+//
+//        if(result == null)
+//            return;
+//
+//        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
+//    }
 }

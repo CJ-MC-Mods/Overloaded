@@ -41,6 +41,7 @@ public final class ModBlocks {
 
     public static ModBlock matterPurifier;
     public static ModBlock fusionCore;
+    public static ModBlock itemManipulator;
 
 
     private static List<ModBlock> registerList = new LinkedList<>();
@@ -70,6 +71,7 @@ public final class ModBlocks {
         if(DevelopmentConfig.I.wipStuff) {
             fusionCore = new BlockFusionCore();
             matterPurifier = new BlockMatterPurifier();
+            itemManipulator = new BlockItemManipulator();
         }
 
         CompressedBlockHandler.initFromConfig();
