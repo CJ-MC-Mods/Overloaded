@@ -2,7 +2,9 @@ package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.config.OverloadedConfig;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -11,7 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "1.11.2",
-        dependencies = "after:forge@[13.20.0.2266,)",   // MC 1.11
+        dependencies = "after:forge@[13.20.0.2266,)",
         useMetadata = true
         )
 public class Overloaded {

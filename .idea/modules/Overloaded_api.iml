@@ -59,6 +59,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Gradle: codechicken:CodeChickenLib:universal:1.11.2-2.6.0.254" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>

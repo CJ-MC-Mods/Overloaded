@@ -15,6 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
@@ -71,7 +72,7 @@ public class TileItemManipulator extends TileEntity implements ITickable {
         for(int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
             if(!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
                 EnumActionResult result = currentItem.getItem().onItemUse(player,getWorld(),blockPos,EnumHand.MAIN_HAND,facing.getOpposite(),0.5f,0.5f,0.5f);
-                System.out.println(result);
+//                System.out.println(result);
 //                currentItem.onItemUse(player,this.getWorld(),blockPos,EnumHand.MAIN_HAND,
 //                        this.facing.getOpposite(),0.5f,0.5f,0.5f);
 //                player.interactionManager.processRightClickBlock(player,this.getWorld(),currentItem,EnumHand.MAIN_HAND,

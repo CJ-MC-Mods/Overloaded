@@ -4,9 +4,6 @@ import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nonnull;
 
-/**
- * Created by CJ on 4/20/2017.
- */
 public enum RecipeEnabledConfig implements IConfig {
     I;
 
@@ -32,6 +29,7 @@ public enum RecipeEnabledConfig implements IConfig {
     public static boolean playerInterface;
     public static boolean itemInterface;
     public static boolean itemManipulator;
+    public static boolean customHelmet;
 
     @Override
     public void init(@Nonnull Configuration config) {
@@ -59,5 +57,6 @@ public enum RecipeEnabledConfig implements IConfig {
         itemInterface = config.get(category, "itemInterface", true).getBoolean();
         itemManipulator = config.get(category, "itemManipulator", true).getBoolean();
 
+        customHelmet = config.get(category, "customHelmet",true).getBoolean();
     }
 }

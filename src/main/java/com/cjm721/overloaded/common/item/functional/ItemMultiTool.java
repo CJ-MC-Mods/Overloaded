@@ -16,6 +16,7 @@ import com.cjm721.overloaded.common.util.LongEnergyWrapper;
 import com.cjm721.overloaded.common.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,6 +24,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -120,7 +122,7 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
-        return super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
+        return player == null || super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
     }
 
     @Override
@@ -152,7 +154,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float floatBreakCost = MultiToolConfig.breakBaseCost + (hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (100  / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
+        float floatBreakCost = (hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (MultiToolConfig.breakBaseCost / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
         if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
             return BlockResult.FAIL_ENERGY;
 
@@ -188,8 +190,9 @@ public class ItemMultiTool extends ModItem {
         startingLocation = startingLocation.add(direction);
         World world = source.getEntityWorld();
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
-        while (distanceToEnd > 0.3D) {
-            world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, direction.xCoord, direction.yCoord, direction.zCoord);
+        // Make the reach check unnessicary * Change to for loop
+        while (distanceToEnd > 0.3D && distanceToEnd < (MultiToolConfig.reach * 2)) {
+            world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
         }
@@ -251,8 +254,8 @@ public class ItemMultiTool extends ModItem {
         IMessage message = new MultiToolLeftClickMessage(pos);
         Overloaded.proxy.networkWrapper.sendToServer(message);
 
-        //EntityPlayerSP player = Minecraft.getMinecraft().player;
-        // drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+         drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
     }
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
@@ -280,24 +283,25 @@ public class ItemMultiTool extends ModItem {
         } else {
             IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
-
-            int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
-            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
-            switch(breakAndUseEnergy(world, pos, energyStack,player,efficiency,unbreaking)) {
-                case FAIL_REMOVE:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
-                    break;
-                case FAIL_ENERGY:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
-                    break;
-                case FAIL_UNBREAKABLE:
-                    player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
-                    break;
-                case SUCCESS:
-                    break;
+            try {
+                int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
+                int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+                switch(breakAndUseEnergy(world, pos, energyStack,player,efficiency,unbreaking)) {
+                    case FAIL_REMOVE:
+                        player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
+                        break;
+                    case FAIL_ENERGY:
+                        player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
+                        break;
+                    case FAIL_UNBREAKABLE:
+                        player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
+                        break;
+                    case SUCCESS:
+                        break;
+                }
+            } finally {
+                energy.give(energyStack,true);
             }
-            energy.give(energyStack,true);
-
         }
     }
 

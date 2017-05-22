@@ -8,6 +8,8 @@ import com.cjm721.overloaded.common.item.functional.ItemAmountSelector;
 import com.cjm721.overloaded.common.item.functional.ItemEnergyShield;
 import com.cjm721.overloaded.common.item.functional.ItemLinkingCard;
 import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
+import com.cjm721.overloaded.common.item.functional.armor.ItemCustomHelmet;
+import com.cjm721.overloaded.common.util.IModRegistrable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,9 +27,11 @@ public class ModItems {
     public static ModItem fluidCore;
     public static ModItem itemCore;
 
-    private static List<ModItem> registerList = new LinkedList<>();
+    public static ItemCustomHelmet customHelmet;
 
-    public static void addToSecondaryInit(ModItem item) {
+    private static List<IModRegistrable> registerList = new LinkedList<>();
+
+    public static void addToSecondaryInit(IModRegistrable item) {
         registerList.add(item);
     }
 
@@ -42,17 +46,18 @@ public class ModItems {
         if(DevelopmentConfig.I.wipStuff) {
             energyShield = new ItemEnergyShield();
             amountSelector = new ItemAmountSelector();
+            customHelmet = new ItemCustomHelmet();
         }
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        for(ModItem item: registerList)
+        for(IModRegistrable item: registerList)
             item.registerModel();
     }
 
     public static void registerRecipes() {
-        for(ModItem item: registerList)
+        for(IModRegistrable item: registerList)
             item.registerRecipe();
     }
 }

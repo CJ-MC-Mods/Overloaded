@@ -1,17 +1,11 @@
 package com.cjm721.overloaded.common.item;
 
+import com.cjm721.overloaded.common.util.IModRegistrable;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ModItem extends Item {
+public abstract class ModItem extends Item implements IModRegistrable {
 
     public ModItem() {
         ModItems.addToSecondaryInit(this);
     }
-
-    @SideOnly(Side.CLIENT)
-    public abstract void registerModel();
-
-    public abstract void registerRecipe();
 }
