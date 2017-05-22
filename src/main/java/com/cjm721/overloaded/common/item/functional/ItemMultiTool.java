@@ -301,7 +301,7 @@ public class ItemMultiTool extends ModItem {
         if(event.isCanceled())
             return;
         EntityPlayer player = event.getHarvester();
-        if(player == null || event.getHarvester().getHeldItemMainhand().getItem() != this)
+        if(player == null || player.getHeldItemMainhand() == null || player.getHeldItemMainhand().getItem() != this)
             return;
 
         World world = event.getWorld();
