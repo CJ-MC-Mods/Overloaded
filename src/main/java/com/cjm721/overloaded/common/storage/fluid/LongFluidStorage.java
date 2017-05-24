@@ -18,7 +18,6 @@ import static com.cjm721.overloaded.common.util.NumberUtil.addToMax;
 
 public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertible {
 
-    @Nonnull
     private LongFluidStack storedFluid;
 
     public LongFluidStorage() {
@@ -34,7 +33,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
     @Override
     public IFluidTankProperties[] getTankProperties() {
         return new IFluidTankProperties[] {
-                new FluidTankProperties(FluidRegistry.getFluidStack(storedFluid.fluidStack.getFluid().getName(),
+                new FluidTankProperties(FluidRegistry.getFluidStack(storedFluid.fluidStack == null ? null : storedFluid.fluidStack.getFluid().getName(),
                         (int) Math.min(Integer.MAX_VALUE,storedFluid.amount)), Integer.MAX_VALUE, true, true)
         };
     }
