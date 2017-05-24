@@ -90,7 +90,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState,@Nonnull IBlockAccess worldIn,@Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -110,9 +110,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
             if(te instanceof TilePlayerInterface) {
                 UUID placer = ((TilePlayerInterface) te).getPlacer();
 
-
                 GameProfile profile = worldIn.getMinecraftServer().getPlayerProfileCache().getProfileByUUID(placer);
-
 
                 if(profile == null){
                     playerIn.sendMessage(new TextComponentString(String.format("Bound to offline player: %s", placer.toString())));
