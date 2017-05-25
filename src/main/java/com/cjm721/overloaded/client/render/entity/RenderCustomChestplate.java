@@ -21,9 +21,9 @@ public class RenderCustomChestplate extends ModelBiped {
         this.bipedRightArm.cubeList.clear();
         this.bipedLeftArm.cubeList.clear();
 
-        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_helmet.obj"));
-        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_helmet.obj"));
-        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_helmet.obj"));
+        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_body.obj"));
+        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_right_arm.obj"));
+        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_left_arm.obj"));
 
         this.bipedBody.addChild(body);
         this.bipedRightArm.addChild(rightArm);
