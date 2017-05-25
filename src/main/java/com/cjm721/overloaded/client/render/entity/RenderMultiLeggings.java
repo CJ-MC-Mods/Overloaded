@@ -18,10 +18,11 @@ public class RenderMultiLeggings extends ModelBiped {
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 
-
+        ModelRenderOBJ belt = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_belt.obj"));
         ModelRenderOBJ rightLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_leg.obj"));
         ModelRenderOBJ leftLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_leg.obj"));
 
+        this.bipedBody.addChild(belt);
         this.bipedRightLeg.addChild(rightLeg);
         this.bipedLeftLeg.addChild(leftLeg);
     }

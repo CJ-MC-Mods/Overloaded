@@ -9,15 +9,11 @@ import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
-import com.cjm721.overloaded.common.storage.LongEnergyStack;
-import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.common.util.BlockResult;
 import com.cjm721.overloaded.common.util.IntEnergyWrapper;
-import com.cjm721.overloaded.common.util.LongEnergyWrapper;
 import com.cjm721.overloaded.common.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,7 +21,6 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -60,7 +55,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static com.cjm721.overloaded.common.util.PlayerInteractionUtil.placeBlock;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -175,7 +169,7 @@ public class ItemMultiTool extends ModItem {
 
         boolean result = PlayerInteractionUtil.tryHarvestBlock(player,worldIn,blockPos);
         if (result) {
-            energy.extractEnergy(breakCost,true);
+            energy.extractEnergy(breakCost,false);
             return BlockResult.SUCCESS;
         }
         return BlockResult.FAIL_REMOVE;
@@ -384,7 +378,7 @@ public class ItemMultiTool extends ModItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
+        return new IntEnergyWrapper(stack, nbt);
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
@@ -419,4 +413,9 @@ public class ItemMultiTool extends ModItem {
 //
 //        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 //    }
+
+    @Override
+    public boolean getShareTag() {
+        return true;
+    }
 }

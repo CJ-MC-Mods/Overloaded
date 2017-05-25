@@ -128,7 +128,7 @@ public class PlayerInteractionUtil {
             if(!player.isCreative())
                 foundStack.shrink(1);
 
-            energy.extractEnergy((int)cost,true);
+            energy.extractEnergy((int)cost,false);
             return true;
         }
 

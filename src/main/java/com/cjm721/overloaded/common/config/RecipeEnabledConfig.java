@@ -30,6 +30,9 @@ public enum RecipeEnabledConfig implements IConfig {
     public static boolean itemInterface;
     public static boolean itemManipulator;
     public static boolean customHelmet;
+    public static boolean customChestplate;
+    public static boolean customLeggings;
+    public static boolean customBoots;
 
     @Override
     public void init(@Nonnull Configuration config) {
@@ -58,5 +61,8 @@ public enum RecipeEnabledConfig implements IConfig {
         itemManipulator = config.get(category, "itemManipulator", true).getBoolean();
 
         customHelmet = config.get(category, "customHelmet",true).getBoolean();
+        customChestplate = config.get(category, "customChestplate",true).getBoolean();
+        customLeggings = config.get(category, "customLeggings",true).getBoolean();
+        customBoots = config.get(category, "customBoots",true).getBoolean();
     }
 }

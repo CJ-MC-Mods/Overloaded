@@ -29,14 +29,6 @@ public class RenderMultiChestplate extends ModelBiped {
         this.bipedRightArm.addChild(rightArm);
         this.bipedLeftArm.addChild(leftArm);
 
-        body.offsetY = 0.755F;
-        body.offsetZ = -0.03F;
-        rightArm.offsetY = 0.72F;
-        rightArm.offsetX = -0.205F; //rightArm.offsetX = -0.18F;
-        rightArm.offsetZ = -0.05F;
-        leftArm.offsetY = 0.72F;
-        leftArm.offsetX = 0.21F; //leftArm.offsetX = 0.18F;
-        leftArm.offsetZ = -0.06F;
     }
 
     @Override
