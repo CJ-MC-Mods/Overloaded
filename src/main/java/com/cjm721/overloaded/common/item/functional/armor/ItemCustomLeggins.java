@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.item.functional.armor;
 
 import com.cjm721.overloaded.client.render.entity.RenderCustomHelmet;
+import com.cjm721.overloaded.client.render.entity.RenderCustomLeggins;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -47,7 +48,7 @@ public class ItemCustomLeggins extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderCustomHelmet();
+        return new RenderCustomLeggins();
     }
 
     @SideOnly(Side.CLIENT)

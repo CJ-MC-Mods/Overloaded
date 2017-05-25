@@ -17,9 +17,9 @@ public class RenderCustomChestplate extends ModelBiped {
 
     public RenderCustomChestplate() {
         super(0, 0, 1024, 1024);
-
-        this.bipedHead.cubeList.clear();
-        //this.bipedHeadwear.cubeList.clear();
+        this.bipedBody.cubeList.clear();
+        this.bipedRightArm.cubeList.clear();
+        this.bipedLeftArm.cubeList.clear();
 
         ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_helmet.obj"));
         ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_helmet.obj"));
@@ -50,6 +50,10 @@ public class RenderCustomChestplate extends ModelBiped {
         if (entity != null && entity.isSneaking()) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
+
+        this.bipedBody.render(1);
+        this.bipedRightArm.render(1);
+        this.bipedLeftArm.render(1);
 
         GlStateManager.popMatrix();
 

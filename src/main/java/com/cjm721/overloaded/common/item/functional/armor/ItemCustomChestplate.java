@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.common.item.functional.armor;
 
+import com.cjm721.overloaded.client.render.entity.RenderCustomChestplate;
 import com.cjm721.overloaded.client.render.entity.RenderCustomHelmet;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
@@ -47,7 +48,7 @@ public class ItemCustomChestplate extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderCustomHelmet();
+        return new RenderCustomChestplate();
     }
 
     @SideOnly(Side.CLIENT)
