@@ -9,7 +9,6 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -23,14 +22,14 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class ItemCustomHelmet extends ItemArmor implements IModRegistrable {
+public class ItemCustomChestplate extends ItemArmor implements IModRegistrable {
 
-    public ItemCustomHelmet() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
+    public ItemCustomChestplate() {
+        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.CHEST);
         setMaxDamage(-1);
 
-        setRegistryName("custom_helmet");
-        setUnlocalizedName("custom_helmet");
+        setRegistryName("custom_chestplate");
+        setUnlocalizedName("custom_chestplate");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);

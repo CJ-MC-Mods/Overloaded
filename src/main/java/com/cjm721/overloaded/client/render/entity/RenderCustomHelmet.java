@@ -18,7 +18,13 @@ public class RenderCustomHelmet extends ModelBiped {
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();
 
-        this.bipedHead.addChild(new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/armor/custom_helmet.obj")));
+        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/item/armor/custom_helmet.obj"));
+
+        this.bipedHead.addChild(head);
+
+//        head.offsetY = -0.1F;
+//        head.offsetX = -0.04F;
+//        head.offsetZ = 0.17F;
     }
 
     @Override
@@ -34,7 +40,8 @@ public class RenderCustomHelmet extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedHead.render(1/10F);
+        this.bipedHead.render(1);
+
         GlStateManager.popMatrix();
 
     }

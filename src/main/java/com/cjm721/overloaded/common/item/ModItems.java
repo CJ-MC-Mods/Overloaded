@@ -8,7 +8,10 @@ import com.cjm721.overloaded.common.item.functional.ItemAmountSelector;
 import com.cjm721.overloaded.common.item.functional.ItemEnergyShield;
 import com.cjm721.overloaded.common.item.functional.ItemLinkingCard;
 import com.cjm721.overloaded.common.item.functional.ItemMultiTool;
+import com.cjm721.overloaded.common.item.functional.armor.ItemCustomBoots;
+import com.cjm721.overloaded.common.item.functional.armor.ItemCustomChestplate;
 import com.cjm721.overloaded.common.item.functional.armor.ItemCustomHelmet;
+import com.cjm721.overloaded.common.item.functional.armor.ItemCustomLeggins;
 import com.cjm721.overloaded.common.util.IModRegistrable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -28,6 +31,9 @@ public class ModItems {
     public static ModItem itemCore;
 
     public static ItemCustomHelmet customHelmet;
+    public static ItemCustomChestplate customChestplate;
+    public static ItemCustomLeggins customLeggins;
+    public static ItemCustomBoots customBoots;
 
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
@@ -44,9 +50,12 @@ public class ModItems {
         itemCore = new ItemItemCore();
 
         if(DevelopmentConfig.I.wipStuff) {
-            energyShield = new ItemEnergyShield();
-            amountSelector = new ItemAmountSelector();
+//            energyShield = new ItemEnergyShield();
+//            amountSelector = new ItemAmountSelector();
             customHelmet = new ItemCustomHelmet();
+            customChestplate = new ItemCustomChestplate();
+            customLeggins = new ItemCustomLeggins();
+            customBoots = new ItemCustomBoots();
         }
     }
 

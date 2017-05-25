@@ -254,8 +254,8 @@ public class ItemMultiTool extends ModItem {
         IMessage message = new MultiToolLeftClickMessage(pos);
         Overloaded.proxy.networkWrapper.sendToServer(message);
 
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
-         drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
+//        EntityPlayerSP player = Minecraft.getMinecraft().player;
+//        drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
     }
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
