@@ -13,17 +13,17 @@ public class ArmorModelHelper implements TextureUtils.IIconRegister {
 
     @Override
     public void registerIcons(TextureMap textureMap) {
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_helmet"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_helmet"));
 
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_body"));
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_right_arm"));
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_left_arm"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_body"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_right_arm"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_left_arm"));
 
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_belt"));
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_right_leg"));
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_left_leg"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_belt"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_right_leg"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_left_leg"));
 
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_right_boot"));
-        textureMap.registerSprite(new ResourceLocation(MODID,"armors/custom_left_boot"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_right_boot"));
+        textureMap.registerSprite(new ResourceLocation(MODID,"armors/multi_left_boot"));
     }
 }

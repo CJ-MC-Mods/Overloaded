@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.common.item.functional.armor;
 
-import com.cjm721.overloaded.client.render.entity.RenderCustomBoots;
-import com.cjm721.overloaded.client.render.entity.RenderCustomHelmet;
+import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -13,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,16 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
+public class ItemMultiBoots extends ItemArmor implements IModRegistrable {
 
-public class ItemCustomBoots extends ItemArmor implements IModRegistrable {
-
-    public ItemCustomBoots() {
+    public ItemMultiBoots() {
         super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.FEET);
         setMaxDamage(-1);
 
-        setRegistryName("custom_boots");
-        setUnlocalizedName("custom_boots");
+        setRegistryName("multi_boots");
+        setUnlocalizedName("multi_boots");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
@@ -48,7 +44,7 @@ public class ItemCustomBoots extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderCustomBoots();
+        return new RenderMultiBoots();
     }
 
     @SideOnly(Side.CLIENT)

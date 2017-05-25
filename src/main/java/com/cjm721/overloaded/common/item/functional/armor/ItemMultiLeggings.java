@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.common.item.functional.armor;
 
-import com.cjm721.overloaded.client.render.entity.RenderCustomHelmet;
+import com.cjm721.overloaded.client.render.entity.RenderMultiLeggings;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -9,11 +9,9 @@ import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,16 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
+public class ItemMultiLeggings extends ItemArmor implements IModRegistrable {
 
-public class ItemCustomHelmet extends ItemArmor implements IModRegistrable {
-
-    public ItemCustomHelmet() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
+    public ItemMultiLeggings() {
+        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.LEGS);
         setMaxDamage(-1);
 
-        setRegistryName("custom_helmet");
-        setUnlocalizedName("custom_helmet");
+        setRegistryName("multi_leggings");
+        setUnlocalizedName("multi_leggings");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
@@ -48,7 +44,7 @@ public class ItemCustomHelmet extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderCustomHelmet();
+        return new RenderMultiLeggings();
     }
 
     @SideOnly(Side.CLIENT)

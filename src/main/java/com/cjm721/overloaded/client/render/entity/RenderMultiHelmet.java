@@ -10,15 +10,15 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class RenderCustomHelmet extends ModelBiped {
+public class RenderMultiHelmet extends ModelBiped {
 
-    public RenderCustomHelmet() {
+    public RenderMultiHelmet() {
         super(0,0,1024,1024);
 
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();
 
-        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/item/armor/custom_helmet.obj"));
+        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/item/armor/multi_helmet.obj"));
 
         this.bipedHead.addChild(head);
 

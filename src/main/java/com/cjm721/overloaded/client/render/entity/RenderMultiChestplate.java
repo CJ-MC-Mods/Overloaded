@@ -13,17 +13,17 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 /**
  * Created by CJ on 5/25/2017.
  */
-public class RenderCustomChestplate extends ModelBiped {
+public class RenderMultiChestplate extends ModelBiped {
 
-    public RenderCustomChestplate() {
+    public RenderMultiChestplate() {
         super(0, 0, 1024, 1024);
         this.bipedBody.cubeList.clear();
         this.bipedRightArm.cubeList.clear();
         this.bipedLeftArm.cubeList.clear();
 
-        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_body.obj"));
-        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_right_arm.obj"));
-        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_left_arm.obj"));
+        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_body.obj"));
+        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_arm.obj"));
+        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_arm.obj"));
 
         this.bipedBody.addChild(body);
         this.bipedRightArm.addChild(rightArm);

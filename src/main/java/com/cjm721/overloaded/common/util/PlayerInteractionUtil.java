@@ -19,6 +19,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 
@@ -92,7 +93,7 @@ public class PlayerInteractionUtil {
         return flag;
     }
 
-    public static boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull LongEnergyStack energyStack, float hitX, float hitY, float hitZ) {
+    public static boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull IEnergyStorage energy, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
         if(!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false,facing, null)) {
@@ -104,9 +105,9 @@ public class PlayerInteractionUtil {
             return false;
 
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
-        long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
 
-        if(cost < 0 || energyStack.amount < cost)
+        long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
+        if(cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost)
             return false;
 
         int foundStackSlot = findItemStack(searchStack, player);
@@ -126,6 +127,8 @@ public class PlayerInteractionUtil {
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
             if(!player.isCreative())
                 foundStack.shrink(1);
+
+            energy.extractEnergy((int)cost,true);
             return true;
         }
 

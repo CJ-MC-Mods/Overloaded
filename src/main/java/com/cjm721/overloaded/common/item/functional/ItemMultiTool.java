@@ -12,6 +12,7 @@ import com.cjm721.overloaded.common.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import com.cjm721.overloaded.common.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.common.util.BlockResult;
+import com.cjm721.overloaded.common.util.IntEnergyWrapper;
 import com.cjm721.overloaded.common.util.LongEnergyWrapper;
 import com.cjm721.overloaded.common.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
@@ -43,6 +44,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -60,6 +62,7 @@ import java.util.Set;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.common.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static com.cjm721.overloaded.common.util.PlayerInteractionUtil.placeBlock;
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class ItemMultiTool extends ModItem {
 
@@ -104,8 +107,8 @@ public class ItemMultiTool extends ModItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);
-        tooltip.add("Energy Stored: " + handler.status().getAmount());
+        IEnergyStorage handler = stack.getCapability(ENERGY, null);
+        tooltip.add(String.format("Energy Stored: %d", handler.getEnergyStored()));
 
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
@@ -144,7 +147,7 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull LongEnergyStack energyStack, EntityPlayerMP player, int efficiency, int unbreaking) {
+    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy, EntityPlayerMP player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
@@ -158,9 +161,9 @@ public class ItemMultiTool extends ModItem {
         if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
             return BlockResult.FAIL_ENERGY;
 
-        long breakCost = Math.round(floatBreakCost);
+        int breakCost = Math.round(floatBreakCost);
 
-        if(breakCost < 0 || energyStack.getAmount() < breakCost){
+        if(breakCost < 0 || energy.getEnergyStored() < breakCost){
             return BlockResult.FAIL_ENERGY;
         }
 
@@ -172,7 +175,7 @@ public class ItemMultiTool extends ModItem {
 
         boolean result = PlayerInteractionUtil.tryHarvestBlock(player,worldIn,blockPos);
         if (result) {
-            energyStack.amount -= breakCost;
+            energy.extractEnergy(breakCost,true);
             return BlockResult.SUCCESS;
         }
         return BlockResult.FAIL_REMOVE;
@@ -281,26 +284,22 @@ public class ItemMultiTool extends ModItem {
             ITextComponent component = stackToPlace.getTextComponent();
             player.sendStatusMessage( new TextComponentString("Bound tool to ").appendSibling(component), true);
         } else {
-            IHyperHandlerEnergy energy = itemStack.getCapability(HYPER_ENERGY_HANDLER, null);
-            LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
-            try {
-                int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
-                int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
-                switch(breakAndUseEnergy(world, pos, energyStack,player,efficiency,unbreaking)) {
-                    case FAIL_REMOVE:
-                        player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
-                        break;
-                    case FAIL_ENERGY:
-                        player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
-                        break;
-                    case FAIL_UNBREAKABLE:
-                        player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
-                        break;
-                    case SUCCESS:
-                        break;
-                }
-            } finally {
-                energy.give(energyStack,true);
+            IEnergyStorage energy = itemStack.getCapability(ENERGY, null);
+
+            int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
+            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
+            switch(breakAndUseEnergy(world, pos, energy,player,efficiency,unbreaking)) {
+                case FAIL_REMOVE:
+                    player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
+                    break;
+                case FAIL_ENERGY:
+                    player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
+                    break;
+                case FAIL_UNBREAKABLE:
+                    player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
+                    break;
+                case SUCCESS:
+                    break;
             }
         }
     }
@@ -326,71 +325,66 @@ public class ItemMultiTool extends ModItem {
             return;
         }
 
-        IHyperHandlerEnergy energy = multiTool.getCapability(HYPER_ENERGY_HANDLER, null);
-        LongEnergyStack energyStack = energy.take(new LongEnergyStack(Long.MAX_VALUE),true);
+        IEnergyStorage energy = multiTool.getCapability(ENERGY, null);
 
         Vec3i sideVector = sideHit.getDirectionVec();
         BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
-        try {
-            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                return;
-            if (player.isSneaking()) {
-                BlockPos playerPos = player.getPosition();
-                switch (sideHit) {
-                    case UP:
-                        while (newPosition.getY() < playerPos.getY()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                    case DOWN:
-                        while (newPosition.getY() > playerPos.getY()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                    case NORTH:
-                        while (newPosition.getZ() > playerPos.getZ()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                    case SOUTH:
-                        while (newPosition.getZ() < playerPos.getZ()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                    case EAST:
-                        while (newPosition.getX() < playerPos.getX()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                    case WEST:
-                        while (newPosition.getX() > playerPos.getX()) {
-                            newPosition.move(sideHit);
-                            if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energyStack, hitX, hitY, hitZ))
-                                break;
-                        }
-                        break;
-                }
+
+        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+            return;
+        if (player.isSneaking()) {
+            BlockPos playerPos = player.getPosition();
+            switch (sideHit) {
+                case UP:
+                    while (newPosition.getY() < playerPos.getY()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
+                case DOWN:
+                    while (newPosition.getY() > playerPos.getY()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
+                case NORTH:
+                    while (newPosition.getZ() > playerPos.getZ()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
+                case SOUTH:
+                    while (newPosition.getZ() < playerPos.getZ()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
+                case EAST:
+                    while (newPosition.getX() < playerPos.getX()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
+                case WEST:
+                    while (newPosition.getX() > playerPos.getX()) {
+                        newPosition.move(sideHit);
+                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                            break;
+                    }
+                    break;
             }
-        }
-        finally {
-            energy.give(energyStack, true);
         }
     }
 
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new LongEnergyWrapper(stack);
+        return new IntEnergyWrapper(stack);
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(

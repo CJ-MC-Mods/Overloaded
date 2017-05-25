@@ -10,20 +10,24 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class RenderCustomLeggins  extends ModelBiped {
+public class RenderMultiBoots extends ModelBiped {
 
-    public RenderCustomLeggins() {
+    public RenderMultiBoots() {
         super(0, 0, 1024, 1024);
 
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 
+        ModelRenderOBJ rightBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_boot.obj"));
+        ModelRenderOBJ leftBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_boot.obj"));
 
-        ModelRenderOBJ rightLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_right_leg.obj"));
-        ModelRenderOBJ leftLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/custom_left_leg.obj"));
+        this.bipedRightLeg.addChild(rightBoot);
+        this.bipedLeftLeg.addChild(leftBoot);
 
-        this.bipedRightLeg.addChild(rightLeg);
-        this.bipedLeftLeg.addChild(leftLeg);
+//        rightBoot.offsetY = 0.76F;
+//        rightBoot.offsetX = -0.03F;
+//        leftBoot.offsetY = 0.76F;
+//        leftBoot.offsetX = 0.03F;
     }
 
     @Override

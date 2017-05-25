@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.common.item.functional.armor;
 
-import com.cjm721.overloaded.client.render.entity.RenderCustomHelmet;
-import com.cjm721.overloaded.client.render.entity.RenderCustomLeggins;
+import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -13,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,16 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
+public class ItemMultiHelmet extends ItemArmor implements IModRegistrable {
 
-public class ItemCustomLeggins extends ItemArmor implements IModRegistrable {
-
-    public ItemCustomLeggins() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.LEGS);
+    public ItemMultiHelmet() {
+        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
         setMaxDamage(-1);
 
-        setRegistryName("custom_leggins");
-        setUnlocalizedName("custom_leggins");
+        setRegistryName("multi_helmet");
+        setUnlocalizedName("multi_helmet");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
@@ -48,7 +44,7 @@ public class ItemCustomLeggins extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderCustomLeggins();
+        return new RenderMultiHelmet();
     }
 
     @SideOnly(Side.CLIENT)
