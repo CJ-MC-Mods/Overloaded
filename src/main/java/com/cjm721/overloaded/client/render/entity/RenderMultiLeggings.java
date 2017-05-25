@@ -22,6 +22,16 @@ public class RenderMultiLeggings extends ModelBiped {
         ModelRenderOBJ rightLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_leg.obj"));
         ModelRenderOBJ leftLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_leg.obj"));
 
+        belt.offsetY = 0.756F;
+        belt.offsetZ = -0.04F;
+        rightLeg.offsetY = 0.6F;
+        rightLeg.offsetX = -0.085F; //rightLeg.offsetX = -0.06F;
+        leftLeg.offsetY = 0.6F;
+        leftLeg.offsetX = 0.085F; //leftLeg.offsetX = 0.06F;
+
+        leftLeg.scale = 1F / 14F;
+        rightLeg.scale = 1F / 14F;
+
         this.bipedBody.addChild(belt);
         this.bipedRightLeg.addChild(rightLeg);
         this.bipedLeftLeg.addChild(leftLeg);
@@ -39,8 +49,8 @@ public class RenderMultiLeggings extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedRightLeg.render(1);
-        this.bipedLeftLeg.render(1);
+        this.bipedRightLeg.render(1/16F);
+        this.bipedLeftLeg.render(1/16F);
 
         GlStateManager.popMatrix();
 

@@ -21,13 +21,16 @@ public class RenderMultiBoots extends ModelBiped {
         ModelRenderOBJ rightBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_boot.obj"));
         ModelRenderOBJ leftBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_boot.obj"));
 
+        rightBoot.offsetY = 0.76F;
+        rightBoot.offsetX = -0.03F;
+        leftBoot.offsetY = 0.76F;
+        leftBoot.offsetX = 0.03F;
+
+        leftBoot.scale = 1F / 14F;
+        rightBoot.scale = 1F / 14F;
+
         this.bipedRightLeg.addChild(rightBoot);
         this.bipedLeftLeg.addChild(leftBoot);
-
-//        rightBoot.offsetY = 0.76F;
-//        rightBoot.offsetX = -0.03F;
-//        leftBoot.offsetY = 0.76F;
-//        leftBoot.offsetX = 0.03F;
     }
 
     @Override
@@ -42,8 +45,8 @@ public class RenderMultiBoots extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedRightLeg.render(1);
-        this.bipedLeftLeg.render(1);
+        this.bipedRightLeg.render(1/16F);
+        this.bipedLeftLeg.render(1/16F);
 
         GlStateManager.popMatrix();
 

@@ -20,6 +20,7 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IN
     private EnergyStorage storage;
 
     public IntEnergyWrapper(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        storage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,0);
 //        deserializeNBT(nbt);
     }
 

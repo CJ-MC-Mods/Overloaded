@@ -19,12 +19,14 @@ public class RenderMultiHelmet extends ModelBiped {
         //this.bipedHeadwear.cubeList.clear();
 
         ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/item/armor/multi_helmet.obj"));
+        head.offsetY = -0.1F;
+        head.offsetX = -0.033F;
+        head.offsetZ = 0.1F;
+        head.scale = 1F / 13F;
 
         this.bipedHead.addChild(head);
 
-//        head.offsetY = -0.1F;
-//        head.offsetX = -0.04F;
-//        head.offsetZ = 0.17F;
+
     }
 
     @Override
@@ -40,7 +42,7 @@ public class RenderMultiHelmet extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedHead.render(1);
+        this.bipedHead.render(1/16F);
 
         GlStateManager.popMatrix();
 

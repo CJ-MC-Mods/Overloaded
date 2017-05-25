@@ -83,7 +83,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         }
 
         GlStateManager.disableLighting();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_DST_ALPHA);
         GlStateManager.enableBlend();
         //GlStateManager.disableDepth();
 

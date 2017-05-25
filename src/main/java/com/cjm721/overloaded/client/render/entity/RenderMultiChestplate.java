@@ -25,6 +25,21 @@ public class RenderMultiChestplate extends ModelBiped {
         ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_arm.obj"));
         ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_arm.obj"));
 
+        body.offsetY = 0.755F;
+        rightArm.offsetY = 0.755F;
+        leftArm.offsetY = 0.755F;
+        body.offsetY = 0.755F;
+        body.offsetZ = -0.03F;
+        rightArm.offsetY = 0.72F;
+        rightArm.offsetX = -0.205F; //rightArm.offsetX = -0.18F;
+        rightArm.offsetZ = -0.05F;
+        leftArm.offsetY = 0.72F;
+        leftArm.offsetX = 0.21F; //leftArm.offsetX = 0.18F;
+        leftArm.offsetZ = -0.06F;
+
+        leftArm.scale = 1F / 13.9F;
+        rightArm.scale = 1F / 13.9F;
+
         this.bipedBody.addChild(body);
         this.bipedRightArm.addChild(rightArm);
         this.bipedLeftArm.addChild(leftArm);
@@ -43,9 +58,9 @@ public class RenderMultiChestplate extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedBody.render(1);
-        this.bipedRightArm.render(1);
-        this.bipedLeftArm.render(1);
+        this.bipedBody.render(1/16F);
+        this.bipedRightArm.render(1/16F);
+        this.bipedLeftArm.render(1/16F);
 
         GlStateManager.popMatrix();
 
