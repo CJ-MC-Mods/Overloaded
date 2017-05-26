@@ -107,10 +107,10 @@ public class ItemMultiTool extends ModItem {
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
-    @Override
-    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-        return true;
-    }
+//    @Override
+//    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
+//        return true;
+//    }
 
     @Override
     public boolean canHarvestBlock(IBlockState blockIn) {

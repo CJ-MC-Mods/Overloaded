@@ -1,7 +1,5 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import codechicken.lib.texture.TextureUtils;
-import codechicken.lib.util.TransformUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -10,7 +8,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -30,13 +30,10 @@ public class ModelRenderOBJ extends ModelRenderer {
         super(baseModel);
 
         try {
-            objModel = OBJLoader.INSTANCE.loadModel(customModel).bake(TransformUtils.DEFAULT_TOOL, DefaultVertexFormats.ITEM, TextureUtils.bakedTextureGetter);
-        }
-        catch (Exception e) {
+            objModel = ModelLoaderRegistry.getModel(customModel).bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, ModelLoader.defaultTextureGetter());
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override

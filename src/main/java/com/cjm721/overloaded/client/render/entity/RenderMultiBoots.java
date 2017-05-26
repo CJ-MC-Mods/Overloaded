@@ -18,8 +18,8 @@ public class RenderMultiBoots extends ModelBiped {
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 
-        ModelRenderOBJ rightBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_boot.obj"));
-        ModelRenderOBJ leftBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_boot.obj"));
+        ModelRenderOBJ rightBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_right_boot.obj"));
+        ModelRenderOBJ leftBoot = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_left_boot.obj"));
 
         rightBoot.offsetY = 0.76F;
         rightBoot.offsetX = -0.03F;

@@ -18,7 +18,7 @@ public class RenderMultiHelmet extends ModelBiped {
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();
 
-        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"models/item/armor/multi_helmet.obj"));
+        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"item/armor/multi_helmet.obj"));
         head.offsetY = -0.1F;
         head.offsetX = -0.033F;
         head.offsetZ = 0.1F;

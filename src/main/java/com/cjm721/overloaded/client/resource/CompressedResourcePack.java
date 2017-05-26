@@ -11,6 +11,8 @@ import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.MetadataSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
@@ -19,7 +21,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+@SideOnly(Side.CLIENT)
 public enum CompressedResourcePack implements IResourcePack {
     INSTANCE;
 

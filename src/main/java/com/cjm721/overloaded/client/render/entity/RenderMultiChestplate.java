@@ -21,9 +21,9 @@ public class RenderMultiChestplate extends ModelBiped {
         this.bipedRightArm.cubeList.clear();
         this.bipedLeftArm.cubeList.clear();
 
-        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_body.obj"));
-        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_arm.obj"));
-        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_arm.obj"));
+        ModelRenderOBJ body = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_body.obj"));
+        ModelRenderOBJ rightArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_right_arm.obj"));
+        ModelRenderOBJ leftArm = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_left_arm.obj"));
 
         body.offsetY = 0.755F;
         rightArm.offsetY = 0.755F;

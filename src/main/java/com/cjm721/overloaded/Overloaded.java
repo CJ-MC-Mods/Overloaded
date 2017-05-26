@@ -2,6 +2,8 @@ package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.common.CommonProxy;
 import com.cjm721.overloaded.common.config.OverloadedConfig;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;

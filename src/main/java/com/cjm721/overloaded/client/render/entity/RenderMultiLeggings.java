@@ -18,9 +18,9 @@ public class RenderMultiLeggings extends ModelBiped {
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 
-        ModelRenderOBJ belt = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_belt.obj"));
-        ModelRenderOBJ rightLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_right_leg.obj"));
-        ModelRenderOBJ leftLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "models/item/armor/multi_left_leg.obj"));
+        ModelRenderOBJ belt = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_belt.obj"));
+        ModelRenderOBJ rightLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_right_leg.obj"));
+        ModelRenderOBJ leftLeg = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_left_leg.obj"));
 
         belt.offsetY = 0.756F;
         belt.offsetZ = -0.04F;
@@ -49,6 +49,7 @@ public class RenderMultiLeggings extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
+        this.bipedBody.render(1/16F);
         this.bipedRightLeg.render(1/16F);
         this.bipedLeftLeg.render(1/16F);
 

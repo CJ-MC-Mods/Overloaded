@@ -6,29 +6,38 @@ import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.util.IModRegistrable;
 import com.cjm721.overloaded.common.util.IntEnergyWrapper;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.UUID;
 
 public class ItemMultiChestplate extends ItemArmor implements IModRegistrable {
 
+    private static final UUID[] ARMOR_MODIFIERS = new UUID[] {UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
+
+    public static ArmorMaterial pureMatter =  EnumHelper.addArmorMaterial("pureMatter", "", 100,new int[]{30,60,80,30}, 50, SoundEvents.ITEM_ARMOR_EQUIP_GOLD,10);
+
     public ItemMultiChestplate() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.CHEST);
+        super(pureMatter, 0, EntityEquipmentSlot.CHEST);
         setMaxDamage(-1);
 
         setRegistryName("multi_chestplate");
@@ -70,7 +79,16 @@ public class ItemMultiChestplate extends ItemArmor implements IModRegistrable {
     @Override
     @Nonnull
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(@Nullable EntityEquipmentSlot equipmentSlot) {
-        return super.getItemAttributeModifiers(equipmentSlot);
+        Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
+
+        if (equipmentSlot == this.armorType)
+        {
+            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", 100, 0));
+            multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Max Health", 100, 0));
+            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", 100, 0));
+        }
+
+        return multimap;
     }
 
     @Nullable
