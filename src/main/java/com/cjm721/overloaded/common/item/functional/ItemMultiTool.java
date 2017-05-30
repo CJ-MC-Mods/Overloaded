@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -113,13 +114,37 @@ public class ItemMultiTool extends ModItem {
 //    }
 
     @Override
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+        IEnergyStorage storage = stack.getCapability(ENERGY,null);
+
+        if(storage != null) {
+            int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack);
+            int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+            float breakCost = getBreakCost(worldIn.getBlockState(pos).getBlockHardness(worldIn,pos),efficiency,unbreaking, entityLiving == null ? 10 : getDistance(entityLiving,pos));
+
+            storage.extractEnergy((int)Math.min(Integer.MAX_VALUE,breakCost),false);
+        }
+
+        return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+    }
+
+    private double getDistance(@Nonnull EntityLivingBase entityLiving, @Nonnull BlockPos pos) {
+        return entityLiving.getDistance(pos.getX(),pos.getY(),pos.getZ());
+    }
+
+    @Override
     public boolean canHarvestBlock(IBlockState blockIn) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
         return player == null || super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
+    }
+
+    @Override
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
+        return super.getStrVsBlock(stack, state);
     }
 
     @Override
@@ -137,6 +162,11 @@ public class ItemMultiTool extends ModItem {
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
+    private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
+        float floatBreakCost = (float) ((hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (MultiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
+        return floatBreakCost;
+    }
+
     /**
      * @return True if the break was successful, false otherwise
      */
@@ -151,7 +181,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_UNBREAKABLE;
         }
 
-        float floatBreakCost = (hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (MultiToolConfig.breakBaseCost / (unbreaking + 1)) + (float)blockPos.getDistance((int)player.posX,(int)player.posY,(int)player.posZ);
+        float floatBreakCost = getBreakCost(hardness,efficiency,unbreaking, getDistance(player,blockPos));
         if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
             return BlockResult.FAIL_ENERGY;
 
@@ -168,11 +198,7 @@ public class ItemMultiTool extends ModItem {
             return BlockResult.FAIL_REMOVE;
 
         boolean result = PlayerInteractionUtil.tryHarvestBlock(player,worldIn,blockPos);
-        if (result) {
-            energy.extractEnergy(breakCost,false);
-            return BlockResult.SUCCESS;
-        }
-        return BlockResult.FAIL_REMOVE;
+        return result ? BlockResult.SUCCESS : BlockResult.FAIL_REMOVE;
     }
 
     public void drawParticleStreamTo(EntityPlayer source, Vec3d endingLocation, EnumParticleTypes type) {

@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
 
 public class ItemMultiLeggings extends ItemArmor implements IModRegistrable {
 
+    private RenderMultiLeggings armorModel;
+
     public ItemMultiLeggings() {
         super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.LEGS);
         setMaxDamage(-1);
@@ -47,7 +49,10 @@ public class ItemMultiLeggings extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderMultiLeggings();
+        if(armorModel == null)
+            armorModel = new RenderMultiLeggings();
+
+        return armorModel;
     }
 
     @SideOnly(Side.CLIENT)

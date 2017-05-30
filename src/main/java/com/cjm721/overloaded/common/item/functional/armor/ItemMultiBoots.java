@@ -47,8 +47,12 @@ public class ItemMultiBoots extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderMultiBoots();
+        if(armorModel == null)
+            armorModel = new RenderMultiBoots();
+        return armorModel;
     }
+
+    private RenderMultiBoots armorModel;
 
     @SideOnly(Side.CLIENT)
     @Override

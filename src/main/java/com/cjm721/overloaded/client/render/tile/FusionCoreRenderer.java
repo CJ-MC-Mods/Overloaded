@@ -74,7 +74,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
 
         GlStateManager.scale(scale, scale, scale);
 
-        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableLighting();
         this.bindTexture(texture);
         if (Minecraft.isAmbientOcclusionEnabled()) {
             GlStateManager.shadeModel(GL11.GL_SMOOTH);
@@ -82,7 +82,7 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
             GlStateManager.shadeModel(GL11.GL_FLAT);
         }
 
-        GlStateManager.disableLighting();
+
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_DST_ALPHA);
         GlStateManager.enableBlend();
         //GlStateManager.disableDepth();
@@ -105,7 +105,6 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
         //GlStateManager.enableDepth();
         GlStateManager.disableBlend();
 
-        RenderHelper.enableStandardItemLighting();
         GlStateManager.popMatrix();
         GlStateManager.popAttrib();
     }

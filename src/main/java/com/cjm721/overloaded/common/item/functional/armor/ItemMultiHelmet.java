@@ -24,6 +24,8 @@ import javax.annotation.Nullable;
 
 public class ItemMultiHelmet extends ItemArmor implements IModRegistrable {
 
+    private RenderMultiHelmet armorModel;
+
     public ItemMultiHelmet() {
         super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
         setMaxDamage(-1);
@@ -47,7 +49,9 @@ public class ItemMultiHelmet extends ItemArmor implements IModRegistrable {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return new RenderMultiHelmet();
+        if(armorModel == null)
+            armorModel = new RenderMultiHelmet();
+        return armorModel;
     }
 
     @SideOnly(Side.CLIENT)
