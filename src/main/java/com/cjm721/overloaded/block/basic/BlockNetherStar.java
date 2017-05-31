@@ -31,8 +31,10 @@ public class BlockNetherStar extends ModBlock {
 
     @Override
     public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.netherStarBlock)
+        if(OverloadedConfig.recipeEnabledConfig.netherStarBlock) {
             GameRegistry.addRecipe(new ItemStack(this), "NNN", "NNN", "NNN", 'N', Items.NETHER_STAR);
+            GameRegistry.addShapelessRecipe(new ItemStack(Items.NETHER_STAR,9), this);
+        }
     }
 
     @SideOnly(Side.CLIENT)
