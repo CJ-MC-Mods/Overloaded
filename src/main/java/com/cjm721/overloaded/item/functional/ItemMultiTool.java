@@ -174,20 +174,21 @@ public class ItemMultiTool extends ModItem {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
-        float hardness = state.getBlockHardness(worldIn, blockPos);
+        if(!player.capabilities.isCreativeMode) {
+            float hardness = state.getBlockHardness(worldIn, blockPos);
+            if(hardness < 0) {
+                return BlockResult.FAIL_UNBREAKABLE;
+            }
 
-        if(hardness < 0) {
-            return BlockResult.FAIL_UNBREAKABLE;
-        }
+            float floatBreakCost = getBreakCost(hardness,efficiency,unbreaking, getDistance(player,blockPos));
+            if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
+                return BlockResult.FAIL_ENERGY;
 
-        float floatBreakCost = getBreakCost(hardness,efficiency,unbreaking, getDistance(player,blockPos));
-        if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
-            return BlockResult.FAIL_ENERGY;
+            int breakCost = Math.round(floatBreakCost);
 
-        int breakCost = Math.round(floatBreakCost);
-
-        if(breakCost < 0 || energy.getEnergyStored() < breakCost){
-            return BlockResult.FAIL_ENERGY;
+            if(breakCost < 0 || energy.getEnergyStored() < breakCost){
+                return BlockResult.FAIL_ENERGY;
+            }
         }
 
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
