@@ -144,8 +144,10 @@ public class PlayerInteractionUtil {
         int size = inventory.getSlots();
         for(int i = 0; i < size; i++) {
             ItemStack stack = inventory.getStackInSlot(i);
-            if(stack.isItemEqual(item))
+            if(!stack.isEmpty() && stack.isItemEqual(item)) {
+                System.out.println("Stack size: " + stack.getCount());
                 return i;
+            }
         }
 
         return -1;

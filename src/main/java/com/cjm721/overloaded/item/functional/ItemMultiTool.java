@@ -66,9 +66,9 @@ public class ItemMultiTool extends ModItem {
         setRegistryName("multi_tool");
         setUnlocalizedName("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
-
         GameRegistry.register(this);
     }
+
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
@@ -423,7 +423,7 @@ public class ItemMultiTool extends ModItem {
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
     }
-    
+
 //    @SubscribeEvent
 //    @SideOnly(Side.CLIENT)
 //    public void renderBlockOverlayEvent(RenderBlockOverlayEvent event) {
