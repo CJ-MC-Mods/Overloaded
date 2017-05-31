@@ -1,10 +1,9 @@
 package com.cjm721.overloaded.client.render.tile;
 
 
-import com.cjm721.overloaded.common.block.tile.TileFusionCore;
+import com.cjm721.overloaded.block.tile.TileFusionCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;

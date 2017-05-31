@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.client.render.tile;
 
-import com.cjm721.overloaded.common.block.tile.TilePlayerInterface;
+import com.cjm721.overloaded.block.tile.TilePlayerInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
