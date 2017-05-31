@@ -143,7 +143,7 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
-        return super.getStrVsBlock(stack, state);
+        return 0f;
     }
 
     @Override
