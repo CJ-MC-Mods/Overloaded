@@ -14,7 +14,7 @@ public class ConfigChangedHandler {
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if(event.getModID().equals(MODID)) {
-//            ConfigManager.sync(MODID, Config.Type.INSTANCE);
+            ConfigManager.sync(MODID, Config.Type.INSTANCE);
         }
     }
 }

@@ -14,9 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by CJ on 4/2/2017.
- */
 public final class ModBlocks {
 
     public static ModBlock basicGenerator;
@@ -75,7 +72,7 @@ public final class ModBlocks {
             itemManipulator = new BlockItemManipulator();
         }
 
-//        CompressedBlockHandler.initFromConfig();
+        CompressedBlockHandler.initFromConfig();
     }
 
     public static void addToSecondaryInit(ModBlock block) {
