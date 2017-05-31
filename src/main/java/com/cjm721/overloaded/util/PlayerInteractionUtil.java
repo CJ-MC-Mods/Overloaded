@@ -21,8 +21,11 @@ import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+
+import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class PlayerInteractionUtil {
 
@@ -109,13 +112,15 @@ public class PlayerInteractionUtil {
         if(cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost)
             return false;
 
-        int foundStackSlot = findItemStack(searchStack, player);
+        IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY,EnumFacing.UP);
+
+        int foundStackSlot = findItemStack(searchStack, inventory);
         if(foundStackSlot == -1)
             return false;
 
-        player.inventory.getStackInSlot(foundStackSlot);
+        inventory.getStackInSlot(foundStackSlot);
 
-        ItemStack foundStack = player.inventory.getStackInSlot(foundStackSlot);
+        ItemStack foundStack = inventory.getStackInSlot(foundStackSlot);
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
         IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
@@ -124,7 +129,7 @@ public class PlayerInteractionUtil {
         {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-            if(!player.isCreative())
+            if(!player.capabilities.isCreativeMode)
                 foundStack.shrink(1);
 
             energy.extractEnergy((int)cost,false);
@@ -134,10 +139,10 @@ public class PlayerInteractionUtil {
         return false;
     }
 
-    public static int findItemStack(@Nonnull ItemStack item, @Nonnull EntityPlayerMP player) {
-        int size = player.inventory.getSizeInventory();
+    public static int findItemStack(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
+        int size = inventory.getSlots();
         for(int i = 0; i < size; i++) {
-            ItemStack stack = player.inventory.getStackInSlot(i);
+            ItemStack stack = inventory.getStackInSlot(i);
             if(stack.isItemEqual(item))
                 return i;
         }
