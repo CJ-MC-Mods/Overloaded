@@ -52,7 +52,7 @@ public class PlayerInteractionUtil {
                 world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
                 boolean flag1;
 
-                if (player.interactionManager.isCreative())
+                if (player.capabilities.isCreativeMode)
                 {
                     flag1 = removeBlock(world,pos,player,false);
                     player.connection.sendPacket(new SPacketBlockChange(world, pos));
@@ -115,12 +115,12 @@ public class PlayerInteractionUtil {
         IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY,EnumFacing.UP);
 
         int foundStackSlot = findItemStack(searchStack, inventory);
-        if(foundStackSlot == -1)
+        if(foundStackSlot == -1) {
+            System.out.println("Stack not found");
             return false;
-
-        inventory.getStackInSlot(foundStackSlot);
-
-        ItemStack foundStack = inventory.getStackInSlot(foundStackSlot);
+        }
+        System.out.println("Stack found at index: " + foundStackSlot);
+        ItemStack foundStack = inventory.extractItem(foundStackSlot,1,player.capabilities.isCreativeMode);
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
         IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
@@ -129,13 +129,14 @@ public class PlayerInteractionUtil {
         {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-            if(!player.capabilities.isCreativeMode)
-                foundStack.shrink(1);
 
             energy.extractEnergy((int)cost,false);
+            System.out.println("Place Block Successs");
             return true;
         }
 
+        System.out.println("Place Block Failed");
+        inventory.insertItem(foundStackSlot,foundStack,player.capabilities.isCreativeMode);
         return false;
     }
 
