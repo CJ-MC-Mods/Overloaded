@@ -7,6 +7,7 @@ import com.cjm721.overloaded.common.block.basic.container.BlockInfiniteTank;
 import com.cjm721.overloaded.common.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.common.block.compressed.CompressedBlockHandler;
 import com.cjm721.overloaded.common.config.DevelopmentConfig;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -68,13 +69,13 @@ public final class ModBlocks {
         playerInterface = new BlockPlayerInterface();
         itemInterface = new BlockItemInterface();
 
-        if(DevelopmentConfig.I.wipStuff) {
+        if(OverloadedConfig.developmentConfig.wipStuff) {
             fusionCore = new BlockFusionCore();
             matterPurifier = new BlockMatterPurifier();
             itemManipulator = new BlockItemManipulator();
         }
 
-        CompressedBlockHandler.initFromConfig();
+//        CompressedBlockHandler.initFromConfig();
     }
 
     public static void addToSecondaryInit(ModBlock block) {

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.common.block.compressed;
 import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -57,7 +58,7 @@ public class BlockCompressed extends ModBlock {
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.compressedBlocks && recipeEnabled) {
+        if(OverloadedConfig.recipeEnabledConfig.compressedBlocks && recipeEnabled) {
             GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
             GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
         }

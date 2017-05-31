@@ -2,6 +2,7 @@ package com.cjm721.overloaded.common.item.functional;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlocks;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -56,7 +57,7 @@ public class ItemLinkingCard extends ModItem {
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.linkingCard)
+        if(OverloadedConfig.recipeEnabledConfig.linkingCard)
             GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
     }
 }

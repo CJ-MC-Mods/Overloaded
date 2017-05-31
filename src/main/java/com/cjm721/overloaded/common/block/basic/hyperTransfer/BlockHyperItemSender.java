@@ -4,6 +4,7 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.block.basic.hyperTransfer.base.AbstractBlockHyperSender;
 import com.cjm721.overloaded.common.block.tile.hyperTransfer.TileHyperItemSender;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -34,7 +35,7 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.hyperItemNodes)
+        if(OverloadedConfig.recipeEnabledConfig.hyperItemNodes)
             GameRegistry.addRecipe(new ItemStack(this), "IRI", "ENE", "IRI", 'R', Blocks.CHEST, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock, 'E', Items.ENDER_EYE);
     }
 

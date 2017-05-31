@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.util;
 
 import com.cjm721.overloaded.common.config.MultiToolConfig;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.storage.LongEnergyStack;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
@@ -106,7 +107,7 @@ public class PlayerInteractionUtil {
 
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
 
-        long cost = MultiToolConfig.placeBaseCost + MultiToolConfig.costPerMeterAway * distance;
+        long cost = OverloadedConfig.multiToolConfig.placeBaseCost + OverloadedConfig.multiToolConfig.costPerMeterAway * distance;
         if(cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost)
             return false;
 

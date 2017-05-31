@@ -4,6 +4,7 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.config.MultiToolConfig;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItem;
 import com.cjm721.overloaded.common.item.ModItems;
@@ -94,7 +95,7 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.multiTool)
+        if(OverloadedConfig.recipeEnabledConfig.multiTool)
             GameRegistry.addRecipe(new ItemStack(this), "NI ", "IES", " SB", 'N', Items.NETHER_STAR, 'I', Items.IRON_INGOT, 'E', ModItems.energyCore, 'B', Blocks.IRON_BLOCK, 'S', ModBlocks.netherStarBlock);
     }
 
@@ -152,7 +153,7 @@ public class ItemMultiTool extends ModItem {
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
             // TODO Make distance a config option
-            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(MultiToolConfig.reach)));
+            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(OverloadedConfig.multiToolConfig.reach)));
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 //                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
@@ -163,7 +164,7 @@ public class ItemMultiTool extends ModItem {
     }
 
     private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
-        float floatBreakCost = (float) ((hardness * MultiToolConfig.breakCostMultiplier / (efficiency + 1)) + (MultiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
+        float floatBreakCost = (float) ((hardness * OverloadedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1)) + (OverloadedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
         return floatBreakCost;
     }
 
@@ -214,7 +215,7 @@ public class ItemMultiTool extends ModItem {
         World world = source.getEntityWorld();
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
         // Make the reach check unnessicary * Change to for loop
-        while (distanceToEnd > 0.3D && distanceToEnd < (MultiToolConfig.reach * 2)) {
+        while (distanceToEnd > 0.3D && distanceToEnd < (OverloadedConfig.multiToolConfig.reach * 2)) {
             world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
@@ -246,7 +247,7 @@ public class ItemMultiTool extends ModItem {
 
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result = entityLiving.rayTrace(MultiToolConfig.reach, 0);
+            RayTraceResult result = entityLiving.rayTrace(OverloadedConfig.multiToolConfig.reach, 0);
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
                 leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }

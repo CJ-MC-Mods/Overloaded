@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.common.item;
 
-import com.cjm721.overloaded.common.config.DevelopmentConfig;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.common.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.common.item.crafting.ItemItemCore;
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ModItems {
     public static ModItem linkingCard;
-    public static ItemMultiTool distanceBreaker;
+    public static ItemMultiTool itemMultiTool;
 
     public static ItemEnergyShield energyShield;
     public static ItemAmountSelector amountSelector;
@@ -43,13 +43,13 @@ public class ModItems {
 
     public static void init() {
         linkingCard = new ItemLinkingCard();
-        distanceBreaker = new ItemMultiTool();
+        itemMultiTool = new ItemMultiTool();
 
         energyCore = new ItemEnergyCore();
         fluidCore = new ItemFluidCore();
         itemCore = new ItemItemCore();
 
-        if(DevelopmentConfig.I.wipStuff) {
+        if(OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = new ItemEnergyShield();
 //            amountSelector = new ItemAmountSelector();
             customHelmet = new ItemMultiHelmet();

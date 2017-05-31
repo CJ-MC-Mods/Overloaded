@@ -34,13 +34,11 @@ public class Overloaded {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Configuration configuration = new Configuration(event.getSuggestedConfigurationFile());
-        OverloadedConfig.I.init(configuration);
-
-        if(configuration.hasChanged()) {
-            configuration.save();
-        }
-
+//        Configuration configuration = new Configuration(event.getSuggestedConfigurationFile());
+//
+//        if(configuration.hasChanged()) {
+//            configuration.save();
+//        }
         proxy.preInit(event);
     }
 

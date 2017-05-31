@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.common.item.crafting;
 
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -35,7 +36,7 @@ public class ItemFluidCore extends ModItem {
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.fluidCore)
+        if(OverloadedConfig.recipeEnabledConfig.fluidCore)
             GameRegistry.addRecipe(new ItemStack(this), "NNN", "NIN", "NNN", 'N', Items.NETHER_STAR, 'I', Blocks.IRON_BLOCK);
     }
 }

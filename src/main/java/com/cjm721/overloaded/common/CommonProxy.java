@@ -28,7 +28,7 @@ public class CommonProxy {
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
 
-        MinecraftForge.EVENT_BUS.register(ModItems.distanceBreaker);
+        MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
     }
 
     public void init(FMLInitializationEvent event) {

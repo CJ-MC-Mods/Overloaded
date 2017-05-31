@@ -4,6 +4,7 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.ModBlocks;
 import com.cjm721.overloaded.common.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.cjm721.overloaded.common.item.ModItems;
 import com.cjm721.overloaded.common.util.FacingStateMapper;
@@ -96,7 +97,7 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.energyExtractor)
+        if(OverloadedConfig.recipeEnabledConfig.energyExtractor)
             GameRegistry.addRecipe(new ItemStack(this), "IRI", "RBR", "IRI", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT, 'B', Blocks.REDSTONE_BLOCK);
     }
 

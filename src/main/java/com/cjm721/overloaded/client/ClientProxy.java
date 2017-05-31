@@ -28,8 +28,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(new CompressedBlockAssets());
         MinecraftForge.EVENT_BUS.register(new ArmorSecondarySpritesRegister());
 
-        CompressedResourcePack.INSTANCE.addDomain("overloaded");
-        CompressedResourcePack.INSTANCE.inject();
+//        CompressedResourcePack.INSTANCE.addDomain("overloaded");
+//        CompressedResourcePack.INSTANCE.inject();
 
         ModBlocks.registerModels();
         ModItems.registerModels();
@@ -38,8 +38,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-
-
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TileItemInterface;
 import com.cjm721.overloaded.common.block.tile.TileItemManipulator;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -51,7 +52,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.itemManipulator) {
+        if(OverloadedConfig.recipeEnabledConfig.itemManipulator) {
 
         }
     }

@@ -1,30 +1,24 @@
 package com.cjm721.overloaded.common.config;
 
+import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nonnull;
 
-public enum MultiToolConfig implements IConfig {
-    I;
+public class MultiToolConfig {
 
-    public static int reach;
+    @Config.Comment({"Max range Multi-Tool can edit blocks [Default: 128]"})
+    public int reach = 128;
 
-    public static long placeBaseCost;
-    public static long costPerMeterAway;
-    public static long breakBaseCost;
-    public static long breakCostMultiplier;
+    @Config.Comment({"Cost that is added on to every place [Default: 100]"})
+    public int placeBaseCost = 100;
 
-    private static final String category = "multiTool";
+    @Config.Comment({"Cost per meter away [Default: 10]"})
+    public int costPerMeterAway = 10;
 
-    @Override
-    public void init(@Nonnull Configuration config) {
-        config.addCustomCategoryComment(category, "Multi Tool Settings");
+    @Config.Comment({"Cost that is added on to every block break [Default: 100]"})
+    public int breakBaseCost = 100;
 
-        reach = config.get(category, "reach", 128).getInt();
-
-        placeBaseCost = Math.round(config.get(category, "placeBaseCost", 100).getDouble());
-        costPerMeterAway = Math.round(config.get(category, "costPerMeterAway", 10).getDouble());
-        breakBaseCost = Math.round(config.get(category, "breakBaseCost", 100).getDouble());
-        breakCostMultiplier = Math.round(config.get(category, "breakCostMultiplier", 1).getDouble());
-    }
+    @Config.Comment({"Multiples the Hardness Cost by this. [Default: 1]"})
+    public int breakCostMultiplier = 1;
 }

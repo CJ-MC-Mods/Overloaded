@@ -1,17 +1,15 @@
 package com.cjm721.overloaded.common.config;
 
-import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Config;
 
-import javax.annotation.Nonnull;
+import static com.cjm721.overloaded.Overloaded.MODID;
 
-public enum OverloadedConfig implements IConfig {
-    I;
+@Config(modid = MODID)
+public class OverloadedConfig {
 
-    @Override
-    public void init(@Nonnull Configuration configuration) {
-        CompressedConfig.I.init(configuration);
-        MultiToolConfig.I.init(configuration);
-        RecipeEnabledConfig.I.init(configuration);
-        DevelopmentConfig.I.init(configuration);
-    }
+    public static CompressedConfig compressedConfig = new CompressedConfig();
+    public static MultiToolConfig multiToolConfig = new MultiToolConfig();
+    public static RecipeEnabledConfig recipeEnabledConfig = new RecipeEnabledConfig();
+    public static DevelopmentConfig developmentConfig = new DevelopmentConfig();
+
 }

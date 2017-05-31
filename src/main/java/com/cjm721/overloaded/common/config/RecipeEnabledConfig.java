@@ -1,68 +1,56 @@
 package com.cjm721.overloaded.common.config;
 
+import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Configuration;
 
 import javax.annotation.Nonnull;
 
-public enum RecipeEnabledConfig implements IConfig {
-    I;
+public class RecipeEnabledConfig {
 
-    private static String category = "Recipe Enabled";
+    @Config.RequiresMcRestart
+    public boolean multiTool = true;
+    @Config.RequiresMcRestart
+    public boolean infiniteWaterSource = true;
+    @Config.RequiresMcRestart
+    @Config.Comment({"If set to false will override any settings in the Compressed Settings Section"})
+    public boolean compressedBlocks = true;
+    @Config.RequiresMcRestart
+    public boolean energyCore = true;
+    @Config.RequiresMcRestart
+    public boolean fluidCore = true;
+    @Config.RequiresMcRestart
+    public boolean itemCore = true;
 
-    public static boolean multiTool;
-    public static boolean infiniteWaterSource;
-    public static boolean compressedBlocks;
-
-    public static boolean energyCore;
-    public static boolean fluidCore;
-    public static boolean itemCore;
-
-    public static boolean infinityBarrel;
-    public static boolean infinityCapacitor;
-    public static boolean infinityTank;
-    public static boolean netherStarBlock;
-    public static boolean linkingCard;
-    public static boolean energyExtractor;
-    public static boolean hyperEnergyNodes;
-    public static boolean hyperFluidNodes;
-    public static boolean hyperItemNodes;
-    public static boolean playerInterface;
-    public static boolean itemInterface;
-    public static boolean itemManipulator;
-    public static boolean customHelmet;
-    public static boolean customChestplate;
-    public static boolean customLeggings;
-    public static boolean customBoots;
-
-    @Override
-    public void init(@Nonnull Configuration config) {
-        config.addCustomCategoryComment(category, "Enabled Recipes");
-
-        multiTool = config.get(category,"multiTool", true).getBoolean();
-        infiniteWaterSource = config.get(category,"infiniteWaterSource", true).getBoolean();
-        compressedBlocks = config.get(category, "compressedBlocks", true, "If set to false will override any settings in the Compressed Settings Section").getBoolean();
-
-        energyCore = config.get(category,"energyCore", true).getBoolean();
-        fluidCore = config.get(category, "fluidCore", true).getBoolean();
-        itemCore = config.get(category, "itemCore", true).getBoolean();
-
-        infinityBarrel = config.get(category, "infinityBarrel", true).getBoolean();
-        infinityCapacitor = config.get(category, "infinityCapacitor", true).getBoolean();
-        infinityTank = config.get(category, "infinityTank", true).getBoolean();
-
-        netherStarBlock = config.get(category, "netherStarBlock", true).getBoolean();
-        linkingCard = config.get(category, "linkingCard", true).getBoolean();
-        energyExtractor = config.get(category, "energyExtractor", true).getBoolean();
-        hyperEnergyNodes = config.get(category, "hyperEnergyNodes", true).getBoolean();
-        hyperFluidNodes = config.get(category, "hyperFluidNodes", true).getBoolean();
-        hyperItemNodes = config.get(category, "hyperItemNodes", true).getBoolean();
-        playerInterface = config.get(category, "playerInterface", true).getBoolean();
-        itemInterface = config.get(category, "itemInterface", true).getBoolean();
-        itemManipulator = config.get(category, "itemManipulator", true).getBoolean();
-
-        customHelmet = config.get(category, "customHelmet",true).getBoolean();
-        customChestplate = config.get(category, "customChestplate",true).getBoolean();
-        customLeggings = config.get(category, "customLeggings",true).getBoolean();
-        customBoots = config.get(category, "customBoots",true).getBoolean();
-    }
+    @Config.RequiresMcRestart
+    public boolean infinityBarrel = true;
+    @Config.RequiresMcRestart
+    public boolean infinityCapacitor = true;
+    @Config.RequiresMcRestart
+    public boolean infinityTank = true;
+    @Config.RequiresMcRestart
+    public boolean netherStarBlock = true;
+    @Config.RequiresMcRestart
+    public boolean linkingCard = true;
+    @Config.RequiresMcRestart
+    public boolean energyExtractor = true;
+    @Config.RequiresMcRestart
+    public boolean hyperEnergyNodes = true;
+    @Config.RequiresMcRestart
+    public boolean hyperFluidNodes = true;
+    @Config.RequiresMcRestart
+    public boolean hyperItemNodes = true;
+    @Config.RequiresMcRestart
+    public boolean playerInterface = true;
+    @Config.RequiresMcRestart
+    public boolean itemInterface = true;
+    @Config.RequiresMcRestart
+    public boolean itemManipulator = true;
+    @Config.RequiresMcRestart
+    public boolean customHelmet = true;
+    @Config.RequiresMcRestart
+    public boolean customChestplate = true;
+    @Config.RequiresMcRestart
+    public boolean customLeggings = true;
+    @Config.RequiresMcRestart
+    public boolean customBoots = true;
 }

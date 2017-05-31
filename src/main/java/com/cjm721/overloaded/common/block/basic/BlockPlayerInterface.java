@@ -4,6 +4,7 @@ import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.common.OverloadedCreativeTabs;
 import com.cjm721.overloaded.common.block.ModBlock;
 import com.cjm721.overloaded.common.block.tile.TilePlayerInterface;
+import com.cjm721.overloaded.common.config.OverloadedConfig;
 import com.cjm721.overloaded.common.config.RecipeEnabledConfig;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.ITileEntityProvider;
@@ -59,7 +60,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
     @Override
     public void registerRecipe() {
-        if(RecipeEnabledConfig.playerInterface) {
+        if(OverloadedConfig.recipeEnabledConfig.playerInterface) {
             GameRegistry.addRecipe(new ItemStack(this), "NDN", "NEN", "NNN", 'N', Items.NETHER_STAR, 'E', Blocks.ENDER_CHEST, 'D', Blocks.DRAGON_EGG);
         }
     }
