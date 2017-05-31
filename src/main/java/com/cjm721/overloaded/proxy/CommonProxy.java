@@ -1,4 +1,4 @@
-package com.cjm721.overloaded;
+package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;

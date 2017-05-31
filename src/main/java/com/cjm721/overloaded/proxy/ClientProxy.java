@@ -1,9 +1,9 @@
-package com.cjm721.overloaded.client;
+package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.entity.ArmorSecondarySpritesRegister;
 import com.cjm721.overloaded.client.resource.CompressedResourcePack;
-import com.cjm721.overloaded.CommonProxy;
+import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;
 import net.minecraftforge.client.model.obj.OBJLoader;
