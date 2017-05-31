@@ -36,6 +36,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -155,7 +156,6 @@ public class ItemMultiTool extends ModItem {
             if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 //                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
-
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -423,8 +423,7 @@ public class ItemMultiTool extends ModItem {
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
     }
-
-//
+    
 //    @SubscribeEvent
 //    @SideOnly(Side.CLIENT)
 //    public void renderBlockOverlayEvent(RenderBlockOverlayEvent event) {
@@ -438,7 +437,21 @@ public class ItemMultiTool extends ModItem {
 //            return;
 //
 //        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
+//
+//        //Minecraft.getMinecraft().getBlockRendererDispatcher()
+//        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(Blocks.COBBLESTONE.getDefaultState(),toRenderAt, event.getPlayer().getEntityWorld(),  );
 //    }
+
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack) {
+        IEnergyStorage storage = stack.getCapability(ENERGY, null);
+
+        if(storage != null)
+            return storage.getEnergyStored() / (double)storage.getMaxEnergyStored();
+
+        return 0;
+    }
 
     @Override
     public boolean getShareTag() {
