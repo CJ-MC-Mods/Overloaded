@@ -116,10 +116,8 @@ public class PlayerInteractionUtil {
 
         int foundStackSlot = findItemStack(searchStack, inventory);
         if(foundStackSlot == -1) {
-            System.out.println("Stack not found");
             return false;
         }
-        System.out.println("Stack found at index: " + foundStackSlot);
         ItemStack foundStack = inventory.extractItem(foundStackSlot,1,player.capabilities.isCreativeMode);
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
@@ -131,11 +129,8 @@ public class PlayerInteractionUtil {
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 
             energy.extractEnergy((int)cost,false);
-            System.out.println("Place Block Successs");
             return true;
         }
-
-        System.out.println("Place Block Failed");
         inventory.insertItem(foundStackSlot,foundStack,player.capabilities.isCreativeMode);
         return false;
     }
@@ -145,7 +140,6 @@ public class PlayerInteractionUtil {
         for(int i = 0; i < size; i++) {
             ItemStack stack = inventory.getStackInSlot(i);
             if(!stack.isEmpty() && stack.isItemEqual(item)) {
-                System.out.println("Stack size: " + stack.getCount());
                 return i;
             }
         }

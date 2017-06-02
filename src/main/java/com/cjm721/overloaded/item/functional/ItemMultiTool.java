@@ -13,7 +13,13 @@ import com.cjm721.overloaded.util.IntEnergyWrapper;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -37,6 +43,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -49,6 +56,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -108,7 +116,12 @@ public class ItemMultiTool extends ModItem {
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
 
-//    @Override
+    @Override
+    public boolean isDamageable() {
+        return false;
+    }
+
+    //    @Override
 //    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 //        return true;
 //    }
@@ -420,27 +433,116 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Override
+    public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
+        return true;
+    }
+
+    @Override
+
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
     }
 
-//    @SubscribeEvent
-//    @SideOnly(Side.CLIENT)
-//    public void renderBlockOverlayEvent(RenderBlockOverlayEvent event) {
-//        EntityPlayer player = event.getPlayer();
-//        if(player == null || player.getHeldItemMainhand().getItem() != this)
-//            return;
-//
-//        RayTraceResult result = player.rayTrace(128,event.getRenderPartialTicks());
-//
-//        if(result == null)
-//            return;
-//
-//        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
-//
-//        //Minecraft.getMinecraft().getBlockRendererDispatcher()
-//        Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlock(Blocks.COBBLESTONE.getDefaultState(),toRenderAt, event.getPlayer().getEntityWorld(),  );
-//    }
+    @SubscribeEvent
+    @SideOnly(Side.CLIENT)
+    public void renderBlockOverlayEvent(RenderWorldLastEvent event) {
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player.getHeldItemMainhand().getItem() != this)
+            return;
+
+        RayTraceResult result = player.rayTrace(128,event.getPartialTicks());
+
+        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
+            return;
+
+        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
+//        System.out.println(toRenderAt);
+        //Minecraft.getMinecraft().getBlockRendererDispatcher()
+//        final Tessellator tessellator = Tessellator.getInstance();
+//        final VertexBuffer worldrenderer = tessellator.getBuffer();
+//        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
+//                player.getEntityWorld(),
+//                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Blocks.COBBLESTONE)),
+//                Blocks.COBBLESTONE.getDefaultState(),
+//                toRenderAt,
+//                worldrenderer,
+//                false
+//                );
+
+        final float partialTicks = event.getPartialTicks();
+        final double x = player.lastTickPosX + ( player.posX - player.lastTickPosX ) * partialTicks;
+        final double y = player.lastTickPosY + ( player.posY - player.lastTickPosY ) * partialTicks;
+        final double z = player.lastTickPosZ + ( player.posZ - player.lastTickPosZ ) * partialTicks;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
+        renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Blocks.WOOL,1,1)),player.getEntityWorld(), toRenderAt);
+        GlStateManager.popMatrix();
+    }
+
+    public static void renderModel(
+            final IBakedModel model,
+            final World worldObj,
+            final BlockPos blockPos,
+            final int alpha )
+    {
+        final Tessellator tessellator = Tessellator.getInstance();
+        final VertexBuffer worldrenderer = tessellator.getBuffer();
+        worldrenderer.begin( GL11.GL_QUADS, DefaultVertexFormats.ITEM );
+
+        for ( final EnumFacing enumfacing : EnumFacing.values() )
+        {
+            renderQuads( alpha, worldrenderer, model.getQuads( null, enumfacing, 0 ), worldObj, blockPos );
+        }
+
+        renderQuads( alpha, worldrenderer, model.getQuads( null, null, 0 ), worldObj, blockPos );
+        tessellator.draw();
+    }
+
+    public static void renderQuads(
+            final int alpha,
+            final VertexBuffer renderer,
+            final List<BakedQuad> quads,
+            final World worldObj,
+            final BlockPos blockPos )
+    {
+        for (BakedQuad bakedquad: quads)
+        {
+            final int color = bakedquad.getTintIndex() == -1 ? alpha | 0xffffff : getTint( alpha, bakedquad.getTintIndex(), worldObj, blockPos );
+            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor( renderer, bakedquad, color );
+        }
+    }
+
+    public static int getTint(
+            final int alpha,
+            final int tintIndex,
+            final World worldObj,
+            final BlockPos blockPos )
+    {
+        return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier( Blocks.COBBLESTONE.getDefaultState(), worldObj, blockPos, tintIndex );
+    }
+
+    public static void renderGhostModel(
+            final IBakedModel baked,
+            final World worldObj,
+            final BlockPos blockPos)
+    {
+        final int alpha = 0xaa000000;
+        GlStateManager.bindTexture( Minecraft.getMinecraft().getTextureMapBlocks().getGlTextureId() );
+        GlStateManager.color( 1.0f, 1.0f, 1.0f, 1.0f );
+
+        GlStateManager.enableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.blendFunc( GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
+        GlStateManager.colorMask( false, false, false, false );
+
+        renderModel( baked, worldObj, blockPos, alpha );
+        GlStateManager.colorMask( true, true, true, true );
+        GlStateManager.depthFunc( GL11.GL_LEQUAL );
+        renderModel( baked, worldObj, blockPos, alpha );
+
+        GlStateManager.disableBlend();
+    }
 
 
     @Override
@@ -448,9 +550,9 @@ public class ItemMultiTool extends ModItem {
         IEnergyStorage storage = stack.getCapability(ENERGY, null);
 
         if(storage != null)
-            return storage.getEnergyStored() / (double)storage.getMaxEnergyStored();
+            return 1D - storage.getEnergyStored() / (double)storage.getMaxEnergyStored();
 
-        return 0;
+        return 1D;
     }
 
     @Override
