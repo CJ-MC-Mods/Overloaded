@@ -164,10 +164,8 @@ public class ItemMultiTool extends ModItem {
     @Nonnull
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
-            // TODO Make distance a config option
-            RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionEyes(1), player.getPositionVector().add(player.getLookVec().scale(OverloadedConfig.multiToolConfig.reach)));
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-//                ((ItemBlock)Item.getItemFromBlock(Blocks.GLASS)).canPlaceBlockOnSide(worldIn, result.getBlockPos(), result.sideHit,player, null);
+            RayTraceResult result = getBlockPlayerLookingAt(player, Minecraft.getMinecraft().getRenderPartialTicks());
+            if (result != null) {
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
             }
         }
@@ -259,8 +257,8 @@ public class ItemMultiTool extends ModItem {
 
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result = entityLiving.rayTrace(OverloadedConfig.multiToolConfig.reach, 0);
-            if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+            RayTraceResult result =  getBlockPlayerLookingAt(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
+            if (result != null) {
                 leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }
         }
@@ -340,19 +338,17 @@ public class ItemMultiTool extends ModItem {
     public void rightClickWithItem(@Nonnull World worldIn, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull EnumFacing sideHit, float hitX, float hitY, float hitZ) {
         ItemStack multiTool = player.getHeldItemMainhand();
 
-        if(multiTool.getItem() != this) {
+        if (multiTool.getItem() != this) {
             return;
         }
 
-        NBTTagCompound tagCompound = multiTool.getTagCompound();
+        ItemStack blockStack = getSelectedBlockItemStack(multiTool);
 
-        if(tagCompound == null || !tagCompound.hasKey("Item")){
-            player.sendStatusMessage( new TextComponentString("No block type selected to place."), true);
+        if (blockStack.isEmpty()) {
+            player.sendStatusMessage(new TextComponentString("No block type selected to place."), true);
             return;
         }
 
-        NBTTagCompound itemTag = tagCompound.getCompoundTag("Item");
-        ItemStack blockStack = new ItemStack(itemTag);
         if(!(blockStack.getItem() instanceof ItemBlock)) {
             player.sendStatusMessage(new TextComponentString("No valid block type selected to place."), true);
             return;
@@ -414,6 +410,17 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
+    private ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
+        NBTTagCompound tagCompound = multiTool.getTagCompound();
+
+        if(tagCompound == null || !tagCompound.hasKey("Item")){
+            return ItemStack.EMPTY;
+        }
+
+        NBTTagCompound itemTag = tagCompound.getCompoundTag("Item");
+        return new ItemStack(itemTag);
+    }
+
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
@@ -450,10 +457,13 @@ public class ItemMultiTool extends ModItem {
         if(player.getHeldItemMainhand().getItem() != this)
             return;
 
-        RayTraceResult result = player.rayTrace(128,event.getPartialTicks());
+        ItemStack stack = getSelectedBlockItemStack(player.getHeldItemMainhand());
 
-        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
+        if(stack.isEmpty())
             return;
+
+        RayTraceResult result = getBlockPlayerLookingAt(player,event.getPartialTicks());
+        if (result == null) return;
 
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 //        System.out.println(toRenderAt);
@@ -476,8 +486,17 @@ public class ItemMultiTool extends ModItem {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
-        renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Blocks.WOOL,1,1)),player.getEntityWorld(), toRenderAt);
+        renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack),player.getEntityWorld(), toRenderAt);
         GlStateManager.popMatrix();
+    }
+
+    @Nullable
+    private RayTraceResult getBlockPlayerLookingAt(EntityPlayer player, float partialTicks) {
+        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach,partialTicks);
+
+        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
+            return null;
+        return result;
     }
 
     public static void renderModel(
