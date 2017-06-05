@@ -48,7 +48,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
                 renderItem(stackCache);
             } else {
                 uuidCache = uuid;
-                stackCache = new ItemStack(Item.getByNameOrId("skull"));
+                stackCache = new ItemStack(Item.getByNameOrId("skull"),1,3);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setString("SkullOwner", uuid.toString());
                 stackCache.setTagCompound(tag);
