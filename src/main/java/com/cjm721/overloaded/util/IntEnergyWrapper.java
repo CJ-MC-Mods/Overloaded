@@ -1,12 +1,11 @@
 package com.cjm721.overloaded.util;
 
+import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 
@@ -15,12 +14,26 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class IntEnergyWrapper implements ICapabilitySerializable<NBTTagCompound> {
+public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage {
 
-    private EnergyStorage storage;
+    private final ItemStack stack;
 
-    public IntEnergyWrapper(ItemStack stack, @Nullable NBTTagCompound tagCompound) {
-        storage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,0);
+    public IntEnergyWrapper(ItemStack stack) {
+        this.stack = stack;
+
+        NBTTagCompound tagCompound = this.stack.getTagCompound();
+        if(tagCompound == null) {
+            tagCompound = new NBTTagCompound();
+        }
+
+        if(!tagCompound.hasKey("IntEnergyStorage")) {
+            NBTTagCompound storageTag = new NBTTagCompound();
+            LongEnergyStorage storage = new LongEnergyStorage();
+
+            storage.writeToNBT(storageTag);
+            tagCompound.setTag("IntEnergyStorage", storageTag);
+            this.stack.setTagCompound(tagCompound);
+        }
     }
 
     @Override
@@ -31,26 +44,62 @@ public class IntEnergyWrapper implements ICapabilitySerializable<NBTTagCompound>
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY) {
-            return (T) storage;
+        if(hasCapability(capability,facing)) {
+            return (T) this;
         }
         return null;
     }
 
     @Override
-    @Nonnull
-    public NBTTagCompound serializeNBT() {
-        NBTTagCompound tagCompound = new NBTTagCompound();
-        tagCompound.setInteger("IntEnergyStorage", storage == null ? 0 :storage.getEnergyStored());
-        return tagCompound;
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        EnergyStorage storage = getStorage();
+        try{
+            return storage.receiveEnergy(maxReceive,simulate);
+        }
+        finally {
+            this.setStorage(storage);
+        }
     }
 
     @Override
-    public void deserializeNBT(@Nullable NBTTagCompound nbt) {
-        int energy = 0;
-        if(nbt != null && nbt.hasKey("IntEnergyStorage")) {
-            energy = nbt.getInteger("IntEnergyStorage");
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        EnergyStorage storage = getStorage();
+        try{
+            return storage.extractEnergy(maxExtract,simulate);
         }
-        storage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, energy);
+        finally {
+            this.setStorage(storage);
+        }
+    }
+
+    @Override
+    public int getEnergyStored() {
+        return getStorage().getEnergyStored();
+    }
+
+    @Override
+    public int getMaxEnergyStored() {
+        return getStorage().getMaxEnergyStored();
+    }
+
+    @Override
+    public boolean canExtract() {
+        return getStorage().canExtract();
+    }
+
+    @Override
+    public boolean canReceive() {
+        return getStorage().canReceive();
+    }
+
+    @Nonnull
+    private EnergyStorage getStorage() {
+        int energy = stack.getTagCompound().getInteger("IntEnergyStorage");
+
+        return new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,energy);
+    }
+
+    private void setStorage(@Nonnull EnergyStorage storage) {
+        stack.getTagCompound().setInteger("IntEnergyStorage", storage.getEnergyStored());
     }
 }

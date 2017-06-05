@@ -10,6 +10,7 @@ import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.util.BlockResult;
 import com.cjm721.overloaded.util.IntEnergyWrapper;
+import com.cjm721.overloaded.util.LongEnergyWrapper;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -427,7 +428,7 @@ public class ItemMultiTool extends ModItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack,nbt);
+        return new IntEnergyWrapper(stack);
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(

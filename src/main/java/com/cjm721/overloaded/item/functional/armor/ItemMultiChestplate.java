@@ -97,6 +97,6 @@ public class ItemMultiChestplate extends ItemArmor implements IModRegistrable {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack,nbt);
+        return new IntEnergyWrapper(stack);
     }
 }
