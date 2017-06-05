@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -14,13 +15,12 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, INBTSerializable<NBTTagCompound> {
+public class IntEnergyWrapper implements ICapabilitySerializable<NBTTagCompound> {
 
     private EnergyStorage storage;
 
-    public IntEnergyWrapper(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public IntEnergyWrapper(ItemStack stack, @Nullable NBTTagCompound tagCompound) {
         storage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,0);
-//        deserializeNBT(nbt);
     }
 
     @Override
@@ -32,40 +32,9 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IN
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY) {
-            return (T) this;
+            return (T) storage;
         }
         return null;
-    }
-
-
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate) {
-        return storage.receiveEnergy(maxReceive,simulate);
-    }
-
-    @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
-        return storage.extractEnergy(maxExtract,simulate);
-    }
-
-    @Override
-    public int getEnergyStored() {
-        return storage.getEnergyStored();
-    }
-
-    @Override
-    public int getMaxEnergyStored() {
-        return storage.getMaxEnergyStored();
-    }
-
-    @Override
-    public boolean canExtract() {
-        return storage.canExtract();
-    }
-
-    @Override
-    public boolean canReceive() {
-        return storage.canReceive();
     }
 
     @Override
@@ -83,6 +52,5 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IN
             energy = nbt.getInteger("IntEnergyStorage");
         }
         storage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, energy);
-        
     }
 }

@@ -42,7 +42,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -162,9 +161,10 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     @Nonnull
+    @SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
-            RayTraceResult result = getBlockPlayerLookingAt(player, Minecraft.getMinecraft().getRenderPartialTicks());
+            RayTraceResult result = getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
             }
@@ -257,7 +257,7 @@ public class ItemMultiTool extends ModItem {
 
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result =  getBlockPlayerLookingAt(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
+            RayTraceResult result =  getBlockPlayerLookingAtClient(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
                 leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }
@@ -359,8 +359,11 @@ public class ItemMultiTool extends ModItem {
         Vec3i sideVector = sideHit.getDirectionVec();
         BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
 
-        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+
+        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
+            player.sendStatusMessage(new TextComponentString("Unable to place blocks"), true);
             return;
+        }
         if (player.isSneaking()) {
             BlockPos playerPos = player.getPosition();
             switch (sideHit) {
@@ -424,7 +427,7 @@ public class ItemMultiTool extends ModItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack, nbt);
+        return new IntEnergyWrapper(stack,nbt);
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
@@ -462,22 +465,10 @@ public class ItemMultiTool extends ModItem {
         if(stack.isEmpty())
             return;
 
-        RayTraceResult result = getBlockPlayerLookingAt(player,event.getPartialTicks());
+        RayTraceResult result = getBlockPlayerLookingAtClient(player,event.getPartialTicks());
         if (result == null) return;
 
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
-//        System.out.println(toRenderAt);
-        //Minecraft.getMinecraft().getBlockRendererDispatcher()
-//        final Tessellator tessellator = Tessellator.getInstance();
-//        final VertexBuffer worldrenderer = tessellator.getBuffer();
-//        Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
-//                player.getEntityWorld(),
-//                Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(new ItemStack(Blocks.COBBLESTONE)),
-//                Blocks.COBBLESTONE.getDefaultState(),
-//                toRenderAt,
-//                worldrenderer,
-//                false
-//                );
 
         final float partialTicks = event.getPartialTicks();
         final double x = player.lastTickPosX + ( player.posX - player.lastTickPosX ) * partialTicks;
@@ -491,7 +482,8 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Nullable
-    private RayTraceResult getBlockPlayerLookingAt(EntityPlayer player, float partialTicks) {
+    @SideOnly(Side.CLIENT)
+    private RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
         RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach,partialTicks);
 
         if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
@@ -499,6 +491,7 @@ public class ItemMultiTool extends ModItem {
         return result;
     }
 
+    @SideOnly(Side.CLIENT)
     public static void renderModel(
             final IBakedModel model,
             final World worldObj,
@@ -518,6 +511,7 @@ public class ItemMultiTool extends ModItem {
         tessellator.draw();
     }
 
+    @SideOnly(Side.CLIENT)
     public static void renderQuads(
             final int alpha,
             final VertexBuffer renderer,
@@ -532,6 +526,7 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public static int getTint(
             final int alpha,
             final int tintIndex,
@@ -541,6 +536,7 @@ public class ItemMultiTool extends ModItem {
         return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier( Blocks.COBBLESTONE.getDefaultState(), worldObj, blockPos, tintIndex );
     }
 
+    @SideOnly(Side.CLIENT)
     public static void renderGhostModel(
             final IBakedModel baked,
             final World worldObj,
