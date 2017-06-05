@@ -526,6 +526,7 @@ public class ItemMultiTool extends ModItem {
 
     }
 
+    @SideOnly(Side.CLIENT)
     private void renderBlockPreview(RenderWorldLastEvent event, EntityPlayer player, ItemStack stack, RayTraceResult result, IBlockState state) {
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 
