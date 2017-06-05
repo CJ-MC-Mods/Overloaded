@@ -3,24 +3,22 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.config.MultiToolConfig;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
+import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockResult;
-import com.cjm721.overloaded.util.IntEnergyWrapper;
-import com.cjm721.overloaded.util.LongEnergyWrapper;
+import com.cjm721.overloaded.util.RenderUtil;
+import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -43,10 +41,13 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -56,10 +57,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -111,7 +113,8 @@ public class ItemMultiTool extends ModItem {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         IEnergyStorage handler = stack.getCapability(ENERGY, null);
-        tooltip.add(String.format("Energy Stored: %d", handler.getEnergyStored()));
+        tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
+        tooltip.add("Assist Mode: " + getAssistMode());
 
         super.addInformation(stack, playerIn, tooltip, advanced);
     }
@@ -165,7 +168,7 @@ public class ItemMultiTool extends ModItem {
     @SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if(worldIn.isRemote) {
-            RayTraceResult result = getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
+            RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
                 Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
             }
@@ -182,7 +185,7 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy, EntityPlayerMP player, int efficiency, int unbreaking) {
+    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy,@Nonnull EntityPlayerMP player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
@@ -213,7 +216,7 @@ public class ItemMultiTool extends ModItem {
         return result ? BlockResult.SUCCESS : BlockResult.FAIL_REMOVE;
     }
 
-    public void drawParticleStreamTo(EntityPlayer source, Vec3d endingLocation, EnumParticleTypes type) {
+    public void drawParticleStreamTo(@Nonnull EntityPlayer source,@Nonnull Vec3d endingLocation,@Nonnull EnumParticleTypes type) {
         double xOffset = 0;//0.25;
         double yOffset = -.25;
         double zOffset = 0;//.25;
@@ -258,12 +261,52 @@ public class ItemMultiTool extends ModItem {
 
         if(stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result =  getBlockPlayerLookingAtClient(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
+            RayTraceResult result =  PlayerInteractionUtil.getBlockPlayerLookingAtClient(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
                 leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onMouseEvent(MouseEvent event) {
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        if(event.getDwheel() != 0 && player != null && player.isSneaking()) {
+            ItemStack stack = player.getHeldItemMainhand();
+            if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
+                changeHelpMode(event.getDwheel());
+                player.sendStatusMessage(new TextComponentString("Assist Mode: " + getAssistMode().getName()), true);
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    private void changeHelpMode(int dwheel) {
+        AssistMode[] values = AssistMode.values();
+        int mode = (OverloadedConfig.multiToolConfig.assistMode + Integer.signum(dwheel)) % values.length;
+        if(mode < 0)
+            mode += values.length;
+
+        OverloadedConfig.multiToolConfig.assistMode = mode;
+        ConfigManager.sync(MODID, Config.Type.INSTANCE);
+    }
+
+    @Nonnull
+    private AssistMode getAssistMode() {
+        AssistMode[] values = AssistMode.values();
+        int mode = OverloadedConfig.multiToolConfig.assistMode;
+
+        for(AssistMode assistMode: values) {
+            if(assistMode.getMode() == mode){
+                return assistMode;
+            }
+        }
+        // Invalid Config Entry so causing an update;
+        changeHelpMode(0);
+        return AssistMode.NONE;
+    }
+
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
@@ -456,7 +499,7 @@ public class ItemMultiTool extends ModItem {
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public void renderBlockOverlayEvent(RenderWorldLastEvent event) {
+    public void renderWorldLastEvent(RenderWorldLastEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().player;
         if(player.getHeldItemMainhand().getItem() != this)
             return;
@@ -466,9 +509,24 @@ public class ItemMultiTool extends ModItem {
         if(stack.isEmpty())
             return;
 
-        RayTraceResult result = getBlockPlayerLookingAtClient(player,event.getPartialTicks());
+        RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player,event.getPartialTicks());
         if (result == null) return;
 
+        IBlockState state;
+        if(stack.getItem() instanceof ItemBlock) {
+            state = ((ItemBlock) stack.getItem()).block.getDefaultState();
+        } else {
+            state = Blocks.COBBLESTONE.getDefaultState();
+        }
+
+        switch(getAssistMode()) {
+            case PREVIEW:
+                renderBlockPreview(event, player, stack, result, state);
+        }
+
+    }
+
+    private void renderBlockPreview(RenderWorldLastEvent event, EntityPlayer player, ItemStack stack, RayTraceResult result, IBlockState state) {
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 
         final float partialTicks = event.getPartialTicks();
@@ -478,86 +536,8 @@ public class ItemMultiTool extends ModItem {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
-        renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack),player.getEntityWorld(), toRenderAt);
+        RenderUtil.renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack), state, player.getEntityWorld(), toRenderAt);
         GlStateManager.popMatrix();
-    }
-
-    @Nullable
-    @SideOnly(Side.CLIENT)
-    private RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
-        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach,partialTicks);
-
-        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
-            return null;
-        return result;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void renderModel(
-            final IBakedModel model,
-            final World worldObj,
-            final BlockPos blockPos,
-            final int alpha )
-    {
-        final Tessellator tessellator = Tessellator.getInstance();
-        final VertexBuffer worldrenderer = tessellator.getBuffer();
-        worldrenderer.begin( GL11.GL_QUADS, DefaultVertexFormats.ITEM );
-
-        for ( final EnumFacing enumfacing : EnumFacing.values() )
-        {
-            renderQuads( alpha, worldrenderer, model.getQuads( null, enumfacing, 0 ), worldObj, blockPos );
-        }
-
-        renderQuads( alpha, worldrenderer, model.getQuads( null, null, 0 ), worldObj, blockPos );
-        tessellator.draw();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void renderQuads(
-            final int alpha,
-            final VertexBuffer renderer,
-            final List<BakedQuad> quads,
-            final World worldObj,
-            final BlockPos blockPos )
-    {
-        for (BakedQuad bakedquad: quads)
-        {
-            final int color = bakedquad.getTintIndex() == -1 ? alpha | 0xffffff : getTint( alpha, bakedquad.getTintIndex(), worldObj, blockPos );
-            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor( renderer, bakedquad, color );
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static int getTint(
-            final int alpha,
-            final int tintIndex,
-            final World worldObj,
-            final BlockPos blockPos )
-    {
-        return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier( Blocks.COBBLESTONE.getDefaultState(), worldObj, blockPos, tintIndex );
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void renderGhostModel(
-            final IBakedModel baked,
-            final World worldObj,
-            final BlockPos blockPos)
-    {
-        final int alpha = 0xaa000000;
-        GlStateManager.bindTexture( Minecraft.getMinecraft().getTextureMapBlocks().getGlTextureId() );
-        GlStateManager.color( 1.0f, 1.0f, 1.0f, 1.0f );
-
-        GlStateManager.enableBlend();
-        GlStateManager.enableTexture2D();
-        GlStateManager.blendFunc( GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
-        GlStateManager.colorMask( false, false, false, false );
-
-        renderModel( baked, worldObj, blockPos, alpha );
-        GlStateManager.colorMask( true, true, true, true );
-        GlStateManager.depthFunc( GL11.GL_LEQUAL );
-        renderModel( baked, worldObj, blockPos, alpha );
-
-        GlStateManager.disableBlend();
     }
 
 

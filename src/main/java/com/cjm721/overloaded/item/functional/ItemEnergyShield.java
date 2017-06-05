@@ -4,7 +4,7 @@ import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
-import com.cjm721.overloaded.util.LongEnergyWrapper;
+import com.cjm721.overloaded.util.itemwrapper.LongEnergyWrapper;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;

@@ -5,7 +5,7 @@ import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.IModRegistrable;
-import com.cjm721.overloaded.util.IntEnergyWrapper;
+import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockDispenser;

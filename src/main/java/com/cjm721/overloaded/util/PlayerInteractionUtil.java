@@ -16,14 +16,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
@@ -114,7 +118,7 @@ public class PlayerInteractionUtil {
 
         IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY,EnumFacing.UP);
 
-        int foundStackSlot = findItemStack(searchStack, inventory);
+        int foundStackSlot = findItemStackSlot(searchStack, inventory);
         if(foundStackSlot == -1) {
             return false;
         }
@@ -135,7 +139,7 @@ public class PlayerInteractionUtil {
         return false;
     }
 
-    public static int findItemStack(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
+    public static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
         int size = inventory.getSlots();
         for(int i = 0; i < size; i++) {
             ItemStack stack = inventory.getStackInSlot(i);
@@ -145,5 +149,15 @@ public class PlayerInteractionUtil {
         }
 
         return -1;
+    }
+
+    @Nullable
+    @SideOnly(Side.CLIENT)
+    public static RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
+        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach,partialTicks);
+
+        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
+            return null;
+        return result;
     }
 }

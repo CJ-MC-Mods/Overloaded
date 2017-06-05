@@ -18,4 +18,7 @@ public class MultiToolConfig {
 
     @Config.Comment({"Multiples the Hardness Cost by this. [Default: 1]"})
     public int breakCostMultiplier = 1;
+
+    @Config.Comment({"0 - None, 1 Block Place Preview, 2 Block Break Preview, 3 Place/Break Preview. (2/3 WIP)[Default: 1]"})
+    public int assistMode = 1;
 }
