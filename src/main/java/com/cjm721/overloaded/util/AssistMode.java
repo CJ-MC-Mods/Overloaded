@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 
 public enum AssistMode {
     NONE(0,"None"),
-    PREVIEW(1,"Preview");
+    PLACE_PREVIEW(1,"Place Preview"),
+    REMOVE_PREVIEW(2,"Remove Preview"),
+    BOTH_PREVIEW(3,"Both Preview");
 
     private final int mode;
     private final String name;

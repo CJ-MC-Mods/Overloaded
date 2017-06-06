@@ -3,7 +3,6 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.config.MultiToolConfig;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
@@ -18,7 +17,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -43,11 +45,14 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -61,7 +66,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -520,10 +524,40 @@ public class ItemMultiTool extends ModItem {
         }
 
         switch(getAssistMode()) {
-            case PREVIEW:
+            case PLACE_PREVIEW:
                 renderBlockPreview(event, player, stack, result, state);
+                break;
+            case REMOVE_PREVIEW:
+                renderRemovePreview(event,player,result);
+                break;
+            case BOTH_PREVIEW:
+                renderBlockPreview(event, player, stack, result, state);
+                renderRemovePreview(event,player,result);
+                break;
         }
 
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void renderRemovePreview(RenderWorldLastEvent event, EntityPlayer player, RayTraceResult result) {
+        try {
+            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
+            IBakedModel bakeModel = model.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString()));
+
+            BlockPos toRenderAt = result.getBlockPos();
+
+            final float partialTicks = event.getPartialTicks();
+            final double x = player.lastTickPosX + ( player.posX - player.lastTickPosX ) * partialTicks;
+            final double y = player.lastTickPosY + ( player.posY - player.lastTickPosY ) * partialTicks;
+            final double z = player.lastTickPosZ + ( player.posZ - player.lastTickPosZ ) * partialTicks;
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
+            RenderUtil.renderGhostModel(bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(), toRenderAt);
+            GlStateManager.popMatrix();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SideOnly(Side.CLIENT)
