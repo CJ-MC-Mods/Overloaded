@@ -2,6 +2,8 @@ package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
+import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
 import com.cjm721.overloaded.network.handler.MultiToolLeftClickHandler;
 import com.cjm721.overloaded.network.handler.MultiToolRightClickHandler;
 import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
@@ -27,8 +29,7 @@ public class CommonProxy {
         CapabilityHyperItem.register();
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
-
-        MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
+        MultiArmorCapabilityProvider.register();
     }
 
     public void init(FMLInitializationEvent event) {
@@ -38,6 +39,9 @@ public class CommonProxy {
         networkWrapper = new SimpleNetworkWrapper("overloaded");
         networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
         networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
+
+        MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
+        MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
     }
 
     public void postInit(FMLPostInitializationEvent event) {

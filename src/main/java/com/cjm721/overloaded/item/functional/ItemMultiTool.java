@@ -118,7 +118,7 @@ public class ItemMultiTool extends ModItem {
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         IEnergyStorage handler = stack.getCapability(ENERGY, null);
         tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
-        tooltip.add("Assist Mode: " + getAssistMode());
+        tooltip.add("Assist Mode: " + getAssistMode().getName());
 
         super.addInformation(stack, playerIn, tooltip, advanced);
     }

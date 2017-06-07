@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiBoots extends ItemArmor implements IModRegistrable {
+public class ItemMultiBoots extends ItemArmor implements IModRegistrable, IMultiArmor {
 
     public ItemMultiBoots() {
         super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.FEET);

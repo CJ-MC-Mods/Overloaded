@@ -113,7 +113,7 @@ public class PlayerInteractionUtil {
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
 
         long cost = OverloadedConfig.multiToolConfig.placeBaseCost + OverloadedConfig.multiToolConfig.costPerMeterAway * distance;
-        if(cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost)
+        if(!player.capabilities.isCreativeMode && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
             return false;
 
         IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY,EnumFacing.UP);
@@ -132,7 +132,8 @@ public class PlayerInteractionUtil {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 
-            energy.extractEnergy((int)cost,false);
+            if(!player.capabilities.isCreativeMode)
+                energy.extractEnergy((int)cost,false);
             return true;
         }
         inventory.insertItem(foundStackSlot,foundStack,player.capabilities.isCreativeMode);

@@ -22,7 +22,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiHelmet extends ItemArmor implements IModRegistrable {
+public class ItemMultiHelmet extends ItemArmor implements IModRegistrable, IMultiArmor {
 
     private RenderMultiHelmet armorModel;
 
