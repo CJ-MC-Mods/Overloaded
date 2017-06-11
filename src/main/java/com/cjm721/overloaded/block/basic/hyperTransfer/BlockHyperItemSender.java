@@ -34,8 +34,9 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
     @Override
     public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.hyperItemNodes)
+        if(OverloadedConfig.recipeEnabledConfig.hyperItemNodes) {
             GameRegistry.addRecipe(new ItemStack(this), "IRI", "ENE", "IRI", 'R', Blocks.CHEST, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock, 'E', Items.ENDER_EYE);
+        }
     }
 
     @Override

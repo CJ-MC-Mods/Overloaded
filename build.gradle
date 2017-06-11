@@ -52,14 +52,14 @@ compileJava {
 }
 
 minecraft {
-    version = "1.11.2-13.20.0.2282"
+    version = "1.12-14.21.0.2321"
     runDir = "run"
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20170530"
+    mappings = "snapshot_20161118"
     replace '${mod_version}', project.config.mod_version
     replaceIn "Overloaded.java"
     // serverRunArgs = ["GradleStartServer", "noGui"]

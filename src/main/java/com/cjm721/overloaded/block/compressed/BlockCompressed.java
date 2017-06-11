@@ -7,16 +7,19 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class BlockCompressed extends ModBlock {
@@ -48,12 +51,13 @@ public class BlockCompressed extends ModBlock {
         register();
     }
 
+
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(@Nonnull ItemStack stack, EntityPlayer player,@Nonnull List<String> tooltip, boolean advanced) {
+    public void addInformation(@Nonnull ItemStack stack, @Nullable World world ,@Nonnull List<String> tooltip, ITooltipFlag advanced) {
         tooltip.add(String.format("Hardness: %.0f", ((ItemBlock) stack.getItem()).getBlock().getDefaultState().getBlockHardness(null,null)));
 
-        super.addInformation(stack, player, tooltip, advanced);
+        super.addInformation(stack, world, tooltip, advanced);
     }
 
     @Override

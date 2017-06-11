@@ -2,9 +2,9 @@ package com.cjm721.overloaded.util;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -27,7 +27,7 @@ public class RenderUtil {
             final int alpha )
     {
         final Tessellator tessellator = Tessellator.getInstance();
-        final VertexBuffer worldRenderer = tessellator.getBuffer();
+        final BufferBuilder worldRenderer = tessellator.getBuffer();
         worldRenderer.begin( GL11.GL_QUADS, DefaultVertexFormats.ITEM );
 
         for ( final EnumFacing enumfacing : EnumFacing.values() )
@@ -42,7 +42,7 @@ public class RenderUtil {
     @SideOnly(Side.CLIENT)
     public static void renderQuads(
             final int alpha,
-            final VertexBuffer renderer,
+            final BufferBuilder renderer,
             final List<BakedQuad> quads,
             final IBlockState state,
             final World worldObj,

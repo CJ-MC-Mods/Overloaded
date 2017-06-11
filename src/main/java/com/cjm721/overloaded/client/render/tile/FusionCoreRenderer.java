@@ -41,7 +41,9 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
     }
 
     @Override
-    public void renderTileEntityAt(TileFusionCore te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void func_192841_a(TileFusionCore te, double x, double y, double z, float partialTicks, int destroyStage, float idk) {
+        super.func_192841_a(te,x,y,z,partialTicks,destroyStage,idk);
+
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
