@@ -42,7 +42,7 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
         super.readFromNBT(compound);
 
         fluidStorage.readFromNBT(compound.getCompoundTag("Fluid"));
-        energyStorage.readFromNBT(compound.getCompoundTag("Energy"));
+        energyStorage.deserializeNBT(compound.getCompoundTag("Energy"));
         input = new ItemStack(compound.getCompoundTag("Item"));
     }
 
@@ -50,10 +50,10 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
     @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         NBTTagCompound fluid = new NBTTagCompound();
-        NBTTagCompound energy = new NBTTagCompound();
+        NBTTagCompound energy = energyStorage.serializeNBT();;
 
         fluidStorage.writeToNBT(fluid);
-        energyStorage.writeToNBT(energy);
+
 
         compound.setTag("Fluid", fluid);
         compound.setTag("Energy", energy);

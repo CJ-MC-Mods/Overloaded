@@ -29,10 +29,9 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
         }
 
         if(!tagCompound.hasKey("EnergyStorage")) {
-            NBTTagCompound storageTag = new NBTTagCompound();
             LongEnergyStorage storage = new LongEnergyStorage();
 
-            storage.writeToNBT(storageTag);
+            NBTTagCompound storageTag = storage.serializeNBT();
             tagCompound.setTag("EnergyStorage", storageTag);
             this.stack.setTagCompound(tagCompound);
         }
@@ -51,12 +50,6 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
         }
         return null;
     }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) { }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) { return compound; }
 
     @Nonnull
     @Override
@@ -135,14 +128,13 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
         NBTTagCompound compound = stack.getTagCompound().getCompoundTag("EnergyStorage");
 
         LongEnergyStorage storage = new LongEnergyStorage();
-        storage.readFromNBT(compound);
+        storage.deserializeNBT(compound);
 
         return storage;
     }
 
     private void setStorage(@Nonnull LongEnergyStorage storage) {
-        NBTTagCompound compound = stack.getTagCompound().getCompoundTag("EnergyStorage");
-        storage.writeToNBT(compound);
+        NBTTagCompound compound = storage.serializeNBT();
         stack.getTagCompound().setTag("EnergyStorage", compound);
     }
 }

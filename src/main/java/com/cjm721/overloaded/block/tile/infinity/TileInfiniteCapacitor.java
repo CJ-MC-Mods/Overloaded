@@ -25,14 +25,15 @@ public class TileInfiniteCapacitor extends TileEntity {
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         super.writeToNBT(compound);
-        energyStorage.writeToNBT(compound);
+        NBTTagCompound energy = energyStorage.serializeNBT();
+        compound.setTag("Energy", energy);
         return compound;
     }
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
         super.readFromNBT(compound);
-        energyStorage.readFromNBT(compound);
+        energyStorage.deserializeNBT(compound.getCompoundTag("Energy"));
     }
 
     public LongEnergyStorage getStorage() {

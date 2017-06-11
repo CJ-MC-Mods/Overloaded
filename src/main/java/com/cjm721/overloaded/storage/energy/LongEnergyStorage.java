@@ -4,11 +4,12 @@ import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTConvertible {
+public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<NBTTagCompound>  {
 
     @Nonnull
     private LongEnergyStack energy;
@@ -18,13 +19,14 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound serializeNBT() {
+        NBTTagCompound compound = new NBTTagCompound();
         compound.setLong("Count", energy.amount);
         return compound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void deserializeNBT(@Nonnull NBTTagCompound compound) {
         energy = new LongEnergyStack(compound.hasKey("Count") ? compound.getLong("Count") : 0L);
     }
 
