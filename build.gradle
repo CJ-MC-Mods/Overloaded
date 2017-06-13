@@ -62,7 +62,7 @@ minecraft {
     mappings = "stable_31"
     replace '${mod_version}', project.config.mod_version
     replaceIn "Overloaded.java"
-    // serverRunArgs = ["GradleStartServer", "noGui"]
+    serverRunArgs = ["nogui"]
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 

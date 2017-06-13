@@ -22,22 +22,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiHelmet extends ItemArmor implements IModRegistrable, IMultiArmor {
+public class ItemMultiHelmet extends AbstractMultiArmor {
 
     private RenderMultiHelmet armorModel;
 
     public ItemMultiHelmet() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
-        setMaxDamage(-1);
+        super(0, EntityEquipmentSlot.HEAD);
 
         setRegistryName("multi_helmet");
         setUnlocalizedName("multi_helmet");
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-
-        ModItems.addToSecondaryInit(this);
     }
 
     @Override

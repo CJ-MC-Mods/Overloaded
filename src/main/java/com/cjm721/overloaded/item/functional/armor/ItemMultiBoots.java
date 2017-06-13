@@ -22,20 +22,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiBoots extends ItemArmor implements IModRegistrable, IMultiArmor {
+public class ItemMultiBoots extends AbstractMultiArmor{
 
     public ItemMultiBoots() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.FEET);
-        setMaxDamage(-1);
+        super(0, EntityEquipmentSlot.FEET);
 
         setRegistryName("multi_boots");
         setUnlocalizedName("multi_boots");
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-
-        ModItems.addToSecondaryInit(this);
     }
 
     @Override

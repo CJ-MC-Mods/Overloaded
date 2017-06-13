@@ -22,22 +22,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiLeggings extends ItemArmor implements IModRegistrable, IMultiArmor {
+public class ItemMultiLeggings extends AbstractMultiArmor {
 
     private RenderMultiLeggings armorModel;
 
     public ItemMultiLeggings() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.LEGS);
-        setMaxDamage(-1);
+        super(0, EntityEquipmentSlot.LEGS);
 
         setRegistryName("multi_leggings");
         setUnlocalizedName("multi_leggings");
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.register(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-
-        ModItems.addToSecondaryInit(this);
     }
 
     @Override
