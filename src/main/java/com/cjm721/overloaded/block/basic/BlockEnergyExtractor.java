@@ -114,6 +114,6 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
+        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
     }
 }

@@ -174,7 +174,7 @@ public class ItemMultiTool extends ModItem {
         if(worldIn.isRemote) {
             RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
+                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -234,7 +234,7 @@ public class ItemMultiTool extends ModItem {
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
         // Make the reach check unnessicary * Change to for loop
         while (distanceToEnd > 0.3D && distanceToEnd < (OverloadedConfig.multiToolConfig.reach * 2)) {
-            world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
+            world.spawnParticle(type, startingLocation.x, startingLocation.y, startingLocation.z, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
         }

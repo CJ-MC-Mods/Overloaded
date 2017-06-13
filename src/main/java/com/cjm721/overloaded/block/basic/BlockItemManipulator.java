@@ -105,11 +105,11 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
+        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(@Nonnull World worldIn,@Nonnull  BlockPos pos,@Nonnull  IBlockState state) {
         ((TileItemManipulator)worldIn.getTileEntity(pos)).breakBlock();
         super.breakBlock(worldIn, pos, state);
     }
