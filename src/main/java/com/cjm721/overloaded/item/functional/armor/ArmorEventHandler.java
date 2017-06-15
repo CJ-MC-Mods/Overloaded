@@ -5,6 +5,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
@@ -43,15 +44,32 @@ public class ArmorEventHandler {
         if (isMultiArmorSetEquipped(player)) {
             tryEnableFlight(player,dataStorage,event.side);
             tryFeedPlayer(player,event.side);
+            tryHealPlayer(player,event.side);
             tryRemoveHarmful(player,event.side);
         } else {
             disableFlight(player,dataStorage, event.side);
         }
     }
 
+    private void tryHealPlayer(EntityPlayer player, Side side) {
+        float currentHealth = player.getHealth();
+        float maxHealth = player.getMaxHealth();
+
+        int toHeal = (int) Math.ceil(maxHealth - currentHealth);
+        if(toHeal > 0&& extractEnergy(player, OverloadedConfig.multiArmorConfig.costPerHealth * toHeal, side.isClient())) {
+            player.setHealth(maxHealth);
+        }
+    }
+
     private void tryRemoveHarmful(EntityPlayer player, Side side) {
         for(PotionEffect effect: player.getActivePotionEffects()) {
+            Potion potion = effect.getPotion();
+            if(!potion.isBadEffect())
+                continue;
 
+            if(extractEnergy(player,OverloadedConfig.multiArmorConfig.removeEffect,side.isClient())) {
+                player.removeActivePotionEffect(potion);
+            }
         }
     }
 

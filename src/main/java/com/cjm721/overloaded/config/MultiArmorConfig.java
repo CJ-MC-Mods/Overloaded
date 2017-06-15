@@ -17,6 +17,10 @@ public class MultiArmorConfig {
     public int energyPerTickFlying = 10;
     @Config.Comment("Max level to feed up too. [Default: 20]")
     public int maxFoodLevel = 20;
-    @Config.Comment("Energy Cost per food level to fill")
+    @Config.Comment("Energy Cost per food amount to fill. [Default: 1000]")
     public int costPerFood = 1000;
+    @Config.Comment("Energy Cost to remove a potion effect. [Default: 10000]")
+    public int removeEffect = 10000;
+    @Config.Comment("Energy Cost per health amount to heal. [Default: 5000]")
+    public int costPerHealth = 5000;
 }
