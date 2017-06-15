@@ -46,8 +46,15 @@ public class ArmorEventHandler {
             tryFeedPlayer(player,event.side);
             tryHealPlayer(player,event.side);
             tryRemoveHarmful(player,event.side);
+            tryExtinguish(player,event.side);
         } else {
             disableFlight(player,dataStorage, event.side);
+        }
+    }
+
+    private void tryExtinguish(EntityPlayer player, Side side) {
+        if(player.isBurning() && extractEnergy(player,OverloadedConfig.multiArmorConfig.extinguishCost, side.isClient())) {
+            player.extinguish();
         }
     }
 
@@ -150,11 +157,22 @@ public class ArmorEventHandler {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY,null);
 
             if(energyStorage != null)
+                energyCost -= energyStorage.extractEnergy(energyCost / 4,simulated);
+
+            if(energyCost == 0)
+                return true;
+        }
+
+        for(ItemStack stack: player.inventory.armorInventory) {
+            IEnergyStorage energyStorage = stack.getCapability(ENERGY,null);
+
+            if(energyStorage != null)
                 energyCost -= energyStorage.extractEnergy(energyCost,simulated);
 
             if(energyCost == 0)
                 return true;
         }
+
         return false;
     }
 

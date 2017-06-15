@@ -56,7 +56,7 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "gui");
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
     }
 
@@ -66,19 +66,4 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
             //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
         }
     }
-
-//    @Override
-//    @Nonnull
-//    public Multimap<String, AttributeModifier> getItemAttributeModifiers(@Nullable EntityEquipmentSlot equipmentSlot) {
-//        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
-//
-//        if (equipmentSlot == this.armorType)
-//        {
-////            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", 100, 0));
-////            multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Max Health", 100, 0));
-////            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", 100, 0));
-//        }
-//
-//        return multimap;
-//    }
 }

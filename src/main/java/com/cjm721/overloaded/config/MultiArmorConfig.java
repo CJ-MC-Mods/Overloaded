@@ -23,4 +23,6 @@ public class MultiArmorConfig {
     public int removeEffect = 10000;
     @Config.Comment("Energy Cost per health amount to heal. [Default: 5000]")
     public int costPerHealth = 5000;
+    @Config.Comment("Energy to Extinguish the player. [Default: 1000]")
+    public int extinguishCost = 1000;
 }
