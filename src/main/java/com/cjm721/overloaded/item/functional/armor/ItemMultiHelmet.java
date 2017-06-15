@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -55,7 +56,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     @Override
     public void registerRecipe() {
         if(OverloadedConfig.recipeEnabledConfig.customHelmet) {
-            //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
+            GameRegistry.addRecipe(new ItemStack(this), "NEN", "N N", 'N', ModBlocks.netherStarBlock, 'E', ModItems.energyCore);
         }
     }
 }

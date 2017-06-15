@@ -49,13 +49,14 @@ public class ModItems {
         fluidCore = new ItemFluidCore();
         itemCore = new ItemItemCore();
 
+        customHelmet = new ItemMultiHelmet();
+        customChestplate = new ItemMultiChestplate();
+        customLeggins = new ItemMultiLeggings();
+        customBoots = new ItemMultiBoots();
+
         if(OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = new ItemEnergyShield();
 //            amountSelector = new ItemAmountSelector();
-            customHelmet = new ItemMultiHelmet();
-            customChestplate = new ItemMultiChestplate();
-            customLeggins = new ItemMultiLeggings();
-            customBoots = new ItemMultiBoots();
         }
     }
 

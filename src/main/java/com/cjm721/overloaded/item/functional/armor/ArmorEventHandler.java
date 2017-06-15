@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -159,7 +158,7 @@ public class ArmorEventHandler {
             if(energyStorage != null)
                 energyCost -= energyStorage.extractEnergy(energyCost / 4,simulated);
 
-            if(energyCost == 0)
+            if(energyCost <= 0)
                 return true;
         }
 

@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.entity.RenderMultiChestplate;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -14,6 +15,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -63,7 +66,7 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
     @Override
     public void registerRecipe() {
         if(OverloadedConfig.recipeEnabledConfig.customChestplate) {
-            //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
+            GameRegistry.addRecipe(new ItemStack(this), "N N", "NEN", "NNN", 'N', ModBlocks.netherStarBlock, 'E', ModItems.energyCore);
         }
     }
 }
