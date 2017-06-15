@@ -36,11 +36,6 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
-
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
@@ -63,11 +58,5 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
         if(OverloadedConfig.recipeEnabledConfig.customLeggings) {
             //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
         }
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
     }
 }

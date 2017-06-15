@@ -44,11 +44,6 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
-
     @Nullable
     @Override
     @SideOnly(Side.CLIENT)
@@ -72,24 +67,18 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
         }
     }
 
-    @Override
-    @Nonnull
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(@Nullable EntityEquipmentSlot equipmentSlot) {
-        Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
-
-        if (equipmentSlot == this.armorType)
-        {
-            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", 100, 0));
-            multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Max Health", 100, 0));
-            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", 100, 0));
-        }
-
-        return multimap;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
-    }
+//    @Override
+//    @Nonnull
+//    public Multimap<String, AttributeModifier> getItemAttributeModifiers(@Nullable EntityEquipmentSlot equipmentSlot) {
+//        Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+//
+//        if (equipmentSlot == this.armorType)
+//        {
+////            multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", 100, 0));
+////            multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Max Health", 100, 0));
+////            multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", 100, 0));
+//        }
+//
+//        return multimap;
+//    }
 }

@@ -11,6 +11,8 @@ public class OverloadedConfig {
     public static CompressedConfig compressedConfig = new CompressedConfig();
     @Config.Name("Multi-Tool")
     public static MultiToolConfig multiToolConfig = new MultiToolConfig();
+    @Config.Name("Multi-Armor")
+    public static MultiArmorConfig multiArmorConfig = new MultiArmorConfig();
     @Config.Name("Recipes")
     public static RecipeEnabledConfig recipeEnabledConfig = new RecipeEnabledConfig();
     @Config.Name("Development")
