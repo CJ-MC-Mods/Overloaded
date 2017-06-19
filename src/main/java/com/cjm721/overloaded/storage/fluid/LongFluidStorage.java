@@ -2,6 +2,7 @@ package com.cjm721.overloaded.storage.fluid;
 
 import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.LongFluidStack;
+import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -19,9 +20,12 @@ import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertible {
 
     @Nonnull
+    private final IDataUpdate dataUpdate;
+    @Nonnull
     private LongFluidStack storedFluid;
 
-    public LongFluidStorage() {
+    public LongFluidStorage(@Nonnull IDataUpdate dataUpdate) {
+        this.dataUpdate = dataUpdate;
         storedFluid = new LongFluidStack(null, 0);
     }
 
@@ -143,6 +147,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
             storedFluid.amount -= toReturn.amount;
             if (storedFluid.amount == 0)
                 storedFluid = LongFluidStack.EMPTY_STACK;
+            dataUpdate.dataUpdated();
         }
 
         return toReturn;
@@ -154,13 +159,17 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
         if(storedFluid.fluidStack == null) {
             if(doAction){
                 storedFluid = fluidStack;
+                dataUpdate.dataUpdated();
             }
             return LongFluidStack.EMPTY_STACK;
         }
 
         if(fluidsAreEqual(storedFluid.fluidStack, fluidStack.fluidStack)) {
             NumberUtil.AddReturn<Long> value = addToMax(storedFluid.amount, fluidStack.amount);
-            if(doAction) storedFluid.amount = value.result;
+            if(doAction) {
+                storedFluid.amount = value.result;
+                dataUpdate.dataUpdated();
+            }
 
             return new LongFluidStack(storedFluid.fluidStack, value.overflow);
         }

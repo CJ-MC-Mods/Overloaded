@@ -38,6 +38,7 @@ public class ArmorEventHandler {
     public void onLivingUpdateEvent(TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
 
+
         IOverloadedPlayerDataStorage dataStorage = getDataStorage(player);
 
         if (isMultiArmorSetEquipped(player)) {

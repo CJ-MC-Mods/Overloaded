@@ -2,6 +2,7 @@ package com.cjm721.overloaded.storage.item;
 
 import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.LongItemStack;
+import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +16,13 @@ import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertible {
 
     @Nonnull
+    private final IDataUpdate dataUpdate;
+    @Nonnull
     private LongItemStack longItemStack;
 
 
-    public LongItemStorage() {
+    public LongItemStorage(@Nonnull IDataUpdate dataUpdate) {
+        this.dataUpdate = dataUpdate;
         longItemStack = new LongItemStack(ItemStack.EMPTY,0);
     }
 
@@ -154,6 +158,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
         if(longItemStack.getItemStack().isEmpty()) {
             if(doAction) {
                 longItemStack = new LongItemStack(stack.getItemStack(), stack.getAmount());
+                dataUpdate.dataUpdated();
             }
             return LongItemStack.EMPTY_STACK;
         }
@@ -162,6 +167,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
             NumberUtil.AddReturn<Long> result = addToMax(longItemStack.getAmount(), stack.getAmount());
             if(doAction) {
                 longItemStack.setAmount(result.result);
+                dataUpdate.dataUpdated();
             }
             return new LongItemStack(stack.getItemStack(), result.overflow);
         }
@@ -182,6 +188,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
             if(longItemStack.getAmount() == 0L)
                 longItemStack.setItemStack(ItemStack.EMPTY);
+            dataUpdate.dataUpdated();
         }
 
         return toReturn;

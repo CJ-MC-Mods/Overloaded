@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.compressed;
 
-import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
+import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.config.OverloadedConfig;

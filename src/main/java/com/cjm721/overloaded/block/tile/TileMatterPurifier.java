@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.tile;
 
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,7 +18,7 @@ import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLE
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class TileMatterPurifier extends TileEntity implements ITickable {
+public class TileMatterPurifier extends TileEntity implements ITickable, IDataUpdate {
 
     private LongFluidStorage fluidStorage;
     private LongEnergyStorage energyStorage;
@@ -25,8 +26,8 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
 
 
     public TileMatterPurifier() {
-        fluidStorage = new LongFluidStorage();
-        energyStorage = new LongEnergyStorage();
+        fluidStorage = new LongFluidStorage(this);
+        energyStorage = new LongEnergyStorage(this);
         input = ItemStack.EMPTY;
     }
 
@@ -81,5 +82,10 @@ public class TileMatterPurifier extends TileEntity implements ITickable {
             return true;
 
         return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public void dataUpdated() {
+        markDirty();
     }
 }

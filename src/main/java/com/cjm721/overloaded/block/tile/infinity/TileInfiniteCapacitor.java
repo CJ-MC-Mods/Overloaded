@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.block.tile.infinity;
 
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -12,13 +13,13 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class TileInfiniteCapacitor extends TileEntity {
+public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
 
     @Nonnull
     private LongEnergyStorage energyStorage;
 
     public TileInfiniteCapacitor() {
-        energyStorage = new LongEnergyStorage();
+        energyStorage = new LongEnergyStorage(this);
     }
 
     @Override
@@ -44,7 +45,6 @@ public class TileInfiniteCapacitor extends TileEntity {
     @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
-            markDirty();
             return (T) energyStorage;
         }
         return super.getCapability(capability, facing);
@@ -56,5 +56,10 @@ public class TileInfiniteCapacitor extends TileEntity {
             return true;
         }
         return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public void dataUpdated() {
+        markDirty();
     }
 }

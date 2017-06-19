@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.client.render.block.compressed;
+package com.cjm721.overloaded.client.render.dynamic.compressed.block;
 
 import com.cjm721.overloaded.client.resource.CompressedResourcePack;
 import com.cjm721.overloaded.config.OverloadedConfig;
