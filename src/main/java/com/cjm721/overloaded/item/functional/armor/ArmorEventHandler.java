@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -69,13 +70,16 @@ public class ArmorEventHandler {
     }
 
     private void tryRemoveHarmful(EntityPlayer player, Side side) {
-        for(PotionEffect effect: player.getActivePotionEffects()) {
+        Iterator<PotionEffect> potionEffectIterator = player.getActivePotionEffects().iterator();
+
+        while(potionEffectIterator.hasNext()) {
+            PotionEffect effect = potionEffectIterator.next();
             Potion potion = effect.getPotion();
             if(!potion.isBadEffect())
                 continue;
 
             if(extractEnergy(player,OverloadedConfig.multiArmorConfig.removeEffect,side.isClient())) {
-                player.removeActivePotionEffect(potion);
+                potionEffectIterator.remove();
             }
         }
     }
