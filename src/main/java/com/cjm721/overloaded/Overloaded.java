@@ -10,7 +10,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "1.11.2",
         dependencies = "after:forge@[13.20.0.2266,)",
-        useMetadata = true
+        useMetadata = true,
+        acceptableRemoteVersions = "[0.0.25,)"
         )
 public class Overloaded {
 
