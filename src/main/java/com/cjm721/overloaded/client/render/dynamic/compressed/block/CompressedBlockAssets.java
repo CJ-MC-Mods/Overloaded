@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.client.render.dynamic.compressed.block;
 
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.CompressedResourcePack;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -11,12 +11,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +44,6 @@ public class CompressedBlockAssets {
         return new ResourceLocation(base.getResourceDomain(), "blockstates/" + base.getResourcePath() + ".json");
     }
 
-    private static InputStream getTextureInputStream(ResourceLocation baseLocation) throws IOException {
-        return Minecraft.getMinecraft().getResourceManager().getResource(getTexturePath(baseLocation)).getInputStream();
-    }
-
     @SubscribeEvent
     public void texturePre(TextureStitchEvent.Pre event) {
         for(CompressedResourceLocation locations: toCreateTextures) {
@@ -66,7 +59,7 @@ public class CompressedBlockAssets {
 
         BufferedImage image;
         try {
-            image = TextureUtil.readBufferedImage(getTextureInputStream(locations.base));
+            image = TextureUtil.readBufferedImage(ImageUtil.getTextureInputStream(CompressedBlockAssets.getTexturePath(locations.base)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -85,7 +78,7 @@ public class CompressedBlockAssets {
         BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, true, null);
 
         if(compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
-            compressedImage = scaleToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
+            compressedImage = ImageUtil.scaleToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
         }
 
         ResourceLocation rl = getTexturePath(locations.compressed);
@@ -106,14 +99,4 @@ public class CompressedBlockAssets {
         }
     }
 
-    private static BufferedImage scaleToWidth(@Nonnull BufferedImage original, int width) {
-        double scale = original.getWidth() / (double) width;
-
-        AffineTransform at = new AffineTransform();
-        at.scale(1/scale,1/scale);
-
-        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-
-        return scaleOp.filter(original,null);
-    }
 }
