@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.item.crafting;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,19 +25,18 @@ public class ItemFluidCore extends ModItem {
         setUnlocalizedName("fluid_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"fluid_core"), null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.fluidCore)
-            GameRegistry.addRecipe(new ItemStack(this), "NNN", "NIN", "NNN", 'N', Items.NETHER_STAR, 'I', Blocks.IRON_BLOCK);
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/items/fluid_core.png"),
+                new ResourceLocation(MODID,"textures/dynamic/items/fluid_core.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 }

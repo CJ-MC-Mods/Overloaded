@@ -29,7 +29,6 @@ public final class ModBlocks {
 
     public static ModBlock infiniteWaterSource;
 
-    public static ModBlock grill;
     public static ModBlock energyExtractor;
 
     public static ModBlock netherStarBlock;
@@ -58,7 +57,6 @@ public final class ModBlocks {
 
         infiniteWaterSource = new BlockInfiniteWaterSource();
 
-        grill = new BlockGrill();
         energyExtractor = new BlockEnergyExtractor();
 
         netherStarBlock = new BlockNetherStar();
@@ -76,12 +74,6 @@ public final class ModBlocks {
 
     public static void addToSecondaryInit(ModBlock block) {
         registerList.add(block);
-    }
-
-    public static void addRecipes() {
-        for(ModBlock block: registerList){
-            block.registerRecipe();
-        }
     }
 
     @SideOnly(Side.CLIENT)

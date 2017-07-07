@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.compressed;
 
-import com.cjm721.overloaded.client.render.block.compressed.CompressedBlockAssets;
+import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -58,14 +58,6 @@ public class BlockCompressed extends ModBlock {
         tooltip.add(String.format("Hardness: %.0f", ((ItemBlock) stack.getItem()).getBlock().getDefaultState().getBlockHardness(null,null)));
 
         super.addInformation(stack, world, tooltip, advanced);
-    }
-
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.compressedBlocks && recipeEnabled) {
-            GameRegistry.addRecipe(new ItemStack(this), "AAA", "AAA", "AAA", 'A', previousBlock);
-            GameRegistry.addShapelessRecipe(new ItemStack(previousBlock, 9), this);
-        }
     }
 
     @SideOnly(Side.CLIENT)

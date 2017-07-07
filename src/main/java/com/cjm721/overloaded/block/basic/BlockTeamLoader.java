@@ -41,11 +41,6 @@ public class BlockTeamLoader extends ModBlock implements ITileEntityProvider {
     }
 
     @Override
-    public void registerRecipe() {
-
-    }
-
-    @Override
     public void registerModel() {
 
     }

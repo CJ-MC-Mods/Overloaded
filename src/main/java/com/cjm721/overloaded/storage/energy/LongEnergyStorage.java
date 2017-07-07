@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.energy;
 
-import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.LongEnergyStack;
+import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -12,10 +12,13 @@ import javax.annotation.Nonnull;
 public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<NBTTagCompound>  {
 
     @Nonnull
+    private final IDataUpdate dataUpdate;
+    @Nonnull
     private LongEnergyStack energy;
 
-    public LongEnergyStorage() {
+    public LongEnergyStorage(@Nonnull IDataUpdate dataUpdate) {
         energy = new LongEnergyStack(0);
+        this.dataUpdate = dataUpdate;
     }
 
     @Override
@@ -103,8 +106,10 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     public LongEnergyStack give(@Nonnull LongEnergyStack stack, boolean doAction) {
         NumberUtil.AddReturn<Long> longAddReturn = NumberUtil.addToMax(energy.amount, stack.amount);
 
-        if(doAction)
+        if(doAction) {
             energy.amount = longAddReturn.result;
+            dataUpdate.dataUpdated();
+        }
 
         return new LongEnergyStack(longAddReturn.overflow);
     }
@@ -115,8 +120,10 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
         long newStoredAmount = Math.max(energy.amount - stack.amount, 0);
         LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount,stack.amount));
 
-        if(doAction)
+        if(doAction) {
             energy.amount = newStoredAmount;
+            dataUpdate.dataUpdated();
+        }
 
         return result;
     }

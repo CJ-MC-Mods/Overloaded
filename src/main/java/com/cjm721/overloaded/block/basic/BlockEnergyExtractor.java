@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.util.FacingStateMapper;
 import net.minecraft.block.BlockDirectional;
@@ -17,9 +18,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -91,12 +94,6 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.energyExtractor)
-            GameRegistry.addRecipe(new ItemStack(this), "IRI", "RBR", "IRI", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT, 'B', Blocks.REDSTONE_BLOCK);
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
@@ -104,6 +101,11 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
         FacingStateMapper stateMapper = new FacingStateMapper(getRegistryName());
         ModelLoader.setCustomStateMapper(this, stateMapper);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/energy_extractor.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/energy_extractor.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override
@@ -114,6 +116,6 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
+        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
     }
 }

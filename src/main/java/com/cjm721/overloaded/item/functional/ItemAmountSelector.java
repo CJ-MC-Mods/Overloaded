@@ -9,9 +9,4 @@ public class ItemAmountSelector extends ModItem {
     public void registerModel() {
 
     }
-
-    @Override
-    public void registerRecipe() {
-
-    }
 }

@@ -32,12 +32,6 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.hyperItemNodes)
-            GameRegistry.addRecipe(new ItemStack(this), "IRI", "RNR", "IRI", 'R', Blocks.CHEST, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock);
-    }
-
-    @Override
     @Nonnull
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperItemReceiver();

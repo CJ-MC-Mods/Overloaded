@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.util.itemwrapper;
 
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,7 +15,7 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage {
+public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IDataUpdate {
 
     private final ItemStack stack;
 
@@ -27,7 +28,7 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage {
         }
 
         if(!tagCompound.hasKey("IntEnergyStorage")) {
-            LongEnergyStorage storage = new LongEnergyStorage();
+            LongEnergyStorage storage = new LongEnergyStorage(this);
             NBTTagCompound storageTag = storage.serializeNBT();
 
 
@@ -101,5 +102,10 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage {
 
     private void setStorage(@Nonnull EnergyStorage storage) {
         stack.getTagCompound().setInteger("IntEnergyStorage", storage.getEnergyStored());
+    }
+
+    @Override
+    public void dataUpdated() {
+        // TODO: Find a way to use this for writing data instead of triggering a save call on every use.
     }
 }

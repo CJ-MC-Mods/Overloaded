@@ -3,6 +3,7 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
@@ -21,6 +22,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -80,7 +82,7 @@ public class ItemMultiTool extends ModItem {
         setRegistryName("multi_tool");
         setUnlocalizedName("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
     }
 
 
@@ -104,23 +106,21 @@ public class ItemMultiTool extends ModItem {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.multiTool)
-            GameRegistry.addRecipe(new ItemStack(this), "NI ", "IES", " SB", 'N', Items.NETHER_STAR, 'I', Items.IRON_INGOT, 'E', ModItems.energyCore, 'B', Blocks.IRON_BLOCK, 'S', ModBlocks.netherStarBlock);
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/items/ntool.png"),
+                new ResourceLocation(MODID,"textures/dynamic/items/ntool.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
-
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IEnergyStorage handler = stack.getCapability(ENERGY, null);
         tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
         tooltip.add("Assist Mode: " + getAssistMode().getName());
 
-        super.addInformation(stack, playerIn, tooltip, advanced);
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
@@ -174,7 +174,7 @@ public class ItemMultiTool extends ModItem {
         if(worldIn.isRemote) {
             RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.xCoord - result.getBlockPos().getX(), (float) result.hitVec.yCoord - result.getBlockPos().getY(), (float) result.hitVec.zCoord - result.getBlockPos().getZ()));
+                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -234,7 +234,7 @@ public class ItemMultiTool extends ModItem {
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
         // Make the reach check unnessicary * Change to for loop
         while (distanceToEnd > 0.3D && distanceToEnd < (OverloadedConfig.multiToolConfig.reach * 2)) {
-            world.spawnParticle(type, startingLocation.xCoord, startingLocation.yCoord, startingLocation.zCoord, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
+            world.spawnParticle(type, startingLocation.x, startingLocation.y, startingLocation.z, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
         }
@@ -518,7 +518,7 @@ public class ItemMultiTool extends ModItem {
 
         IBlockState state;
         if(stack.getItem() instanceof ItemBlock) {
-            state = ((ItemBlock) stack.getItem()).block.getDefaultState();
+            state = ((ItemBlock) stack.getItem()).getBlock().getDefaultState();
         } else {
             state = Blocks.COBBLESTONE.getDefaultState();
         }

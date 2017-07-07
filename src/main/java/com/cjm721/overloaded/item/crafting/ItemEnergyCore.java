@@ -1,11 +1,14 @@
 package com.cjm721.overloaded.item.crafting;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
@@ -23,19 +26,18 @@ public class ItemEnergyCore extends ModItem {
         setUnlocalizedName("energy_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"energy_core"), null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.energyCore)
-            GameRegistry.addRecipe(new ItemStack(this), "NNN", "NRN", "NNN", 'N', Items.NETHER_STAR, 'R', Blocks.REDSTONE_BLOCK);
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/items/energy_core.png"),
+                new ResourceLocation(MODID,"textures/dynamic/items/energy_core.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 }

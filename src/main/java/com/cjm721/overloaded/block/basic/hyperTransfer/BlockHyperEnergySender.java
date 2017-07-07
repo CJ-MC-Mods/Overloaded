@@ -35,12 +35,6 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.hyperEnergyNodes)
-            GameRegistry.addRecipe(new ItemStack(this), "IRI", "ENE", "IRI", 'R', Blocks.REDSTONE_BLOCK, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock, 'E', Items.ENDER_EYE);
-    }
-
-    @Override
     @Nonnull
     public String getType() {
         return "Energy";

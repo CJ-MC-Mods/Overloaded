@@ -29,14 +29,6 @@ public class BlockNetherStar extends ModBlock {
         register();
     }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.netherStarBlock) {
-            GameRegistry.addRecipe(new ItemStack(this), "NNN", "NNN", "NNN", 'N', Items.NETHER_STAR);
-            GameRegistry.addShapelessRecipe(new ItemStack(Items.NETHER_STAR,9), this);
-        }
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {

@@ -1,5 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -14,6 +17,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -22,25 +26,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiBoots extends ItemArmor implements IModRegistrable, IMultiArmor {
+import static com.cjm721.overloaded.Overloaded.MODID;
+
+public class ItemMultiBoots extends AbstractMultiArmor {
 
     public ItemMultiBoots() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.FEET);
-        setMaxDamage(-1);
+        super(0, EntityEquipmentSlot.FEET);
 
         setRegistryName("multi_boots");
         setUnlocalizedName("multi_boots");
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-
-        ModItems.addToSecondaryInit(this);
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 
     @Nullable
@@ -59,18 +56,10 @@ public class ItemMultiBoots extends ItemArmor implements IModRegistrable, IMulti
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.customBoots) {
-            //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
-        }
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/armors/multi_boot.png"),
+                new ResourceLocation(MODID,"textures/dynamic/armors/multi_boot.png"),
+                OverloadedConfig.textureResolutions.multiArmorResolution));
     }
 }

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemManipulator;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -49,17 +51,15 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.itemManipulator) {
-
-        }
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/item_manipulator.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/item_manipulator.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override
@@ -105,11 +105,11 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
+        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
     }
 
     @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+    public void breakBlock(@Nonnull World worldIn,@Nonnull  BlockPos pos,@Nonnull  IBlockState state) {
         ((TileItemManipulator)worldIn.getTileEntity(pos)).breakBlock();
         super.breakBlock(worldIn, pos, state);
     }

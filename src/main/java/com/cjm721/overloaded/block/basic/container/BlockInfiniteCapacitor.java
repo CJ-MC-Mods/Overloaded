@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.IHyperType;
@@ -54,17 +55,16 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
         return new TileInfiniteCapacitor();
     }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.infinityCapacitor)
-            GameRegistry.addRecipe(new ItemStack(this), "GDG", "DCD", "GDG", 'G', Blocks.IRON_BLOCK, 'D', Blocks.DIAMOND_BLOCK, 'C', ModItems.energyCore);
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_capacitor"), null);
+        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/infinite_capacitor.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_capacitor.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

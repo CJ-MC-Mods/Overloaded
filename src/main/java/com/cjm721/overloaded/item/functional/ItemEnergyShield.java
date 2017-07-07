@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.LongEnergyStack;
@@ -7,6 +8,7 @@ import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.util.itemwrapper.LongEnergyWrapper;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
@@ -18,13 +20,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -42,7 +42,7 @@ public class ItemEnergyShield extends ModItem {
         setUnlocalizedName("energy_shield");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
@@ -53,11 +53,6 @@ public class ItemEnergyShield extends ModItem {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"energy_shield"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
-
-    @Override
-    public void registerRecipe() {
-
     }
 
     @Override
@@ -131,11 +126,11 @@ public class ItemEnergyShield extends ModItem {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);
         tooltip.add("Energy Stored: " + handler.status().getAmount());
 
-        super.addInformation(stack, playerIn, tooltip, advanced);
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override

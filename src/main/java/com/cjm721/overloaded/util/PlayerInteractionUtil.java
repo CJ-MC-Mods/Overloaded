@@ -125,7 +125,7 @@ public class PlayerInteractionUtil {
         ItemStack foundStack = inventory.extractItem(foundStackSlot,1,player.capabilities.isCreativeMode);
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
-        IBlockState iblockstate1 = itemBlock.block.getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
+        IBlockState iblockstate1 = itemBlock.getBlock().getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
 
         if (itemBlock.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1))
         {

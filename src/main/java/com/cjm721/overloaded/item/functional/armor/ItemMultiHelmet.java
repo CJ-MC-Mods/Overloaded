@@ -1,5 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -14,6 +17,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -22,27 +26,20 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemMultiHelmet extends ItemArmor implements IModRegistrable, IMultiArmor {
+import static com.cjm721.overloaded.Overloaded.MODID;
+
+public class ItemMultiHelmet extends AbstractMultiArmor {
 
     private RenderMultiHelmet armorModel;
 
     public ItemMultiHelmet() {
-        super(ArmorMaterial.DIAMOND, 0, EntityEquipmentSlot.HEAD);
-        setMaxDamage(-1);
+        super(0, EntityEquipmentSlot.HEAD);
 
         setRegistryName("multi_helmet");
         setUnlocalizedName("multi_helmet");
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        GameRegistry.register(this);
+        Overloaded.proxy.itemToRegister.add(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-
-        ModItems.addToSecondaryInit(this);
-    }
-
-    @Override
-    public boolean isDamageable() {
-        return false;
     }
 
     @Nullable
@@ -59,18 +56,10 @@ public class ItemMultiHelmet extends ItemArmor implements IModRegistrable, IMult
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
-    }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.customHelmet) {
-            //GameRegistry.addRecipe(new ItemStack(this), "GII", "IRI", "III", 'G', Items.GOLD_NUGGET, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);
-        }
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/armors/multi_helmet.png"),
+                new ResourceLocation(MODID,"textures/dynamic/armors/multi_helmet.png"),
+                OverloadedConfig.textureResolutions.multiArmorResolution));
     }
 }

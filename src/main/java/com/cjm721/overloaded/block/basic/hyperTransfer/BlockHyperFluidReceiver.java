@@ -34,12 +34,6 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.hyperFluidNodes)
-            GameRegistry.addRecipe(new ItemStack(this), "IRI", "RNR", "IRI", 'R', Items.BUCKET, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock);
-    }
-
-    @Override
     @Nonnull
     protected String getType() {
         return "Fluid";

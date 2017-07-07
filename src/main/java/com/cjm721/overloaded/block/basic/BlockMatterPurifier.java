@@ -24,11 +24,6 @@ public class BlockMatterPurifier extends ModBlock {
     }
 
     @Override
-    public void registerRecipe() {
-
-    }
-
-    @Override
     public void registerModel() {
 
     }

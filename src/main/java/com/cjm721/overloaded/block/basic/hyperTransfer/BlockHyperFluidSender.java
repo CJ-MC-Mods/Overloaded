@@ -40,12 +40,6 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
     }
 
     @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.hyperFluidNodes)
-            GameRegistry.addRecipe(new ItemStack(this), "IRI", "ENE", "IRI", 'R', Items.BUCKET, 'I', Blocks.IRON_BLOCK, 'N', ModBlocks.netherStarBlock, 'E', Items.ENDER_EYE);
-    }
-
-    @Override
     @Nonnull
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperFluidSender();

@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.block.tile.infinity;
 
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -12,12 +13,12 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class TileInfiniteTank extends TileEntity {
+public class TileInfiniteTank extends TileEntity implements IDataUpdate {
 
     private LongFluidStorage fluidStorage;
 
     public TileInfiniteTank() {
-        fluidStorage = new LongFluidStorage();
+        fluidStorage = new LongFluidStorage(this);
     }
 
     @Override
@@ -56,9 +57,13 @@ public class TileInfiniteTank extends TileEntity {
     {
         if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
         {
-            markDirty();
             return (T) fluidStorage;
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void dataUpdated() {
+        markDirty();
     }
 }

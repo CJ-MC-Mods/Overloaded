@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.IHyperType;
@@ -48,18 +49,16 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.infinityBarrel)
-            GameRegistry.addRecipe(new ItemStack(this), "GDG", "DCD", "GDG", 'G', Blocks.IRON_BLOCK, 'D', Blocks.DIAMOND_BLOCK, 'C', ModItems.itemCore);
-
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/infinite_barrel.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_barrel.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

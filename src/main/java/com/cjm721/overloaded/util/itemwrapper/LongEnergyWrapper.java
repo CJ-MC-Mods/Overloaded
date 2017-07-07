@@ -3,6 +3,7 @@ package com.cjm721.overloaded.util.itemwrapper;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -16,7 +17,7 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IHyperHandlerEnergy {
+public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IHyperHandlerEnergy, IDataUpdate {
 
     private final ItemStack stack;
 
@@ -29,7 +30,7 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
         }
 
         if(!tagCompound.hasKey("EnergyStorage")) {
-            LongEnergyStorage storage = new LongEnergyStorage();
+            LongEnergyStorage storage = new LongEnergyStorage(this);
 
             NBTTagCompound storageTag = storage.serializeNBT();
             tagCompound.setTag("EnergyStorage", storageTag);
@@ -127,7 +128,7 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     private LongEnergyStorage getStorage() {
         NBTTagCompound compound = stack.getTagCompound().getCompoundTag("EnergyStorage");
 
-        LongEnergyStorage storage = new LongEnergyStorage();
+        LongEnergyStorage storage = new LongEnergyStorage(this);
         storage.deserializeNBT(compound);
 
         return storage;
@@ -136,5 +137,10 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     private void setStorage(@Nonnull LongEnergyStorage storage) {
         NBTTagCompound compound = storage.serializeNBT();
         stack.getTagCompound().setTag("EnergyStorage", compound);
+    }
+
+    @Override
+    public void dataUpdated() {
+        // TODO: Find a way to use this for writing data instead of triggering a save call on every use.
     }
 }

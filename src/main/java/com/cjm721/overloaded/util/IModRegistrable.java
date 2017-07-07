@@ -6,6 +6,4 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface IModRegistrable {
     @SideOnly(Side.CLIENT)
     void registerModel();
-
-    void registerRecipe();
 }

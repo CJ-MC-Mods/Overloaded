@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.tile.infinity;
 
 import com.cjm721.overloaded.storage.item.LongItemStorage;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -11,13 +12,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileInfiniteBarrel extends TileEntity  {
+public class TileInfiniteBarrel extends TileEntity implements IDataUpdate {
 
     @Nonnull
     private LongItemStorage itemStorage;
 
     public TileInfiniteBarrel() {
-        itemStorage = new LongItemStorage();
+        itemStorage = new LongItemStorage(this);
     }
 
     @Override
@@ -51,7 +52,6 @@ public class TileInfiniteBarrel extends TileEntity  {
     {
         if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER)
         {
-            markDirty();
             return (T) itemStorage;
         }
         return super.getCapability(capability, facing);
@@ -61,4 +61,8 @@ public class TileInfiniteBarrel extends TileEntity  {
         return itemStorage;
     }
 
+    @Override
+    public void dataUpdated() {
+        markDirty();
+    }
 }

@@ -12,8 +12,8 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class ArmorSecondarySpritesRegister {
     @SubscribeEvent
     public void texturePre(TextureStitchEvent.Pre event) {
-        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_belt"));
-        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_left_arm"));
-        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_right_arm"));
+//        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_belt"));
+//        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_left_arm"));
+//        event.getMap().registerSprite(new ResourceLocation(MODID, "armors/multi_right_arm"));
     }
 }

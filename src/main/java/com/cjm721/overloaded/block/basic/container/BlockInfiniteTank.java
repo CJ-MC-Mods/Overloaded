@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteTank;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.IHyperType;
@@ -52,17 +53,16 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }
 
-    @Override
-    public void registerRecipe() {
-        if(OverloadedConfig.recipeEnabledConfig.infinityTank)
-            GameRegistry.addRecipe(new ItemStack(this), "GDG", "DCD", "GDG", 'G', Blocks.IRON_BLOCK, 'D', Blocks.DIAMOND_BLOCK, 'C', ModItems.fluidCore);
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_tank"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/infinite_tank.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_tank.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override
@@ -86,9 +86,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
                 TileEntity te = worldIn.getTileEntity(pos);
                 if (te != null && te instanceof TileInfiniteTank) {
                     IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, side);
-                    FluidActionResult result = FluidUtil.interactWithFluidHandler(heldItem, handler,playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
-                    if(result.isSuccess())
-                        playerIn.setHeldItem(hand, result.getResult());
+                    FluidUtil.interactWithFluidHandler(playerIn, hand, handler); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
                 }
             }
         }

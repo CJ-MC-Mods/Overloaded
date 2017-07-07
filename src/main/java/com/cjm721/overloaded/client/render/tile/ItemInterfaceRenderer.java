@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInterface> {
 
     @Override
-    public void renderTileEntityAt(TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
