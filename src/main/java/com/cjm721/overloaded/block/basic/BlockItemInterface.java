@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
@@ -19,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -60,6 +62,11 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     public void registerModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
         ClientRegistry.bindTileEntitySpecialRenderer(TileItemInterface.class, new ItemInterfaceRenderer());
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/block.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/block.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

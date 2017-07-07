@@ -1,8 +1,7 @@
 package com.cjm721.overloaded.client.render.dynamic.general;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.resource.CompressedResourcePack;
-import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -10,6 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ResizeableTextureGenerator {
     }
 
     @SubscribeEvent
-    public void texturePre(TextureStitchEvent.Pre event) {
+    public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
         for(ResizableTexture resizableTexture: toCreateTextures) {
             BufferedImage image = null;
             try {
@@ -40,8 +40,20 @@ public class ResizeableTextureGenerator {
 
             image = ImageUtil.scaleToWidth(image, resizableTexture.resizeToWidth);
 
-            CompressedResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
+            BlockResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
+
+            event.getMap().registerSprite(cleanForSprite(resizableTexture.generatedName));
         }
+    }
+
+    @Nonnull
+    private ResourceLocation cleanForSprite(@Nonnull ResourceLocation location) {
+        String path = location.getResourcePath();
+
+        if(path.startsWith("textures/")) {
+            return new ResourceLocation(location.getResourceDomain(), path.substring(9).replace(".png",""));
+        }
+        return location;
     }
 
     public static class ResizableTexture {

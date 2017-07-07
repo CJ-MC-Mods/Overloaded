@@ -17,5 +17,6 @@ public class OverloadedConfig {
     public static RecipeEnabledConfig recipeEnabledConfig = new RecipeEnabledConfig();
     @Config.Name("Development")
     public static DevelopmentConfig developmentConfig = new DevelopmentConfig();
-
+    @Config.Name("Texture Resolutions")
+    public static ResolutionConfig textureResolutions = new ResolutionConfig();
 }

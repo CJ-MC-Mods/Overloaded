@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiChestplate;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -22,6 +23,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.EnumHelper;
@@ -32,6 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
+
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ItemMultiChestplate extends AbstractMultiArmor {
 
@@ -61,6 +65,19 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "gui");
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/armors/multi_body.png"),
+                new ResourceLocation(MODID,"textures/dynamic/armors/multi_body.png"),
+                OverloadedConfig.textureResolutions.multiArmorResolution));
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/armors/multi_left_arm.png"),
+                new ResourceLocation(MODID,"textures/dynamic/armors/multi_left_arm.png"),
+                OverloadedConfig.textureResolutions.multiArmorResolution));
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/armors/multi_right_arm.png"),
+                new ResourceLocation(MODID,"textures/dynamic/armors/multi_right_arm.png"),
+                OverloadedConfig.textureResolutions.multiArmorResolution));
     }
 
     @Override

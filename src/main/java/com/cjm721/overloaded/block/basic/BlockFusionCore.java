@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileFusionCore;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,8 +59,16 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     public void registerModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
         ClientRegistry.bindTileEntitySpecialRenderer(TileFusionCore.class, new FusionCoreRenderer());
-    }
 
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/sun/yellow.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/sun/yellow.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/sun/red_two.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/sun/red_two.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
+    }
 
     @Nullable
     @Override

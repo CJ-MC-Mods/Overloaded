@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -49,6 +50,11 @@ public class ItemLinkingCard extends ModItem {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"linking_card"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/items/linkingcard.png"),
+                new ResourceLocation(MODID,"textures/dynamic/items/linkingcard.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

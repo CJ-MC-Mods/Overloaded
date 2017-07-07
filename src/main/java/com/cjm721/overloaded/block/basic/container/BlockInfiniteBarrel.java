@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.IHyperType;
@@ -60,6 +61,11 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/infinite_barrel.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_barrel.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

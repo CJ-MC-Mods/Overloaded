@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
         acceptedMinecraftVersions = "1.11.2",
         dependencies = "after:forge@[13.20.0.2266,)",
         useMetadata = true,
-        acceptableRemoteVersions = "[0.0.25,)"
+        acceptableRemoteVersions = "[${mod_version},)"
         )
 public class Overloaded {
 

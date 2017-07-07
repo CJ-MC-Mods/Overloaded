@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.util.FacingStateMapper;
 import net.minecraft.block.BlockDirectional;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -104,6 +106,11 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
 
         FacingStateMapper stateMapper = new FacingStateMapper(getRegistryName());
         ModelLoader.setCustomStateMapper(this, stateMapper);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/blocks/energy_extractor.png"),
+                new ResourceLocation(MODID,"textures/dynamic/blocks/energy_extractor.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.client.render.dynamic.compressed.block;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.resource.CompressedResourcePack;
+import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
@@ -55,7 +55,7 @@ public class CompressedBlockAssets {
 
     private static boolean generateTexture(CompressedResourceLocation locations) {
         String state = getBlockState(locations.compressed);
-        CompressedResourcePack.INSTANCE.addBlockState(getJsonPath(locations.compressed), state);
+        BlockResourcePack.INSTANCE.addBlockState(getJsonPath(locations.compressed), state);
 
         BufferedImage image;
         try {
@@ -82,7 +82,7 @@ public class CompressedBlockAssets {
         }
 
         ResourceLocation rl = getTexturePath(locations.compressed);
-        CompressedResourcePack.INSTANCE.addImage(rl, compressedImage);
+        BlockResourcePack.INSTANCE.addImage(rl, compressedImage);
 
         return true;
     }

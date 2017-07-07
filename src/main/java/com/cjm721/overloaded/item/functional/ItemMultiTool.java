@@ -3,6 +3,7 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
@@ -104,6 +105,11 @@ public class ItemMultiTool extends ModItem {
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
+
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                new ResourceLocation(MODID,"textures/items/ntool.png"),
+                new ResourceLocation(MODID,"textures/dynamic/items/ntool.png"),
+                OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override
