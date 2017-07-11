@@ -49,9 +49,9 @@ public class RenderMultiLeggings extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedBody.render(1/16F);
-        this.bipedRightLeg.render(1/16F);
-        this.bipedLeftLeg.render(1/16F);
+        this.bipedBody.render(f5);
+        this.bipedRightLeg.render(f5);
+        this.bipedLeftLeg.render(f5);
 
         GlStateManager.popMatrix();
 

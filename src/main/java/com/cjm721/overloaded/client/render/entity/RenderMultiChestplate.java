@@ -58,9 +58,9 @@ public class RenderMultiChestplate extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedBody.render(1/16F);
-        this.bipedRightArm.render(1/16F);
-        this.bipedLeftArm.render(1/16F);
+        this.bipedBody.render(f5);
+        this.bipedRightArm.render(f5);
+        this.bipedLeftArm.render(f5);
 
         GlStateManager.popMatrix();
 

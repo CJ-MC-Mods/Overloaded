@@ -42,7 +42,7 @@ public class RenderMultiHelmet extends ModelBiped {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedHead.render(1/16F);
+        this.bipedHead.render(f5);
 
         GlStateManager.popMatrix();
 
