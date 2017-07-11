@@ -13,8 +13,6 @@ public class OverloadedConfig {
     public static MultiToolConfig multiToolConfig = new MultiToolConfig();
     @Config.Name("Multi-Armor")
     public static MultiArmorConfig multiArmorConfig = new MultiArmorConfig();
-    @Config.Name("Recipes")
-    public static RecipeEnabledConfig recipeEnabledConfig = new RecipeEnabledConfig();
     @Config.Name("Development")
     public static DevelopmentConfig developmentConfig = new DevelopmentConfig();
     @Config.Name("Texture Resolutions")

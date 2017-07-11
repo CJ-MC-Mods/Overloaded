@@ -7,13 +7,6 @@ public class CompressedConfig {
     @Config.Comment({"Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<recipe enabled>"})
     @Config.RequiresMcRestart
     public String[] compressedBlocks = new String[] {
-            "minecraft:cobblestone:8:true",
-            "minecraft:sand:8:true",
-            "minecraft:stone:8:true",
-            "minecraft:obsidian:8:true",
-            "minecraft:netherrack:8:true",
-            "minecraft:dirt:8:true",
-            "minecraft:gravel:8:true"
     };
 
     @Config.RequiresMcRestart

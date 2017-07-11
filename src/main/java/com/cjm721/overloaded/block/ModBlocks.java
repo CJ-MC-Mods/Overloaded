@@ -69,7 +69,8 @@ public final class ModBlocks {
             itemManipulator = new BlockItemManipulator();
         }
 
-        CompressedBlockHandler.initFromConfig();
+        // Disabled
+        // CompressedBlockHandler.initFromConfig();
     }
 
     public static void addToSecondaryInit(ModBlock block) {
