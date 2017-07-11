@@ -1,11 +1,12 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.ArmorSecondarySpritesRegister;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,7 +40,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
-
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.itemMultiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
     }
 
     @Override

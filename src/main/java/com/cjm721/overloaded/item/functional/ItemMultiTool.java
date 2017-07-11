@@ -2,18 +2,16 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
-import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockResult;
+import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import com.cjm721.overloaded.util.RenderUtil;
 import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
-import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -21,7 +19,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -32,7 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -44,6 +41,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -61,7 +59,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -84,7 +81,6 @@ public class ItemMultiTool extends ModItem {
         setCreativeTab(OverloadedCreativeTabs.TECH);
         Overloaded.proxy.itemToRegister.add(this);
     }
-
 
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
@@ -127,11 +123,6 @@ public class ItemMultiTool extends ModItem {
     public boolean isDamageable() {
         return false;
     }
-
-    //    @Override
-//    public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-//        return true;
-//    }
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
@@ -575,7 +566,6 @@ public class ItemMultiTool extends ModItem {
         GlStateManager.popMatrix();
     }
 
-
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         IEnergyStorage storage = stack.getCapability(ENERGY, null);
@@ -589,5 +579,11 @@ public class ItemMultiTool extends ModItem {
     @Override
     public boolean getShareTag() {
         return true;
+    }
+
+    @Override
+    @Nonnull
+    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+        return TextFormatting.GOLD + super.getItemStackDisplayName(stack);
     }
 }

@@ -6,15 +6,18 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.EnumHelper;
@@ -115,4 +118,9 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
         return energy.getEnergyStored() > 0;
     }
 
+    @Override
+    @Nonnull
+    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+        return TextFormatting.GOLD + super.getItemStackDisplayName(stack);
+    }
 }

@@ -15,14 +15,20 @@ public class MultiArmorConfig {
 
     @Config.Comment("Energy used per tick while flying. [Default:10]")
     public int energyPerTickFlying = 10;
-    @Config.Comment("Max level to feed up too. [Default: 20]")
+    @Config.Comment("Max level to feed up too. [Default By Vanilla MC: 20]")
     public int maxFoodLevel = 20;
+    @Config.Comment("Max saturation level to add too. [Default By Vanilla MC: 5")
+    public float maxSaturationLevel = 5.0f;
     @Config.Comment("Energy Cost per food amount to fill. [Default: 1000]")
     public int costPerFood = 1000;
+    @Config.Comment("Energy Cost per Saturation amount to fill. [Default: 4000]")
+    public float costPerSaturation = 4000;
     @Config.Comment("Energy Cost to remove a potion effect. [Default: 10000]")
     public int removeEffect = 10000;
     @Config.Comment("Energy Cost per health amount to heal. [Default: 5000]")
     public int costPerHealth = 5000;
     @Config.Comment("Energy to Extinguish the player. [Default: 1000]")
     public int extinguishCost = 1000;
+    @Config.Comment("Energy per Air Tick. [Default: 10]")
+    public int costPerAir = 10;
 }
