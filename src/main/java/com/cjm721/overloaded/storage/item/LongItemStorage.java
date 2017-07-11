@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.util.ItemUtil.itemsAreEqual;
@@ -128,7 +129,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
         if(!longItemStack.getItemStack().isEmpty()) {
             compound.setTag("Item", longItemStack.getItemStack().serializeNBT());
             compound.setLong("Count", longItemStack.getAmount());
@@ -138,7 +139,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
         ItemStack storedItem = compound.hasKey("Item") ? new ItemStack(compound.getCompoundTag("Item")) : null;
         if(storedItem != null) {
             long storedAmount = compound.hasKey("Count") ? compound.getLong("Count") : 0L;
@@ -178,7 +179,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Nonnull
     @Override
     public LongItemStack take(@Nonnull LongItemStack stack, boolean doAction) {
-        if(longItemStack.getItemStack() == null)
+        if(longItemStack.getItemStack().isEmpty())
             return LongItemStack.EMPTY_STACK;
 
         long result = Math.min(stack.getAmount(), longItemStack.getAmount());
