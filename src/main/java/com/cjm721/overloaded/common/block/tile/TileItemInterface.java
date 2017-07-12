@@ -149,10 +149,11 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
             return true;
         }
 
-        return storedItem.hasCapability(capability,facing) || super.hasCapability(capability, facing);
+        return (storedItem != null && storedItem.hasCapability(capability,facing)) || super.hasCapability(capability, facing);
     }
 
     @Override
+    @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
             return (T) this;
