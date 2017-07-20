@@ -7,9 +7,12 @@ import com.cjm721.overloaded.client.render.entity.ArmorSecondarySpritesRegister;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -17,12 +20,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+
+    public KeyBinding noClipKeybind;
 
     @Override
     public void preInit(FMLPreInitializationEvent e) {
@@ -41,6 +47,10 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.itemMultiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
+
+        noClipKeybind = new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V ,"overloaded.cat.key.multiarmor");
+
+        ClientRegistry.registerKeyBinding(noClipKeybind);
     }
 
     @Override

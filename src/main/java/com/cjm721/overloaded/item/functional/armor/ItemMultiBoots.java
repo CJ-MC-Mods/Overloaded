@@ -1,14 +1,9 @@
 package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.item.ModItems;
-import com.cjm721.overloaded.util.IModRegistrable;
-import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -16,11 +11,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

@@ -12,6 +12,7 @@ import com.cjm721.overloaded.util.BlockResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import com.cjm721.overloaded.util.RenderUtil;
 import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -305,10 +306,8 @@ public class ItemMultiTool extends ModItem {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
-        if(event.isCanceled())
-            return;
         EntityPlayer player = event.getHarvester();
-        if(player == null || event.getHarvester().getHeldItemMainhand().getItem() != this)
+        if(player == null || event.getHarvester().getHeldItemMainhand().getItem() != this || event.getDrops() instanceof ImmutableList)
             return;
 
         World world = event.getWorld();

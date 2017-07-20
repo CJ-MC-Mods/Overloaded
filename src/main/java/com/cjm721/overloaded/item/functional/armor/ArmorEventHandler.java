@@ -2,8 +2,13 @@ package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
+import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
+import com.cjm721.overloaded.proxy.ClientProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -13,10 +18,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -36,9 +45,10 @@ public class ArmorEventHandler {
     }
 
     private static final String set = "set";
+    private static final String noClip = "noClip";
 
     @SubscribeEvent
-    public void onLivingUpdateEvent(@Nonnull TickEvent.PlayerTickEvent event) {
+    public void onPlayerTickEvent(@Nonnull TickEvent.PlayerTickEvent event) {
         EntityPlayer player = event.player;
         if (player == null)
             return;
@@ -54,6 +64,17 @@ public class ArmorEventHandler {
             tryGiveAir(player,event.side);
         } else {
             disableFlight(player, dataStorage, event.side);
+        }
+    }
+
+    private void tryEnableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
+        final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
+        if(booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
+            if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
+                player.noClip = true;
+            }
+        } else {
+            player.noClip = false;
         }
     }
 
@@ -174,12 +195,24 @@ public class ArmorEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
+        Entity entity = event.getEntity();
+
+        if(entity instanceof EntityPlayer) {
+            EntityPlayer player = ((EntityPlayer) entity);
+            tryEnableNoClip(player,getDataStorage(player), Side.SERVER);
+        }
+    }
+
+
     private boolean extractEnergy(EntityPlayer player, int energyCost, boolean simulated) {
+        final int orignalCost = energyCost;
         for (ItemStack stack : player.inventory.armorInventory) {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY, null);
 
             if (energyStorage != null)
-                energyCost -= energyStorage.extractEnergy(energyCost / 4, simulated);
+                energyCost -= energyStorage.extractEnergy(orignalCost / 4, simulated);
 
             if (energyCost <= 0)
                 return true;
@@ -190,7 +223,6 @@ public class ArmorEventHandler {
 
             if (energyStorage != null)
                 energyCost -= energyStorage.extractEnergy(energyCost, simulated);
-
             if (energyCost == 0)
                 return true;
         }
@@ -199,7 +231,7 @@ public class ArmorEventHandler {
     }
 
     @Nonnull
-    private IOverloadedPlayerDataStorage getDataStorage(EntityPlayer player) {
+    private static IOverloadedPlayerDataStorage getDataStorage(EntityPlayer player) {
         return player.getCapability(MultiArmorCapabilityProvider.PLAYER_DATA_STORAGE, null);
     }
 
@@ -213,4 +245,32 @@ public class ArmorEventHandler {
         return setEquipped;
     }
 
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
+        if(((ClientProxy) Overloaded.proxy).noClipKeybind.isPressed()) {
+            IMessage message = new KeyBindPressedMessage(KeyBindPressedMessage.KeyBind.NO_CLIP);
+            Overloaded.proxy.networkWrapper.sendToServer(message);
+        }
+    }
+
+    public static boolean toggleNoClip(EntityPlayerMP player) {
+        IOverloadedPlayerDataStorage storage = getDataStorage(player);
+
+        final Map<String, Boolean> booleans = storage.getBooleanMap();
+        if (booleans.containsKey(noClip) && booleans.get(noClip)) {
+            booleans.remove(noClip);
+            return false;
+        } else {
+            booleans.put(noClip,true);
+            return true;
+        }
+    }
+
+    public static void setNoClip(EntityPlayer player, boolean enabled) {
+        IOverloadedPlayerDataStorage storage = getDataStorage(player);
+
+        final Map<String, Boolean> booleans = storage.getBooleanMap();
+        booleans.put(noClip,enabled);
+    }
 }

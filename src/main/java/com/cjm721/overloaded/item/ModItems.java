@@ -4,10 +4,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
-import com.cjm721.overloaded.item.functional.ItemAmountSelector;
-import com.cjm721.overloaded.item.functional.ItemEnergyShield;
-import com.cjm721.overloaded.item.functional.ItemLinkingCard;
-import com.cjm721.overloaded.item.functional.ItemMultiTool;
+import com.cjm721.overloaded.item.functional.*;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
@@ -35,6 +32,8 @@ public class ModItems {
     public static ItemMultiLeggings customLeggins;
     public static ItemMultiBoots customBoots;
 
+    public static ItemQuantumTunneller quantumTunneller;
+
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
     public static void addToSecondaryInit(IModRegistrable item) {
@@ -55,6 +54,7 @@ public class ModItems {
         customBoots = new ItemMultiBoots();
 
         if(OverloadedConfig.developmentConfig.wipStuff) {
+            quantumTunneller = new ItemQuantumTunneller();
 //            energyShield = new ItemEnergyShield();
 //            amountSelector = new ItemAmountSelector();
         }

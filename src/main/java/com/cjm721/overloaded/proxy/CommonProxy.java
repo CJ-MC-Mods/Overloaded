@@ -6,10 +6,14 @@ import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
+import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.MultiToolLeftClickHandler;
 import com.cjm721.overloaded.network.handler.MultiToolRightClickHandler;
+import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
+import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
+import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
 import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
@@ -52,6 +56,8 @@ public class CommonProxy {
         networkWrapper = new SimpleNetworkWrapper("overloaded");
         networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
         networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
+        networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, 2, Side.SERVER);
+        networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, 3, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());

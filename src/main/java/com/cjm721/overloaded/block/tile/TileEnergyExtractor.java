@@ -1,40 +1,26 @@
 package com.cjm721.overloaded.block.tile;
 
 import com.cjm721.overloaded.storage.LongEnergyStack;
+import com.cjm721.overloaded.storage.energy.ForgeEnergyZero;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class TileEnergyExtractor extends TileEntity implements ITickable {
-
-    private EnumFacing front;
+public class TileEnergyExtractor extends AbstractTileEntityFaceable implements ITickable {
 
     public TileEnergyExtractor() {
 
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-
-        this.front = EnumFacing.getFront(compound.getInteger("Front"));
-    }
-
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setInteger("Front", this.front.getIndex());
-
-        return super.writeToNBT(compound);
     }
 
     /**
@@ -43,18 +29,18 @@ public class TileEnergyExtractor extends TileEntity implements ITickable {
     @Override
     public void update() {
         BlockPos me = this.getPos();
-        TileEntity frontTE = getWorld().getTileEntity(me.add(front.getDirectionVec()));
+        TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 
-        if(frontTE == null || !frontTE.hasCapability(HYPER_ENERGY_HANDLER, front.getOpposite()))
+        if(frontTE == null || !frontTE.hasCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite()))
             return;
 
-        IHyperHandlerEnergy storage = frontTE.getCapability(HYPER_ENERGY_HANDLER, front.getOpposite());
+        IHyperHandlerEnergy storage = frontTE.getCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite());
         LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE),false);
         for(EnumFacing facing: EnumFacing.values()) {
             if(energy.getAmount() == 0L)
                 return;
 
-            if(facing == front)
+            if(facing == getFacing())
                 continue;
 
             TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
@@ -73,12 +59,20 @@ public class TileEnergyExtractor extends TileEntity implements ITickable {
         }
     }
 
-    public TileEnergyExtractor setFacing(EnumFacing front) {
-        this.front = front;
-        return this;
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        if(capability == ENERGY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
     }
 
-    public EnumFacing getFacing() {
-        return front;
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if(capability == ENERGY) {
+            return (T) new ForgeEnergyZero();
+        }
+        return super.getCapability(capability, facing);
     }
 }

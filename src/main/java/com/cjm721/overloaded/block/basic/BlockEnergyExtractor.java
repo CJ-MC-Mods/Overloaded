@@ -25,6 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -36,9 +37,7 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvider {
-
-    private static final PropertyDirection FACING = BlockDirectional.FACING;
+public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITileEntityProvider {
 
     public BlockEnergyExtractor() {
         super(Material.ROCK);
@@ -54,23 +53,6 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
         GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID + ":energy_extractor");
     }
 
-    @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer.Builder(this).add(FACING).build();
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getProperties().get(FACING)).getIndex();
-    }
-
-    @Override
-    @Nonnull
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
-    }
-
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
@@ -79,18 +61,23 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
         return te;
     }
 
+    @Override
+    public boolean isBlockNormalCube(IBlockState blockState) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState blockState) {
+        return false;
+    }
+
+
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
-    }
-
-    @Deprecated
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
     }
 
     @Override
@@ -106,16 +93,5 @@ public class BlockEnergyExtractor extends ModBlock implements ITileEntityProvide
                 new ResourceLocation(MODID,"textures/blocks/energy_extractor.png"),
                 new ResourceLocation(MODID,"textures/dynamic/blocks/energy_extractor.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, getFront(placer))); // EnumFacing.getDirectionFromEntityLiving(pos,placer)
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
-
-    private EnumFacing getFront(EntityLivingBase placer) {
-        Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
     }
 }

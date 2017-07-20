@@ -37,9 +37,10 @@ public final class ModBlocks {
 
     public static ModBlock matterPurifier;
     public static ModBlock fusionCore;
+    public static ModBlock energyInjectorChest;
+
+
     public static ModBlock itemManipulator;
-
-
     private static List<ModBlock> registerList = new LinkedList<>();
 
     public static void init() {
@@ -67,6 +68,7 @@ public final class ModBlocks {
             fusionCore = new BlockFusionCore();
             matterPurifier = new BlockMatterPurifier();
             itemManipulator = new BlockItemManipulator();
+            energyInjectorChest = new BlockEnergyInjectorChest();
         }
 
         // Disabled

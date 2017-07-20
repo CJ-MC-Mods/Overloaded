@@ -31,4 +31,6 @@ public class MultiArmorConfig {
     public int extinguishCost = 1000;
     @Config.Comment("Energy per Air Tick. [Default: 10]")
     public int costPerAir = 10;
+    @Config.Comment("Energy Per Tick to use No Clip")
+    public int noClipEnergyPerTick = 100000;
 }
