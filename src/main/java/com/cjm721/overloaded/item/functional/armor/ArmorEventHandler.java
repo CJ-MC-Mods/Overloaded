@@ -3,9 +3,7 @@ package com.cjm721.overloaded.item.functional.armor;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
-import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -56,6 +54,8 @@ public class ArmorEventHandler {
         IOverloadedPlayerDataStorage dataStorage = getDataStorage(player);
 
         if (isMultiArmorSetEquipped(player)) {
+            dataStorage.getBooleanMap().put(set,true);
+
             tryEnableFlight(player, dataStorage, event.side);
             tryFeedPlayer(player, event.side);
             tryHealPlayer(player, event.side);
@@ -63,8 +63,19 @@ public class ArmorEventHandler {
             tryExtinguish(player, event.side);
             tryGiveAir(player,event.side);
         } else {
-            disableFlight(player, dataStorage, event.side);
+            Map<String, Boolean> boolMap = dataStorage.getBooleanMap();
+            if(boolMap.containsKey(set) && boolMap.get(set)) {
+                boolMap.put(set,false);
+                disableFlight(player, dataStorage, event.side);
+                disableNoClip(player,dataStorage, event.side);
+            }
+
         }
+    }
+
+    private void disableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
+        player.noClip = false;
+        dataStorage.getBooleanMap().put(noClip,false);
     }
 
     private void tryEnableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
@@ -72,9 +83,9 @@ public class ArmorEventHandler {
         if(booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
             if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
                 player.noClip = true;
+            } else {
+                setNoClip(player,false);
             }
-        } else {
-            player.noClip = false;
         }
     }
 
@@ -147,14 +158,10 @@ public class ArmorEventHandler {
     }
 
     private void disableFlight(@Nonnull EntityPlayer player, @Nonnull IOverloadedPlayerDataStorage dataStorage, @Nonnull Side side) {
-        final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
-        if (booleans.containsKey(set) && booleans.get(set)) {
-            player.capabilities.allowFlying = false;
-            player.capabilities.isFlying = false;
-            if (side.isClient()) {
-                player.capabilities.setFlySpeed(0.05F);
-            }
-            booleans.put(set, false);
+        player.capabilities.allowFlying = false;
+        player.capabilities.isFlying = false;
+        if (side.isClient()) {
+            player.capabilities.setFlySpeed(0.05F);
         }
     }
 
@@ -214,8 +221,9 @@ public class ArmorEventHandler {
             if (energyStorage != null)
                 energyCost -= energyStorage.extractEnergy(orignalCost / 4, simulated);
 
-            if (energyCost <= 0)
+            if (energyCost <= 0) {
                 return true;
+            }
         }
 
         for (ItemStack stack : player.inventory.armorInventory) {
@@ -223,10 +231,10 @@ public class ArmorEventHandler {
 
             if (energyStorage != null)
                 energyCost -= energyStorage.extractEnergy(energyCost, simulated);
-            if (energyCost == 0)
+            if (energyCost == 0) {
                 return true;
+            }
         }
-
         return false;
     }
 
