@@ -18,10 +18,15 @@ import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -33,6 +38,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
+
 @Mod.EventBusSubscriber
 public class CommonProxy {
 
@@ -40,16 +47,30 @@ public class CommonProxy {
 
     public static List<Block> blocksToRegister = new LinkedList<>();
     public static List<Item> itemToRegister = new LinkedList<>();
+    public static Fluid pureMatter;
 
 
     public void preInit(FMLPreInitializationEvent event) {
+        createFluids();
         ModBlocks.init();
         ModItems.init();
+
 
         CapabilityHyperItem.register();
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
         MultiArmorCapabilityProvider.register();
+    }
+
+    private void createFluids() {
+        String textureName = "blocks/pure_matter";
+        ResourceLocation still = new ResourceLocation(MODID,textureName + "_still");
+//        ResourceLocation flowing = new ResourceLocation(MODID,textureName + "_flow");
+
+        pureMatter = new Fluid("pure_matter", still, still).setDensity(3000).setViscosity(6000).setRarity(EnumRarity.EPIC);
+        if(!FluidRegistry.registerFluid(pureMatter)) {
+            pureMatter = FluidRegistry.getFluid("pure_matter");
+        }
     }
 
     public void init(FMLInitializationEvent event) {

@@ -6,7 +6,9 @@ import com.cjm721.overloaded.block.basic.container.BlockInfiniteCapacitor;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteTank;
 import com.cjm721.overloaded.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.block.compressed.CompressedBlockHandler;
+import com.cjm721.overloaded.block.fluid.BlockPureMatterFluid;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,12 +38,13 @@ public final class ModBlocks {
     public static ModBlock itemInterface;
 
     public static ModBlock matterPurifier;
+    public static BlockPureMatterFluid pureMatterFluidBlock;
     public static ModBlock fusionCore;
     public static ModBlock energyInjectorChest;
 
 
     public static ModBlock itemManipulator;
-    private static List<ModBlock> registerList = new LinkedList<>();
+    private static List<IModRegistrable> registerList = new LinkedList<>();
 
     public static void init() {
         basicGenerator = new BlockCreativeGenerator();
@@ -65,23 +68,24 @@ public final class ModBlocks {
         itemInterface = new BlockItemInterface();
 
         if(OverloadedConfig.developmentConfig.wipStuff) {
-            fusionCore = new BlockFusionCore();
+//            fusionCore = new BlockFusionCore();
             matterPurifier = new BlockMatterPurifier();
-            itemManipulator = new BlockItemManipulator();
-            energyInjectorChest = new BlockEnergyInjectorChest();
+            pureMatterFluidBlock = new BlockPureMatterFluid();
+//            itemManipulator = new BlockItemManipulator();
+//            energyInjectorChest = new BlockEnergyInjectorChest();
         }
 
         // Disabled
         // CompressedBlockHandler.initFromConfig();
     }
 
-    public static void addToSecondaryInit(ModBlock block) {
+    public static void addToSecondaryInit(IModRegistrable block) {
         registerList.add(block);
     }
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        for(ModBlock block: registerList){
+        for(IModRegistrable block: registerList){
             block.registerModel();
         }
     }

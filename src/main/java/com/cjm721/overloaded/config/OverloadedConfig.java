@@ -17,4 +17,6 @@ public class OverloadedConfig {
     public static DevelopmentConfig developmentConfig = new DevelopmentConfig();
     @Config.Name("Texture Resolutions")
     public static ResolutionConfig textureResolutions = new ResolutionConfig();
+    @Config.Name("Matter Purifier")
+    public static PurifierConfig purifierConfig = new PurifierConfig();
 }
