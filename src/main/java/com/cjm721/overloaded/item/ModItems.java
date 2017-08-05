@@ -32,8 +32,6 @@ public class ModItems {
     public static ItemMultiLeggings customLeggins;
     public static ItemMultiBoots customBoots;
 
-    public static ItemQuantumTunneller quantumTunneller;
-
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
     public static void addToSecondaryInit(IModRegistrable item) {
@@ -54,7 +52,6 @@ public class ModItems {
         customBoots = new ItemMultiBoots();
 
         if(OverloadedConfig.developmentConfig.wipStuff) {
-            quantumTunneller = new ItemQuantumTunneller();
 //            energyShield = new ItemEnergyShield();
 //            amountSelector = new ItemAmountSelector();
         }
