@@ -47,7 +47,8 @@ public class BlockCompressed extends ModBlock {
 
         if(harvestTool != null)
             setHarvestLevel(harvestTool, harvestLevel);
-        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
+        // TODO: When implemented uncomment this
+        // setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
         register();
     }
 

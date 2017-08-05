@@ -1,6 +1,7 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.proxy.CommonProxy;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

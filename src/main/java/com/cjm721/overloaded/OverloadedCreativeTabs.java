@@ -10,19 +10,20 @@ import javax.annotation.Nonnull;
 import java.util.Comparator;
 
 public class OverloadedCreativeTabs {
-    public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("Overloaded_Compressed") {
-        @Override
-        public ItemStack getTabIconItem() {
-            return new ItemStack(Blocks.COBBLESTONE);
-        }
-
-        @Override
-        public void displayAllRelevantItems(@Nonnull NonNullList<ItemStack> p_78018_1_) {
-            super.displayAllRelevantItems(p_78018_1_);
-
-            p_78018_1_.sort(Comparator.comparing(a -> a.getItem().getRegistryName().getResourcePath()));
-        }
-    };
+    // Not in use yet for 1.12
+//    public static CreativeTabs COMPRESSED_BLOCKS = new CreativeTabs("Overloaded_Compressed") {
+//        @Override
+//        public ItemStack getTabIconItem() {
+//            return new ItemStack(Blocks.COBBLESTONE);
+//        }
+//
+//        @Override
+//        public void displayAllRelevantItems(@Nonnull NonNullList<ItemStack> p_78018_1_) {
+//            super.displayAllRelevantItems(p_78018_1_);
+//
+//            p_78018_1_.sort(Comparator.comparing(a -> a.getItem().getRegistryName().getResourcePath()));
+//        }
+//    };
 
     public static CreativeTabs TECH = new CreativeTabs("Overloaded_Tech") {
         @Override
