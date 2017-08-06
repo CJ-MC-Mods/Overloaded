@@ -130,7 +130,9 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         if(!longItemStack.getItemStack().isEmpty()) {
-            compound.setTag("Item", longItemStack.getItemStack().serializeNBT());
+            ItemStack stack = longItemStack.getItemStack();
+            stack.setCount(1);
+            compound.setTag("Item", stack.serializeNBT());
             compound.setLong("Count", longItemStack.getAmount());
         }
 
