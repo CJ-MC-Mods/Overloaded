@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
-        acceptedMinecraftVersions = "1.12",
+        acceptedMinecraftVersions = "[1.12,1.13)",
         useMetadata = true
         )
 public class Overloaded {
