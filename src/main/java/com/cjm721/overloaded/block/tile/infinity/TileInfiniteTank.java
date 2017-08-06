@@ -52,7 +52,7 @@ public class TileInfiniteTank extends TileEntity implements IDataUpdate {
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability,@Nullable EnumFacing facing)
     {
         if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)

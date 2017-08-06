@@ -42,7 +42,7 @@ public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
             return (T) energyStorage;

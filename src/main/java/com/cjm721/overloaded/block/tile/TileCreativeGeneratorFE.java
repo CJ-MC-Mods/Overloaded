@@ -39,7 +39,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     }
 
     @Override
-    @Nonnull
+    @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
         if(capability == ENERGY) {
             return (T) this;
