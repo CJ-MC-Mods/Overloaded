@@ -45,7 +45,7 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
 

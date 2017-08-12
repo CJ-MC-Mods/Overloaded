@@ -29,7 +29,20 @@ public class CompressedBlockAssets {
     }
 
     private static String getBlockState(@Nonnull ResourceLocation location) {
-        return String.format("{ \"forge_marker\": 1, \"variants\": { \"normal\": { \"model\": \"cube_all\", \"textures\": { \"all\": \"%1$s\" } }, \"inventory\": { \"model\": \"cube_all\", \"textures\": { \"all\": \"%1$s\" } } } }", getBlocksPath(location));
+        return String.format(
+            "{ " +
+                "\"forge_marker\": 1, " +
+                "\"defaults\": { " +
+                    "\"model\": \"cube_all\", " +
+                    "\"textures\": { " +
+                        "\"all\": \"%1$s\" " +
+                    "} " +
+                "}," +
+                "\"variants\": { " +
+                    "\"normal\": [{ }], " +
+                    "\"inventory\": [{ }] " +
+                "}" +
+            "}", getBlocksPath(location));
     }
 
     private static ResourceLocation getBlocksPath(@Nonnull ResourceLocation base) {
@@ -53,7 +66,7 @@ public class CompressedBlockAssets {
         }
     }
 
-    private static boolean generateTexture(CompressedResourceLocation locations) {
+    private static boolean generateTexture(@Nonnull CompressedResourceLocation locations) {
         String state = getBlockState(locations.compressed);
         BlockResourcePack.INSTANCE.addBlockState(getJsonPath(locations.compressed), state);
 

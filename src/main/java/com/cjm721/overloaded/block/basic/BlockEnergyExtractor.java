@@ -49,7 +49,6 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        register();
         GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID + ":energy_extractor");
     }
 

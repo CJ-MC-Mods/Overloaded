@@ -45,7 +45,6 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
 
         setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
 
         GameRegistry.registerTileEntity(TileItemInterface.class, MODID + ":item_interface");
     }

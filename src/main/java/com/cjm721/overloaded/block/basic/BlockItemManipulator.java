@@ -45,7 +45,6 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
         setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
 
         GameRegistry.registerTileEntity(TileItemManipulator.class, MODID + ":item_manipulator");
     }

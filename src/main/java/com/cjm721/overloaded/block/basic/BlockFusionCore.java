@@ -41,7 +41,6 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
 
         setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
 
         GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_core");
     }

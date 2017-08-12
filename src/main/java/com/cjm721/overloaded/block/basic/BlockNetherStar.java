@@ -26,7 +26,6 @@ public class BlockNetherStar extends ModBlock {
 
         setHardness(16384);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
     }
 
     @SideOnly(Side.CLIENT)

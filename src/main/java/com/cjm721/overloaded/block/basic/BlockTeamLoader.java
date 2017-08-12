@@ -23,7 +23,6 @@ public class BlockTeamLoader extends ModBlock implements ITileEntityProvider {
 
         setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
 
         GameRegistry.registerTileEntity(TileTeamLoader.class, MODID + ":team_loader");
     }

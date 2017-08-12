@@ -30,7 +30,7 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
     }
 

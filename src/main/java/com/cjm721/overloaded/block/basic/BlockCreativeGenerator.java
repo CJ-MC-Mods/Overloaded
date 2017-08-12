@@ -36,7 +36,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
     }
 

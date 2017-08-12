@@ -17,68 +17,58 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CompressedBlockHandler {
 
-    public static Map<Integer, Block> CreateCompressedBlocks(@Nonnull Block toCompress, int depth, boolean recipeEnabled) {
-        Map<Integer, Block> compressedBlocks = new HashMap<>();
-
+    public static BlockCompressed CreateCompressedBlock(@Nonnull Block toCompress, int depth, float hardnessMultiplier, boolean recipeEnabled) {
         Material material = toCompress.getDefaultState().getMaterial();
         String registryName = toCompress.getRegistryName().getResourcePath();
         String unlocalizedName = toCompress.getUnlocalizedName();
 
-        float baseHardness = toCompress.getDefaultState().getBlockHardness(null,null);
         String harvestTool = toCompress.getHarvestTool(toCompress.getDefaultState());
         int harvestLevel = toCompress.getHarvestLevel(toCompress.getDefaultState());
 
+        String compRegistryName = String.format("compressed%s", registryName);
+        String compUnlocalizedName = String.format("compressed.%s", unlocalizedName);
 
-        compressedBlocks.put(0, toCompress);
-        Block previousLevel = toCompress;
-        float currentHardness = baseHardness;
-        for(int i = 1; i <= depth; i++) {
-            String compRegistryName = String.format("compressed%s%d", registryName, i);
-            String compUnlocalizedName = String.format("%dxCompressed:%s", i, unlocalizedName);
-            currentHardness *= 9;
-            if(currentHardness < 0) {
-                currentHardness = Float.MAX_VALUE;
-            }
-//            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel, recipeEnabled);
-//            previousLevel = block;
-//            compressedBlocks.put(i, block);
-        }
-        return compressedBlocks;
+
+        return new BlockCompressed(toCompress, depth, material,compRegistryName , compUnlocalizedName, harvestTool, harvestLevel, hardnessMultiplier, recipeEnabled);
     }
 
-    public static void initFromConfig() {
+    public static List<BlockCompressed> initFromConfig() {
         IForgeRegistry<Block> registry = GameRegistry.findRegistry(Block.class);
 
-//        for(String setting: OverloadedConfig.compressedConfig.compressedBlocks) {
-//            if(setting.isEmpty())
-//                continue;
-//            String[] split = setting.split(":");
-//
-//            if(split.length < 4) {
-//                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-//                    throwClientSideError(setting);
-//                } else {
-//                    throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
-//                }
-//            }
-//
-//            String domain = split[0];
-//            String blockName = split[1];
-//            int depth = Integer.parseInt(split[2]);
-//            boolean recipeEnabled = Boolean.parseBoolean(split[3]);
-//
-//            Block block = registry.getValue(new ResourceLocation(domain,blockName));
-//
-//            if(block == Blocks.AIR)
-//                continue;
-//
-//            CompressedBlockHandler.CreateCompressedBlocks(block, depth, recipeEnabled);
-//        }
+        List<BlockCompressed> compressedBlocks = new LinkedList<>();
+
+        for(String setting: OverloadedConfig.compressedConfig.compressedBlocks) {
+            if(setting.isEmpty())
+                continue;
+            String[] split = setting.split(":");
+
+            if(split.length < 5) {
+                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+                    throwClientSideError(setting);
+                } else {
+                    throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
+                }
+            }
+
+            String domain = split[0];
+            String blockName = split[1];
+            int depth = Integer.parseInt(split[2]);
+            float hardnessMultiplier = Float.parseFloat(split[3]);
+            boolean recipeEnabled = Boolean.parseBoolean(split[4]);
+
+            Block block = registry.getValue(new ResourceLocation(domain,blockName));
+
+            if(block == null || block == Blocks.AIR)
+                continue;
+
+            compressedBlocks.add(CompressedBlockHandler.CreateCompressedBlock(block, depth, hardnessMultiplier, recipeEnabled));
+        }
+        return compressedBlocks;
     }
 
     @SideOnly(Side.CLIENT)

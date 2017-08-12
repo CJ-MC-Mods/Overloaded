@@ -23,11 +23,9 @@ public class BlockPureMatterFluid extends BlockFluidClassic implements IModRegis
     public BlockPureMatterFluid() {
         super(CommonProxy.pureMatter, Material.WATER);
         setRegistryName("pure_matter");
-
-        Overloaded.proxy.blocksToRegister.add(this);
-        ModBlocks.addToSecondaryInit(this);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
         ModelLoader.setCustomStateMapper(this, new FluidStateMapper());

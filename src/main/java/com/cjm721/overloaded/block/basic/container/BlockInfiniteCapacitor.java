@@ -45,7 +45,7 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infinite_capacitor");
     }
 

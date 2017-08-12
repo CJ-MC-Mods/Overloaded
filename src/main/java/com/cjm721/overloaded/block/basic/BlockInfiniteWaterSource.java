@@ -45,7 +45,6 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
 
         GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }

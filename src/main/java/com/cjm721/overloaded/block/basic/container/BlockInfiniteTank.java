@@ -49,7 +49,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }
 

@@ -1,6 +1,9 @@
 package com.cjm721.overloaded.item;
 
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.item.basic.ItemCompressedBlock;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
@@ -31,6 +34,7 @@ public class ModItems {
     public static ItemMultiChestplate customChestplate;
     public static ItemMultiLeggings customLeggins;
     public static ItemMultiBoots customBoots;
+    public static LinkedList<ItemCompressedBlock> compressedItemBlocks;
 
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
@@ -54,6 +58,11 @@ public class ModItems {
         if(OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = new ItemEnergyShield();
 //            amountSelector = new ItemAmountSelector();
+        }
+
+        compressedItemBlocks = new LinkedList<>();
+        for(BlockCompressed block :ModBlocks.compressedBlocks) {
+            compressedItemBlocks.add(new ItemCompressedBlock(block));
         }
     }
 

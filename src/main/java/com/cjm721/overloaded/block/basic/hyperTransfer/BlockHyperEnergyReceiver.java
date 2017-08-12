@@ -27,7 +27,7 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
         setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        register();
+
         GameRegistry.registerTileEntity(TileHyperEnergyReceiver.class, MODID + ":hyper_energy_receiver");
     }
 

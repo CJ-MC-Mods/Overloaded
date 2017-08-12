@@ -40,7 +40,6 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        register();
         GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID + ":energy_injector_chest");
     }
 
