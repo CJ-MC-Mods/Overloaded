@@ -7,8 +7,8 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 @Config(modid = MODID)
 public class OverloadedConfig {
 
-    @Config.Name("Compressed Blocks")
-    public static CompressedConfig compressedConfig = new CompressedConfig();
+//    @Config.Name("Compressed Blocks")
+//    public static CompressedConfig compressedConfig = new CompressedConfig();
     @Config.Name("Multi-Tool")
     public static MultiToolConfig multiToolConfig = new MultiToolConfig();
     @Config.Name("Multi-Armor")
