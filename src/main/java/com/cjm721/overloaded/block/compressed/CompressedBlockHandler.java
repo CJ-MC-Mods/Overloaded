@@ -1,12 +1,14 @@
 package com.cjm721.overloaded.block.compressed;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.util.CraftingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
@@ -66,7 +68,8 @@ public class CompressedBlockHandler {
             if(block == null || block == Blocks.AIR)
                 continue;
 
-            compressedBlocks.add(CompressedBlockHandler.CreateCompressedBlock(block, depth, hardnessMultiplier, recipeEnabled));
+            BlockCompressed compressedBlock = CompressedBlockHandler.CreateCompressedBlock(block, depth, hardnessMultiplier, recipeEnabled);
+            compressedBlocks.add(compressedBlock);
         }
         return compressedBlocks;
     }

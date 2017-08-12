@@ -12,7 +12,9 @@ import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
+import com.cjm721.overloaded.util.CraftingRegistry;
 import com.cjm721.overloaded.util.IModRegistrable;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -62,7 +64,17 @@ public class ModItems {
 
         compressedItemBlocks = new LinkedList<>();
         for(BlockCompressed block :ModBlocks.compressedBlocks) {
-            compressedItemBlocks.add(new ItemCompressedBlock(block));
+            ItemCompressedBlock itemCompressed = new ItemCompressedBlock(block);
+            compressedItemBlocks.add(itemCompressed);
+
+
+            CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed ,1,0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
+            CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(),9), new ItemStack(itemCompressed , 1, 0));
+
+            for(int meta = 0; meta < block.getMaxCompression()- 1; meta++) {
+                CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed ,1,meta+1), "XXX", "XXX", "XXX", 'X', new ItemStack(itemCompressed , 1, meta));
+                CraftingRegistry.addShapelessRecipe(new ItemStack(itemCompressed ,9,meta), new ItemStack(itemCompressed , 1, meta+1));
+            }
         }
     }
 
