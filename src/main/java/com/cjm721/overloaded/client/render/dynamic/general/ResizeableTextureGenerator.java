@@ -38,7 +38,7 @@ public class ResizeableTextureGenerator {
 
             if(image == null) continue;
 
-            image = ImageUtil.scaleToWidth(image, resizableTexture.resizeToWidth);
+            image = ImageUtil.scaleDownToWidth(image, resizableTexture.resizeToWidth);
 
             BlockResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
 

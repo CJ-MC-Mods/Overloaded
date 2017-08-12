@@ -15,6 +15,7 @@ public class RenderMultiLeggings extends ModelBiped {
     public RenderMultiLeggings() {
         super(0, 0, 1024, 1024);
 
+        this.bipedBody.cubeList.clear();
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 

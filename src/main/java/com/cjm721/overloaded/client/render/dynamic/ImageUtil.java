@@ -15,8 +15,12 @@ import java.io.InputStream;
 
 @SideOnly(Side.CLIENT)
 public class ImageUtil {
-    public static BufferedImage scaleToWidth(@Nonnull BufferedImage original, int width) {
+    public static BufferedImage scaleDownToWidth(@Nonnull BufferedImage original, int width) {
         double scale = original.getWidth() / (double) width;
+
+        if(scale <= 1) {
+            return original;
+        }
 
         AffineTransform at = new AffineTransform();
         at.scale(1/scale,1/scale);
