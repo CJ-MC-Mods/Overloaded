@@ -118,7 +118,7 @@ public class BlockCompressed extends ModBlock {
 
         for(int meta = 0; meta < maxCompressionAmount; meta++) {
             ResourceLocation rl = new ResourceLocation(getRegistryName().getResourceDomain(), getRegistryName().getResourcePath() + meta);
-            CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), rl, meta));
+            CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), rl, meta + 1));
             ModelResourceLocation ml = new ModelResourceLocation(rl, "normal");
 
             ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), meta, ml);
