@@ -41,12 +41,14 @@ public class BlockCompressed extends ModBlock {
     private final Block baseBlock;
     private final int maxCompressionAmount;
     private final float hardnessMultiplier;
+    private final boolean recipeEnabled;
 
     BlockCompressed(@Nonnull Block baseBlock, int maxCompressionAmount, @Nonnull Material materialIn, @Nonnull String registryName, @Nonnull String unlocalizedName, String harvestTool, int harvestLevel, float hardnessMultiplier, boolean recipeEnabled) {
         super(materialIn);
         this.baseBlock = baseBlock;
         this.maxCompressionAmount = maxCompressionAmount;
         this.hardnessMultiplier = hardnessMultiplier;
+        this.recipeEnabled = recipeEnabled;
 
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
@@ -158,5 +160,9 @@ public class BlockCompressed extends ModBlock {
     @Nonnull
     public Block getBaseBlock() {
         return baseBlock;
+    }
+
+    public boolean isRecipeEnabled() {
+        return recipeEnabled;
     }
 }

@@ -68,12 +68,14 @@ public class ModItems {
             compressedItemBlocks.add(itemCompressed);
 
 
-            CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed ,1,0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
-            CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(),9), new ItemStack(itemCompressed , 1, 0));
+            if(block.isRecipeEnabled()) {
+                CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed, 1, 0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
+                CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(), 9), new ItemStack(itemCompressed, 1, 0));
 
-            for(int meta = 0; meta < block.getMaxCompression()- 1; meta++) {
-                CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed ,1,meta+1), "XXX", "XXX", "XXX", 'X', new ItemStack(itemCompressed , 1, meta));
-                CraftingRegistry.addShapelessRecipe(new ItemStack(itemCompressed ,9,meta), new ItemStack(itemCompressed , 1, meta+1));
+                for (int meta = 0; meta < block.getMaxCompression() - 1; meta++) {
+                    CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed, 1, meta + 1), "XXX", "XXX", "XXX", 'X', new ItemStack(itemCompressed, 1, meta));
+                    CraftingRegistry.addShapelessRecipe(new ItemStack(itemCompressed, 9, meta), new ItemStack(itemCompressed, 1, meta + 1));
+                }
             }
         }
     }
