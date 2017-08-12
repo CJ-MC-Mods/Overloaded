@@ -154,4 +154,9 @@ public class BlockCompressed extends ModBlock {
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
     }
+
+    @Nonnull
+    public Block getBaseBlock() {
+        return baseBlock;
+    }
 }

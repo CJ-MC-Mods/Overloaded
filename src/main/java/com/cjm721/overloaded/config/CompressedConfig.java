@@ -4,7 +4,7 @@ import net.minecraftforge.common.config.Config;
 
 public class CompressedConfig {
 
-    @Config.Comment({"Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<hardness multiplier per level>:<recipe enabled>"})
+    @Config.Comment({"WARNING: These must match the server config if you wish to play MP. Put compressed blocks here in the form of <modid>:<blockname>:<compression amount>:<hardness multiplier per level>:<recipe enabled>."})
     @Config.RequiresMcRestart
     public String[] compressedBlocks = new String[] {
             "minecraft:cobblestone:16:9:true",

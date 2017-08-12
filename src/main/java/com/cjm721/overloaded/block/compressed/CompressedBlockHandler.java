@@ -30,7 +30,7 @@ public class CompressedBlockHandler {
         String harvestTool = toCompress.getHarvestTool(toCompress.getDefaultState());
         int harvestLevel = toCompress.getHarvestLevel(toCompress.getDefaultState());
 
-        String compRegistryName = String.format("compressed%s", registryName);
+        String compRegistryName = String.format("compressed_%s", registryName);
         String compUnlocalizedName = String.format("compressed.%s", unlocalizedName);
 
 
