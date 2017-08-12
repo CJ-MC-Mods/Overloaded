@@ -44,9 +44,9 @@ public class CompressedBlockHandler {
             if(currentHardness < 0) {
                 currentHardness = Float.MAX_VALUE;
             }
-            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel, recipeEnabled);
-            previousLevel = block;
-            compressedBlocks.put(i, block);
+//            BlockCompressed block = new BlockCompressed(toCompress, previousLevel, i, material,compRegistryName , compUnlocalizedName, currentHardness, harvestTool, harvestLevel, recipeEnabled);
+//            previousLevel = block;
+//            compressedBlocks.put(i, block);
         }
         return compressedBlocks;
     }
@@ -54,31 +54,31 @@ public class CompressedBlockHandler {
     public static void initFromConfig() {
         IForgeRegistry<Block> registry = GameRegistry.findRegistry(Block.class);
 
-        for(String setting: OverloadedConfig.compressedConfig.compressedBlocks) {
-            if(setting.isEmpty())
-                continue;
-            String[] split = setting.split(":");
-
-            if(split.length < 4) {
-                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-                    throwClientSideError(setting);
-                } else {
-                    throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
-                }
-            }
-
-            String domain = split[0];
-            String blockName = split[1];
-            int depth = Integer.parseInt(split[2]);
-            boolean recipeEnabled = Boolean.parseBoolean(split[3]);
-
-            Block block = registry.getValue(new ResourceLocation(domain,blockName));
-
-            if(block == Blocks.AIR)
-                continue;
-
-            CompressedBlockHandler.CreateCompressedBlocks(block, depth, recipeEnabled);
-        }
+//        for(String setting: OverloadedConfig.compressedConfig.compressedBlocks) {
+//            if(setting.isEmpty())
+//                continue;
+//            String[] split = setting.split(":");
+//
+//            if(split.length < 4) {
+//                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+//                    throwClientSideError(setting);
+//                } else {
+//                    throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
+//                }
+//            }
+//
+//            String domain = split[0];
+//            String blockName = split[1];
+//            int depth = Integer.parseInt(split[2]);
+//            boolean recipeEnabled = Boolean.parseBoolean(split[3]);
+//
+//            Block block = registry.getValue(new ResourceLocation(domain,blockName));
+//
+//            if(block == Blocks.AIR)
+//                continue;
+//
+//            CompressedBlockHandler.CreateCompressedBlocks(block, depth, recipeEnabled);
+//        }
     }
 
     @SideOnly(Side.CLIENT)
