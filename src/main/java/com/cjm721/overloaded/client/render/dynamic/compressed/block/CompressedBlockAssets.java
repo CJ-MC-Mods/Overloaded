@@ -78,7 +78,7 @@ public class CompressedBlockAssets {
         BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, true, null);
 
         if(compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
-            compressedImage = ImageUtil.scaleToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
+            compressedImage = ImageUtil.scaleDownToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
         }
 
         ResourceLocation rl = getTexturePath(locations.compressed);
