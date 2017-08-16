@@ -59,6 +59,15 @@ public class BlockCompressed extends ModBlock {
         if (harvestTool != null) {
             setHarvestLevel(harvestTool, harvestLevel);
         }
+        
+        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
+    }
+
+    @Override
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+        for (int meta = 0; meta < maxCompressionAmount; meta++) {
+            items.add(new ItemStack(Item.getItemFromBlock(this),1,meta));
+        }
     }
 
     @Override
