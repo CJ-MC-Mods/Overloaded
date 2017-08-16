@@ -30,19 +30,19 @@ public class CompressedBlockAssets {
 
     private static String getBlockState(@Nonnull ResourceLocation location) {
         return String.format(
-            "{ " +
-                "\"forge_marker\": 1, " +
-                "\"defaults\": { " +
-                    "\"model\": \"cube_all\", " +
-                    "\"textures\": { " +
+                "{ " +
+                        "\"forge_marker\": 1, " +
+                        "\"defaults\": { " +
+                        "\"model\": \"cube_all\", " +
+                        "\"textures\": { " +
                         "\"all\": \"%1$s\" " +
-                    "} " +
-                "}," +
-                "\"variants\": { " +
-                    "\"normal\": [{ }], " +
-                    "\"inventory\": [{ }] " +
-                "}" +
-            "}", getBlocksPath(location));
+                        "} " +
+                        "}," +
+                        "\"variants\": { " +
+                        "\"normal\": [{ }], " +
+                        "\"inventory\": [{ }] " +
+                        "}" +
+                        "}", getBlocksPath(location));
     }
 
     private static ResourceLocation getBlocksPath(@Nonnull ResourceLocation base) {
@@ -59,7 +59,7 @@ public class CompressedBlockAssets {
 
     @SubscribeEvent
     public void texturePre(TextureStitchEvent.Pre event) {
-        for(CompressedResourceLocation locations: toCreateTextures) {
+        for (CompressedResourceLocation locations : toCreateTextures) {
             if (!generateTexture(locations)) return;
 
             event.getMap().registerSprite(getBlocksPath(locations.compressed));
@@ -80,17 +80,21 @@ public class CompressedBlockAssets {
 
         int scale = 1 + locations.compressionAmount;
 
-        WritableRaster raster = image.getColorModel().createCompatibleWritableRaster(image.getWidth()*scale,image.getHeight()*scale);
-        int[] pixels = image.getData().getPixels(0,0,image.getWidth(), image.getHeight(), (int[])null);
+        int squareSize = Math.min(image.getWidth(), image.getHeight());
 
-        for(int x = 0; x < scale; x++) {
-            for(int y = 0; y < scale; y++) {
-                raster.setPixels(x*image.getWidth(),y*image.getHeight(),image.getWidth(),image.getHeight(),pixels);
+        WritableRaster raster = image.getColorModel().createCompatibleWritableRaster(squareSize * scale, squareSize * scale);
+
+
+        int[] pixels = image.getData().getPixels(0, 0, squareSize, squareSize, (int[]) null);
+
+        for (int x = 0; x < scale; x++) {
+            for (int y = 0; y < scale; y++) {
+                raster.setPixels(x * squareSize, y * squareSize, squareSize, squareSize, pixels);
             }
         }
         BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, true, null);
 
-        if(compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
+        if (compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
             compressedImage = ImageUtil.scaleDownToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
         }
 
