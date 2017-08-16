@@ -35,11 +35,11 @@ public class PlayerDataStorage implements IOverloadedPlayerDataStorage, INBTSeri
         Map<String, Integer> integers = this.getIntegerMap();
         Map<String, Boolean> booleans = this.getBooleanMap();
 
-        for(String key: integers.keySet()) {
+        for (String key : integers.keySet()) {
             tagCompound.setInteger(key, integers.get(key));
         }
 
-        for(String key: booleans.keySet()) {
+        for (String key : booleans.keySet()) {
             tagCompound.setBoolean(key, booleans.get(key));
         }
 
@@ -51,11 +51,11 @@ public class PlayerDataStorage implements IOverloadedPlayerDataStorage, INBTSeri
         Map<String, Integer> integers = this.getIntegerMap();
         Map<String, Boolean> booleans = this.getBooleanMap();
 
-        for(String key: tagCompound.getKeySet()) {
+        for (String key : tagCompound.getKeySet()) {
             integers.put(key, tagCompound.getInteger(key));
         }
 
-        for(String key: booleans.keySet()) {
+        for (String key : booleans.keySet()) {
             booleans.put(key, tagCompound.getBoolean(key));
         }
     }

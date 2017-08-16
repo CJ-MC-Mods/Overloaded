@@ -72,7 +72,7 @@ public final class ModBlocks {
         playerInterface = registerFull(new BlockPlayerInterface());
         itemInterface = registerFull(new BlockItemInterface());
 
-        if(OverloadedConfig.developmentConfig.wipStuff) {
+        if (OverloadedConfig.developmentConfig.wipStuff) {
 //            fusionCore = new BlockFusionCore();
             matterPurifier = registerFull(new BlockMatterPurifier());
             pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
@@ -82,7 +82,7 @@ public final class ModBlocks {
 
         compressedBlocks = CompressedBlockHandler.initFromConfig();
 
-        for(BlockCompressed block: compressedBlocks) {
+        for (BlockCompressed block : compressedBlocks) {
             registerBlock(block);
         }
     }
@@ -93,7 +93,7 @@ public final class ModBlocks {
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        for(IModRegistrable block: registerList){
+        for (IModRegistrable block : registerList) {
             block.registerModel();
         }
     }
@@ -110,7 +110,7 @@ public final class ModBlocks {
     private static <T extends Block> T registerBlock(T block) {
         Overloaded.proxy.blocksToRegister.add(block);
 
-        if(block instanceof IModRegistrable)
+        if (block instanceof IModRegistrable)
             ModBlocks.addToSecondaryInit((IModRegistrable) block);
 
         return block;

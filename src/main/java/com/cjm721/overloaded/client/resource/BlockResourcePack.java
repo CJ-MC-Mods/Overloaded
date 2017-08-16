@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Map;
 import java.util.Set;
+
 @SideOnly(Side.CLIENT)
 public class BlockResourcePack extends AbstractInjectableResoucePack {
 
@@ -24,19 +25,20 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
         INSTANCE = new BlockResourcePack();
     }
 
-    private BlockResourcePack() {}
+    private BlockResourcePack() {
+    }
 
     private Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
     private Map<ResourceLocation, String> blockStates = Maps.newHashMap();
 
     private Set<String> domains = Sets.newHashSet();
 
-    public void addImage(@Nonnull ResourceLocation res,@Nonnull BufferedImage image) {
+    public void addImage(@Nonnull ResourceLocation res, @Nonnull BufferedImage image) {
         images.put(res, image);
     }
 
     public void addBlockState(ResourceLocation res, String state) {
-        blockStates.put(res,state);
+        blockStates.put(res, state);
     }
 
     public void addDomain(String domain) {
@@ -46,12 +48,12 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
     @Override
     @Nonnull
     public InputStream getInputStream(@Nonnull ResourceLocation location) throws IOException {
-        if(location.getResourcePath().endsWith(".png")) {
+        if (location.getResourcePath().endsWith(".png")) {
             return getImageInputStream(location);
         } else {
             String state = blockStates.get(location);
 
-            if(state != null) {
+            if (state != null) {
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
                 os.write(state.getBytes());
                 return new ByteArrayInputStream(os.toByteArray());
@@ -84,7 +86,7 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IMetadataSection> T getPackMetadata(@Nonnull MetadataSerializer metadataSerializer,@Nonnull String metadataSectionName) throws IOException {
+    public <T extends IMetadataSection> T getPackMetadata(@Nonnull MetadataSerializer metadataSerializer, @Nonnull String metadataSectionName) throws IOException {
         return null;
     }
 

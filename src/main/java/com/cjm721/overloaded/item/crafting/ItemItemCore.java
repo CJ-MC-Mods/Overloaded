@@ -1,17 +1,12 @@
 package com.cjm721.overloaded.item.crafting;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,8 +19,6 @@ public class ItemItemCore extends ModItem {
         setRegistryName("item_core");
         setUnlocalizedName("item_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
-
-        Overloaded.proxy.itemToRegister.add(this);
     }
 
     @SideOnly(Side.CLIENT)
@@ -35,8 +28,8 @@ public class ItemItemCore extends ModItem {
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/items/item_core.png"),
-                new ResourceLocation(MODID,"textures/dynamic/items/item_core.png"),
+                new ResourceLocation(MODID, "textures/items/item_core.png"),
+                new ResourceLocation(MODID, "textures/dynamic/items/item_core.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 }

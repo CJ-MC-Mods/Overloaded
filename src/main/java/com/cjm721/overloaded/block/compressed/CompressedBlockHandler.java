@@ -1,14 +1,12 @@
 package com.cjm721.overloaded.block.compressed;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.util.CraftingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiErrorScreen;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
@@ -36,7 +34,7 @@ public class CompressedBlockHandler {
         String compUnlocalizedName = String.format("compressed.%s", unlocalizedName);
 
 
-        return new BlockCompressed(toCompress, depth, material,compRegistryName , compUnlocalizedName, harvestTool, harvestLevel, hardnessMultiplier, recipeEnabled);
+        return new BlockCompressed(toCompress, depth, material, compRegistryName, compUnlocalizedName, harvestTool, harvestLevel, hardnessMultiplier, recipeEnabled);
     }
 
     public static List<BlockCompressed> initFromConfig() {
@@ -44,13 +42,13 @@ public class CompressedBlockHandler {
 
         List<BlockCompressed> compressedBlocks = new LinkedList<>();
 
-        for(String setting: OverloadedConfig.compressedConfig.compressedBlocks) {
-            if(setting.isEmpty())
+        for (String setting : OverloadedConfig.compressedConfig.compressedBlocks) {
+            if (setting.isEmpty())
                 continue;
             String[] split = setting.split(":");
 
-            if(split.length < 5) {
-                if(FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            if (split.length < 5) {
+                if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
                     throwClientSideError(setting);
                 } else {
                     throw new ReportedException(CrashReport.makeCrashReport(new RuntimeException("Compressed Blocks Config is invalid. Looking at compressed block: " + setting), "Invalid Compressed Block Config"));
@@ -63,9 +61,9 @@ public class CompressedBlockHandler {
             float hardnessMultiplier = Float.parseFloat(split[3]);
             boolean recipeEnabled = Boolean.parseBoolean(split[4]);
 
-            Block block = registry.getValue(new ResourceLocation(domain,blockName));
+            Block block = registry.getValue(new ResourceLocation(domain, blockName));
 
-            if(block == null || block == Blocks.AIR)
+            if (block == null || block == Blocks.AIR)
                 continue;
 
             BlockCompressed compressedBlock = CompressedBlockHandler.CreateCompressedBlock(block, depth, hardnessMultiplier, recipeEnabled);
@@ -84,7 +82,7 @@ public class CompressedBlockHandler {
             @SideOnly(Side.CLIENT)
             @Override
             public void drawScreen(GuiErrorScreen errorScreen, FontRenderer fontRenderer, int mouseRelX, int mouseRelY, float tickTime) {
-                errorScreen.drawString(fontRenderer, "Compressed Blocks Config is invalid. Looking at compressed block: " + setting, errorScreen.width/2, errorScreen.width/2, 0);
+                errorScreen.drawString(fontRenderer, "Compressed Blocks Config is invalid. Looking at compressed block: " + setting, errorScreen.width / 2, errorScreen.width / 2, 0);
             }
         };
     }

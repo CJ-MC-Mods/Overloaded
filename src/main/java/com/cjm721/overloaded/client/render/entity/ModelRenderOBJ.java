@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -81,7 +80,7 @@ public class ModelRenderOBJ extends ModelRenderer {
             this.scale = scale;
         }
 
-        if (objModel == null){
+        if (objModel == null) {
             compiled = true;
             System.err.println("Armor Model Display List could not be compiled!!! Armor model is broken!");
             return;

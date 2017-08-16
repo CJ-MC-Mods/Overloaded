@@ -6,7 +6,7 @@ import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
-public class TileHyperEnergyReceiver extends AbstractTileHyperReceiver<LongEnergyStack,IHyperHandlerEnergy> {
+public class TileHyperEnergyReceiver extends AbstractTileHyperReceiver<LongEnergyStack, IHyperHandlerEnergy> {
 
     public TileHyperEnergyReceiver() {
         super(HYPER_ENERGY_HANDLER);

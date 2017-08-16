@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemInterface;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
+import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -12,8 +12,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -56,14 +54,14 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
         ClientRegistry.bindTileEntitySpecialRenderer(TileItemInterface.class, new ItemInterfaceRenderer());
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/block.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/block.png"),
+                new ResourceLocation(MODID, "textures/blocks/block.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/block.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        ((TileItemInterface)worldIn.getTileEntity(pos)).breakBlock();
+        ((TileItemInterface) worldIn.getTileEntity(pos)).breakBlock();
         super.breakBlock(worldIn, pos, state);
     }
 
@@ -93,39 +91,38 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(worldIn.isRemote)
+        if (worldIn.isRemote)
             return true;
 
         TileEntity te = worldIn.getTileEntity(pos);
 
-        if(!(te instanceof TileItemInterface))
+        if (!(te instanceof TileItemInterface))
             return true;
 
-        TileItemInterface anInterface = (TileItemInterface)te;
+        TileItemInterface anInterface = (TileItemInterface) te;
 
         ItemStack stack = anInterface.getStoredItem();
-        if(stack.isEmpty()) {
+        if (stack.isEmpty()) {
             ItemStack handStack = playerIn.getHeldItem(hand);
 
-            if(handStack.isEmpty())
+            if (handStack.isEmpty())
                 return true;
 
             ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
-            playerIn.setHeldItem(hand,returnedItem);
+            playerIn.setHeldItem(hand, returnedItem);
         } else {
-            if(!playerIn.getHeldItem(hand).isEmpty())
+            if (!playerIn.getHeldItem(hand).isEmpty())
                 return true;
 
-            ItemStack toSpawn = anInterface.extractItem(0, 1,false);
-            if(toSpawn.isEmpty())
-               return true;
+            ItemStack toSpawn = anInterface.extractItem(0, 1, false);
+            if (toSpawn.isEmpty())
+                return true;
 
             worldIn.spawnEntity(new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, toSpawn));
         }

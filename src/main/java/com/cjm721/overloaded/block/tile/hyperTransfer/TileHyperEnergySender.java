@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
-public class TileHyperEnergySender extends AbstractTileHyperSender<LongEnergyStack,IHyperHandlerEnergy> {
+public class TileHyperEnergySender extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {
 
     public TileHyperEnergySender() {
         super(HYPER_ENERGY_HANDLER);

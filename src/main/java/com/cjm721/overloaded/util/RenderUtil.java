@@ -24,18 +24,16 @@ public class RenderUtil {
             final IBlockState state,
             final World worldObj,
             final BlockPos blockPos,
-            final int alpha )
-    {
+            final int alpha) {
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder worldRenderer = tessellator.getBuffer();
-        worldRenderer.begin( GL11.GL_QUADS, DefaultVertexFormats.ITEM );
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
-        for ( final EnumFacing enumfacing : EnumFacing.values() )
-        {
-            renderQuads( alpha, worldRenderer, model.getQuads( null, enumfacing, 0 ), state, worldObj, blockPos );
+        for (final EnumFacing enumfacing : EnumFacing.values()) {
+            renderQuads(alpha, worldRenderer, model.getQuads(null, enumfacing, 0), state, worldObj, blockPos);
         }
 
-        renderQuads( alpha, worldRenderer, model.getQuads( null, null, 0 ), state, worldObj, blockPos );
+        renderQuads(alpha, worldRenderer, model.getQuads(null, null, 0), state, worldObj, blockPos);
         tessellator.draw();
     }
 
@@ -46,18 +44,16 @@ public class RenderUtil {
             final List<BakedQuad> quads,
             final IBlockState state,
             final World worldObj,
-            final BlockPos blockPos )
-    {
-        for (BakedQuad bakedquad: quads)
-        {
-            final int color = bakedquad.getTintIndex() == -1 ? alpha | 0xffffff : getTint( alpha, bakedquad.getTintIndex(), state, worldObj, blockPos );
-            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor( renderer, bakedquad, color );
+            final BlockPos blockPos) {
+        for (BakedQuad bakedquad : quads) {
+            final int color = bakedquad.getTintIndex() == -1 ? alpha | 0xffffff : getTint(alpha, bakedquad.getTintIndex(), state, worldObj, blockPos);
+            net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(renderer, bakedquad, color);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public static int getTint(final int alpha, final int tintIndex, final IBlockState state, final World worldObj, final BlockPos blockPos ) {
-        return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, blockPos, tintIndex );
+    public static int getTint(final int alpha, final int tintIndex, final IBlockState state, final World worldObj, final BlockPos blockPos) {
+        return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, blockPos, tintIndex);
     }
 
     @SideOnly(Side.CLIENT)
@@ -65,21 +61,20 @@ public class RenderUtil {
             final IBakedModel baked,
             final IBlockState state,
             final World worldObj,
-            final BlockPos blockPos)
-    {
+            final BlockPos blockPos) {
         final int alpha = 0xaa000000;
-        GlStateManager.bindTexture( Minecraft.getMinecraft().getTextureMapBlocks().getGlTextureId() );
-        GlStateManager.color( 1.0f, 1.0f, 1.0f, 1.0f );
+        GlStateManager.bindTexture(Minecraft.getMinecraft().getTextureMapBlocks().getGlTextureId());
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
         GlStateManager.enableBlend();
         GlStateManager.enableTexture2D();
-        GlStateManager.blendFunc( GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA );
-        GlStateManager.colorMask( false, false, false, false );
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.colorMask(false, false, false, false);
 
-        renderModel( baked, state, worldObj, blockPos, alpha );
-        GlStateManager.colorMask( true, true, true, true );
-        GlStateManager.depthFunc( GL11.GL_LEQUAL );
-        renderModel( baked, state, worldObj, blockPos, alpha );
+        renderModel(baked, state, worldObj, blockPos, alpha);
+        GlStateManager.colorMask(true, true, true, true);
+        GlStateManager.depthFunc(GL11.GL_LEQUAL);
+        renderModel(baked, state, worldObj, blockPos, alpha);
 
         GlStateManager.disableBlend();
     }

@@ -28,41 +28,26 @@
 
 package com.cjm721.overloaded.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.*;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.GameData;
 
 /**
  * This class contains a bunch of helper methods for adding recipes in code in minecraft 1.12
- *
+ * <p>
  * Feel free to use this code for your projects.
- *
+ * <p>
  * Also please, please point out places where this can be improved.
  */
 public final class CraftingRegistry {
-
-    /**
-     * Adds a shaped recipe that supports string inputparamers corisponding to an oredict entry, can also be used for recipes without ore dict ingredients
-     *
-     * @param output The stack that should be produced
-     */
-    public static void addShapedOreRecipe(ItemStack output, Object... params) {
-        ResourceLocation location = getNameForRecipe(output);
-        ShapedOreRecipe recipe = new ShapedOreRecipe(location, output, params);
-        recipe.setRegistryName(location);
-        GameData.register_impl(recipe);
-    }
-
     /**
      * Adds a basic shaped recipe
      *
@@ -72,18 +57,6 @@ public final class CraftingRegistry {
         ResourceLocation location = getNameForRecipe(output);
         CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(params);
         ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
-        recipe.setRegistryName(location);
-        GameData.register_impl(recipe);
-    }
-
-    /**
-     * Adds a shapeless ore recipe
-     *
-     * @param output The stack that should be produced
-     */
-    public static void addShapelessOreRecipe(ItemStack output, Object... input) {
-        ResourceLocation location = getNameForRecipe(output);
-        ShapelessOreRecipe recipe = new ShapelessOreRecipe(location, output, input);
         recipe.setRegistryName(location);
         GameData.register_impl(recipe);
     }
@@ -119,45 +92,21 @@ public final class CraftingRegistry {
     }
 
     /**
-     *  Converts an object array into a NonNullList of Ingredients
+     * Converts an object array into a NonNullList of Ingredients
      */
-    private static NonNullList<Ingredient> buildInput (Object[] input) {
+    private static NonNullList<Ingredient> buildInput(Object[] input) {
         NonNullList<Ingredient> list = NonNullList.create();
-        for(Object obj : input){
-            if(obj instanceof Ingredient){
+        for (Object obj : input) {
+            if (obj instanceof Ingredient) {
                 list.add((Ingredient) obj);
             } else {
                 Ingredient ingredient = CraftingHelper.getIngredient(obj);
-                if(ingredient == null){
+                if (ingredient == null) {
                     ingredient = Ingredient.EMPTY;
                 }
                 list.add(ingredient);
             }
         }
         return list;
-    }
-
-    public static void addSmelting(Block input, ItemStack output, float xp) {
-        GameRegistry.addSmelting(input, output, xp);
-    }
-
-    public static void addSmelting(Item input, ItemStack output, float xp) {
-        GameRegistry.addSmelting(input, output, xp);
-    }
-
-    public static void addSmelting(ItemStack input, ItemStack output, float xp) {
-        GameRegistry.addSmelting(input, output, xp);
-    }
-
-    public static void addSmelting(ItemStack input, ItemStack output) {
-        addSmelting(input, output, 1F);
-    }
-
-    public static void addSmelting(Item input, ItemStack output) {
-        addSmelting(input, output, 1F);
-    }
-
-    public static void addSmelting(Block input, ItemStack output) {
-        addSmelting(input, output, 1F);
     }
 }

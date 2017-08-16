@@ -3,7 +3,6 @@ package com.cjm721.overloaded.block.tile;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.ForgeEnergyZero;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -31,29 +30,29 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
         BlockPos me = this.getPos();
         TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 
-        if(frontTE == null || !frontTE.hasCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite()))
+        if (frontTE == null || !frontTE.hasCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite()))
             return;
 
         IHyperHandlerEnergy storage = frontTE.getCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite());
-        LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE),false);
-        for(EnumFacing facing: EnumFacing.values()) {
-            if(energy.getAmount() == 0L)
+        LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE), false);
+        for (EnumFacing facing : EnumFacing.values()) {
+            if (energy.getAmount() == 0L)
                 return;
 
-            if(facing == getFacing())
+            if (facing == getFacing())
                 continue;
 
             TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
-            if(te == null || !te.hasCapability(ENERGY, facing.getOpposite()))
+            if (te == null || !te.hasCapability(ENERGY, facing.getOpposite()))
                 continue;
 
             IEnergyStorage receiver = te.getCapability(ENERGY, facing.getOpposite());
-            if(!receiver.canReceive())
+            if (!receiver.canReceive())
                 continue;
 
-            int acceptedAmount = receiver.receiveEnergy((int) Math.min(energy.getAmount(), Integer.MAX_VALUE),true);
-            if(acceptedAmount != 0) {
-                receiver.receiveEnergy(acceptedAmount,false);
+            int acceptedAmount = receiver.receiveEnergy((int) Math.min(energy.getAmount(), Integer.MAX_VALUE), true);
+            if (acceptedAmount != 0) {
+                receiver.receiveEnergy(acceptedAmount, false);
                 energy = storage.take(new LongEnergyStack(acceptedAmount), true);
             }
         }
@@ -61,7 +60,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY) {
+        if (capability == ENERGY) {
             return true;
         }
         return super.hasCapability(capability, facing);
@@ -70,7 +69,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY) {
+        if (capability == ENERGY) {
             return (T) new ForgeEnergyZero();
         }
         return super.getCapability(capability, facing);

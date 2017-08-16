@@ -11,7 +11,8 @@ public class NoClipStatusMessage implements IMessage {
 
     private boolean enabled;
 
-    public NoClipStatusMessage() { }
+    public NoClipStatusMessage() {
+    }
 
     public NoClipStatusMessage(boolean enabled) {
         this.enabled = enabled;

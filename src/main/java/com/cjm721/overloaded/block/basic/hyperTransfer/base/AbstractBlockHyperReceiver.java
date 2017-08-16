@@ -24,9 +24,9 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
-        if(heldItem.getItem().equals(ModItems.linkingCard)) {
+        if (heldItem.getItem().equals(ModItems.linkingCard)) {
             NBTTagCompound tag = heldItem.getTagCompound();
-            if(tag == null) {
+            if (tag == null) {
                 tag = new NBTTagCompound();
             }
 
@@ -34,7 +34,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
             writeNodeData(tag, worldId, pos);
             heldItem.setTagCompound(tag);
 
-            if(worldIn.isRemote) {
+            if (worldIn.isRemote) {
                 playerIn.sendStatusMessage(new TextComponentString(String.format("Recorded: World: %d Position: %s", worldId, pos.toString())), false);
             }
 

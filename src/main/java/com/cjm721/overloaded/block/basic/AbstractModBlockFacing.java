@@ -31,7 +31,7 @@ public abstract class AbstractModBlockFacing extends ModBlock {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getProperties().get(FACING)).getIndex();
+        return ((EnumFacing) state.getProperties().get(FACING)).getIndex();
     }
 
     @Override
@@ -48,7 +48,7 @@ public abstract class AbstractModBlockFacing extends ModBlock {
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
+        return EnumFacing.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
     }
 
 }

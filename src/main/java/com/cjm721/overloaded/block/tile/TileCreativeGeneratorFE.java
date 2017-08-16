@@ -19,19 +19,19 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
      */
     @Override
     public void update() {
-        if(getWorld().isRemote)
+        if (getWorld().isRemote)
             return;
 
         BlockPos pos = this.getPos();
-        for(EnumFacing facing: EnumFacing.values()) {
+        for (EnumFacing facing : EnumFacing.values()) {
             TileEntity te = world.getTileEntity(pos.add(facing.getDirectionVec()));
 
-            if(te == null)
+            if (te == null)
                 continue;
 
             IEnergyStorage storage = te.getCapability(ENERGY, facing.getOpposite());
 
-            if(storage == null)
+            if (storage == null)
                 continue;
 
             storage.receiveEnergy(Integer.MAX_VALUE, false);
@@ -41,7 +41,7 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     @Override
     @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY) {
+        if (capability == ENERGY) {
             return (T) this;
         }
         return super.getCapability(capability, facing);

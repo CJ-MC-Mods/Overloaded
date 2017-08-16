@@ -33,52 +33,40 @@ import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABI
 
 public class PlayerInteractionUtil {
 
-    public static boolean tryHarvestBlock(EntityPlayerMP player, World world, BlockPos pos)
-    {
+    public static boolean tryHarvestBlock(EntityPlayerMP player, World world, BlockPos pos) {
         int exp = net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(world, player.interactionManager.getGameType(), player, pos);
-        if (exp == -1)
-        {
+        if (exp == -1) {
             return false;
-        }
-        else
-        {
+        } else {
             IBlockState iblockstate = world.getBlockState(pos);
             TileEntity tileentity = world.getTileEntity(pos);
             Block block = iblockstate.getBlock();
 
-            if ((block instanceof BlockCommandBlock || block instanceof BlockStructure) && !player.canUseCommandBlock())
-            {
+            if ((block instanceof BlockCommandBlock || block instanceof BlockStructure) && !player.canUseCommandBlock()) {
                 world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
                 return false;
-            }
-            else
-            {
+            } else {
                 world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
                 boolean flag1;
 
-                if (player.capabilities.isCreativeMode)
-                {
-                    flag1 = removeBlock(world,pos,player,false);
+                if (player.capabilities.isCreativeMode) {
+                    flag1 = removeBlock(world, pos, player, false);
                     player.connection.sendPacket(new SPacketBlockChange(world, pos));
-                }
-                else
-                {
+                } else {
                     ItemStack itemstack1 = player.getHeldItemMainhand();
                     ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
                     boolean flag = iblockstate.getBlock().canHarvestBlock(world, pos, player);
 
                     itemstack1.onBlockDestroyed(world, iblockstate, pos, player);
 
-                    flag1 = removeBlock(world,pos,player, flag);
-                    if (flag1 && flag)
-                    {
+                    flag1 = removeBlock(world, pos, player, flag);
+                    if (flag1 && flag) {
                         iblockstate.getBlock().harvestBlock(world, player, pos, iblockstate, tileentity, itemstack2);
                     }
                 }
 
                 // Drop experience
-                if (!player.isCreative() && flag1 && exp > 0)
-                {
+                if (!player.isCreative() && flag1 && exp > 0) {
                     iblockstate.getBlock().dropXpOnBlockBreak(world, player.getPosition(), exp);
                 }
                 return flag1;
@@ -86,13 +74,11 @@ public class PlayerInteractionUtil {
         }
     }
 
-    private static boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest)
-    {
+    private static boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
         IBlockState iblockstate = world.getBlockState(pos);
         boolean flag = iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest);
 
-        if (flag)
-        {
+        if (flag) {
             iblockstate.getBlock().onBlockDestroyedByPlayer(world, pos, iblockstate);
         }
 
@@ -102,49 +88,48 @@ public class PlayerInteractionUtil {
     public static boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull IEnergyStorage energy, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
-        if(!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false,facing, null)) {
+        if (!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false, facing, null)) {
             return false;
         }
 
-        BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player,new BlockSnapshot(worldIn,newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
-        if(event.isCanceled())
+        BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player, new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
+        if (event.isCanceled())
             return false;
 
-        long distance = Math.round(player.getPosition().getDistance(newPosition.getX(),newPosition.getY(),newPosition.getZ()));
+        long distance = Math.round(player.getPosition().getDistance(newPosition.getX(), newPosition.getY(), newPosition.getZ()));
 
         long cost = OverloadedConfig.multiToolConfig.placeBaseCost + OverloadedConfig.multiToolConfig.costPerMeterAway * distance;
-        if(!player.capabilities.isCreativeMode && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
+        if (!player.capabilities.isCreativeMode && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
             return false;
 
-        IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY,EnumFacing.UP);
+        IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 
         int foundStackSlot = findItemStackSlot(searchStack, inventory);
-        if(foundStackSlot == -1) {
+        if (foundStackSlot == -1) {
             return false;
         }
-        ItemStack foundStack = inventory.extractItem(foundStackSlot,1,player.capabilities.isCreativeMode);
+        ItemStack foundStack = inventory.extractItem(foundStackSlot, 1, player.capabilities.isCreativeMode);
 
         int i = itemBlock.getMetadata(foundStack.getMetadata());
         IBlockState iblockstate1 = itemBlock.getBlock().getStateForPlacement(worldIn, newPosition, facing, hitX, hitY, hitZ, i, player, EnumHand.MAIN_HAND);
 
-        if (itemBlock.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1))
-        {
+        if (itemBlock.placeBlockAt(foundStack, player, worldIn, newPosition, facing, hitX, hitY, hitZ, iblockstate1)) {
             SoundType soundtype = worldIn.getBlockState(newPosition).getBlock().getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
             worldIn.playSound(null, newPosition, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 
-            if(!player.capabilities.isCreativeMode)
-                energy.extractEnergy((int)cost,false);
+            if (!player.capabilities.isCreativeMode)
+                energy.extractEnergy((int) cost, false);
             return true;
         }
-        inventory.insertItem(foundStackSlot,foundStack,player.capabilities.isCreativeMode);
+        inventory.insertItem(foundStackSlot, foundStack, player.capabilities.isCreativeMode);
         return false;
     }
 
     public static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
         int size = inventory.getSlots();
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             ItemStack stack = inventory.getStackInSlot(i);
-            if(!stack.isEmpty() && stack.isItemEqual(item)) {
+            if (!stack.isEmpty() && stack.isItemEqual(item)) {
                 return i;
             }
         }
@@ -155,9 +140,9 @@ public class PlayerInteractionUtil {
     @Nullable
     @SideOnly(Side.CLIENT)
     public static RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
-        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach,partialTicks);
+        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach, partialTicks);
 
-        if(result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
+        if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
             return null;
         return result;
     }

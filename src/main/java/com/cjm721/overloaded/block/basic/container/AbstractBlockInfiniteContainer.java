@@ -27,8 +27,8 @@ public abstract class AbstractBlockInfiniteContainer extends ModBlock {
     public final List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
         IHyperType stack = getHyperStack(world, pos);
 
-        if(stack != null && stack.getAmount() != 0) {
-            ItemStack toDrop = new ItemStack(this,1);
+        if (stack != null && stack.getAmount() != 0) {
+            ItemStack toDrop = new ItemStack(this, 1);
 
             NBTTagCompound compound = new NBTTagCompound();
             world.getTileEntity(pos).writeToNBT(compound);

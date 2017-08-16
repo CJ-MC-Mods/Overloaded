@@ -17,15 +17,13 @@ public class CapabilityHyperItem {
     @CapabilityInject(IHyperHandlerItem.class)
     public static Capability<IHyperHandlerItem> HYPER_ITEM_HANDLER = null;
 
-    public static void register()
-    {
+    public static void register() {
         CapabilityManager.INSTANCE.register(IHyperHandlerItem.class, new Capability.IStorage<IHyperHandlerItem>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side)
-            {
+            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side) {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongItemStack stack = instance.status();
-                if(!stack.getItemStack().isEmpty()) {
+                if (!stack.getItemStack().isEmpty()) {
                     tag.setLong("Count", stack.getAmount());
                     tag.setTag("Item", stack.getItemStack().serializeNBT());
                 }
@@ -33,11 +31,10 @@ public class CapabilityHyperItem {
             }
 
             @Override
-            public void readNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side,@Nonnull NBTBase nbt)
-            {
-                NBTTagCompound tag = (NBTTagCompound)nbt;
+            public void readNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side, @Nonnull NBTBase nbt) {
+                NBTTagCompound tag = (NBTTagCompound) nbt;
 
-                if(tag.hasKey("Item")) {
+                if (tag.hasKey("Item")) {
                     LongItemStack stack = new LongItemStack(new ItemStack((NBTTagCompound) tag.getTag("Item")), tag.getLong("Count"));
                     instance.give(stack, false);
                 }

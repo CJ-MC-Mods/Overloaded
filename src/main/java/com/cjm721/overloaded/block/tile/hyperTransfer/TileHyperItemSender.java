@@ -13,7 +13,7 @@ import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 /**
  * {@link TileEntity That is able to receive items from a remote source}
  */
-public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack,IHyperHandlerItem> {
+public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, IHyperHandlerItem> {
 
     public TileHyperItemSender() {
         super(HYPER_ITEM_HANDLER);
@@ -22,7 +22,7 @@ public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack,I
     @Override
     @Nonnull
     protected LongItemStack generate(long amount) {
-        return new LongItemStack(ItemStack.EMPTY,amount);
+        return new LongItemStack(ItemStack.EMPTY, amount);
     }
 
     @Override

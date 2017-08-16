@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileFusionCore;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
+import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -52,12 +52,12 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
         ClientRegistry.bindTileEntitySpecialRenderer(TileFusionCore.class, new FusionCoreRenderer());
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/sun/yellow.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/sun/yellow.png"),
+                new ResourceLocation(MODID, "textures/blocks/sun/yellow.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/sun/yellow.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/sun/red_two.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/sun/red_two.png"),
+                new ResourceLocation(MODID, "textures/blocks/sun/red_two.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/sun/red_two.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -86,8 +86,7 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return TRANSLUCENT;
     }
 

@@ -14,7 +14,7 @@ public class NoClipUpdateHandler implements IMessageHandler<NoClipStatusMessage,
 
     @Override
     public IMessage onMessage(NoClipStatusMessage message, MessageContext ctx) {
-        if(ctx.side.isClient()) {
+        if (ctx.side.isClient()) {
             clientSide(message);
         }
         return null;
@@ -23,7 +23,7 @@ public class NoClipUpdateHandler implements IMessageHandler<NoClipStatusMessage,
     @SideOnly(Side.CLIENT)
     private void clientSide(NoClipStatusMessage message) {
         Minecraft.getMinecraft().addScheduledTask(() -> {
-            ArmorEventHandler.setNoClip(Minecraft.getMinecraft().player,message.isEnabled());
+            ArmorEventHandler.setNoClip(Minecraft.getMinecraft().player, message.isEnabled());
             Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString("No Clip: " + message.isEnabled()), true);
         });
     }

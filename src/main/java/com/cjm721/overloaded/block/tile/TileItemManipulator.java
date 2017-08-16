@@ -19,7 +19,6 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
@@ -37,17 +36,17 @@ public class TileItemManipulator extends TileEntity implements ITickable {
 
     public TileItemManipulator() {
         itemStack = new ItemStackHandler();
-        energyStorage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,0);
+        energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        if(compound.hasKey("Item")) {
+        if (compound.hasKey("Item")) {
             itemStack.deserializeNBT(compound.getCompoundTag("Item"));
         }
 
-        if(compound.hasKey("Energy")) {
-            energyStorage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,0, compound.getInteger("Energy"));
+        if (compound.hasKey("Energy")) {
+            energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0, compound.getInteger("Energy"));
         }
     }
 
@@ -62,15 +61,15 @@ public class TileItemManipulator extends TileEntity implements ITickable {
     @Override
     public void update() {
         ItemStack currentItem = itemStack.getStackInSlot(0);
-        if(currentItem.isEmpty())
+        if (currentItem.isEmpty())
             return;
 
         FakePlayer player = getPlayer();
 
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(this.getPos());
-        for(int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
-            if(!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
-                EnumActionResult result = currentItem.getItem().onItemUse(player,getWorld(),blockPos,EnumHand.MAIN_HAND,facing.getOpposite(),0.5f,0.5f,0.5f);
+        for (int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
+            if (!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
+                EnumActionResult result = currentItem.getItem().onItemUse(player, getWorld(), blockPos, EnumHand.MAIN_HAND, facing.getOpposite(), 0.5f, 0.5f, 0.5f);
 //                System.out.println(result);
 //                currentItem.onItemUse(player,this.getWorld(),blockPos,EnumHand.MAIN_HAND,
 //                        this.facing.getOpposite(),0.5f,0.5f,0.5f);
@@ -83,7 +82,7 @@ public class TileItemManipulator extends TileEntity implements ITickable {
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY || capability == ITEM_HANDLER_CAPABILITY)
+        if (capability == ENERGY || capability == ITEM_HANDLER_CAPABILITY)
             return true;
         return super.hasCapability(capability, facing);
     }
@@ -91,9 +90,9 @@ public class TileItemManipulator extends TileEntity implements ITickable {
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == ENERGY)
+        if (capability == ENERGY)
             return (T) energyStorage;
-        if(capability == ITEM_HANDLER_CAPABILITY)
+        if (capability == ITEM_HANDLER_CAPABILITY)
             return (T) itemStack;
         return super.getCapability(capability, facing);
     }
@@ -105,10 +104,10 @@ public class TileItemManipulator extends TileEntity implements ITickable {
     }
 
     private FakePlayer getPlayer() {
-        if(this.player == null || this.player.get() == null) {
-            FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer)this.getWorld(),FAKEPLAYER);
+        if (this.player == null || this.player.get() == null) {
+            FakePlayer fakePlayer = FakePlayerFactory.get((WorldServer) this.getWorld(), FAKEPLAYER);
             this.player = new WeakReference<>(fakePlayer);
-            fakePlayer.setLocationAndAngles(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 0f,0f);
+            fakePlayer.setLocationAndAngles(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 0f, 0f);
             fakePlayer.inventory.clear();
         }
 
@@ -117,7 +116,7 @@ public class TileItemManipulator extends TileEntity implements ITickable {
 
     public void breakBlock() {
         ItemStack storedItem = itemStack.getStackInSlot(0);
-        if(!storedItem.isEmpty())
-            this.getWorld().spawnEntity(new EntityItem(this.getWorld(),getPos().getX(), getPos().getY(),getPos().getZ(),storedItem));
+        if (!storedItem.isEmpty())
+            this.getWorld().spawnEntity(new EntityItem(this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem));
     }
 }

@@ -1,14 +1,16 @@
 [
   {
-  "modid": "overloaded",
-  "name": "Overloaded",
-  "description": "Adds various complicated and tedius things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "logoFile": "logo.png",
-  "url": "https://github.com/CJ-MC-Mods/Overloaded",
-  "updateJSON": "minecraftforge.net/versions.json",
-  "authorList": ["CJ Miller (cjm721)"],
-  "credits": "Assets: Mega___Byte | Documentation / Thinkers: Sironin, Braingkk"
+    "modid": "overloaded",
+    "name": "Overloaded",
+    "description": "Adds various complicated and tedius things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "logoFile": "logo.png",
+    "url": "https://github.com/CJ-MC-Mods/Overloaded",
+    "updateJSON": "minecraftforge.net/versions.json",
+    "authorList": [
+      "CJ Miller (cjm721)"
+    ],
+    "credits": "Assets: Mega___Byte | Documentation / Thinkers: Sironin, Braingkk"
   }
 ]

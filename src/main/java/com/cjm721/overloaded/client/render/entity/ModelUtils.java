@@ -126,8 +126,7 @@ public class ModelUtils implements IResourceManagerReloadListener {
                 });
 
                 bakedModelCache.put(modelLocation, bakedModel);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.err.println("Error at ModelUtils.loadBakedModel, Resource: " + modelLocation.toString());
                 throw new RuntimeException(e);
             }

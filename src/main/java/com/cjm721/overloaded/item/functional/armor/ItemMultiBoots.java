@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -28,7 +27,6 @@ public class ItemMultiBoots extends AbstractMultiArmor {
         setRegistryName("multi_boots");
         setUnlocalizedName("multi_boots");
 
-        Overloaded.proxy.itemToRegister.add(this);
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
@@ -36,7 +34,7 @@ public class ItemMultiBoots extends AbstractMultiArmor {
     @Override
     @SideOnly(Side.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        if(armorModel == null)
+        if (armorModel == null)
             armorModel = new RenderMultiBoots();
         return armorModel;
     }
@@ -50,8 +48,8 @@ public class ItemMultiBoots extends AbstractMultiArmor {
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/armors/multi_boot.png"),
-                new ResourceLocation(MODID,"textures/dynamic/armors/multi_boot.png"),
+                new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
+                new ResourceLocation(MODID, "textures/dynamic/armors/multi_boot.png"),
                 OverloadedConfig.textureResolutions.multiArmorResolution));
     }
 }

@@ -31,7 +31,7 @@ public class TilePlayerInterface extends TileEntity {
         NBTTagCompound tag = new NBTTagCompound();
         writeToNBT(tag);
 
-        return new SPacketUpdateTileEntity(getPos(),1,tag);
+        return new SPacketUpdateTileEntity(getPos(), 1, tag);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TilePlayerInterface extends TileEntity {
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        if(compound.hasKey("Placer"))
+        if (compound.hasKey("Placer"))
             placer = UUID.fromString(compound.getString("Placer"));
 
         super.readFromNBT(compound);
@@ -51,23 +51,23 @@ public class TilePlayerInterface extends TileEntity {
     @Override
     @Nonnull
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        if(placer != null)
+        if (placer != null)
             compound.setString("Placer", placer.toString());
 
         return super.writeToNBT(compound);
     }
 
     public void setPlacer(@Nonnull EntityLivingBase placer) {
-        if(placer instanceof EntityPlayer)
+        if (placer instanceof EntityPlayer)
             this.placer = placer.getUniqueID();
     }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if(this.placer != null) {
+        if (this.placer != null) {
             EntityPlayer player = this.getWorld().getPlayerEntityByUUID(this.placer);
 
-            if(player != null){
+            if (player != null) {
                 return player.hasCapability(capability, facing);
             }
         }
@@ -78,10 +78,10 @@ public class TilePlayerInterface extends TileEntity {
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(this.placer != null) {
+        if (this.placer != null) {
             EntityPlayer player = this.getWorld().getPlayerEntityByUUID(this.placer);
 
-            if(player != null){
+            if (player != null) {
                 return player.getCapability(capability, facing);
             }
         }

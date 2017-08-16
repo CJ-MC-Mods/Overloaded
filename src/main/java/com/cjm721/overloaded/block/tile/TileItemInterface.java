@@ -34,7 +34,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
     @Override
     public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        storedItem = new ItemStack((NBTTagCompound)compound.getTag("StoredItem"));
+        storedItem = new ItemStack((NBTTagCompound) compound.getTag("StoredItem"));
 
         super.readFromNBT(compound);
     }
@@ -52,7 +52,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         NBTTagCompound tag = new NBTTagCompound();
         writeToNBT(tag);
 
-        return new SPacketUpdateTileEntity(getPos(),1,tag);
+        return new SPacketUpdateTileEntity(getPos(), 1, tag);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     public int getSlots() {
         return 1;
     }
-    
+
     @Nonnull
     @Override
     public ItemStack getStackInSlot(int slot) {
@@ -85,9 +85,9 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        if(storedItem.isEmpty()) {
-            if(stack.getCount() == 1) {
-                if(!simulate) {
+        if (storedItem.isEmpty()) {
+            if (stack.getCount() == 1) {
+                if (!simulate) {
                     this.storedItem = stack;
                     updateClient();
                     markDirty();
@@ -102,7 +102,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
             returnCopy.setCount(stack.getCount() - 1);
 
-            if(!simulate) {
+            if (!simulate) {
                 this.storedItem = storedCopy;
                 updateClient();
                 markDirty();
@@ -119,9 +119,9 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         ItemStack copy = storedItem.copy();
         copy.setCount(Math.min(copy.getCount(), amount));
 
-        if(!simulate) {
+        if (!simulate) {
             storedItem.setCount(storedItem.getCount() - copy.getCount());
-            if(storedItem.getCount() == 0) {
+            if (storedItem.getCount() == 0) {
                 storedItem = ItemStack.EMPTY;
             }
             markDirty();
@@ -143,23 +143,23 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
+        if ((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
             return true;
         }
 
-        return storedItem.hasCapability(capability,facing) || super.hasCapability(capability, facing);
+        return storedItem.hasCapability(capability, facing) || super.hasCapability(capability, facing);
     }
 
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
+        if ((facing == EnumFacing.UP || facing == EnumFacing.DOWN) && capability == ITEM_HANDLER_CAPABILITY) {
             return (T) this;
         }
 
         T t = storedItem.getCapability(capability, facing);
 
-        if(t == null)
+        if (t == null)
             return super.getCapability(capability, facing);
         return t;
     }
@@ -170,7 +170,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
     }
 
     public void breakBlock() {
-        if(!storedItem.isEmpty())
-            this.getWorld().spawnEntity(new EntityItem(this.getWorld(),getPos().getX(), getPos().getY(),getPos().getZ(),storedItem));
+        if (!storedItem.isEmpty())
+            this.getWorld().spawnEntity(new EntityItem(this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem));
     }
 }

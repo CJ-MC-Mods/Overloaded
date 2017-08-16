@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class KeyBindPressedHandler implements IMessageHandler<KeyBindPressedMessage,IMessage> {
+public class KeyBindPressedHandler implements IMessageHandler<KeyBindPressedMessage, IMessage> {
 
     /**
      * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply
@@ -23,7 +23,7 @@ public class KeyBindPressedHandler implements IMessageHandler<KeyBindPressedMess
     public IMessage onMessage(KeyBindPressedMessage message, MessageContext ctx) {
         EntityPlayerMP player = ctx.getServerHandler().player;
 
-        switch (message.getBind()){
+        switch (message.getBind()) {
             case NO_CLIP:
                 player.getServerWorld().addScheduledTask(() -> {
                     boolean result = ArmorEventHandler.toggleNoClip(player);

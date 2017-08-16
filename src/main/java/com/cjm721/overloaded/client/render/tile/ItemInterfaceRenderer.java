@@ -15,7 +15,7 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x,y,z);
+        GlStateManager.translate(x, y, z);
         GlStateManager.disableRescaleNormal();
 
         renderItem(te);
@@ -27,7 +27,7 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
     private void renderItem(TileItemInterface te) {
         ItemStack stack = te.getStoredItem();
 
-        if(stack.isEmpty())
+        if (stack.isEmpty())
             return;
 
         RenderHelper.enableStandardItemLighting();
@@ -35,7 +35,7 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(.5, .5, .5);
-        GlStateManager.scale(.5f,.5f,.5f);
+        GlStateManager.scale(.5f, .5f, .5f);
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);
 

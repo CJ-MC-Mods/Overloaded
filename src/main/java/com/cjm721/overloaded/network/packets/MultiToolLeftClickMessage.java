@@ -8,7 +8,8 @@ public class MultiToolLeftClickMessage implements IMessage {
 
     private BlockPos pos;
 
-    public MultiToolLeftClickMessage() { }
+    public MultiToolLeftClickMessage() {
+    }
 
     public MultiToolLeftClickMessage(BlockPos pos) {
         this.pos = pos;
@@ -24,7 +25,7 @@ public class MultiToolLeftClickMessage implements IMessage {
         int x = buf.readInt();
         int y = buf.readInt();
         int z = buf.readInt();
-        pos = new BlockPos(x,y,z);
+        pos = new BlockPos(x, y, z);
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.proxy.CommonProxy;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -11,7 +10,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "[1.12,1.13)",
         useMetadata = true
-        )
+)
 public class Overloaded {
 
     @Mod.Instance(Overloaded.MODID)
@@ -32,8 +31,7 @@ public class Overloaded {
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         proxy.init(event);
     }
 

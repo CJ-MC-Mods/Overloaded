@@ -55,20 +55,20 @@ public class ArmorEventHandler {
         IOverloadedPlayerDataStorage dataStorage = getDataStorage(player);
 
         if (isMultiArmorSetEquipped(player)) {
-            dataStorage.getBooleanMap().put(set,true);
+            dataStorage.getBooleanMap().put(set, true);
 
             tryEnableFlight(player, dataStorage, event.side);
             tryFeedPlayer(player, event.side);
             tryHealPlayer(player, event.side);
             tryRemoveHarmful(player, event.side);
             tryExtinguish(player, event.side);
-            tryGiveAir(player,event.side);
+            tryGiveAir(player, event.side);
         } else {
             Map<String, Boolean> boolMap = dataStorage.getBooleanMap();
-            if(boolMap.containsKey(set) && boolMap.get(set)) {
-                boolMap.put(set,false);
+            if (boolMap.containsKey(set) && boolMap.get(set)) {
+                boolMap.put(set, false);
                 disableFlight(player, dataStorage, event.side);
-                disableNoClip(player,dataStorage, event.side);
+                disableNoClip(player, dataStorage, event.side);
             }
 
         }
@@ -76,16 +76,16 @@ public class ArmorEventHandler {
 
     private void disableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
         player.noClip = false;
-        dataStorage.getBooleanMap().put(noClip,false);
+        dataStorage.getBooleanMap().put(noClip, false);
     }
 
     private void tryEnableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
         final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
-        if(booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
+        if (booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
             if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
                 player.noClip = true;
             } else {
-                setNoClip(player,false);
+                setNoClip(player, false);
             }
         }
     }
@@ -93,7 +93,7 @@ public class ArmorEventHandler {
     private void tryGiveAir(EntityPlayer player, Side side) {
         int airNeeded = 300 - player.getAir();
 
-        if(airNeeded > 0 && extractEnergy(player,airNeeded * OverloadedConfig.multiArmorConfig.costPerAir, side.isClient())) {
+        if (airNeeded > 0 && extractEnergy(player, airNeeded * OverloadedConfig.multiArmorConfig.costPerAir, side.isClient())) {
             player.setAir(300);
         }
     }
@@ -137,12 +137,12 @@ public class ArmorEventHandler {
         float toAdd = OverloadedConfig.multiArmorConfig.maxFoodLevel - staturationLevel;
 
         if (toFeed > 0 && extractEnergy(player, Math.round(OverloadedConfig.multiArmorConfig.costPerFood * toFeed), side.isClient())) {
-            foodStats.addStats(toFeed,0);
+            foodStats.addStats(toFeed, 0);
         }
 
-        if(toAdd > 0.0F && extractEnergy(player, Math.round(OverloadedConfig.multiArmorConfig.costPerSaturation * toAdd), side.isClient())) {
+        if (toAdd > 0.0F && extractEnergy(player, Math.round(OverloadedConfig.multiArmorConfig.costPerSaturation * toAdd), side.isClient())) {
             toFeed = Math.round(toAdd);
-            foodStats.addStats(toFeed,0.5F);
+            foodStats.addStats(toFeed, 0.5F);
         }
     }
 
@@ -207,9 +207,9 @@ public class ArmorEventHandler {
     public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
         Entity entity = event.getEntity();
 
-        if(entity instanceof EntityPlayer) {
+        if (entity instanceof EntityPlayer) {
             EntityPlayer player = ((EntityPlayer) entity);
-            tryEnableNoClip(player,getDataStorage(player), Side.SERVER);
+            tryEnableNoClip(player, getDataStorage(player), Side.SERVER);
         }
     }
 
@@ -257,7 +257,7 @@ public class ArmorEventHandler {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
-        if(((ClientProxy) Overloaded.proxy).noClipKeybind.isPressed() && isMultiArmorSetEquipped(Minecraft.getMinecraft().player)) {
+        if (((ClientProxy) Overloaded.proxy).noClipKeybind.isPressed() && isMultiArmorSetEquipped(Minecraft.getMinecraft().player)) {
             IMessage message = new KeyBindPressedMessage(KeyBindPressedMessage.KeyBind.NO_CLIP);
             Overloaded.proxy.networkWrapper.sendToServer(message);
         }
@@ -271,7 +271,7 @@ public class ArmorEventHandler {
             booleans.remove(noClip);
             return false;
         } else {
-            booleans.put(noClip,true);
+            booleans.put(noClip, true);
             return true;
         }
     }
@@ -280,6 +280,6 @@ public class ArmorEventHandler {
         IOverloadedPlayerDataStorage storage = getDataStorage(player);
 
         final Map<String, Boolean> booleans = storage.getBooleanMap();
-        booleans.put(noClip,enabled);
+        booleans.put(noClip, enabled);
     }
 }

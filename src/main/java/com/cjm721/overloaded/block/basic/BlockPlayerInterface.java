@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TilePlayerInterface;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
+import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.ITileEntityProvider;
@@ -13,8 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -60,7 +58,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        ((TilePlayerInterface)worldIn.getTileEntity(pos)).setPlacer(placer);
+        ((TilePlayerInterface) worldIn.getTileEntity(pos)).setPlacer(placer);
 
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
@@ -72,8 +70,8 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
         ClientRegistry.bindTileEntitySpecialRenderer(TilePlayerInterface.class, new PlayerInterfaceRenderer());
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/block_player.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/block_player.png"),
+                new ResourceLocation(MODID, "textures/blocks/block_player.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/block_player.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -89,29 +87,28 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState,@Nonnull IBlockAccess worldIn,@Nonnull BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
+        if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
             TileEntity te = worldIn.getTileEntity(pos);
 
-            if(te instanceof TilePlayerInterface) {
+            if (te instanceof TilePlayerInterface) {
                 UUID placer = ((TilePlayerInterface) te).getPlacer();
 
                 GameProfile profile = worldIn.getMinecraftServer().getPlayerProfileCache().getProfileByUUID(placer);
 
-                if(profile == null){
+                if (profile == null) {
                     playerIn.sendMessage(new TextComponentString(String.format("Bound to offline player: %s", placer.toString())));
                 } else {
                     playerIn.sendMessage(new TextComponentString("Bound to player: " + profile.getName()));

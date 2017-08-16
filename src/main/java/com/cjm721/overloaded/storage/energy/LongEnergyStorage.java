@@ -9,7 +9,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 
-public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<NBTTagCompound>  {
+public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<NBTTagCompound> {
 
     @Nonnull
     private final IDataUpdate dataUpdate;
@@ -66,7 +66,7 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
      */
     @Override
     public int getEnergyStored() {
-        return (int) (((double) energy.amount /(double)Long.MAX_VALUE) * Integer.MAX_VALUE);
+        return (int) (((double) energy.amount / (double) Long.MAX_VALUE) * Integer.MAX_VALUE);
     }
 
     /**
@@ -106,7 +106,7 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     public LongEnergyStack give(@Nonnull LongEnergyStack stack, boolean doAction) {
         NumberUtil.AddReturn<Long> longAddReturn = NumberUtil.addToMax(energy.amount, stack.amount);
 
-        if(doAction) {
+        if (doAction) {
             energy.amount = longAddReturn.result;
             dataUpdate.dataUpdated();
         }
@@ -118,9 +118,9 @@ public class LongEnergyStorage implements IEnergyStorage, IHyperHandlerEnergy, I
     @Nonnull
     public LongEnergyStack take(@Nonnull LongEnergyStack stack, boolean doAction) {
         long newStoredAmount = Math.max(energy.amount - stack.amount, 0);
-        LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount,stack.amount));
+        LongEnergyStack result = new LongEnergyStack(Math.min(energy.amount, stack.amount));
 
-        if(doAction) {
+        if (doAction) {
             energy.amount = newStoredAmount;
             dataUpdate.dataUpdated();
         }

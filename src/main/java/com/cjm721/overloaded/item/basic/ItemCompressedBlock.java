@@ -1,8 +1,7 @@
 package com.cjm721.overloaded.item.basic;
 
-import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.compressed.BlockCompressed;
-import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,9 +23,7 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
         this.compressedBlock = block;
         setHasSubtypes(true);
         setRegistryName(block.getRegistryName());
-
-        Overloaded.proxy.itemToRegister.add(this);
-        ModItems.addToSecondaryInit(this);
+        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
     }
 
     @Override
@@ -35,13 +32,13 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
     }
 
     @Override
-    public void getSubItems(@Nonnull CreativeTabs tab,@Nonnull NonNullList<ItemStack> items) {
-        if(!isInCreativeTab(tab)) {
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+        if (!isInCreativeTab(tab)) {
             return;
         }
 
-        for(int meta = 0; meta < compressedBlock.getMaxCompression(); meta++) {
-            items.add(new ItemStack(this,1,meta));
+        for (int meta = 0; meta < compressedBlock.getMaxCompression(); meta++) {
+            items.add(new ItemStack(this, 1, meta));
         }
     }
 
@@ -55,7 +52,7 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
     @Nonnull
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         String baseName = compressedBlock.getBaseBlock().getLocalizedName();
-        String finalName = (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " +  baseName;
+        String finalName = (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " + baseName;
 
         return finalName;
     }

@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 
-public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack,IHyperHandlerFluid> {
+public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack, IHyperHandlerFluid> {
 
     public TileHyperFluidSender() {
         super(HYPER_FLUID_HANDLER);
@@ -18,7 +18,7 @@ public class TileHyperFluidSender extends AbstractTileHyperSender<LongFluidStack
     @Override
     @Nonnull
     protected LongFluidStack generate(long amount) {
-        return new LongFluidStack(null,amount);
+        return new LongFluidStack(null, amount);
     }
 
     @Override

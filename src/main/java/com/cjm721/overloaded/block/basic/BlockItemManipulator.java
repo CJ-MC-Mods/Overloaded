@@ -56,8 +56,8 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/item_manipulator.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/item_manipulator.png"),
+                new ResourceLocation(MODID, "textures/blocks/item_manipulator.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/item_manipulator.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -69,7 +69,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getProperties().get(FACING)).getIndex();
+        return ((EnumFacing) state.getProperties().get(FACING)).getIndex();
     }
 
     @Override
@@ -104,12 +104,12 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     private EnumFacing getFront(EntityLivingBase placer) {
         Vec3d lookVec = placer.getLookVec();
-        return EnumFacing.getFacingFromVector((float)lookVec.x, (float)lookVec.y, (float)lookVec.z);
+        return EnumFacing.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
     }
 
     @Override
-    public void breakBlock(@Nonnull World worldIn,@Nonnull  BlockPos pos,@Nonnull  IBlockState state) {
-        ((TileItemManipulator)worldIn.getTileEntity(pos)).breakBlock();
+    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        ((TileItemManipulator) worldIn.getTileEntity(pos)).breakBlock();
         super.breakBlock(worldIn, pos, state);
     }
 }

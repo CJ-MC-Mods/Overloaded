@@ -18,15 +18,13 @@ public class CapabilityHyperFluid {
     @CapabilityInject(IHyperHandlerFluid.class)
     public static Capability<IHyperHandlerFluid> HYPER_FLUID_HANDLER = null;
 
-    public static void register()
-    {
+    public static void register() {
         CapabilityManager.INSTANCE.register(IHyperHandlerFluid.class, new Capability.IStorage<IHyperHandlerFluid>() {
             @Override
-            public NBTBase writeNBT(Capability<IHyperHandlerFluid> capability, @Nonnull IHyperHandlerFluid instance, EnumFacing side)
-            {
+            public NBTBase writeNBT(Capability<IHyperHandlerFluid> capability, @Nonnull IHyperHandlerFluid instance, EnumFacing side) {
                 NBTTagCompound tag = new NBTTagCompound();
                 LongFluidStack stack = instance.status();
-                if(stack.fluidStack != null) {
+                if (stack.fluidStack != null) {
                     tag.setLong("Count", stack.amount);
                     NBTTagCompound subTag = new NBTTagCompound();
                     stack.fluidStack.writeToNBT(subTag);
@@ -36,11 +34,10 @@ public class CapabilityHyperFluid {
             }
 
             @Override
-            public void readNBT(Capability<IHyperHandlerFluid> capability,@Nonnull IHyperHandlerFluid instance, EnumFacing side,@Nonnull NBTBase nbt)
-            {
-                NBTTagCompound tag = (NBTTagCompound)nbt;
+            public void readNBT(Capability<IHyperHandlerFluid> capability, @Nonnull IHyperHandlerFluid instance, EnumFacing side, @Nonnull NBTBase nbt) {
+                NBTTagCompound tag = (NBTTagCompound) nbt;
 
-                if(tag.hasKey("Item")) {
+                if (tag.hasKey("Item")) {
                     LongFluidStack stack = new LongFluidStack(FluidStack.loadFluidStackFromNBT((NBTTagCompound) tag.getTag("Fluid")), tag.getLong("Count"));
                     instance.give(stack, false);
                 }

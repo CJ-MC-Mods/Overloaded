@@ -1,8 +1,6 @@
 package com.cjm721.overloaded.proxy;
 
-import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
@@ -18,10 +16,8 @@ import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -55,7 +51,6 @@ public class CommonProxy {
         ModBlocks.init();
         ModItems.init();
 
-
         CapabilityHyperItem.register();
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
@@ -64,11 +59,11 @@ public class CommonProxy {
 
     private void createFluids() {
         String textureName = "blocks/pure_matter";
-        ResourceLocation still = new ResourceLocation(MODID,textureName + "_still");
+        ResourceLocation still = new ResourceLocation(MODID, textureName + "_still");
 //        ResourceLocation flowing = new ResourceLocation(MODID,textureName + "_flow");
 
         pureMatter = new Fluid("pure_matter", still, still).setDensity(3000).setViscosity(6000).setRarity(EnumRarity.EPIC);
-        if(!FluidRegistry.registerFluid(pureMatter)) {
+        if (!FluidRegistry.registerFluid(pureMatter)) {
             pureMatter = FluidRegistry.getFluid("pure_matter");
         }
     }
@@ -90,13 +85,13 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
-        for(Block block: blocksToRegister)
+        for (Block block : blocksToRegister)
             event.getRegistry().register(block);
     }
 
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
-        for(Item item: itemToRegister)
+        for (Item item : itemToRegister)
             event.getRegistry().register(item);
     }
 

@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extends IHyperHandler<Type>> extends TileEntity {
+public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H extends IHyperHandler<Type>> extends TileEntity {
 
     private final Capability<H> capability;
 
@@ -18,16 +18,16 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType,H extend
 
     @Nonnull
     public Type receive(@Nonnull Type stack) {
-        for(EnumFacing side: EnumFacing.values()) {
+        for (EnumFacing side : EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
-            if(te == null || !te.hasCapability(capability, side.getOpposite()))
+            if (te == null || !te.hasCapability(capability, side.getOpposite()))
                 continue;
 
             IHyperHandler<Type> temp = te.getCapability(capability, side.getOpposite());
             stack = temp.give(stack, true);
 
-            if(stack.getAmount() == 0L)
+            if (stack.getAmount() == 0L)
                 return stack;
         }
         return stack;

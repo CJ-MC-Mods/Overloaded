@@ -28,7 +28,7 @@ public class ResizeableTextureGenerator {
 
     @SubscribeEvent
     public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
-        for(ResizableTexture resizableTexture: toCreateTextures) {
+        for (ResizableTexture resizableTexture : toCreateTextures) {
             BufferedImage image = null;
             try {
                 image = TextureUtil.readBufferedImage(getTextureInputStream(resizableTexture.originalTexture));
@@ -36,7 +36,7 @@ public class ResizeableTextureGenerator {
                 e.printStackTrace();
             }
 
-            if(image == null) continue;
+            if (image == null) continue;
 
             image = ImageUtil.scaleDownToWidth(image, resizableTexture.resizeToWidth);
 
@@ -50,8 +50,8 @@ public class ResizeableTextureGenerator {
     private ResourceLocation cleanForSprite(@Nonnull ResourceLocation location) {
         String path = location.getResourcePath();
 
-        if(path.startsWith("textures/")) {
-            return new ResourceLocation(location.getResourceDomain(), path.substring(9).replace(".png",""));
+        if (path.startsWith("textures/")) {
+            return new ResourceLocation(location.getResourceDomain(), path.substring(9).replace(".png", ""));
         }
         return location;
     }

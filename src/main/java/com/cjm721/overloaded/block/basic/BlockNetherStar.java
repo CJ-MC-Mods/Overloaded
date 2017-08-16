@@ -2,15 +2,11 @@ package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 

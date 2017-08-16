@@ -2,8 +2,6 @@ package com.cjm721.overloaded.block.basic;
 
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
-import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
 import com.cjm721.overloaded.block.tile.TileEnergyInjectorChest;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -53,8 +51,8 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         ModelLoader.setCustomStateMapper(this, stateMapper);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/energy_extractor.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/energy_extractor.png"),
+                new ResourceLocation(MODID, "textures/blocks/energy_extractor.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/energy_extractor.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -73,8 +71,7 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

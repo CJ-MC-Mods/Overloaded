@@ -2,19 +2,13 @@ package com.cjm721.overloaded.block.tile;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.CommonProxy;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -36,13 +30,13 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
 
     public TileMatterPurifier() {
         fluidStorage = new FluidTank(Integer.MAX_VALUE);
-        energyStorage = new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE);
+        energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         stack = ItemStack.EMPTY;
     }
 
     @Override
     public void update() {
-        if(stack.isEmpty())
+        if (stack.isEmpty())
             return;
 
         float hardness = ((ItemBlock) stack.getItem()).getBlock().getBlockHardness(null, null, null);
@@ -65,7 +59,7 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
         }
 
         stack.shrink(1);
-        if(stack.getCount() == 0)
+        if (stack.getCount() == 0)
             stack = ItemStack.EMPTY;
 
         fluidStorage.fill(fluidStack, true);
@@ -77,7 +71,7 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         fluidStorage.readFromNBT(compound.getCompoundTag("Fluid"));
-        energyStorage = new EnergyStorage(compound.getInteger("Energy"),Integer.MAX_VALUE,Integer.MAX_VALUE);
+        energyStorage = new EnergyStorage(compound.getInteger("Energy"), Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     @Override
@@ -96,11 +90,11 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == FLUID_HANDLER_CAPABILITY)
+        if (capability == FLUID_HANDLER_CAPABILITY)
             return (T) fluidStorage;
-        if(capability == ENERGY)
+        if (capability == ENERGY)
             return (T) energyStorage;
-        if(capability == ITEM_HANDLER_CAPABILITY)
+        if (capability == ITEM_HANDLER_CAPABILITY)
             return (T) this;
 
         return super.getCapability(capability, facing);
@@ -108,11 +102,11 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if(capability == FLUID_HANDLER_CAPABILITY)
+        if (capability == FLUID_HANDLER_CAPABILITY)
             return true;
-        if(capability == ENERGY)
+        if (capability == ENERGY)
             return true;
-        if(capability == ITEM_HANDLER_CAPABILITY)
+        if (capability == ITEM_HANDLER_CAPABILITY)
             return true;
 
         return super.hasCapability(capability, facing);
@@ -167,18 +161,18 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
     @Nonnull
     @Override
     public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        if(this.stack.isEmpty()) {
-            if(!simulate)
+        if (this.stack.isEmpty()) {
+            if (!simulate)
                 this.stack = stack;
 
             return ItemStack.EMPTY;
         }
 
-        if(ItemHandlerHelper.canItemStacksStack(this.stack,stack)) {
+        if (ItemHandlerHelper.canItemStacksStack(this.stack, stack)) {
             int maxSize = this.stack.getMaxStackSize();
             int toTake = Math.min(maxSize - this.stack.getCount(), stack.getCount());
 
-            if(!simulate) {
+            if (!simulate) {
                 this.stack.setCount(this.stack.getCount() + toTake);
             }
 

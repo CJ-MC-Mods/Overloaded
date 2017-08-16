@@ -42,10 +42,8 @@ public class TileInfiniteTank extends TileEntity implements IDataUpdate {
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability,@Nullable EnumFacing facing)
-    {
-        if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
-        {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
             return true;
         }
         return super.hasCapability(capability, facing);
@@ -53,10 +51,8 @@ public class TileInfiniteTank extends TileEntity implements IDataUpdate {
 
     @Override
     @Nullable
-    public <T> T getCapability(@Nonnull Capability<T> capability,@Nullable EnumFacing facing)
-    {
-        if(capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER)
-        {
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
             return (T) fluidStorage;
         }
         return super.getCapability(capability, facing);

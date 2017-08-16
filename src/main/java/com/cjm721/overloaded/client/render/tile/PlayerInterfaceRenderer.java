@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -21,7 +20,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x,y,z);
+        GlStateManager.translate(x, y, z);
         GlStateManager.disableRescaleNormal();
 
         renderPlayer(te);
@@ -36,17 +35,17 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
     private void renderPlayer(TilePlayerInterface te) {
         UUID uuid = te.getPlacer();
 
-        if(uuid == null)
+        if (uuid == null)
             return;
 
         EntityPlayer player = te.getWorld().getPlayerEntityByUUID(uuid);
 
-        if(player == null) {
-            if(uuid.equals(uuidCache)) {
+        if (player == null) {
+            if (uuid.equals(uuidCache)) {
                 renderItem(stackCache);
             } else {
                 uuidCache = uuid;
-                stackCache = new ItemStack(Items.SKULL,1,3);
+                stackCache = new ItemStack(Items.SKULL, 1, 3);
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setString("SkullOwner", uuid.toString());
                 stackCache.setTagCompound(tag);
@@ -60,7 +59,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(.5, .3, .5);
-        GlStateManager.scale(.2f,.2f,.2f);
+        GlStateManager.scale(.2f, .2f, .2f);
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);
 
@@ -75,7 +74,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(.5, .65, .5);
-        GlStateManager.scale(.5f,.5f,.5f);
+        GlStateManager.scale(.5f, .5f, .5f);
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);
 

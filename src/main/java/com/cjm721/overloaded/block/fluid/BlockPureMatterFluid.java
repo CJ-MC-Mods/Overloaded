@@ -1,7 +1,5 @@
 package com.cjm721.overloaded.block.fluid;
 
-import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.material.Material;
@@ -38,26 +36,22 @@ public class BlockPureMatterFluid extends BlockFluidClassic implements IModRegis
         return BlockRenderLayer.TRANSLUCENT;
     }
 
-    private class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition
-    {
+    private class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {
         public final ModelResourceLocation location;
 
-        public FluidStateMapper()
-        {
+        public FluidStateMapper() {
             this.location = new ModelResourceLocation(BlockPureMatterFluid.this.getRegistryName(), "all");
         }
 
         @Nonnull
         @Override
-        protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state)
-        {
+        protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
             return location;
         }
 
         @Nonnull
         @Override
-        public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack)
-        {
+        public ModelResourceLocation getModelLocation(@Nonnull ItemStack stack) {
             return location;
         }
     }

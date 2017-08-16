@@ -16,7 +16,8 @@ public class KeyBindPressedMessage implements IMessage {
         NO_CLIP
     }
 
-    public KeyBindPressedMessage() {}
+    public KeyBindPressedMessage() {
+    }
 
     public KeyBindPressedMessage(KeyBind bind) {
         this.bind = bind;

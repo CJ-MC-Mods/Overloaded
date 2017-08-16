@@ -16,7 +16,8 @@ public class MultiToolRightClickMessage implements IMessage {
     private float hitY;
     private float hitZ;
 
-    public MultiToolRightClickMessage() { }
+    public MultiToolRightClickMessage() {
+    }
 
     public MultiToolRightClickMessage(BlockPos pos, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
         this.pos = pos;
@@ -33,7 +34,7 @@ public class MultiToolRightClickMessage implements IMessage {
         int z = buf.readInt();
         int facing = buf.readInt();
 
-        this.pos = new BlockPos(x,y,z);
+        this.pos = new BlockPos(x, y, z);
         this.hitSide = EnumFacing.getFront(facing);
 
 

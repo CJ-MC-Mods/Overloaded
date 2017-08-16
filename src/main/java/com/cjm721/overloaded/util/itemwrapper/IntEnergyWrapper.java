@@ -23,11 +23,11 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
         this.stack = stack;
 
         NBTTagCompound tagCompound = this.stack.getTagCompound();
-        if(tagCompound == null) {
+        if (tagCompound == null) {
             tagCompound = new NBTTagCompound();
         }
 
-        if(!tagCompound.hasKey("IntEnergyStorage")) {
+        if (!tagCompound.hasKey("IntEnergyStorage")) {
             LongEnergyStorage storage = new LongEnergyStorage(this);
             NBTTagCompound storageTag = storage.serializeNBT();
 
@@ -45,7 +45,7 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(hasCapability(capability,facing)) {
+        if (hasCapability(capability, facing)) {
             return (T) this;
         }
         return null;
@@ -54,10 +54,9 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         EnergyStorage storage = getStorage();
-        try{
-            return storage.receiveEnergy(maxReceive,simulate);
-        }
-        finally {
+        try {
+            return storage.receiveEnergy(maxReceive, simulate);
+        } finally {
             this.setStorage(storage);
         }
     }
@@ -65,10 +64,9 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
     @Override
     public int extractEnergy(int maxExtract, boolean simulate) {
         EnergyStorage storage = getStorage();
-        try{
-            return storage.extractEnergy(maxExtract,simulate);
-        }
-        finally {
+        try {
+            return storage.extractEnergy(maxExtract, simulate);
+        } finally {
             this.setStorage(storage);
         }
     }
@@ -97,7 +95,7 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
     private EnergyStorage getStorage() {
         int energy = stack.getTagCompound().getInteger("IntEnergyStorage");
 
-        return new EnergyStorage(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE,energy);
+        return new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, energy);
     }
 
     private void setStorage(@Nonnull EnergyStorage storage) {

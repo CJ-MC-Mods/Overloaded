@@ -79,7 +79,6 @@ public class ItemMultiTool extends ModItem {
         setRegistryName("multi_tool");
         setUnlocalizedName("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
-        Overloaded.proxy.itemToRegister.add(this);
     }
 
     @Override
@@ -104,8 +103,8 @@ public class ItemMultiTool extends ModItem {
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/items/ntool.png"),
-                new ResourceLocation(MODID,"textures/dynamic/items/ntool.png"),
+                new ResourceLocation(MODID, "textures/items/ntool.png"),
+                new ResourceLocation(MODID, "textures/dynamic/items/ntool.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -126,21 +125,21 @@ public class ItemMultiTool extends ModItem {
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-        IEnergyStorage storage = stack.getCapability(ENERGY,null);
+        IEnergyStorage storage = stack.getCapability(ENERGY, null);
 
-        if(storage != null) {
+        if (storage != null) {
             int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack);
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
-            float breakCost = getBreakCost(worldIn.getBlockState(pos).getBlockHardness(worldIn,pos),efficiency,unbreaking, entityLiving == null ? 10 : getDistance(entityLiving,pos));
+            float breakCost = getBreakCost(worldIn.getBlockState(pos).getBlockHardness(worldIn, pos), efficiency, unbreaking, entityLiving == null ? 10 : getDistance(entityLiving, pos));
 
-            storage.extractEnergy((int)Math.min(Integer.MAX_VALUE,breakCost),false);
+            storage.extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
         }
 
         return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
     }
 
     private double getDistance(@Nonnull EntityLivingBase entityLiving, @Nonnull BlockPos pos) {
-        return entityLiving.getDistance(pos.getX(),pos.getY(),pos.getZ());
+        return entityLiving.getDistance(pos.getX(), pos.getY(), pos.getZ());
     }
 
     @Override
@@ -162,10 +161,10 @@ public class ItemMultiTool extends ModItem {
     @Nonnull
     @SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
-        if(worldIn.isRemote) {
+        if (worldIn.isRemote) {
             RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(),result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
+                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(), result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -180,23 +179,23 @@ public class ItemMultiTool extends ModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy,@Nonnull EntityPlayerMP player, int efficiency, int unbreaking) {
+    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy, @Nonnull EntityPlayerMP player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
-        if(!player.capabilities.isCreativeMode) {
+        if (!player.capabilities.isCreativeMode) {
             float hardness = state.getBlockHardness(worldIn, blockPos);
-            if(hardness < 0) {
+            if (hardness < 0) {
                 return BlockResult.FAIL_UNBREAKABLE;
             }
 
-            float floatBreakCost = getBreakCost(hardness,efficiency,unbreaking, getDistance(player,blockPos));
-            if(Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
+            float floatBreakCost = getBreakCost(hardness, efficiency, unbreaking, getDistance(player, blockPos));
+            if (Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
                 return BlockResult.FAIL_ENERGY;
 
             int breakCost = Math.round(floatBreakCost);
 
-            if(breakCost < 0 || energy.getEnergyStored() < breakCost){
+            if (breakCost < 0 || energy.getEnergyStored() < breakCost) {
                 return BlockResult.FAIL_ENERGY;
             }
         }
@@ -204,20 +203,20 @@ public class ItemMultiTool extends ModItem {
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
         MinecraftForge.EVENT_BUS.post(event);
 
-        if(event.isCanceled())
+        if (event.isCanceled())
             return BlockResult.FAIL_REMOVE;
 
-        boolean result = PlayerInteractionUtil.tryHarvestBlock(player,worldIn,blockPos);
+        boolean result = PlayerInteractionUtil.tryHarvestBlock(player, worldIn, blockPos);
         return result ? BlockResult.SUCCESS : BlockResult.FAIL_REMOVE;
     }
 
-    public void drawParticleStreamTo(@Nonnull EntityPlayer source,@Nonnull Vec3d endingLocation,@Nonnull EnumParticleTypes type) {
+    public void drawParticleStreamTo(@Nonnull EntityPlayer source, @Nonnull Vec3d endingLocation, @Nonnull EnumParticleTypes type) {
         double xOffset = 0;//0.25;
         double yOffset = -.25;
         double zOffset = 0;//.25;
 
-        Vec3d startingLocation = source.getPositionEyes(1).addVector(xOffset,yOffset,zOffset);
-        startingLocation = startingLocation.add(source.getLookVec().rotateYaw((float)(Math.PI/-2.0D)).scale(0.5D));
+        Vec3d startingLocation = source.getPositionEyes(1).addVector(xOffset, yOffset, zOffset);
+        startingLocation = startingLocation.add(source.getLookVec().rotateYaw((float) (Math.PI / -2.0D)).scale(0.5D));
         Vec3d direction = endingLocation.subtract(startingLocation).normalize();
 
         startingLocation = startingLocation.add(direction);
@@ -225,7 +224,7 @@ public class ItemMultiTool extends ModItem {
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
         // Make the reach check unnessicary * Change to for loop
         while (distanceToEnd > 0.3D && distanceToEnd < (OverloadedConfig.multiToolConfig.reach * 2)) {
-            world.spawnParticle(type, startingLocation.x, startingLocation.y, startingLocation.z, 0,0,0);//direction.xCoord, direction.yCoord, direction.zCoord);
+            world.spawnParticle(type, startingLocation.x, startingLocation.y, startingLocation.z, 0, 0, 0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
         }
@@ -236,11 +235,11 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
+        if (event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
             return;
 
         ItemStack stack = event.getItemStack();
-        if(stack.getItem().equals(this)) {
+        if (stack.getItem().equals(this)) {
             leftClickOnBlockClient(event.getPos(), event.getHitVec());
         }
     }
@@ -249,14 +248,14 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @SideOnly(Side.CLIENT)
     public void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
-        if(event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
+        if (event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
             return;
 
         ItemStack stack = event.getItemStack();
 
-        if(stack.getItem().equals(this)) {
+        if (stack.getItem().equals(this)) {
             EntityPlayer entityLiving = event.getEntityPlayer();
-            RayTraceResult result =  PlayerInteractionUtil.getBlockPlayerLookingAtClient(entityLiving,Minecraft.getMinecraft().getRenderPartialTicks());
+            RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(entityLiving, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
                 leftClickOnBlockClient(result.getBlockPos(), result.hitVec);
             }
@@ -267,7 +266,7 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent
     public void onMouseEvent(MouseEvent event) {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if(event.getDwheel() != 0 && player != null && player.isSneaking()) {
+        if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
             ItemStack stack = player.getHeldItemMainhand();
             if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
                 changeHelpMode(event.getDwheel());
@@ -280,7 +279,7 @@ public class ItemMultiTool extends ModItem {
     private void changeHelpMode(int dwheel) {
         AssistMode[] values = AssistMode.values();
         int mode = (OverloadedConfig.multiToolConfig.assistMode + Integer.signum(dwheel)) % values.length;
-        if(mode < 0)
+        if (mode < 0)
             mode += values.length;
 
         OverloadedConfig.multiToolConfig.assistMode = mode;
@@ -292,8 +291,8 @@ public class ItemMultiTool extends ModItem {
         AssistMode[] values = AssistMode.values();
         int mode = OverloadedConfig.multiToolConfig.assistMode;
 
-        for(AssistMode assistMode: values) {
-            if(assistMode.getMode() == mode){
+        for (AssistMode assistMode : values) {
+            if (assistMode.getMode() == mode) {
                 return assistMode;
             }
         }
@@ -306,12 +305,12 @@ public class ItemMultiTool extends ModItem {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
         EntityPlayer player = event.getHarvester();
-        if(player == null || event.getHarvester().getHeldItemMainhand().getItem() != this || event.getDrops() instanceof ImmutableList)
+        if (player == null || event.getHarvester().getHeldItemMainhand().getItem() != this || event.getDrops() instanceof ImmutableList)
             return;
 
         World world = event.getWorld();
         float chance = event.getDropChance();
-        for(ItemStack stack: event.getDrops()) {
+        for (ItemStack stack : event.getDrops()) {
             if (world.rand.nextFloat() <= chance) {
                 EntityItem toSpawn = new EntityItem(world, player.posX, player.posY, player.posZ, stack);
                 world.spawnEntity(toSpawn);
@@ -331,40 +330,40 @@ public class ItemMultiTool extends ModItem {
 
     public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
         ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
-        if(itemStack.getItem() != this || world.isAirBlock(pos)) {
+        if (itemStack.getItem() != this || world.isAirBlock(pos)) {
             return;
         }
 
         player.setActiveHand(EnumHand.MAIN_HAND);
 
-        if(player.isSneaking()) {
-            NBTTagCompound tag  = itemStack.getTagCompound();
-            if(tag == null) {
+        if (player.isSneaking()) {
+            NBTTagCompound tag = itemStack.getTagCompound();
+            if (tag == null) {
                 tag = new NBTTagCompound();
             }
             IBlockState state = world.getBlockState(pos);
             Item item = Item.getItemFromBlock(state.getBlock());
-            ItemStack stackToPlace = new ItemStack(item,1,state.getBlock().damageDropped(state));
+            ItemStack stackToPlace = new ItemStack(item, 1, state.getBlock().damageDropped(state));
             NBTTagCompound blockTag = new NBTTagCompound();
             stackToPlace.writeToNBT(blockTag);
             tag.setTag("Item", blockTag);
             itemStack.setTagCompound(tag);
             ITextComponent component = stackToPlace.getTextComponent();
-            player.sendStatusMessage( new TextComponentString("Bound tool to ").appendSibling(component), true);
+            player.sendStatusMessage(new TextComponentString("Bound tool to ").appendSibling(component), true);
         } else {
             IEnergyStorage energy = itemStack.getCapability(ENERGY, null);
 
             int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
             int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
-            switch(breakAndUseEnergy(world, pos, energy,player,efficiency,unbreaking)) {
+            switch (breakAndUseEnergy(world, pos, energy, player, efficiency, unbreaking)) {
                 case FAIL_REMOVE:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, reason unknown"), true);
+                    player.sendStatusMessage(new TextComponentString("Unable to break block, reason unknown"), true);
                     break;
                 case FAIL_ENERGY:
-                    player.sendStatusMessage( new TextComponentString("Unable to break block, not enough energy"), true);
+                    player.sendStatusMessage(new TextComponentString("Unable to break block, not enough energy"), true);
                     break;
                 case FAIL_UNBREAKABLE:
-                    player.sendStatusMessage( new TextComponentString("Block is unbreakable"),true);
+                    player.sendStatusMessage(new TextComponentString("Block is unbreakable"), true);
                     break;
                 case SUCCESS:
                     break;
@@ -386,7 +385,7 @@ public class ItemMultiTool extends ModItem {
             return;
         }
 
-        if(!(blockStack.getItem() instanceof ItemBlock)) {
+        if (!(blockStack.getItem() instanceof ItemBlock)) {
             player.sendStatusMessage(new TextComponentString("No valid block type selected to place."), true);
             return;
         }
@@ -453,7 +452,7 @@ public class ItemMultiTool extends ModItem {
     private ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
         NBTTagCompound tagCompound = multiTool.getTagCompound();
 
-        if(tagCompound == null || !tagCompound.hasKey("Item")){
+        if (tagCompound == null || !tagCompound.hasKey("Item")) {
             return ItemStack.EMPTY;
         }
 
@@ -468,9 +467,9 @@ public class ItemMultiTool extends ModItem {
     }
 
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
-        "pickaxe",
-        "shovel",
-        "axe"
+            "pickaxe",
+            "shovel",
+            "axe"
     );
 
     @Override
@@ -494,34 +493,34 @@ public class ItemMultiTool extends ModItem {
     @SideOnly(Side.CLIENT)
     public void renderWorldLastEvent(RenderWorldLastEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().player;
-        if(player.getHeldItemMainhand().getItem() != this)
+        if (player.getHeldItemMainhand().getItem() != this)
             return;
 
         ItemStack stack = getSelectedBlockItemStack(player.getHeldItemMainhand());
 
-        if(stack.isEmpty())
+        if (stack.isEmpty())
             return;
 
-        RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player,event.getPartialTicks());
+        RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
         if (result == null) return;
 
         IBlockState state;
-        if(stack.getItem() instanceof ItemBlock) {
+        if (stack.getItem() instanceof ItemBlock) {
             state = ((ItemBlock) stack.getItem()).getBlock().getDefaultState();
         } else {
             state = Blocks.COBBLESTONE.getDefaultState();
         }
 
-        switch(getAssistMode()) {
+        switch (getAssistMode()) {
             case PLACE_PREVIEW:
                 renderBlockPreview(event, player, stack, result, state);
                 break;
             case REMOVE_PREVIEW:
-                renderRemovePreview(event,player,result);
+                renderRemovePreview(event, player, result);
                 break;
             case BOTH_PREVIEW:
                 renderBlockPreview(event, player, stack, result, state);
-                renderRemovePreview(event,player,result);
+                renderRemovePreview(event, player, result);
                 break;
         }
 
@@ -536,12 +535,12 @@ public class ItemMultiTool extends ModItem {
             BlockPos toRenderAt = result.getBlockPos();
 
             final float partialTicks = event.getPartialTicks();
-            final double x = player.lastTickPosX + ( player.posX - player.lastTickPosX ) * partialTicks;
-            final double y = player.lastTickPosY + ( player.posY - player.lastTickPosY ) * partialTicks;
-            final double z = player.lastTickPosZ + ( player.posZ - player.lastTickPosZ ) * partialTicks;
+            final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+            final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+            final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
             GlStateManager.pushMatrix();
-            GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
+            GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
             RenderUtil.renderGhostModel(bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(), toRenderAt);
             GlStateManager.popMatrix();
         } catch (Exception e) {
@@ -554,12 +553,12 @@ public class ItemMultiTool extends ModItem {
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 
         final float partialTicks = event.getPartialTicks();
-        final double x = player.lastTickPosX + ( player.posX - player.lastTickPosX ) * partialTicks;
-        final double y = player.lastTickPosY + ( player.posY - player.lastTickPosY ) * partialTicks;
-        final double z = player.lastTickPosZ + ( player.posZ - player.lastTickPosZ ) * partialTicks;
+        final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+        final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+        final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
         GlStateManager.pushMatrix();
-        GlStateManager.translate( toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z );
+        GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
         RenderUtil.renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack), state, player.getEntityWorld(), toRenderAt);
         GlStateManager.popMatrix();
     }
@@ -568,8 +567,8 @@ public class ItemMultiTool extends ModItem {
     public double getDurabilityForDisplay(ItemStack stack) {
         IEnergyStorage storage = stack.getCapability(ENERGY, null);
 
-        if(storage != null)
-            return 1D - storage.getEnergyStored() / (double)storage.getMaxEnergyStored();
+        if (storage != null)
+            return 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored();
 
         return 1D;
     }

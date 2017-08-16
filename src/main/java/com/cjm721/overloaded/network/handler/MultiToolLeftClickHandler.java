@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import javax.annotation.Nullable;
 
-public class MultiToolLeftClickHandler implements IMessageHandler<MultiToolLeftClickMessage,IMessage>{
+public class MultiToolLeftClickHandler implements IMessageHandler<MultiToolLeftClickMessage, IMessage> {
 
     /**
      * Called when a message is received of the appropriate type. You can optionally return a reply message, or null if no reply

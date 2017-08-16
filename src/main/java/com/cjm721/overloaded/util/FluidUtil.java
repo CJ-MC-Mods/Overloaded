@@ -7,17 +7,17 @@ import javax.annotation.Nullable;
 
 public final class FluidUtil {
     public static boolean fluidsAreEqual(@Nullable FluidStack a, @Nullable FluidStack b) {
-        if(a == b)
+        if (a == b)
             return true;
-        if(a == null || b == null)
+        if (a == null || b == null)
             return false;
 
-        if(!a.isFluidEqual(b))
+        if (!a.isFluidEqual(b))
             return false;
         NBTTagCompound compoundAlpha = a.tag;
-        NBTTagCompound compoundBeta =  b.tag;
-        if(compoundAlpha == null)
+        NBTTagCompound compoundBeta = b.tag;
+        if (compoundAlpha == null)
             return compoundBeta == null;
-        return  compoundAlpha.equals(compoundBeta);
+        return compoundAlpha.equals(compoundBeta);
     }
 }

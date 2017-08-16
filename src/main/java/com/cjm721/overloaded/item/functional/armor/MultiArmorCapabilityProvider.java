@@ -24,22 +24,20 @@ public class MultiArmorCapabilityProvider extends PlayerDataStorage implements I
         this.player = player;
     }
 
-    public static void register()
-    {
+    public static void register() {
         CapabilityManager.INSTANCE.register(IOverloadedPlayerDataStorage.class,
                 new Capability.IStorage<IOverloadedPlayerDataStorage>() {
                     @Override
-                    public NBTBase writeNBT(Capability<IOverloadedPlayerDataStorage> capability, @Nonnull IOverloadedPlayerDataStorage instance, EnumFacing side)
-                    {
+                    public NBTBase writeNBT(Capability<IOverloadedPlayerDataStorage> capability, @Nonnull IOverloadedPlayerDataStorage instance, EnumFacing side) {
                         NBTTagCompound tagCompound = new NBTTagCompound();
                         Map<String, Integer> integers = instance.getIntegerMap();
                         Map<String, Boolean> booleans = instance.getBooleanMap();
 
-                        for(String key: integers.keySet()) {
+                        for (String key : integers.keySet()) {
                             tagCompound.setInteger(key, integers.get(key));
                         }
 
-                        for(String key: booleans.keySet()) {
+                        for (String key : booleans.keySet()) {
                             tagCompound.setBoolean(key, booleans.get(key));
                         }
 
@@ -47,20 +45,19 @@ public class MultiArmorCapabilityProvider extends PlayerDataStorage implements I
                     }
 
                     @Override
-                    public void readNBT(Capability<IOverloadedPlayerDataStorage> capability,@Nonnull IOverloadedPlayerDataStorage instance, EnumFacing side, NBTBase nbt)
-                    {
-                        if( !(nbt instanceof NBTTagCompound))
+                    public void readNBT(Capability<IOverloadedPlayerDataStorage> capability, @Nonnull IOverloadedPlayerDataStorage instance, EnumFacing side, NBTBase nbt) {
+                        if (!(nbt instanceof NBTTagCompound))
                             return;
 
                         NBTTagCompound tagCompound = ((NBTTagCompound) nbt);
                         Map<String, Integer> integers = instance.getIntegerMap();
                         Map<String, Boolean> booleans = instance.getBooleanMap();
 
-                        for(String key: tagCompound.getKeySet()) {
+                        for (String key : tagCompound.getKeySet()) {
                             integers.put(key, tagCompound.getInteger(key));
                         }
 
-                        for(String key: booleans.keySet()) {
+                        for (String key : booleans.keySet()) {
                             booleans.put(key, tagCompound.getBoolean(key));
                         }
                     }
@@ -78,7 +75,7 @@ public class MultiArmorCapabilityProvider extends PlayerDataStorage implements I
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing enumFacing) {
-        if(capability == PLAYER_DATA_STORAGE) {
+        if (capability == PLAYER_DATA_STORAGE) {
             return PLAYER_DATA_STORAGE.cast(this);
         }
         return null;

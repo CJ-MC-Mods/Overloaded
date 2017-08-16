@@ -17,7 +17,7 @@ public class MultiToolRightClickHandler implements IMessageHandler<MultiToolRigh
      * is needed.
      *
      * @param message The message
-     * @param ctx the context of the message
+     * @param ctx     the context of the message
      * @return an optional return message
      */
     @Override
@@ -26,7 +26,7 @@ public class MultiToolRightClickHandler implements IMessageHandler<MultiToolRigh
         EntityPlayerMP player = ctx.getServerHandler().player;
         WorldServer world = player.getServerWorld();
 
-        world.addScheduledTask(() ->ModItems.itemMultiTool.rightClickWithItem(world,player, message.getPos(), message.getHitSide(), message.getHitX(), message.getHitY(), message.getHitZ()));
+        world.addScheduledTask(() -> ModItems.itemMultiTool.rightClickWithItem(world, player, message.getPos(), message.getHitSide(), message.getHitX(), message.getHitY(), message.getHitZ()));
         // Nothing to send to client from here
         return null;
     }

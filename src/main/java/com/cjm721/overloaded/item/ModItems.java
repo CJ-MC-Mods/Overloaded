@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -7,13 +8,17 @@ import com.cjm721.overloaded.item.basic.ItemCompressedBlock;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
-import com.cjm721.overloaded.item.functional.*;
+import com.cjm721.overloaded.item.functional.ItemAmountSelector;
+import com.cjm721.overloaded.item.functional.ItemEnergyShield;
+import com.cjm721.overloaded.item.functional.ItemLinkingCard;
+import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
 import com.cjm721.overloaded.util.CraftingRegistry;
 import com.cjm721.overloaded.util.IModRegistrable;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,30 +50,30 @@ public class ModItems {
     }
 
     public static void init() {
-        linkingCard = new ItemLinkingCard();
-        itemMultiTool = new ItemMultiTool();
+        linkingCard = registerItem(new ItemLinkingCard());
+        itemMultiTool = registerItem(new ItemMultiTool());
 
-        energyCore = new ItemEnergyCore();
-        fluidCore = new ItemFluidCore();
-        itemCore = new ItemItemCore();
+        energyCore = registerItem(new ItemEnergyCore());
+        fluidCore = registerItem(new ItemFluidCore());
+        itemCore = registerItem(new ItemItemCore());
 
-        customHelmet = new ItemMultiHelmet();
-        customChestplate = new ItemMultiChestplate();
-        customLeggins = new ItemMultiLeggings();
-        customBoots = new ItemMultiBoots();
+        customHelmet = registerItem(new ItemMultiHelmet());
+        customChestplate = registerItem(new ItemMultiChestplate());
+        customLeggins = registerItem(new ItemMultiLeggings());
+        customBoots = registerItem(new ItemMultiBoots());
 
-        if(OverloadedConfig.developmentConfig.wipStuff) {
-//            energyShield = new ItemEnergyShield();
-//            amountSelector = new ItemAmountSelector();
+        if (OverloadedConfig.developmentConfig.wipStuff) {
+            energyShield = registerItem(new ItemEnergyShield());
+//            amountSelector = registerItem(new ItemAmountSelector());
         }
 
         compressedItemBlocks = new LinkedList<>();
-        for(BlockCompressed block :ModBlocks.compressedBlocks) {
+        for (BlockCompressed block : ModBlocks.compressedBlocks) {
             ItemCompressedBlock itemCompressed = new ItemCompressedBlock(block);
             compressedItemBlocks.add(itemCompressed);
 
 
-            if(block.isRecipeEnabled()) {
+            if (block.isRecipeEnabled()) {
                 CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed, 1, 0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
                 CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(), 9), new ItemStack(itemCompressed, 1, 0));
 
@@ -82,7 +87,15 @@ public class ModItems {
 
     @SideOnly(Side.CLIENT)
     public static void registerModels() {
-        for(IModRegistrable item: registerList)
+        for (IModRegistrable item : registerList)
             item.registerModel();
+    }
+
+    private static <T extends Item> T registerItem(T item) {
+        Overloaded.proxy.itemToRegister.add(item);
+        if (item instanceof IModRegistrable)
+            ModItems.addToSecondaryInit((IModRegistrable) item);
+
+        return item;
     }
 }

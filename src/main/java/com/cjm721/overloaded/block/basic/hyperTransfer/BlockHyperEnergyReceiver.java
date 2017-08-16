@@ -1,13 +1,9 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperEnergyReceiver;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;

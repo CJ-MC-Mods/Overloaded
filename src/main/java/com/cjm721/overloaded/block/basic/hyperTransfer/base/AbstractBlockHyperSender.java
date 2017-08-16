@@ -24,19 +24,19 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
 
     @Override
     public boolean onBlockActivated(@Nonnull World worldIn, @Nonnull BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(hand == EnumHand.MAIN_HAND) {
+        if (hand == EnumHand.MAIN_HAND) {
             ItemStack heldItem = playerIn.getHeldItem(hand);
             if (heldItem.isEmpty()) {
                 // SubIf so that Else block does not also need to check for heldItem == null
                 // Should find a cleaner way of showing all of this
-                if(!worldIn.isRemote) {
+                if (!worldIn.isRemote) {
                     String message = ((AbstractTileHyperSender) worldIn.getTileEntity(pos)).getRightClickMessage();
                     playerIn.sendStatusMessage(new TextComponentString(message), false);
                 }
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 NBTTagCompound tag = heldItem.getTagCompound();
                 if (tag != null) {
-                    if(tag.getString("TYPE").equals(this.getType())) {
+                    if (tag.getString("TYPE").equals(this.getType())) {
                         int worldID = tag.getInteger("WORLD");
                         int x = tag.getInteger("X");
                         int y = tag.getInteger("Y");
@@ -49,7 +49,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
                         }
                     } else {
                         if (worldIn.isRemote) {
-                            playerIn.sendStatusMessage(new TextComponentString("Incorrect Hyper Node Type to bind."),true);
+                            playerIn.sendStatusMessage(new TextComponentString("Incorrect Hyper Node Type to bind."), true);
                         }
                     }
                 }
@@ -60,8 +60,8 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
     }
 
-    private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId,@Nonnull BlockPos partnerPos) {
-        ((AbstractTileHyperSender)world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
+    private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId, @Nonnull BlockPos partnerPos) {
+        ((AbstractTileHyperSender) world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 
 }

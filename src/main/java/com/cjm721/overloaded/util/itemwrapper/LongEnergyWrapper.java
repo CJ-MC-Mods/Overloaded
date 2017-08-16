@@ -25,11 +25,11 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
         this.stack = stack;
 
         NBTTagCompound tagCompound = this.stack.getTagCompound();
-        if(tagCompound == null) {
+        if (tagCompound == null) {
             tagCompound = new NBTTagCompound();
         }
 
-        if(!tagCompound.hasKey("EnergyStorage")) {
+        if (!tagCompound.hasKey("EnergyStorage")) {
             LongEnergyStorage storage = new LongEnergyStorage(this);
 
             NBTTagCompound storageTag = storage.serializeNBT();
@@ -46,7 +46,7 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(hasCapability(capability,facing)) {
+        if (hasCapability(capability, facing)) {
             return (T) this;
         }
         return null;
@@ -63,9 +63,8 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     public LongEnergyStack take(@Nonnull LongEnergyStack stack, boolean doAction) {
         LongEnergyStorage storage = getStorage();
         try {
-            return storage.take(stack,doAction);
-        }
-        finally {
+            return storage.take(stack, doAction);
+        } finally {
             this.setStorage(storage);
         }
     }
@@ -75,9 +74,8 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     public LongEnergyStack give(@Nonnull LongEnergyStack stack, boolean doAction) {
         LongEnergyStorage storage = getStorage();
         try {
-            return storage.give(stack,doAction);
-        }
-        finally {
+            return storage.give(stack, doAction);
+        } finally {
             this.setStorage(storage);
         }
     }
@@ -86,9 +84,8 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     public int receiveEnergy(int maxReceive, boolean simulate) {
         LongEnergyStorage storage = getStorage();
         try {
-            return storage.receiveEnergy(maxReceive,simulate);
-        }
-        finally {
+            return storage.receiveEnergy(maxReceive, simulate);
+        } finally {
             this.setStorage(storage);
         }
     }
@@ -97,9 +94,8 @@ public class LongEnergyWrapper implements ICapabilityProvider, IEnergyStorage, I
     public int extractEnergy(int maxExtract, boolean simulate) {
         LongEnergyStorage storage = getStorage();
         try {
-            return storage.extractEnergy(maxExtract,simulate);
-        }
-        finally {
+            return storage.extractEnergy(maxExtract, simulate);
+        } finally {
             this.setStorage(storage);
         }
     }

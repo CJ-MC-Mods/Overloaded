@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -57,7 +59,6 @@ public class BlockCompressed extends ModBlock {
         if (harvestTool != null) {
             setHarvestLevel(harvestTool, harvestLevel);
         }
-        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
     }
 
     @Override
@@ -87,9 +88,9 @@ public class BlockCompressed extends ModBlock {
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         int compression = blockState.getValue(compressionProperty);
 
-        float hardness = baseBlock.getDefaultState().getBlockHardness(worldIn,pos);
+        float hardness = baseBlock.getDefaultState().getBlockHardness(worldIn, pos);
 
-        for(int i = 0; i <= compression; i++) {
+        for (int i = 0; i <= compression; i++) {
             hardness *= hardnessMultiplier;
         }
 
@@ -105,7 +106,7 @@ public class BlockCompressed extends ModBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag advanced) {
-        if(OverloadedConfig.compressedConfig.showHardness)
+        if (OverloadedConfig.compressedConfig.showHardness)
             tooltip.add(String.format("Hardness: %.0f", ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()).getBlockHardness(null, null)));
 
         super.addInformation(stack, world, tooltip, advanced);
@@ -116,7 +117,7 @@ public class BlockCompressed extends ModBlock {
     public void registerModel() {
         Map<IBlockState, ModelResourceLocation> states = new HashMap<>();
 
-        for(int meta = 0; meta < maxCompressionAmount; meta++) {
+        for (int meta = 0; meta < maxCompressionAmount; meta++) {
             ResourceLocation rl = new ResourceLocation(getRegistryName().getResourceDomain(), getRegistryName().getResourcePath() + meta);
             CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(getBaseModelLocation(), rl, meta + 1));
             ModelResourceLocation ml = new ModelResourceLocation(rl, "normal");

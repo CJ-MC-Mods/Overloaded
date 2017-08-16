@@ -42,15 +42,15 @@ public class FusionCoreRenderer extends TileEntitySpecialRenderer<TileFusionCore
 
     @Override
     public void render(TileFusionCore te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        super.render(te,x,y,z,partialTicks,destroyStage,alpha);
+        super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x,y,z);
+        GlStateManager.translate(x, y, z);
         GlStateManager.disableRescaleNormal();
 
-        renderCore(te,0,1, 11f, new ResourceLocation("overloaded", "textures/blocks/test.png"));
+        renderCore(te, 0, 1, 11f, new ResourceLocation("overloaded", "textures/blocks/test.png"));
 
 //        renderCore(te,90,-1, 1, new ResourceLocation("overloaded", "textures/blocks/sun/light_yellow.png"));
 //        renderCore(te,0,1,0.98f, new ResourceLocation("overloaded", "textures/blocks/sun/yellow.png"));

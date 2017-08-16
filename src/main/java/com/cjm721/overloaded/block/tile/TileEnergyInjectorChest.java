@@ -22,53 +22,53 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable implemen
         BlockPos me = this.getPos();
         TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 
-        if(frontTE == null || !frontTE.hasCapability(ENERGY, getFacing().getOpposite()))
+        if (frontTE == null || !frontTE.hasCapability(ENERGY, getFacing().getOpposite()))
             return;
 
         IEnergyStorage storage = frontTE.getCapability(ENERGY, getFacing().getOpposite());
-        int energy = storage.extractEnergy(Integer.MAX_VALUE,false);
-        for(EnumFacing facing: EnumFacing.values()) {
-            if(energy == 0)
+        int energy = storage.extractEnergy(Integer.MAX_VALUE, false);
+        for (EnumFacing facing : EnumFacing.values()) {
+            if (energy == 0)
                 return;
 
-            if(facing == getFacing())
+            if (facing == getFacing())
                 continue;
 
             TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
-            if(te == null || !te.hasCapability(ITEM_HANDLER_CAPABILITY, facing.getOpposite()))
+            if (te == null || !te.hasCapability(ITEM_HANDLER_CAPABILITY, facing.getOpposite()))
                 continue;
 
             IItemHandler inventory = te.getCapability(ITEM_HANDLER_CAPABILITY, facing.getOpposite());
 
-            for(int i = 0; i < inventory.getSlots(); i++) {
+            for (int i = 0; i < inventory.getSlots(); i++) {
                 ItemStack stack = inventory.getStackInSlot(i);
 
-                if(!stack.hasCapability(ENERGY, facing.getOpposite())) {
+                if (!stack.hasCapability(ENERGY, facing.getOpposite())) {
                     continue;
                 }
 
-                stack = inventory.extractItem(i,1,false);
+                stack = inventory.extractItem(i, 1, false);
 
-                if(stack.isEmpty())
+                if (stack.isEmpty())
                     continue;
 
                 IEnergyStorage receiver = stack.getCapability(ENERGY, facing.getOpposite());
-                if(!receiver.canReceive())
+                if (!receiver.canReceive())
                     continue;
 
-                int acceptedAmount = receiver.receiveEnergy(energy,true);
-                if(acceptedAmount != 0) {
-                    receiver.receiveEnergy(acceptedAmount,false);
+                int acceptedAmount = receiver.receiveEnergy(energy, true);
+                if (acceptedAmount != 0) {
+                    receiver.receiveEnergy(acceptedAmount, false);
                     energy -= storage.receiveEnergy(energy, true);
                 }
 
-                stack = inventory.insertItem(i,stack,false);
+                stack = inventory.insertItem(i, stack, false);
 
-                if(stack.isEmpty()) {
+                if (stack.isEmpty()) {
                     continue;
                 }
 
-                getWorld().spawnEntity(new EntityItem(getWorld(),getPos().getX(),getPos().getY(),getPos().getZ(),stack));
+                getWorld().spawnEntity(new EntityItem(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), stack));
             }
         }
     }

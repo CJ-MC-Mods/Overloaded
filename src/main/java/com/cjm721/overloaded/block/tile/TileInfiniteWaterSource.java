@@ -16,8 +16,8 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
 
-    private static IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[] {
-        new FluidTankProperties(FluidRegistry.getFluidStack("water", Integer.MAX_VALUE), Integer.MAX_VALUE, false, true)
+    private static IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[]{
+            new FluidTankProperties(FluidRegistry.getFluidStack("water", Integer.MAX_VALUE), Integer.MAX_VALUE, false, true)
     };
 
     /**
@@ -54,7 +54,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
     @Nullable
     @Override
     public FluidStack drain(@Nonnull FluidStack resource, boolean doDrain) {
-        if(resource.isFluidEqual(FluidRegistry.getFluidStack("water", 0)))
+        if (resource.isFluidEqual(FluidRegistry.getFluidStack("water", 0)))
             return drain(resource.amount, doDrain);
         return new FluidStack(resource.getFluid(), 0);
     }
@@ -76,14 +76,14 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
     }
 
     @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability,@Nullable EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @Override
     @Nullable
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if(capability == FLUID_HANDLER_CAPABILITY ) {
+        if (capability == FLUID_HANDLER_CAPABILITY) {
             return (T) this;
         }
         return super.getCapability(capability, facing);

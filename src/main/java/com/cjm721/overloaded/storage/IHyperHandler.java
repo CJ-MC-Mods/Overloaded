@@ -11,7 +11,7 @@ public interface IHyperHandler<T extends IHyperType> {
     T status();
 
     /**
-     * @param stack Represents what you want and how much
+     * @param stack    Represents what you want and how much
      * @param doAction Should
      * @return the Stack that was able to be removed from the Handler
      */
@@ -19,7 +19,7 @@ public interface IHyperHandler<T extends IHyperType> {
     T take(@Nonnull T stack, boolean doAction);
 
     /**
-     * @param stack of Type {@link T} that will be handed to this handler
+     * @param stack    of Type {@link T} that will be handed to this handler
      * @param doAction should be actually done
      * @return the Stack that was not able to be absorbed by  the handler
      */

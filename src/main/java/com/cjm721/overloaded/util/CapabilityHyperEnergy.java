@@ -20,23 +20,20 @@ public class CapabilityHyperEnergy {
     @CapabilityInject(IHyperHandlerEnergy.class)
     public static Capability<IHyperHandlerEnergy> HYPER_ENERGY_HANDLER = null;
 
-    public static void register()
-    {
+    public static void register() {
         CapabilityManager.INSTANCE.register(IHyperHandlerEnergy.class,
-            new Capability.IStorage<IHyperHandlerEnergy>() {
-                @Override
-                public NBTBase writeNBT(Capability<IHyperHandlerEnergy> capability, @Nonnull IHyperHandlerEnergy instance, EnumFacing side)
-                {
-                    return new NBTTagLong(instance.status().amount);
-                }
+                new Capability.IStorage<IHyperHandlerEnergy>() {
+                    @Override
+                    public NBTBase writeNBT(Capability<IHyperHandlerEnergy> capability, @Nonnull IHyperHandlerEnergy instance, EnumFacing side) {
+                        return new NBTTagLong(instance.status().amount);
+                    }
 
-                @Override
-                public void readNBT(Capability<IHyperHandlerEnergy> capability,@Nonnull IHyperHandlerEnergy instance, EnumFacing side, NBTBase nbt)
-                {
-                    instance.give(new LongEnergyStack(((NBTTagInt)nbt).getLong()), true);
-                }
-            },
-            LongEnergyStorage.class
+                    @Override
+                    public void readNBT(Capability<IHyperHandlerEnergy> capability, @Nonnull IHyperHandlerEnergy instance, EnumFacing side, NBTBase nbt) {
+                        instance.give(new LongEnergyStack(((NBTTagInt) nbt).getLong()), true);
+                    }
+                },
+                LongEnergyStorage.class
         );
     }
 

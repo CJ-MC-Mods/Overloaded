@@ -24,7 +24,9 @@ public class LongItemStack implements IHyperType {
     }
 
     @Nonnull
-    public ItemStack getItemStack() {return itemStack; }
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
 
     public void setAmount(@Nonnegative long amount) {
         this.amount = amount;

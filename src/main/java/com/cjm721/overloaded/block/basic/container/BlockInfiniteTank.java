@@ -4,7 +4,6 @@ import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.IHyperType;
 import com.cjm721.overloaded.storage.LongFluidStack;
 import net.minecraft.block.ITileEntityProvider;
@@ -12,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -24,7 +22,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -38,7 +35,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements ITileEntityProvider{
+public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements ITileEntityProvider {
 
     public BlockInfiniteTank() {
         super(Material.GLASS);
@@ -60,8 +57,8 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/infinite_tank.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_tank.png"),
+                new ResourceLocation(MODID, "textures/blocks/infinite_tank.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_tank.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
@@ -73,11 +70,11 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
 
     @Override
     public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
+        if (!worldIn.isRemote) {
             ItemStack heldItem = playerIn.getHeldItem(hand);
-            if(heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
+            if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
                 LongFluidStack storedFluid = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage().getFluidStack();
-                if(storedFluid == null || storedFluid.fluidStack == null) {
+                if (storedFluid == null || storedFluid.fluidStack == null) {
                     playerIn.sendStatusMessage(new TextComponentString("Fluid: EMPTY"), false);
                 } else {
                     playerIn.sendStatusMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)), false);
@@ -98,7 +95,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
     protected IHyperType getHyperStack(IBlockAccess world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
 
-        if(te != null && te instanceof TileInfiniteTank) {
+        if (te != null && te instanceof TileInfiniteTank) {
             return te.getCapability(HYPER_FLUID_HANDLER, EnumFacing.UP).status();
         }
         return null;

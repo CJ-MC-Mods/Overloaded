@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.item.functional;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.LongEnergyStack;
@@ -42,8 +41,6 @@ public class ItemEnergyShield extends ModItem {
         setUnlocalizedName("energy_shield");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
-        Overloaded.proxy.itemToRegister.add(this);
-
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }
 
@@ -51,7 +48,7 @@ public class ItemEnergyShield extends ModItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID,"energy_shield"), null);
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "energy_shield"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
     }
 
@@ -61,8 +58,8 @@ public class ItemEnergyShield extends ModItem {
 //        return EnumAction.BLOCK;
 
 //        if(energy.amount == constantUseCost) {
-            System.out.println("Blocking");
-            return EnumAction.BLOCK;
+        System.out.println("Blocking");
+        return EnumAction.BLOCK;
 //        }
 //        System.out.println("None");
 //        return EnumAction.NONE;
@@ -76,11 +73,11 @@ public class ItemEnergyShield extends ModItem {
     @Override
     @Nonnull
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote) {
+        if (!worldIn.isRemote) {
             System.out.println("On Item Use");
             IHyperHandlerEnergy handler = player.getHeldItem(hand).getCapability(HYPER_ENERGY_HANDLER, null);
             LongEnergyStack energy = handler.take(new LongEnergyStack(constantUseCost), true);
-            if(energy.amount == constantUseCost) {
+            if (energy.amount == constantUseCost) {
                 System.out.println("On Item Use Success");
                 return EnumActionResult.SUCCESS;
             }
@@ -93,7 +90,7 @@ public class ItemEnergyShield extends ModItem {
 
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-        if(player.isActiveItemStackBlocking()) {
+        if (player.isActiveItemStackBlocking()) {
             System.out.println("On Using Tick Blocking: " + count);
             return;
         }
@@ -102,14 +99,13 @@ public class ItemEnergyShield extends ModItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn)
-    {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         playerIn.setActiveHand(handIn);
 
         IHyperHandlerEnergy handler = itemstack.getCapability(HYPER_ENERGY_HANDLER, null);
         LongEnergyStack energy = handler.take(new LongEnergyStack(initialUseCost), true);
-        if(energy.amount == initialUseCost) {
+        if (energy.amount == initialUseCost) {
             System.out.println("Right click Success");
             return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
         } else {
@@ -135,7 +131,7 @@ public class ItemEnergyShield extends ModItem {
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, @Nonnull ItemStack newStack, boolean slotChanged) {
-        if(slotChanged)
+        if (slotChanged)
             return true;
         return oldStack.getItem() != newStack.getItem();
     }

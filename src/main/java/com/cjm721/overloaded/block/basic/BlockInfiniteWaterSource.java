@@ -10,10 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -56,16 +53,15 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID,"textures/blocks/infinite_water_source.png"),
-                new ResourceLocation(MODID,"textures/dynamic/blocks/infinite_water_source.png"),
+                new ResourceLocation(MODID, "textures/blocks/infinite_water_source.png"),
+                new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_water_source.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public BlockRenderLayer getBlockLayer()
-    {
+    public BlockRenderLayer getBlockLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
@@ -83,13 +79,13 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if(!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
+        if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te != null && te instanceof TileInfiniteWaterSource) {
                 IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, facing);
-                FluidActionResult result = FluidUtil.tryFillContainerAndStow(playerIn.getHeldItem(hand), handler,null, Integer.MAX_VALUE, playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
+                FluidActionResult result = FluidUtil.tryFillContainerAndStow(playerIn.getHeldItem(hand), handler, null, Integer.MAX_VALUE, playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
 
-                if(result.isSuccess())
+                if (result.isSuccess())
                     playerIn.setHeldItem(hand, result.getResult());
             }
         }

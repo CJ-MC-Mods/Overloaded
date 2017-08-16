@@ -13,12 +13,12 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class RenderMultiHelmet extends ModelBiped {
 
     public RenderMultiHelmet() {
-        super(0,0,1024,1024);
+        super(0, 0, 1024, 1024);
 
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();
 
-        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,"item/armor/multi_helmet.obj"));
+        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_helmet.obj"));
         head.offsetY = -0.1F;
         head.offsetX = -0.033F;
         head.offsetZ = 0.1F;
@@ -37,8 +37,7 @@ public class RenderMultiHelmet extends ModelBiped {
         }
 
         GlStateManager.pushMatrix();
-        if (entity != null && entity.isSneaking())
-        {
+        if (entity != null && entity.isSneaking()) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
