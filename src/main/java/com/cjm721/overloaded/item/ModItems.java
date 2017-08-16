@@ -69,7 +69,7 @@ public class ModItems {
 
         compressedItemBlocks = new LinkedList<>();
         for (BlockCompressed block : ModBlocks.compressedBlocks) {
-            ItemCompressedBlock itemCompressed = new ItemCompressedBlock(block);
+            ItemCompressedBlock itemCompressed = registerItem(new ItemCompressedBlock(block));
             compressedItemBlocks.add(itemCompressed);
 
 
