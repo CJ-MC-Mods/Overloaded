@@ -63,7 +63,7 @@ public class ModItems {
         customBoots = registerItem(new ItemMultiBoots());
 
         if (OverloadedConfig.developmentConfig.wipStuff) {
-            energyShield = registerItem(new ItemEnergyShield());
+//            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
         }
 
