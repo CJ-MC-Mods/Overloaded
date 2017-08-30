@@ -18,9 +18,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class TileEnergyExtractor extends AbstractTileEntityFaceable implements ITickable {
 
-    public TileEnergyExtractor() {
-
-    }
+    public TileEnergyExtractor() { }
 
     /**
      * Like the old updateEntity(), except more generic.

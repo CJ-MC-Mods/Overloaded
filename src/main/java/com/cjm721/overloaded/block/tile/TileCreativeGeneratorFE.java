@@ -109,4 +109,5 @@ public class TileCreativeGeneratorFE extends TileEntity implements ITickable, IE
     public boolean canReceive() {
         return false;
     }
+
 }
