@@ -8,10 +8,7 @@ import com.cjm721.overloaded.item.basic.ItemCompressedBlock;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
-import com.cjm721.overloaded.item.functional.ItemAmountSelector;
-import com.cjm721.overloaded.item.functional.ItemEnergyShield;
-import com.cjm721.overloaded.item.functional.ItemLinkingCard;
-import com.cjm721.overloaded.item.functional.ItemMultiTool;
+import com.cjm721.overloaded.item.functional.*;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
@@ -32,6 +29,7 @@ public class ModItems {
 
     public static ItemEnergyShield energyShield;
     public static ItemAmountSelector amountSelector;
+    private static ItemRayGun rayGun;
 
     public static ModItem energyCore;
     public static ModItem fluidCore;
@@ -65,23 +63,13 @@ public class ModItems {
         if (OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
+            rayGun = registerItem(new ItemRayGun());
         }
 
         compressedItemBlocks = new LinkedList<>();
         for (BlockCompressed block : ModBlocks.compressedBlocks) {
             ItemCompressedBlock itemCompressed = registerItem(new ItemCompressedBlock(block));
             compressedItemBlocks.add(itemCompressed);
-
-
-            if (block.isRecipeEnabled()) {
-                CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed, 1, 0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
-                CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(), 9), new ItemStack(itemCompressed, 1, 0));
-
-                for (int meta = 0; meta < block.getMaxCompression() - 1; meta++) {
-                    CraftingRegistry.addShapedRecipe(new ItemStack(itemCompressed, 1, meta + 1), "XXX", "XXX", "XXX", 'X', new ItemStack(itemCompressed, 1, meta));
-                    CraftingRegistry.addShapelessRecipe(new ItemStack(itemCompressed, 9, meta), new ItemStack(itemCompressed, 1, meta + 1));
-                }
-            }
         }
     }
 
@@ -98,4 +86,5 @@ public class ModItems {
 
         return item;
     }
+
 }

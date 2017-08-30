@@ -72,7 +72,7 @@ public class CompressedBlockAssets {
 
         BufferedImage image;
         try {
-            image = TextureUtil.readBufferedImage(ImageUtil.getTextureInputStream(CompressedBlockAssets.getTexturePath(locations.base)));
+            image = TextureUtil.readBufferedImage(ImageUtil.getTextureInputStream(new ResourceLocation(locations.baseTexture)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -105,12 +105,12 @@ public class CompressedBlockAssets {
     }
 
     public static class CompressedResourceLocation {
-        public ResourceLocation base;
-        public ResourceLocation compressed;
-        public int compressionAmount;
+        public final String baseTexture;
+        public final ResourceLocation compressed;
+        public final int compressionAmount;
 
-        public CompressedResourceLocation(@Nonnull ResourceLocation base, @Nonnull ResourceLocation compressed, int compressionAmount) {
-            this.base = base;
+        public CompressedResourceLocation(String baseTexture, @Nonnull ResourceLocation compressed, int compressionAmount) {
+            this.baseTexture = baseTexture;
             this.compressed = compressed;
             this.compressionAmount = compressionAmount;
         }

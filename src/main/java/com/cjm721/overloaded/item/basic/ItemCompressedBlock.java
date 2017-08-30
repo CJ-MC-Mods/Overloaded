@@ -54,6 +54,6 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
         String baseName = compressedBlock.getBaseBlock().getLocalizedName();
         String finalName = (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " + baseName;
 
-        return finalName;
+         return finalName;
     }
 }

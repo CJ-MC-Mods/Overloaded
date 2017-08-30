@@ -6,6 +6,9 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "[1.12,1.13)",
@@ -25,8 +28,14 @@ public class Overloaded {
     @SidedProxy(clientSide = Overloaded.PROXY_CLIENT, serverSide = Overloaded.PROXY_SERVER)
     public static CommonProxy proxy;
 
+    public static File configFolder;
+    public static Logger logger;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        Overloaded.logger = event.getModLog();
+        configFolder = new File(event.getModConfigurationDirectory(),"overloaded/");
+        configFolder.mkdir();
         proxy.preInit(event);
     }
 

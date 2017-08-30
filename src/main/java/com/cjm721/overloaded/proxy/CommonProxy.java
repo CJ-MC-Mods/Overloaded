@@ -69,6 +69,7 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        ModBlocks.secondaryCompressedInit();
         networkWrapper = new SimpleNetworkWrapper("overloaded");
         networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
         networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
