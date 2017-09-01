@@ -5,6 +5,7 @@ import com.cjm721.overloaded.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -51,9 +52,7 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
     @SideOnly(Side.CLIENT)
     @Nonnull
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
-        String baseName = compressedBlock.getBaseBlock().getLocalizedName();
-        String finalName = (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " + baseName;
-
-         return finalName;
+        return (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " +
+                new ItemStack(Item.getItemFromBlock(compressedBlock.getBaseBlock()), 1, compressedBlock.getBaseMeta()).getDisplayName();
     }
 }

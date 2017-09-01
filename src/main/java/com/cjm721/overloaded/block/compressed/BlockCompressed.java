@@ -211,4 +211,8 @@ public class BlockCompressed extends ModBlock {
     public boolean isRecipeEnabled() {
         return recipeEnabled;
     }
+
+    public int getBaseMeta() {
+        return entry.meta;
+    }
 }
