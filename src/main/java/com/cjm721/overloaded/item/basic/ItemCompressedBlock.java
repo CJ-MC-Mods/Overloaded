@@ -52,7 +52,9 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
     @SideOnly(Side.CLIENT)
     @Nonnull
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
+        Item item = Item.getItemFromBlock(compressedBlock.getBaseBlock());
+
         return (stack.getItemDamage() + 1) + "x " + I18n.format("text.compressed") + " " +
-                new ItemStack(Item.getItemFromBlock(compressedBlock.getBaseBlock()), 1, compressedBlock.getBaseMeta()).getDisplayName();
+                new ItemStack(item, 1, compressedBlock.getBaseMeta()).getDisplayName();
     }
 }
