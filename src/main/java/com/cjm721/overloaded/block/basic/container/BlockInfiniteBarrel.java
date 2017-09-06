@@ -40,7 +40,6 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         setRegistryName("infinite_barrel");
         setUnlocalizedName("infinite_barrel");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

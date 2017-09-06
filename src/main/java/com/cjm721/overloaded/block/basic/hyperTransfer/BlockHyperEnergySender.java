@@ -21,8 +21,6 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
         setRegistryName("hyper_energy_sender");
         setUnlocalizedName("hyper_energy_sender");
 
-        setHardness(10);
-        setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileHyperEnergySender.class, MODID + ":hyper_energy_sender");

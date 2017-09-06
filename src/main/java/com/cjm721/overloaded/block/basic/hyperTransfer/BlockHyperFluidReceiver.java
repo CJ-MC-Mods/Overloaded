@@ -20,8 +20,6 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
         setRegistryName("hyper_fluid_receiver");
         setUnlocalizedName("hyper_fluid_receiver");
 
-        setHardness(10);
-        setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileHyperFluidReceiver.class, MODID + ":hyper_fluid_receiver");

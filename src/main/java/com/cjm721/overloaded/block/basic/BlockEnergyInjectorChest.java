@@ -34,7 +34,6 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         setRegistryName("energy_injector_chest");
         setUnlocalizedName("energy_injector_chest");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

@@ -39,7 +39,6 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         setRegistryName("infinite_water_source");
         setUnlocalizedName("infinite_water_source");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

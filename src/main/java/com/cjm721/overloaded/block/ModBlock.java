@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 public abstract class ModBlock extends Block implements IModRegistrable {
     public ModBlock(@Nonnull Material materialIn) {
         super(materialIn);
+        setHardness(5);
     }
 
     @SideOnly(Side.CLIENT)

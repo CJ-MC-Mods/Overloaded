@@ -43,7 +43,6 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
         setRegistryName("item_manipulator");
         setUnlocalizedName("item_manipulator");
 
-        setHardness(10);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileItemManipulator.class, MODID + ":item_manipulator");

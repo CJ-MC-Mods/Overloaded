@@ -43,7 +43,6 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         setRegistryName("infinite_tank");
         setUnlocalizedName("infinite_tank");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

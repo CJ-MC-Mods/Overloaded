@@ -31,7 +31,6 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         setRegistryName("creative_generator");
         setUnlocalizedName("creative_generator");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

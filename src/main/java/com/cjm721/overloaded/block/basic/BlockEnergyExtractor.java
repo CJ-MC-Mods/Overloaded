@@ -33,7 +33,6 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
         setRegistryName("energy_extractor");
         setUnlocalizedName("energy_extractor");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

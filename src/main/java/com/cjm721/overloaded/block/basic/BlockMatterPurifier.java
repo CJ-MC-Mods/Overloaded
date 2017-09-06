@@ -27,7 +27,6 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
         setRegistryName("matter_purifier");
         setUnlocalizedName("matter_purifier");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 

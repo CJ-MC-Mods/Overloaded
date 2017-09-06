@@ -20,8 +20,6 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
         setRegistryName("hyper_fluid_sender");
         setUnlocalizedName("hyper_fluid_sender");
 
-        setHardness(10);
-        setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileHyperFluidSender.class, MODID + ":hyper_fluid_sender");

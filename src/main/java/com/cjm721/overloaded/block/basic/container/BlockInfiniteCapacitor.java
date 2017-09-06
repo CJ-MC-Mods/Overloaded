@@ -40,7 +40,6 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
         setRegistryName("infinite_capacitor");
         setUnlocalizedName("infinite_capacitor");
 
-        setHardness(10);
         setLightOpacity(0);
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
