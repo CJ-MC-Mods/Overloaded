@@ -31,10 +31,13 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
     public BlockEnergyInjectorChest() {
         super(Material.ROCK);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("energy_injector_chest");
         setUnlocalizedName("energy_injector_chest");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID + ":energy_injector_chest");
     }

@@ -16,7 +16,10 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
 
     public BlockHyperFluidSender() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("hyper_fluid_sender");
         setUnlocalizedName("hyper_fluid_sender");
 

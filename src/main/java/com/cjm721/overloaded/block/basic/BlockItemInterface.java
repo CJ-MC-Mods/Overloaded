@@ -37,7 +37,10 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
 
     public BlockItemInterface() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("item_interface");
         setUnlocalizedName("item_interface");
 

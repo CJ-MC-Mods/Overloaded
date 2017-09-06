@@ -28,10 +28,13 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public BlockCreativeGenerator() {
         super(Material.ROCK);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("creative_generator");
         setUnlocalizedName("creative_generator");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
     }
@@ -41,6 +44,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileCreativeGeneratorFE();
     }
+
 
     @SideOnly(Side.CLIENT)
     @Override

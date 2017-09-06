@@ -43,6 +43,8 @@ import java.util.Map;
 public class BlockCompressed extends ModBlock {
 
     private static final PropertyInteger compressionProperty = PropertyInteger.create("compression", 0, 15);
+    private final String registryName;
+    private final String unlocalizedName;
 
     private Block baseBlock;
     private final int maxCompressionAmount;
@@ -52,15 +54,21 @@ public class BlockCompressed extends ModBlock {
 
     BlockCompressed(@Nonnull String registryName, @Nonnull String unlocalizedName, CompressedEntry entry) {
         super(Material.AIR);
+        this.registryName = registryName;
+        this.unlocalizedName = unlocalizedName;
+
         this.entry = entry;
         this.maxCompressionAmount = entry.depth;
         this.hardnessMultiplier = entry.hardnessMultiplier;
         this.recipeEnabled = entry.recipeEnabled;
 
+        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName(registryName);
         setUnlocalizedName(unlocalizedName);
-
-        setCreativeTab(OverloadedCreativeTabs.COMPRESSED_BLOCKS);
     }
 
     public boolean baseBlockInit() {

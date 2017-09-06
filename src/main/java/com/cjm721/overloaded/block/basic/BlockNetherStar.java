@@ -17,10 +17,13 @@ public class BlockNetherStar extends ModBlock {
     public BlockNetherStar() {
         super(Material.IRON);
 
+        setHardness(16384);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("nether_star_block");
         setUnlocalizedName("nether_star_block");
-
-        setHardness(16384);
     }
 
     @SideOnly(Side.CLIENT)

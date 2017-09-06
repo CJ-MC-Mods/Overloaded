@@ -30,10 +30,13 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     public BlockEnergyExtractor() {
         super(Material.ROCK);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("energy_extractor");
         setUnlocalizedName("energy_extractor");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID + ":energy_extractor");
     }

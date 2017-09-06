@@ -40,7 +40,10 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
     public BlockPlayerInterface() {
         super(Material.WOOD);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("player_interface");
         setUnlocalizedName("player_interface");
 

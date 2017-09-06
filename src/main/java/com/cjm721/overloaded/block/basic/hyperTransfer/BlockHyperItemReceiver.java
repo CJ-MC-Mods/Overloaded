@@ -16,7 +16,10 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
     public BlockHyperItemReceiver() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("hyper_item_receiver");
         setUnlocalizedName("hyper_item_receiver");
 

@@ -35,7 +35,10 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
 
     public BlockFusionCore() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("fusion_core");
         setUnlocalizedName("fusion_core");
 

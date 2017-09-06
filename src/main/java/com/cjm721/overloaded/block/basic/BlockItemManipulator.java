@@ -39,7 +39,10 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
 
     public BlockItemManipulator() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("item_manipulator");
         setUnlocalizedName("item_manipulator");
 

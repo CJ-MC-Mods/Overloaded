@@ -40,10 +40,13 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
     public BlockInfiniteTank() {
         super(Material.GLASS);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("infinite_tank");
         setUnlocalizedName("infinite_tank");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }

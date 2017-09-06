@@ -16,7 +16,10 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
     public BlockHyperFluidReceiver() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("hyper_fluid_receiver");
         setUnlocalizedName("hyper_fluid_receiver");
 

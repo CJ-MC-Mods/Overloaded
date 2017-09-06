@@ -16,6 +16,8 @@ public abstract class ModBlock extends Block implements IModRegistrable {
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
+    public abstract void baseInit();
+
     @SideOnly(Side.CLIENT)
     @Override
     public abstract void registerModel();

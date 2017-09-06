@@ -37,10 +37,13 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
     public BlockInfiniteCapacitor() {
         super(Material.ROCK);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("infinite_capacitor");
         setUnlocalizedName("infinite_capacitor");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infinite_capacitor");
     }

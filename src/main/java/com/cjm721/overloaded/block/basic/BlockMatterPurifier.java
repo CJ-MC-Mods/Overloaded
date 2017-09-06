@@ -24,10 +24,13 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
     public BlockMatterPurifier() {
         super(Material.ROCK);
 
+        setLightOpacity(0);
+    }
+
+    @Override
+    public void baseInit() {
         setRegistryName("matter_purifier");
         setUnlocalizedName("matter_purifier");
-
-        setLightOpacity(0);
 
         GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
     }

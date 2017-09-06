@@ -121,6 +121,9 @@ public final class ModBlocks {
         if (block instanceof IModRegistrable)
             ModBlocks.addToSecondaryInit((IModRegistrable) block);
 
+        if(block instanceof ModBlock)
+            ((ModBlock) block).baseInit();
+
         return block;
     }
 

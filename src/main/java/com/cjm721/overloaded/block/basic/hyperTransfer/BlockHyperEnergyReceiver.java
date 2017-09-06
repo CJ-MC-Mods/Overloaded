@@ -16,7 +16,10 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
     public BlockHyperEnergyReceiver() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("hyper_energy_receiver");
         setUnlocalizedName("hyper_energy_receiver");
 
@@ -34,4 +37,5 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperEnergyReceiver();
     }
+
 }

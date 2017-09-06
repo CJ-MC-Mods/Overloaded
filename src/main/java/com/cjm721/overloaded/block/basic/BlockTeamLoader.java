@@ -17,7 +17,10 @@ public class BlockTeamLoader extends ModBlock implements ITileEntityProvider {
 
     public BlockTeamLoader() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("team_loader");
         setUnlocalizedName("team_loader");
 

@@ -17,7 +17,10 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
 
     public BlockHyperEnergySender() {
         super(Material.ROCK);
+    }
 
+    @Override
+    public void baseInit() {
         setRegistryName("hyper_energy_sender");
         setUnlocalizedName("hyper_energy_sender");
 
@@ -35,4 +38,5 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileHyperEnergySender();
     }
+
 }
