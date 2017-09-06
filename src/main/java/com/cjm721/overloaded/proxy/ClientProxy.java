@@ -3,7 +3,6 @@ package com.cjm721.overloaded.proxy;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.client.render.entity.ArmorSecondarySpritesRegister;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.client.Minecraft;
@@ -36,7 +35,6 @@ public class ClientProxy extends CommonProxy {
         OBJLoader.INSTANCE.addDomain(MODID);
         MinecraftForge.EVENT_BUS.register(new CompressedBlockAssets());
         MinecraftForge.EVENT_BUS.register(new ResizeableTextureGenerator());
-        MinecraftForge.EVENT_BUS.register(new ArmorSecondarySpritesRegister());
 
         BlockResourcePack.INSTANCE.addDomain("overloaded");
         BlockResourcePack.INSTANCE.inject();

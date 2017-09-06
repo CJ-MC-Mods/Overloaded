@@ -87,7 +87,7 @@ public final class ModBlocks {
         try {
             compressedBlocks = CompressedBlockHandler.initFromConfig();
         } catch (IOException e) {
-            throw new RuntimeException("IOException while trying to init Compressed Blocks",e);
+            throw new RuntimeException("IOException while trying to init Compressed Blocks", e);
         }
 
         for (BlockCompressed block : compressedBlocks) {

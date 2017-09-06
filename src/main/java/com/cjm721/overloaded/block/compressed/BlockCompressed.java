@@ -67,21 +67,21 @@ public class BlockCompressed extends ModBlock {
         IForgeRegistry<Block> registry = GameRegistry.findRegistry(Block.class);
         this.baseBlock = registry.getValue(new ResourceLocation(entry.baseRegistryName));
 
-        if(baseBlock == null) {
+        if (baseBlock == null) {
             Overloaded.logger.error("Invalid Compressed config entry: Base Block does not exist. %s", entry.baseRegistryName);
             return false;
         }
-        Field blockMaterialField = ReflectionHelper.findField(Block.class, "blockMaterial","field_149764_J");
-        Field blockMapColorIn = ReflectionHelper.findField(Block.class, "blockMapColor","field_181083_K");
+        Field blockMaterialField = ReflectionHelper.findField(Block.class, "blockMaterial", "field_149764_J");
+        Field blockMapColorIn = ReflectionHelper.findField(Block.class, "blockMapColor", "field_181083_K");
 
         blockMaterialField.setAccessible(true);
         blockMapColorIn.setAccessible(true);
 
         try {
-            blockMaterialField.set(this,blockMaterialField.get(baseBlock));
-            blockMapColorIn.set(this,blockMapColorIn.get(baseBlock));
+            blockMaterialField.set(this, blockMaterialField.get(baseBlock));
+            blockMapColorIn.set(this, blockMapColorIn.get(baseBlock));
         } catch (IllegalAccessException e) {
-            Overloaded.logger.error("Unable to get material and color of base block.",e);
+            Overloaded.logger.error("Unable to get material and color of base block.", e);
             return false;
         }
 
@@ -97,7 +97,7 @@ public class BlockCompressed extends ModBlock {
     @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         for (int meta = 0; meta < maxCompressionAmount; meta++) {
-            items.add(new ItemStack(Item.getItemFromBlock(this),1,meta));
+            items.add(new ItemStack(Item.getItemFromBlock(this), 1, meta));
         }
     }
 
@@ -126,7 +126,7 @@ public class BlockCompressed extends ModBlock {
 
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
-        if(baseBlock == null)
+        if (baseBlock == null)
             return 0;
 
         int compression = blockState.getValue(compressionProperty);
@@ -203,7 +203,7 @@ public class BlockCompressed extends ModBlock {
 
     @Nonnull
     public Block getBaseBlock() {
-        if(baseBlock == null)
+        if (baseBlock == null)
             return Blocks.AIR;
         return baseBlock;
     }

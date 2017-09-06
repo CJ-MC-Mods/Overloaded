@@ -18,13 +18,13 @@ public class CompressedConfig {
     public boolean showHardness = true;
 
     public static final CompressedEntry[] defaults = new CompressedEntry[]{
-            new CompressedEntry("minecraft:cobblestone", "compressed_cobblestone",0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:sand", "compressed_sand",0, "minecraft:textures/blocks/sand.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:stone", "compressed_stone",0, "minecraft:textures/blocks/stone.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:obsidian", "compressed_obsidian",0, "minecraft:textures/blocks/obsidian.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:netherrack", "compressed_netherrack",0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:dirt", "compressed_dirt",0, "minecraft:textures/blocks/dirt.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:gravel", "compressed_gravel",0, "minecraft:textures/blocks/gravel.png", 16, 9.0f, true)
+            new CompressedEntry("minecraft:cobblestone", "compressed_cobblestone", 0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:sand", "compressed_sand", 0, "minecraft:textures/blocks/sand.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:stone", "compressed_stone", 0, "minecraft:textures/blocks/stone.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:obsidian", "compressed_obsidian", 0, "minecraft:textures/blocks/obsidian.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:netherrack", "compressed_netherrack", 0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:dirt", "compressed_dirt", 0, "minecraft:textures/blocks/dirt.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:gravel", "compressed_gravel", 0, "minecraft:textures/blocks/gravel.png", 16, 9.0f, true)
     };
 
     public CompressedEntry[] getCompressedEntries() throws IOException {
@@ -33,7 +33,7 @@ public class CompressedConfig {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         if (!file.exists()) {
-            String json = gson.toJson(defaults,defaults.getClass());
+            String json = gson.toJson(defaults, defaults.getClass());
             FileWriter wrtier = new FileWriter(file);
             wrtier.write(json);
             wrtier.flush();
@@ -44,7 +44,7 @@ public class CompressedConfig {
         try {
             return gson.fromJson(new FileReader(file), CompressedEntry[].class);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("Impossible Exception, file existed moments ago",e);
+            throw new RuntimeException("Impossible Exception, file existed moments ago", e);
         }
     }
 }

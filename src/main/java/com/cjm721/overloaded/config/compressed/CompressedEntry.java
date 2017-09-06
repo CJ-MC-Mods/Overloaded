@@ -10,7 +10,8 @@ public class CompressedEntry {
     public boolean recipeEnabled;
 
     // Required as used by GSON
-    public CompressedEntry() { }
+    public CompressedEntry() {
+    }
 
     public CompressedEntry(String baseRegistryName, String compressedPathRegistryName, int meta, String texturePath, int depth, float hardnessMultiplier, boolean recipeEnabled) {
         this.baseRegistryName = baseRegistryName;

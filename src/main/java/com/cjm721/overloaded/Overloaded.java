@@ -34,7 +34,7 @@ public class Overloaded {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Overloaded.logger = event.getModLog();
-        configFolder = new File(event.getModConfigurationDirectory(),"overloaded/");
+        configFolder = new File(event.getModConfigurationDirectory(), "overloaded/");
         configFolder.mkdir();
         proxy.preInit(event);
     }
