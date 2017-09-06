@@ -32,7 +32,6 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
         setUnlocalizedName("creative_generator");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
     }

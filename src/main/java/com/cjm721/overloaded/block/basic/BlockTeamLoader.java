@@ -21,8 +21,6 @@ public class BlockTeamLoader extends ModBlock implements ITileEntityProvider {
         setRegistryName("team_loader");
         setUnlocalizedName("team_loader");
 
-        setCreativeTab(OverloadedCreativeTabs.TECH);
-
         GameRegistry.registerTileEntity(TileTeamLoader.class, MODID + ":team_loader");
     }
 

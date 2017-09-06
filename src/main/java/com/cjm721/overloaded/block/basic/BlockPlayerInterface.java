@@ -44,8 +44,6 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
         setRegistryName("player_interface");
         setUnlocalizedName("player_interface");
 
-        setCreativeTab(OverloadedCreativeTabs.TECH);
-
         GameRegistry.registerTileEntity(TilePlayerInterface.class, MODID + ":player_interface");
     }
 

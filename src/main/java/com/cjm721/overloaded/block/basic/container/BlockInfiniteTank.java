@@ -44,7 +44,6 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         setUnlocalizedName("infinite_tank");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }

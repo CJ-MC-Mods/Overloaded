@@ -21,7 +21,6 @@ public class BlockNetherStar extends ModBlock {
         setUnlocalizedName("nether_star_block");
 
         setHardness(16384);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
     @SideOnly(Side.CLIENT)

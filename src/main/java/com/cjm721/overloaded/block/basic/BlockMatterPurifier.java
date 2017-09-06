@@ -28,7 +28,6 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
         setUnlocalizedName("matter_purifier");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
     }

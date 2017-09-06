@@ -35,7 +35,6 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         setUnlocalizedName("energy_injector_chest");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID + ":energy_injector_chest");
     }

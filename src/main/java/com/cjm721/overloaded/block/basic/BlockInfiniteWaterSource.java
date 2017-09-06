@@ -40,7 +40,6 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         setUnlocalizedName("infinite_water_source");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }

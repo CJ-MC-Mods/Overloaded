@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.block;
 
+import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -12,6 +13,7 @@ public abstract class ModBlock extends Block implements IModRegistrable {
     public ModBlock(@Nonnull Material materialIn) {
         super(materialIn);
         setHardness(5);
+        setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
     @SideOnly(Side.CLIENT)

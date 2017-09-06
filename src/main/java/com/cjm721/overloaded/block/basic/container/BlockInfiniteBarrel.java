@@ -41,7 +41,6 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         setUnlocalizedName("infinite_barrel");
 
         setLightOpacity(0);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
 
         GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
