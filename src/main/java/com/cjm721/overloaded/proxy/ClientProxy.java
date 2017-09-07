@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.RenderGlobalSpectator;
 import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -43,6 +45,9 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+
+        if(OverloadedConfig.specialConfig.noClipRenderFix)
+            Minecraft.getMinecraft().renderGlobal = new RenderGlobalSpectator(Minecraft.getMinecraft());
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.itemMultiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
 
         noClipKeybind = new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V, "overloaded.cat.key.multiarmor");

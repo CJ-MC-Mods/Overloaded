@@ -19,4 +19,6 @@ public class OverloadedConfig {
     public static ResolutionConfig textureResolutions = new ResolutionConfig();
     @Config.Name("Matter Purifier")
     public static PurifierConfig purifierConfig = new PurifierConfig();
+    @Config.Name("Special Entires")
+    public static SpecialConfig specialConfig = new SpecialConfig();
 }
