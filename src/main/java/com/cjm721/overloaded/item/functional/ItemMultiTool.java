@@ -496,13 +496,10 @@ public class ItemMultiTool extends ModItem {
         if (player.getHeldItemMainhand().getItem() != this)
             return;
 
-        ItemStack stack = getSelectedBlockItemStack(player.getHeldItemMainhand());
-
-        if (stack.isEmpty())
-            return;
-
         RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
         if (result == null) return;
+
+        ItemStack stack = getSelectedBlockItemStack(player.getHeldItemMainhand());
 
         IBlockState state;
         if (stack.getItem() instanceof ItemBlock) {
@@ -513,13 +510,15 @@ public class ItemMultiTool extends ModItem {
 
         switch (getAssistMode()) {
             case PLACE_PREVIEW:
-                renderBlockPreview(event, player, stack, result, state);
+                if(!stack.isEmpty())
+                    renderBlockPreview(event, player, stack, result, state);
                 break;
             case REMOVE_PREVIEW:
                 renderRemovePreview(event, player, result);
                 break;
             case BOTH_PREVIEW:
-                renderBlockPreview(event, player, stack, result, state);
+                if(!stack.isEmpty())
+                    renderBlockPreview(event, player, stack, result, state);
                 renderRemovePreview(event, player, result);
                 break;
         }
