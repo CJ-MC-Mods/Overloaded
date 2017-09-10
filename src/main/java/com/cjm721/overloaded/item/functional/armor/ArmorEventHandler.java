@@ -38,7 +38,6 @@ public class ArmorEventHandler {
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) {
-
             event.addCapability(new ResourceLocation(MODID, "playerData"), new MultiArmorCapabilityProvider(((EntityPlayer) event.getObject())));
         }
     }

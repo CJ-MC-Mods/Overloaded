@@ -43,6 +43,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.IModel;
@@ -328,7 +329,9 @@ public class ItemMultiTool extends ModItem {
 //        drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
     }
 
-    public void leftClickOnBlockServer(@Nonnull World world, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos) {
+    public void leftClickOnBlockServer(@Nonnull EntityPlayerMP player, MultiToolLeftClickMessage message) {
+        BlockPos pos = message.getPos();
+        WorldServer world = player.getServerWorld();
         ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
         if (itemStack.getItem() != this || world.isAirBlock(pos)) {
             return;
@@ -371,7 +374,14 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
-    public void rightClickWithItem(@Nonnull World worldIn, @Nonnull EntityPlayerMP player, @Nonnull BlockPos pos, @Nonnull EnumFacing sideHit, float hitX, float hitY, float hitZ) {
+    public void rightClickWithItem(@Nonnull EntityPlayerMP player, MultiToolRightClickMessage message) {
+        BlockPos pos = message.getPos();
+        EnumFacing sideHit = message.getHitSide();
+        float hitX = message.getHitX();
+        float hitY = message.getHitY();
+        float hitZ = message.getHitZ();
+
+        WorldServer worldIn = player.getServerWorld();
         ItemStack multiTool = player.getHeldItemMainhand();
 
         if (multiTool.getItem() != this) {

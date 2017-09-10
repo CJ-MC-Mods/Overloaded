@@ -4,10 +4,7 @@ import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
-import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
-import com.cjm721.overloaded.network.handler.MultiToolLeftClickHandler;
-import com.cjm721.overloaded.network.handler.MultiToolRightClickHandler;
-import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
+import com.cjm721.overloaded.network.handler.*;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
 import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
@@ -28,6 +25,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -71,10 +69,13 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
         ModBlocks.secondaryCompressedInit();
         networkWrapper = new SimpleNetworkWrapper("overloaded");
-        networkWrapper.registerMessage(MultiToolLeftClickHandler.class, MultiToolLeftClickMessage.class, 0, Side.SERVER);
-        networkWrapper.registerMessage(MultiToolRightClickHandler.class, MultiToolRightClickMessage.class, 1, Side.SERVER);
-        networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, 2, Side.SERVER);
-        networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, 3, Side.CLIENT);
+
+        int dis = 0;
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::leftClickOnBlockServer), MultiToolLeftClickMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::rightClickWithItem), MultiToolRightClickMessage.class, dis++, Side.SERVER);
+
+        networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, dis++, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());

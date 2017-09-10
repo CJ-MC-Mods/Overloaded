@@ -118,11 +118,13 @@ public final class ModBlocks {
     private static <T extends Block> T registerBlock(T block) {
         Overloaded.proxy.blocksToRegister.add(block);
 
-        if (block instanceof IModRegistrable)
-            ModBlocks.addToSecondaryInit((IModRegistrable) block);
-
-        if(block instanceof ModBlock)
+        if(block instanceof ModBlock) {
             ((ModBlock) block).baseInit();
+        }
+
+        if (block instanceof IModRegistrable) {
+            ModBlocks.addToSecondaryInit((IModRegistrable) block);
+        }
 
         return block;
     }
