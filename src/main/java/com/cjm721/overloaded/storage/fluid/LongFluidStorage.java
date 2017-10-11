@@ -37,10 +37,9 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
      */
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new IFluidTankProperties[]{
-                new FluidTankProperties(FluidRegistry.getFluidStack(storedFluid.fluidStack.getFluid().getName(),
-                        (int) Math.min(Integer.MAX_VALUE, storedFluid.amount)), Integer.MAX_VALUE, true, true)
-        };
+        if(storedFluid.fluidStack != null)
+            storedFluid.fluidStack.amount = (int) Math.min(Integer.MAX_VALUE, storedFluid.amount);
+        return new FluidTankProperties[]{new FluidTankProperties(storedFluid.fluidStack, Integer.MAX_VALUE, true, true)};
     }
 
     /**
