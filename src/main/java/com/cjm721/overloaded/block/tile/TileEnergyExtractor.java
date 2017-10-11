@@ -21,6 +21,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
     public TileEnergyExtractor() {
     }
 
+
     /**
      * Like the old updateEntity(), except more generic.
      */

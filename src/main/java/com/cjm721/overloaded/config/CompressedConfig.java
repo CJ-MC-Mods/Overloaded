@@ -34,10 +34,10 @@ public class CompressedConfig {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         if (!file.exists()) {
             String json = gson.toJson(defaults, defaults.getClass());
-            FileWriter wrtier = new FileWriter(file);
-            wrtier.write(json);
-            wrtier.flush();
-            wrtier.close();
+            FileWriter writer = new FileWriter(file);
+            writer.write(json);
+            writer.flush();
+            writer.close();
             return defaults;
         }
 
