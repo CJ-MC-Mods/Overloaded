@@ -568,7 +568,7 @@ public class ItemMultiTool extends ModItem {
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-        RenderUtil.renderGhostModel(Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(stack), state, player.getEntityWorld(), toRenderAt);
+        RenderUtil.renderGhostModel(stack, state, player.getEntityWorld(), toRenderAt);
         GlStateManager.popMatrix();
     }
 

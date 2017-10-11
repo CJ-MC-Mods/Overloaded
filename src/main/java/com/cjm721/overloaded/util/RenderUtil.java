@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class RenderUtil {
     @SideOnly(Side.CLIENT)
-    public static void renderModel(
+    private static void renderModel(
             final IBakedModel model,
             final IBlockState state,
             final World worldObj,
@@ -29,16 +30,17 @@ public class RenderUtil {
         final BufferBuilder worldRenderer = tessellator.getBuffer();
         worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
 
-        for (final EnumFacing enumfacing : EnumFacing.values()) {
-            renderQuads(alpha, worldRenderer, model.getQuads(null, enumfacing, 0), state, worldObj, blockPos);
-        }
-
-        renderQuads(alpha, worldRenderer, model.getQuads(null, null, 0), state, worldObj, blockPos);
-        tessellator.draw();
+        try {
+            for (final EnumFacing enumfacing : EnumFacing.values()) {
+                renderQuads(alpha, worldRenderer, model.getQuads(null, enumfacing, 0), state, worldObj, blockPos);
+            }
+            renderQuads(alpha, worldRenderer, model.getQuads(null, null, 0), state, worldObj, blockPos);
+            tessellator.draw();
+        } catch (UnsupportedOperationException ignored) { }
     }
 
     @SideOnly(Side.CLIENT)
-    public static void renderQuads(
+    private static void renderQuads(
             final int alpha,
             final BufferBuilder renderer,
             final List<BakedQuad> quads,
@@ -52,13 +54,24 @@ public class RenderUtil {
     }
 
     @SideOnly(Side.CLIENT)
-    public static int getTint(final int alpha, final int tintIndex, final IBlockState state, final World worldObj, final BlockPos blockPos) {
+    private static int getTint(final int alpha, final int tintIndex, final IBlockState state, final World worldObj, final BlockPos blockPos) {
         return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, blockPos, tintIndex);
     }
 
     @SideOnly(Side.CLIENT)
     public static void renderGhostModel(
-            final IBakedModel baked,
+            final ItemStack itemStack,
+            final IBlockState state,
+            final World worldObj,
+            final BlockPos blockPos) {
+        IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemStack);
+
+        renderGhostModel(model,state,worldObj,blockPos);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void renderGhostModel(
+            final IBakedModel model,
             final IBlockState state,
             final World worldObj,
             final BlockPos blockPos) {
@@ -71,10 +84,10 @@ public class RenderUtil {
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.colorMask(false, false, false, false);
 
-        renderModel(baked, state, worldObj, blockPos, alpha);
+        renderModel(model, state, worldObj, blockPos, alpha);
         GlStateManager.colorMask(true, true, true, true);
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
-        renderModel(baked, state, worldObj, blockPos, alpha);
+        renderModel(model, state, worldObj, blockPos, alpha);
 
         GlStateManager.disableBlend();
     }

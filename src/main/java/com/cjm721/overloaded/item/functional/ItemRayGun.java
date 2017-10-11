@@ -6,6 +6,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
@@ -46,14 +47,21 @@ public class ItemRayGun extends ModItem {
 
     @Override
     @Nonnull
-    @SideOnly(Side.CLIENT)
+    //@SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        if(!worldIn.isRemote)
-            return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+        if(worldIn.isRemote)
+            return super.onItemRightClick(worldIn,playerIn,handIn);
 
+        EntityLightningBolt Lightning = new EntityLightningBolt(worldIn, playerIn.posX+10, playerIn.posY, playerIn.posZ,false);
+        worldIn.spawnEntity(Lightning);
 
-        RayTraceResult ray = ProjectileHelper.forwardsRaycast(playerIn,true,true,null);
-        System.out.println(ray.entityHit);
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return new ActionResult<>(EnumActionResult.SUCCESS,playerIn.getHeldItem(handIn));
+//        if(!worldIn.isRemote)
+//            return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+//
+//
+//        RayTraceResult ray = ProjectileHelper.forwardsRaycast(playerIn,true,true,null);
+//        System.out.println(ray.entityHit);
+//        return super.onItemRightClick(worldIn, playerIn, handIn);
     }
 }
