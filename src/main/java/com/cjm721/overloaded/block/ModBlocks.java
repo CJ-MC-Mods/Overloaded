@@ -118,7 +118,7 @@ public final class ModBlocks {
     private static <T extends Block> T registerBlock(T block) {
         Overloaded.proxy.blocksToRegister.add(block);
 
-        if(block instanceof ModBlock) {
+        if (block instanceof ModBlock) {
             ((ModBlock) block).baseInit();
         }
 
@@ -132,8 +132,8 @@ public final class ModBlocks {
     public static void secondaryCompressedInit() {
         for (BlockCompressed block : compressedBlocks) {
             if (block.baseBlockInit() && block.isRecipeEnabled()) {
-                CraftingRegistry.addShapedRecipe(new ItemStack(Item.getItemFromBlock(block), 1, 0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1));
-                CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(), 9), new ItemStack(Item.getItemFromBlock(block), 1, 0));
+                CraftingRegistry.addShapedRecipe(new ItemStack(Item.getItemFromBlock(block), 1, 0), "XXX", "XXX", "XXX", 'X', new ItemStack(block.getBaseBlock(), 1, block.getBaseMeta()));
+                CraftingRegistry.addShapelessRecipe(new ItemStack(block.getBaseBlock(), 9, block.getBaseMeta()), new ItemStack(Item.getItemFromBlock(block), 1, 0));
 
                 for (int meta = 0; meta < block.getMaxCompression() - 1; meta++) {
                     CraftingRegistry.addShapedRecipe(new ItemStack(Item.getItemFromBlock(block), 1, meta + 1), "XXX", "XXX", "XXX", 'X', new ItemStack(Item.getItemFromBlock(block), 1, meta));
