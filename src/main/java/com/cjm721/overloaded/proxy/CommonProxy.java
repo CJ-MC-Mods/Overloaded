@@ -1,14 +1,12 @@
 package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.config.RayGunConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
 import com.cjm721.overloaded.network.handler.*;
-import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
-import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
-import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
-import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
+import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
@@ -25,7 +23,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -71,8 +68,9 @@ public class CommonProxy {
         networkWrapper = new SimpleNetworkWrapper("overloaded");
 
         int dis = 0;
-        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::leftClickOnBlockServer), MultiToolLeftClickMessage.class, dis++, Side.SERVER);
-        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::rightClickWithItem), MultiToolRightClickMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::leftClickOnBlockServer), LeftClickBlockMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::rightClickWithItem), RightClickBlockMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.rayGun::handleMessage), RayGunMessage.class, dis++, Side.SERVER);
 
         networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, dis++, Side.CLIENT);

@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 /**
  * Created by CJ on 4/15/2017.
  */
-public class MultiToolRightClickMessage implements IMessage {
+public class RightClickBlockMessage implements IMessage {
 
     private EnumFacing hitSide;
     private BlockPos pos;
@@ -16,10 +16,11 @@ public class MultiToolRightClickMessage implements IMessage {
     private float hitY;
     private float hitZ;
 
-    public MultiToolRightClickMessage() {
+    // Used by FML Reflection to create message
+    public RightClickBlockMessage() {
     }
 
-    public MultiToolRightClickMessage(BlockPos pos, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
+    public RightClickBlockMessage(BlockPos pos, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
         this.pos = pos;
         this.hitSide = hitSide;
         this.hitX = hitX;

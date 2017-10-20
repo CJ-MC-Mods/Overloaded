@@ -21,4 +21,6 @@ public class OverloadedConfig {
     public static PurifierConfig purifierConfig = new PurifierConfig();
     @Config.Name("Special Entires")
     public static SpecialConfig specialConfig = new SpecialConfig();
+    @Config.Name("Ray Gun")
+    public static RayGunConfig rayGun = new RayGunConfig();
 }

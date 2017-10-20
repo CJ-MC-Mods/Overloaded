@@ -5,8 +5,8 @@ import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
-import com.cjm721.overloaded.network.packets.MultiToolLeftClickMessage;
-import com.cjm721.overloaded.network.packets.MultiToolRightClickMessage;
+import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
+import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
@@ -73,10 +73,9 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class ItemMultiTool extends ModItem {
+public class ItemMultiTool extends PowerModItem {
 
     public ItemMultiTool() {
-        setMaxStackSize(1);
         setRegistryName("multi_tool");
         setUnlocalizedName("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
@@ -112,17 +111,11 @@ public class ItemMultiTool extends ModItem {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        IEnergyStorage handler = stack.getCapability(ENERGY, null);
-        tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
         tooltip.add("Assist Mode: " + getAssistMode().getName());
 
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
@@ -165,7 +158,7 @@ public class ItemMultiTool extends ModItem {
         if (worldIn.isRemote) {
             RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
             if (result != null) {
-                Overloaded.proxy.networkWrapper.sendToServer(new MultiToolRightClickMessage(result.getBlockPos(), result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
+                Overloaded.proxy.networkWrapper.sendToServer(new RightClickBlockMessage(result.getBlockPos(), result.sideHit, (float) result.hitVec.x - result.getBlockPos().getX(), (float) result.hitVec.y - result.getBlockPos().getY(), (float) result.hitVec.z - result.getBlockPos().getZ()));
             }
         }
         return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
@@ -322,14 +315,14 @@ public class ItemMultiTool extends ModItem {
 
     @SideOnly(Side.CLIENT)
     private void leftClickOnBlockClient(BlockPos pos, Vec3d hitVec) {
-        IMessage message = new MultiToolLeftClickMessage(pos);
+        IMessage message = new LeftClickBlockMessage(pos);
         Overloaded.proxy.networkWrapper.sendToServer(message);
 
 //        EntityPlayerSP player = Minecraft.getMinecraft().player;
 //        drawParticleStreamTo(player, hitVec, EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
     }
 
-    public void leftClickOnBlockServer(@Nonnull EntityPlayerMP player, MultiToolLeftClickMessage message) {
+    public void leftClickOnBlockServer(@Nonnull EntityPlayerMP player, LeftClickBlockMessage message) {
         BlockPos pos = message.getPos();
         WorldServer world = player.getServerWorld();
         ItemStack itemStack = player.getHeldItem(EnumHand.MAIN_HAND);
@@ -374,7 +367,7 @@ public class ItemMultiTool extends ModItem {
         }
     }
 
-    public void rightClickWithItem(@Nonnull EntityPlayerMP player, MultiToolRightClickMessage message) {
+    public void rightClickWithItem(@Nonnull EntityPlayerMP player, RightClickBlockMessage message) {
         BlockPos pos = message.getPos();
         EnumFacing sideHit = message.getHitSide();
         float hitX = message.getHitX();
@@ -470,12 +463,6 @@ public class ItemMultiTool extends ModItem {
         return new ItemStack(itemTag);
     }
 
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
-    }
-
     private static final Set<String> toolClasses = com.google.common.collect.ImmutableSet.of(
             "pickaxe",
             "shovel",
@@ -489,12 +476,6 @@ public class ItemMultiTool extends ModItem {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
-        return true;
-    }
-
-    @Override
-
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
     }
@@ -570,21 +551,6 @@ public class ItemMultiTool extends ModItem {
         GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
         RenderUtil.renderGhostModel(stack, state, player.getEntityWorld(), toRenderAt);
         GlStateManager.popMatrix();
-    }
-
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        IEnergyStorage storage = stack.getCapability(ENERGY, null);
-
-        if (storage != null)
-            return 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored();
-
-        return 1D;
-    }
-
-    @Override
-    public boolean getShareTag() {
-        return true;
     }
 
     @Override

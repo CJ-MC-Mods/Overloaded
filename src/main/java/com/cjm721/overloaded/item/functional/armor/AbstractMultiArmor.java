@@ -49,22 +49,17 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IEnergyStorage handler = stack.getCapability(ENERGY, null);
         tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
+
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @Override
-    public final boolean isDamageable() {
+    public boolean isDamageable() {
         return false;
     }
 
-    @Nullable
     @Override
-    public final ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
-    }
-
-    @Override
-    public boolean showDurabilityBar(ItemStack itemStack) {
+    public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
         return true;
     }
 
@@ -81,6 +76,12 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
     @Override
     public boolean getShareTag() {
         return true;
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+        return new IntEnergyWrapper(stack);
     }
 
     @Override

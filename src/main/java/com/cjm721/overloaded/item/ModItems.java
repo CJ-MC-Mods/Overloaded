@@ -27,7 +27,7 @@ public class ModItems {
 
     public static ItemEnergyShield energyShield;
     public static ItemAmountSelector amountSelector;
-    private static ItemRayGun rayGun;
+    public static ItemRayGun rayGun;
 
     public static ModItem energyCore;
     public static ModItem fluidCore;

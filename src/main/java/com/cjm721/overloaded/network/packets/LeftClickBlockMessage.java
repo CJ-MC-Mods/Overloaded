@@ -4,14 +4,14 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class MultiToolLeftClickMessage implements IMessage {
+public class LeftClickBlockMessage implements IMessage {
 
     private BlockPos pos;
 
-    public MultiToolLeftClickMessage() {
+    public LeftClickBlockMessage() {
     }
 
-    public MultiToolLeftClickMessage(BlockPos pos) {
+    public LeftClickBlockMessage(BlockPos pos) {
         this.pos = pos;
     }
 
