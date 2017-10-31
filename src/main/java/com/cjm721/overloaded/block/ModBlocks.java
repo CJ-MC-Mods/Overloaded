@@ -18,6 +18,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -82,6 +83,9 @@ public final class ModBlocks {
             pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
 //            itemManipulator = new BlockItemManipulator();
 //            energyInjectorChest = new BlockEnergyInjectorChest();
+            for(int i = 0; i < 10; i++) {
+                registerFull(new InDevBlock("in_dev_block_"+i));
+            }
         }
 
         try {

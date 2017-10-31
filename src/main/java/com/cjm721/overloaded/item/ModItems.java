@@ -4,6 +4,7 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.block.compressed.BlockCompressed;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.item.basic.InDevItem;
 import com.cjm721.overloaded.item.basic.ItemCompressedBlock;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
@@ -64,6 +65,9 @@ public class ModItems {
 //            amountSelector = registerItem(new ItemAmountSelector());
             rayGun = registerItem(new ItemRayGun());
             railgun = registerItem(new ItemRailGun());
+            for(int i = 0; i < 10; i++) {
+                registerItem(new InDevItem("in_dev_item_"+i));
+            }
         }
 
         compressedItemBlocks = new LinkedList<>();
