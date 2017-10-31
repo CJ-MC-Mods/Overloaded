@@ -11,6 +11,7 @@ import com.cjm721.overloaded.network.packets.RayGunMessage;
 import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,6 +35,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.util.List;
+
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.WorldUtil.rayTraceWithEntities;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
@@ -44,6 +47,13 @@ public class ItemRayGun extends PowerModItem {
         setRegistryName("ray_gun");
         setUnlocalizedName("ray_gun");
         setCreativeTab(OverloadedCreativeTabs.TECH);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add("§oThe Little Zapper");
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @SideOnly(Side.CLIENT)
