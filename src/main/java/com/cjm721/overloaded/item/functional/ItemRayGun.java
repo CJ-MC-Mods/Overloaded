@@ -53,8 +53,8 @@ public class ItemRayGun extends PowerModItem {
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
-                new ResourceLocation(MODID, "textures/items/zapper.png"),
-                new ResourceLocation(MODID, "textures/dynamic/items/zapper.png"),
+                new ResourceLocation(MODID, "textures/items/ray_gun.png"),
+                new ResourceLocation(MODID, "textures/dynamic/items/ray_gun.png"),
                 OverloadedConfig.textureResolutions.blockResolution));
     }
 
