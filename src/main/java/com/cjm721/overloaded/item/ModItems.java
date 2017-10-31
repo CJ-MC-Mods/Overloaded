@@ -28,6 +28,7 @@ public class ModItems {
     public static ItemEnergyShield energyShield;
     public static ItemAmountSelector amountSelector;
     public static ItemRayGun rayGun;
+    public static ItemRailGun railgun;
 
     public static ModItem energyCore;
     public static ModItem fluidCore;
@@ -62,6 +63,7 @@ public class ModItems {
 //            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
             rayGun = registerItem(new ItemRayGun());
+            railgun = registerItem(new ItemRailGun());
         }
 
         compressedItemBlocks = new LinkedList<>();
