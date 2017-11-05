@@ -1,11 +1,12 @@
 package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.config.RayGunConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
-import com.cjm721.overloaded.network.handler.*;
+import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
+import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
+import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
@@ -80,7 +81,6 @@ public class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-
     }
 
     @SubscribeEvent

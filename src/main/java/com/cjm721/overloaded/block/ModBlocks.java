@@ -78,7 +78,7 @@ public final class ModBlocks {
         itemInterface = registerFull(new BlockItemInterface());
 
         if (OverloadedConfig.developmentConfig.wipStuff) {
-//            fusionCore = new BlockFusionCore();
+            fusionCore = registerFull(new BlockFusionCore());
             matterPurifier = registerFull(new BlockMatterPurifier());
             pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
 //            itemManipulator = new BlockItemManipulator();

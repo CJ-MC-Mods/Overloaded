@@ -59,11 +59,11 @@ public class ModItems {
         customChestplate = registerItem(new ItemMultiChestplate());
         customLeggins = registerItem(new ItemMultiLeggings());
         customBoots = registerItem(new ItemMultiBoots());
+        rayGun = registerItem(new ItemRayGun());
 
         if (OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
-            rayGun = registerItem(new ItemRayGun());
             railgun = registerItem(new ItemRailGun());
             for(int i = 0; i < 10; i++) {
                 registerItem(new InDevItem("in_dev_item_"+i));

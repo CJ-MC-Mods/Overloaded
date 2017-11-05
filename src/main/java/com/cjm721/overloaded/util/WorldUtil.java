@@ -63,8 +63,8 @@ public class WorldUtil {
             }
 
             if (entity != null) {
-                return new RayTraceResult(entity,boundingBox.calculateIntercept(startingLocation,endingLocation).hitVec);
-                //return new RayTraceResult(entity, );
+                Vec3d hitVec = boundingBox.calculateIntercept(startingLocation,endingLocation).hitVec;
+                return new RayTraceResult(entity,hitVec == null ? new Vec3d(0.5,0.5,0.5) : hitVec);
             }
         }
         return raytraceresult;
