@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.client.render.entity;
 
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
@@ -9,11 +10,12 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.config.OverloadedConfig.textureResolutions;
 
 public class RenderMultiHelmet extends ModelBiped {
 
     public RenderMultiHelmet() {
-        super(0, 0, 1024, 1024);
+        super(0, 0, textureResolutions.multiArmorResolution, textureResolutions.multiArmorResolution);
 
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();

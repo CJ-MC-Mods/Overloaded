@@ -9,11 +9,12 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.config.OverloadedConfig.textureResolutions;
 
 public class RenderMultiBoots extends ModelBiped {
 
     public RenderMultiBoots() {
-        super(0, 0, 1024, 1024);
+        super(0, 0, textureResolutions.multiArmorResolution, textureResolutions.multiArmorResolution);
 
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
