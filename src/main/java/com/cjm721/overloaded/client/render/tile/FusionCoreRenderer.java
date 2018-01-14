@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.client.render.tile;
 
 
-import com.cjm721.overloaded.block.tile.TileFusionCore;
+import com.cjm721.overloaded.block.reactor.TileFusionCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;

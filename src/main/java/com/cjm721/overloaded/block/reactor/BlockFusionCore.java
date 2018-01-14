@@ -1,8 +1,6 @@
-package com.cjm721.overloaded.block.basic;
+package com.cjm721.overloaded.block.reactor;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.TileFusionCore;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
