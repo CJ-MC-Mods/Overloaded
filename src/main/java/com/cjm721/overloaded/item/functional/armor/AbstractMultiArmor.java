@@ -132,4 +132,9 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         return TextFormatting.GOLD + super.getItemStackDisplayName(stack);
     }
+
+    @Override
+    public boolean hasEffect(ItemStack stack) {
+        return false;
+    }
 }
