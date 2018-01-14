@@ -7,6 +7,8 @@ import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.SoundEvents;
@@ -39,6 +41,7 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
         super(pureMatter, render_index, equipmentSlot);
 
         setMaxDamage(-1);
+        setMaxStackSize(1);
 
         setCreativeTab(OverloadedCreativeTabs.TECH);
         ModItems.addToSecondaryInit(this);
@@ -51,6 +54,16 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
         tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
 
         super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public int getItemEnchantability(ItemStack stack) {
+        return 15;
+    }
+
+    @Override
+    public boolean isEnchantable(@Nonnull ItemStack stack) {
+        return this.getItemStackLimit(stack) == 1;
     }
 
     @Override
