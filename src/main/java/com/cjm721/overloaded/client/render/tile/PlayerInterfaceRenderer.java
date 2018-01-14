@@ -63,7 +63,7 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         long angle = (System.currentTimeMillis() / 10) % 360;
         GlStateManager.rotate(angle, 0, 1, 0);
 
-        Minecraft.getMinecraft().getRenderManager().doRenderEntity(player, 0, 0, 0, 0, 1, false);
+        Minecraft.getMinecraft().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
 
         GlStateManager.popMatrix();
     }
