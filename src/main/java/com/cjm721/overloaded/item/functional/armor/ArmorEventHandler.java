@@ -53,7 +53,7 @@ public class ArmorEventHandler {
 
         IOverloadedPlayerDataStorage dataStorage = getDataStorage(player);
 
-        if (isMultiArmorSetEquipped(player)) {
+        if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
             dataStorage.getBooleanMap().put(set, true);
 
             tryEnableFlight(player, dataStorage, event.side);
@@ -69,7 +69,6 @@ public class ArmorEventHandler {
                 disableFlight(player, dataStorage, event.side);
                 disableNoClip(player, dataStorage, event.side);
             }
-
         }
     }
 
@@ -153,8 +152,9 @@ public class ArmorEventHandler {
         }
         booleans.put(set, true);
 
-        if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient()))
+        if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient())) {
             disableFlight(player, dataStorage, side);
+        }
     }
 
     private void disableFlight(@Nonnull EntityPlayer player, @Nonnull IOverloadedPlayerDataStorage dataStorage, @Nonnull Side side) {
@@ -212,6 +212,14 @@ public class ArmorEventHandler {
         }
     }
 
+    private boolean hasEnergy(EntityPlayer player) {
+        for (ItemStack stack : player.inventory.armorInventory) {
+            if (stack.getCapability(ENERGY, null).getEnergyStored() > 0)
+                return true;
+        }
+
+        return false;
+    }
 
     private boolean extractEnergy(EntityPlayer player, int energyCost, boolean simulated) {
         final int orignalCost = energyCost;
