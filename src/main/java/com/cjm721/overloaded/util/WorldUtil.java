@@ -15,7 +15,7 @@ public class WorldUtil {
         Vec3d endingLocation = startingLocation.add(direction.scale(maxDistance));
         RayTraceResult raytraceresult = world.rayTraceBlocks(startingLocation, endingLocation, false, true, false);
 
-        if (raytraceresult != null) {
+        if (raytraceresult != null && raytraceresult.hitVec != null) {
             endingLocation = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
         }
 
@@ -44,15 +44,13 @@ public class WorldUtil {
 
             List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
             double smallestEntityDistance = 0.0D;
-            for (int k = 0; k < list.size(); ++k) {
-                Entity entity1 = list.get(k);
-
+            for (Entity entity1 : list) {
                 if (entity1.canBeCollidedWith() && (!entity1.isEntityEqual(excludedEntity)) && !entity1.noClip) {
                     AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
-                    RayTraceResult raytraceresult1 = axisalignedbb.calculateIntercept(startingLocation, endingLocation);
+                    RayTraceResult intercept = axisalignedbb.calculateIntercept(startingLocation, endingLocation);
 
-                    if (raytraceresult1 != null) {
-                        double currentEntityDistance = startingLocation.squareDistanceTo(raytraceresult1.hitVec);
+                    if (intercept != null && intercept.hitVec != null) {
+                        double currentEntityDistance = startingLocation.squareDistanceTo(intercept.hitVec);
 
                         if (currentEntityDistance < smallestEntityDistance || smallestEntityDistance == 0.0D) {
                             entity = entity1;
@@ -63,8 +61,12 @@ public class WorldUtil {
             }
 
             if (entity != null) {
-                Vec3d hitVec = boundingBox.calculateIntercept(startingLocation,endingLocation).hitVec;
-                return new RayTraceResult(entity,hitVec == null ? new Vec3d(0.5,0.5,0.5) : hitVec);
+                RayTraceResult intercept = boundingBox.calculateIntercept(startingLocation, endingLocation);
+
+                if(intercept != null) {
+                    Vec3d hitVec = intercept.hitVec;
+                    return new RayTraceResult(entity, hitVec == null ? new Vec3d(0.5, 0.5, 0.5) : hitVec);
+                }
             }
         }
         return raytraceresult;
