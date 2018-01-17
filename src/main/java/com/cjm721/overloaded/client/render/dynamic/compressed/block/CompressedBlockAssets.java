@@ -3,7 +3,6 @@ package com.cjm721.overloaded.client.render.dynamic.compressed.block;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -11,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class CompressedBlockAssets {
 
         BufferedImage image;
         try {
-            image = TextureUtil.readBufferedImage(ImageUtil.getTextureInputStream(new ResourceLocation(locations.baseTexture)));
+            image = ImageIO.read(ImageUtil.getTextureInputStream(new ResourceLocation(locations.baseTexture)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -84,7 +84,6 @@ public class CompressedBlockAssets {
 
         WritableRaster raster = image.getColorModel().createCompatibleWritableRaster(squareSize * scale, squareSize * scale);
 
-
         int[] pixels = image.getData().getPixels(0, 0, squareSize, squareSize, (int[]) null);
 
         for (int x = 0; x < scale; x++) {
@@ -92,7 +91,8 @@ public class CompressedBlockAssets {
                 raster.setPixels(x * squareSize, y * squareSize, squareSize, squareSize, pixels);
             }
         }
-        BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, true, null);
+
+        BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, false, null);
 
         if (compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
             compressedImage = ImageUtil.scaleDownToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
