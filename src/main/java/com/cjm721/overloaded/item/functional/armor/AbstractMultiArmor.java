@@ -2,13 +2,12 @@ package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.util.IModRegistrable;
-import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
+import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.SoundEvents;
@@ -27,13 +26,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public abstract class AbstractMultiArmor extends ItemArmor implements IModRegistrable, IMultiArmor {
-
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     public static ArmorMaterial pureMatter = EnumHelper.addArmorMaterial("pureMatter", "overloaded:na", 100, new int[]{6, 12, 16, 6}, 50, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 4);
 
@@ -94,7 +94,13 @@ public abstract class AbstractMultiArmor extends ItemArmor implements IModRegist
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
+        return new CapabilityContainer().addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
+    }
+
+    public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
+        collection.add(new IntEnergyWrapper(stack));
+
+        return collection;
     }
 
     @Override

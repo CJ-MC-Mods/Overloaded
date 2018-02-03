@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.item.ModItem;
-import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
+import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
