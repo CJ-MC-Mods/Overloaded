@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
-import com.cjm721.overloaded.item.functional.armor.MultiArmorCapabilityProvider;
+import com.cjm721.overloaded.storage.GenericDataStorage;
+import com.cjm721.overloaded.network.OverloadedGuiHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -50,7 +53,7 @@ public class CommonProxy {
         CapabilityHyperItem.register();
         CapabilityHyperEnergy.register();
         CapabilityHyperFluid.register();
-        MultiArmorCapabilityProvider.register();
+        GenericDataStorage.register();
     }
 
     private void createFluids() {
@@ -72,12 +75,15 @@ public class CommonProxy {
         networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::leftClickOnBlockServer), LeftClickBlockMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::rightClickWithItem), RightClickBlockMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.rayGun::handleMessage), RayGunMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.customHelmet::updateSettings), MultiArmorSettingsMessage.class, dis++, Side.SERVER);
 
         networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, dis++, Side.CLIENT);
 
         MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
     }
 
     public void postInit(FMLPostInitializationEvent event) {
