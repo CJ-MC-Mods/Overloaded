@@ -27,6 +27,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -124,7 +125,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider 
             if (toSpawn.isEmpty())
                 return true;
 
-            worldIn.spawnEntity(new EntityItem(worldIn, playerIn.posX, playerIn.posY, playerIn.posZ, toSpawn));
+            ItemHandlerHelper.giveItemToPlayer(playerIn,toSpawn,playerIn.inventory.currentItem);
         }
 
         return true;

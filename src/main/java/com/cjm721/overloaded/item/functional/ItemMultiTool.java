@@ -4,14 +4,12 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import com.cjm721.overloaded.util.RenderUtil;
-import com.cjm721.overloaded.util.itemwrapper.IntEnergyWrapper;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -25,7 +23,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -50,7 +47,6 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -62,10 +58,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.Set;
 
@@ -306,8 +302,7 @@ public class ItemMultiTool extends PowerModItem {
         float chance = event.getDropChance();
         for (ItemStack stack : event.getDrops()) {
             if (world.rand.nextFloat() <= chance) {
-                EntityItem toSpawn = new EntityItem(world, player.posX, player.posY, player.posZ, stack);
-                world.spawnEntity(toSpawn);
+                ItemHandlerHelper.giveItemToPlayer(player,stack);
             }
         }
         event.getDrops().clear();
