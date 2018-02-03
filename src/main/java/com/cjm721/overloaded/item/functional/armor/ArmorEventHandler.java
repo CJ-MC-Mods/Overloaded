@@ -4,6 +4,9 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
+import com.cjm721.overloaded.storage.GenericDataStorage;
+import com.cjm721.overloaded.storage.IGenericDataStorage;
+import com.cjm721.overloaded.storage.MultiArmorCapabilityProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +41,7 @@ public class ArmorEventHandler {
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) {
-            event.addCapability(new ResourceLocation(MODID, "playerData"), new MultiArmorCapabilityProvider(((EntityPlayer) event.getObject())));
+            event.addCapability(new ResourceLocation(MODID, "playerData"), new MultiArmorCapabilityProvider());
         }
     }
 
@@ -51,7 +54,7 @@ public class ArmorEventHandler {
         if (player == null)
             return;
 
-        IOverloadedPlayerDataStorage dataStorage = getDataStorage(player);
+        IGenericDataStorage dataStorage = getDataStorage(player);
 
         if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
             dataStorage.getBooleanMap().put(set, true);
@@ -72,12 +75,12 @@ public class ArmorEventHandler {
         }
     }
 
-    private void disableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
+    private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, Side side) {
         player.noClip = false;
         dataStorage.getBooleanMap().put(noClip, false);
     }
 
-    private void tryEnableNoClip(EntityPlayer player, IOverloadedPlayerDataStorage dataStorage, Side side) {
+    private void tryEnableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, Side side) {
         final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
         if (booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
             if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
@@ -144,7 +147,7 @@ public class ArmorEventHandler {
         }
     }
 
-    private void tryEnableFlight(@Nonnull EntityPlayer player, @Nonnull IOverloadedPlayerDataStorage dataStorage, @Nonnull Side side) {
+    private void tryEnableFlight(@Nonnull EntityPlayer player, @Nonnull IGenericDataStorage dataStorage, @Nonnull Side side) {
         final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
         player.capabilities.allowFlying = true;
         if (side.isClient()) {
@@ -157,7 +160,7 @@ public class ArmorEventHandler {
         }
     }
 
-    private void disableFlight(@Nonnull EntityPlayer player, @Nonnull IOverloadedPlayerDataStorage dataStorage, @Nonnull Side side) {
+    private void disableFlight(@Nonnull EntityPlayer player, @Nonnull IGenericDataStorage dataStorage, @Nonnull Side side) {
         player.capabilities.allowFlying = false;
         player.capabilities.isFlying = false;
         if (side.isClient()) {
@@ -247,8 +250,8 @@ public class ArmorEventHandler {
     }
 
     @Nonnull
-    private static IOverloadedPlayerDataStorage getDataStorage(EntityPlayer player) {
-        return player.getCapability(MultiArmorCapabilityProvider.PLAYER_DATA_STORAGE, null);
+    private static IGenericDataStorage getDataStorage(EntityPlayer player) {
+        return player.getCapability(GenericDataStorage.GENERIC_DATA_STORAGE, null);
     }
 
     private boolean isMultiArmorSetEquipped(EntityPlayer player) {
@@ -271,7 +274,7 @@ public class ArmorEventHandler {
     }
 
     public static boolean toggleNoClip(EntityPlayerMP player) {
-        IOverloadedPlayerDataStorage storage = getDataStorage(player);
+        IGenericDataStorage storage = getDataStorage(player);
 
         final Map<String, Boolean> booleans = storage.getBooleanMap();
         if (booleans.containsKey(noClip) && booleans.get(noClip)) {
@@ -284,7 +287,7 @@ public class ArmorEventHandler {
     }
 
     public static void setNoClip(EntityPlayer player, boolean enabled) {
-        IOverloadedPlayerDataStorage storage = getDataStorage(player);
+        IGenericDataStorage storage = getDataStorage(player);
 
         final Map<String, Boolean> booleans = storage.getBooleanMap();
         booleans.put(noClip, enabled);
