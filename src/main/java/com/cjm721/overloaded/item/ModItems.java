@@ -43,6 +43,8 @@ public class ModItems {
 
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
+    private static ItemSettingEditor settingsEditor;
+
     public static void addToSecondaryInit(IModRegistrable item) {
         registerList.add(item);
     }
@@ -68,6 +70,8 @@ public class ModItems {
             for(int i = 0; i < 10; i++) {
                 registerItem(new InDevItem("in_dev_item_"+i));
             }
+
+            settingsEditor = registerItem(new ItemSettingEditor());
         }
 
         compressedItemBlocks = new LinkedList<>();
