@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -105,14 +106,9 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
             if (te instanceof TilePlayerInterface) {
                 UUID placer = ((TilePlayerInterface) te).getPlacer();
+                String username = UsernameCache.getLastKnownUsername(placer);
 
-                GameProfile profile = worldIn.getMinecraftServer().getPlayerProfileCache().getProfileByUUID(placer);
-
-                if (profile == null) {
-                    playerIn.sendMessage(new TextComponentString(String.format("Bound to offline player: %s", placer.toString())));
-                } else {
-                    playerIn.sendMessage(new TextComponentString("Bound to player: " + profile.getName()));
-                }
+                playerIn.sendMessage(new TextComponentString("Bound to player: " + username == null ? placer.toString() : username));
             }
         }
 
