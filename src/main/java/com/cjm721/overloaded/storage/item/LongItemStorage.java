@@ -7,10 +7,10 @@ import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.util.ItemUtil.itemsAreEqual;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 
 public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertible {
@@ -165,7 +165,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
             return LongItemStack.EMPTY_STACK;
         }
 
-        if (itemsAreEqual(longItemStack.getItemStack(), stack.getItemStack())) {
+        if (ItemHandlerHelper.canItemStacksStack(longItemStack.getItemStack(), stack.getItemStack())) {
             NumberUtil.AddReturn<Long> result = addToMax(longItemStack.getAmount(), stack.getAmount());
             if (doAction) {
                 longItemStack.setAmount(result.result);
