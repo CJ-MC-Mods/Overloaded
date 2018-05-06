@@ -12,7 +12,10 @@ public interface IGenericDataStorage {
     Map<String, Boolean> getBooleanMap();
 
     @Nonnull
-    Map<String,Double> getDoubleMap();
+    Map<String, Double> getDoubleMap();
+
+    @Nonnull
+    Map<String, Float> getFloatMap();
 
     default void suggestUpdate() {}
 

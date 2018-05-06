@@ -34,6 +34,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.*;
+import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class ArmorEventHandler {
@@ -54,23 +56,26 @@ public class ArmorEventHandler {
         if (player == null)
             return;
 
-        IGenericDataStorage dataStorage = getDataStorage(player);
+        IGenericDataStorage playerDataStorage = getPlayerDataStorage(player);
 
         if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
-            dataStorage.getBooleanMap().put(set, true);
+            IGenericDataStorage armorDataStorage = getHelmetDataStorage(player);
 
-            tryEnableFlight(player, dataStorage, event.side);
+
+            playerDataStorage.getBooleanMap().put(set, true);
+
+            tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
             tryFeedPlayer(player, event.side);
             tryHealPlayer(player, event.side);
             tryRemoveHarmful(player, event.side);
             tryExtinguish(player, event.side);
             tryGiveAir(player, event.side);
         } else {
-            Map<String, Boolean> boolMap = dataStorage.getBooleanMap();
+            Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
-                disableFlight(player, dataStorage, event.side);
-                disableNoClip(player, dataStorage, event.side);
+                disableFlight(player, playerDataStorage, event.side);
+                disableNoClip(player, playerDataStorage, event.side);
             }
         }
     }
@@ -80,11 +85,17 @@ public class ArmorEventHandler {
         dataStorage.getBooleanMap().put(noClip, false);
     }
 
-    private void tryEnableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, Side side) {
-        final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
-        if (booleans.containsKey(set) && booleans.get(set) && booleans.containsKey(noClip) && booleans.get(noClip)) {
+    private void tryEnableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, IGenericDataStorage helmetDataStorage, Side side) {
+        final Map<String, Boolean> playerBooleans = dataStorage.getBooleanMap();
+        final Map<String, Boolean> armorBooleans = helmetDataStorage.getBooleanMap();
+
+        if (playerBooleans.containsKey(set) && playerBooleans.get(set) && playerBooleans.containsKey(noClip) && playerBooleans.get(noClip)) {
             if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
                 player.noClip = true;
+                if(armorBooleans.getOrDefault(NOCLIP_FLIGHT_LOCK, DEFAULT_NOCLIP_FLIGHT_LOCK)) {
+                    tryEnableFlight(player, dataStorage, helmetDataStorage, side);
+                    player.capabilities.isFlying = true;
+                }
             } else {
                 setNoClip(player, false);
             }
@@ -147,12 +158,15 @@ public class ArmorEventHandler {
         }
     }
 
-    private void tryEnableFlight(@Nonnull EntityPlayer player, @Nonnull IGenericDataStorage dataStorage, @Nonnull Side side) {
+    private void tryEnableFlight(@Nonnull EntityPlayer player, @Nonnull IGenericDataStorage dataStorage, IGenericDataStorage armorDataStorage, @Nonnull Side side) {
         final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
+        final Map<String, Float> armorFloats = armorDataStorage.getFloatMap();
+
         player.capabilities.allowFlying = true;
         if (side.isClient()) {
-            player.capabilities.setFlySpeed(0.1F);
+            player.capabilities.setFlySpeed(armorFloats.getOrDefault(FLIGHT_SPEED,DEFAULT_ARMOR_FLIGHT_SPEED));
         }
+        player.capabilities.setPlayerWalkSpeed(armorFloats.getOrDefault(GROUND_SPEED, DEFAULT_ARMOR_GROUND_SPEED));
         booleans.put(set, true);
 
         if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient())) {
@@ -166,6 +180,7 @@ public class ArmorEventHandler {
         if (side.isClient()) {
             player.capabilities.setFlySpeed(0.05F);
         }
+        player.capabilities.setPlayerWalkSpeed(0.1F);
     }
 
 
@@ -211,12 +226,12 @@ public class ArmorEventHandler {
 
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = ((EntityPlayer) entity);
-            tryEnableNoClip(player, getDataStorage(player), Side.SERVER);
+            tryEnableNoClip(player, getPlayerDataStorage(player), getHelmetDataStorage(player), Side.SERVER);
         }
     }
 
     private boolean hasEnergy(EntityPlayer player) {
-        for (ItemStack stack : player.inventory.armorInventory) {
+        for (ItemStack stack : player.getArmorInventoryList()) {
             if (stack.getCapability(ENERGY, null).getEnergyStored() > 0)
                 return true;
         }
@@ -226,7 +241,7 @@ public class ArmorEventHandler {
 
     private boolean extractEnergy(EntityPlayer player, int energyCost, boolean simulated) {
         final int orignalCost = energyCost;
-        for (ItemStack stack : player.inventory.armorInventory) {
+        for (ItemStack stack : player.getArmorInventoryList()) {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY, null);
 
             if (energyStorage != null)
@@ -237,7 +252,7 @@ public class ArmorEventHandler {
             }
         }
 
-        for (ItemStack stack : player.inventory.armorInventory) {
+        for (ItemStack stack : player.getArmorInventoryList()) {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY, null);
 
             if (energyStorage != null)
@@ -250,8 +265,20 @@ public class ArmorEventHandler {
     }
 
     @Nonnull
-    private static IGenericDataStorage getDataStorage(EntityPlayer player) {
-        return player.getCapability(GenericDataStorage.GENERIC_DATA_STORAGE, null);
+    private static IGenericDataStorage getPlayerDataStorage(EntityPlayer player) {
+        return player.getCapability(GENERIC_DATA_STORAGE, null);
+    }
+
+    @Nonnull
+    private static IGenericDataStorage getHelmetDataStorage(EntityPlayer player) {
+        for (ItemStack stack : player.inventory.armorInventory) {
+            if (stack.getItem() instanceof ItemMultiHelmet) {
+                IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE, null);
+                cap.suggestUpdate();
+                return cap;
+            }
+        }
+        return new GenericDataStorage();
     }
 
     private boolean isMultiArmorSetEquipped(EntityPlayer player) {
@@ -274,7 +301,7 @@ public class ArmorEventHandler {
     }
 
     public static boolean toggleNoClip(EntityPlayerMP player) {
-        IGenericDataStorage storage = getDataStorage(player);
+        IGenericDataStorage storage = getPlayerDataStorage(player);
 
         final Map<String, Boolean> booleans = storage.getBooleanMap();
         if (booleans.containsKey(noClip) && booleans.get(noClip)) {
@@ -287,7 +314,7 @@ public class ArmorEventHandler {
     }
 
     public static void setNoClip(EntityPlayer player, boolean enabled) {
-        IGenericDataStorage storage = getDataStorage(player);
+        IGenericDataStorage storage = getPlayerDataStorage(player);
 
         final Map<String, Boolean> booleans = storage.getBooleanMap();
         booleans.put(noClip, enabled);

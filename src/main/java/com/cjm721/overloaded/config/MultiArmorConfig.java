@@ -33,4 +33,8 @@ public class MultiArmorConfig {
     public int costPerAir = 10;
     @Config.Comment("Energy Per Tick to use No Clip")
     public int noClipEnergyPerTick = 100000;
+    @Config.Comment("Max flight speed. [Default: 5]")
+    public float maxFlightSpeed = 5.0f;
+    @Config.Comment("Max ground speed. [Default: 10]")
+    public float maxGroundSpeed = 10.0f;
 }

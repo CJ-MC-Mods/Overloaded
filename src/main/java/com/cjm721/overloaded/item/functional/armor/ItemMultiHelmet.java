@@ -4,7 +4,9 @@ import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGene
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
-import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
+import com.cjm721.overloaded.storage.IGenericDataStorage;
+import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
+import com.google.common.primitives.Floats;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -22,10 +24,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
+import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.*;
 import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
 
 public class ItemMultiHelmet extends AbstractMultiArmor {
@@ -63,21 +66,30 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     }
 
     public void updateSettings(EntityPlayerMP entityPlayerMP, MultiArmorSettingsMessage message) {
-        for(ItemStack itemStack: entityPlayerMP.getArmorInventoryList()) {
-            if(itemStack.getItem() == this) {
-                updateSettings(itemStack,message);
+        for (ItemStack itemStack : entityPlayerMP.getArmorInventoryList()) {
+            if (itemStack.getItem() == this) {
+                updateSettings(itemStack, message);
             }
         }
     }
 
     @Override
     public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
-        collection.add(new GenericDataCapabilityProvider());
+        collection.add(new GenericDataCapabilityProviderWrapper(stack));
         return super.collectCapabilities(collection, stack, nbt);
     }
 
     private void updateSettings(ItemStack itemStack, MultiArmorSettingsMessage message) {
-        itemStack.getCapability(GENERIC_DATA_STORAGE,null);
-        System.out.println("Update Settings");
+        IGenericDataStorage settings = itemStack.getCapability(GENERIC_DATA_STORAGE, null);
+        settings.suggestUpdate();
+
+        Map<String, Float> floats = settings.getFloatMap();
+        floats.put(FLIGHT_SPEED, Floats.constrainToRange(message.flightSpeed, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed));
+        floats.put(GROUND_SPEED, Floats.constrainToRange(message.groundSpeed, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed));
+
+        Map<String, Boolean> booleans = settings.getBooleanMap();
+        booleans.put(NOCLIP_FLIGHT_LOCK, message.noclipFlightLock);
+
+        settings.suggestSave();
     }
 }

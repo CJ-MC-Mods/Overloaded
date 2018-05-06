@@ -20,11 +20,13 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
     private final Map<String, Integer> integerMap;
     private final Map<String, Boolean> booleanMap;
     private final Map<String, Double> doubleMap;
+    private final Map<String, Float> floatMap;
 
     public GenericDataStorage() {
         integerMap = Maps.newHashMap();
         booleanMap = Maps.newHashMap();
         doubleMap = Maps.newHashMap();
+        floatMap = Maps.newHashMap();
     }
 
     public static void register() {
@@ -52,6 +54,12 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
         return doubleMap;
     }
 
+    @Nonnull
+    @Override
+    public Map<String, Float> getFloatMap() {
+        return floatMap;
+    }
+
     @Override
     public NBTTagCompound serializeNBT() {
         return writeNBT(GENERIC_DATA_STORAGE, this, null);
@@ -68,6 +76,7 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
         NBTTagCompound tagCompound = new NBTTagCompound();
         Map<String, Integer> integers = instance.getIntegerMap();
         Map<String, Boolean> booleans = instance.getBooleanMap();
+        Map<String, Float> floats = instance.getFloatMap();
         Map<String, Double> doubles = instance.getDoubleMap();
 
         for (String key : integers.keySet()) {
@@ -76,6 +85,10 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
 
         for (String key : booleans.keySet()) {
             tagCompound.setBoolean(key, booleans.get(key));
+        }
+
+        for (String key : floats.keySet()) {
+            tagCompound.setFloat(key, floats.get(key));
         }
 
         for (String key : doubles.keySet()) {
@@ -93,6 +106,7 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
         NBTTagCompound tagCompound = ((NBTTagCompound) nbt);
         Map<String, Integer> integers = instance.getIntegerMap();
         Map<String, Boolean> booleans = instance.getBooleanMap();
+        Map<String, Float> floats = instance.getFloatMap();
         Map<String, Double> doubles = instance.getDoubleMap();
 
         for (String key : tagCompound.getKeySet()) {
@@ -102,6 +116,9 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
                     break;
                 case Constants.NBT.TAG_BYTE:
                     booleans.put(key, tagCompound.getBoolean(key));
+                    break;
+                case Constants.NBT.TAG_FLOAT:
+                    floats.put(key,tagCompound.getFloat(key));
                     break;
                 case Constants.NBT.TAG_DOUBLE:
                     doubles.put(key, tagCompound.getDouble(key));

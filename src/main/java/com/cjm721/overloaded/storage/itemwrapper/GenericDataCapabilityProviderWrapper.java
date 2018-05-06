@@ -13,7 +13,7 @@ public class GenericDataCapabilityProviderWrapper extends GenericDataCapabilityP
 
     private final ItemStack stack;
 
-    public GenericDataCapabilityProviderWrapper(ItemStack stack, @Nullable NBTTagCompound baseNBT) {
+    public GenericDataCapabilityProviderWrapper(ItemStack stack) {
         this.stack = stack;
 
         NBTTagCompound itemNBT = this.stack.getTagCompound();

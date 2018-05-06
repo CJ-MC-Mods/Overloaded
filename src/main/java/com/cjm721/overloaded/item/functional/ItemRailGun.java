@@ -8,6 +8,7 @@ import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
+import com.google.common.primitives.Ints;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -134,7 +135,7 @@ public class ItemRailGun extends PowerModItem {
 
     @Override
     public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
-        collection.add(new GenericDataCapabilityProviderWrapper(stack, nbt));
+        collection.add(new GenericDataCapabilityProviderWrapper(stack));
 
         return super.collectCapabilities(collection, stack, nbt);
     }
@@ -149,7 +150,7 @@ public class ItemRailGun extends PowerModItem {
         Map<String, Integer> integerMap = cap.getIntegerMap();
 
         int power = integerMap.getOrDefault(RAILGUN_POWER_KEY, 0) + message.powerDelta;
-        power = Math.max(Math.min(power, OverloadedConfig.railGun.maxEnergy), OverloadedConfig.railGun.minEngery);
+        power = Ints.constrainToRange(power, OverloadedConfig.railGun.minEngery, OverloadedConfig.railGun.maxEnergy);
 
         integerMap.put(RAILGUN_POWER_KEY, power);
         cap.suggestSave();

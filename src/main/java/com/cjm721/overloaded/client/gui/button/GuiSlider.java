@@ -24,7 +24,7 @@ public class GuiSlider extends GuiButton {
         this.maxValue = maxValue;
         this.sliderValue = currentValue;
         this.baseText = baseText;
-        this.displayString = baseText + sliderValue;
+        resetDisplayString();
     }
 
     @Override
