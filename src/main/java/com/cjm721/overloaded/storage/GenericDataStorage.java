@@ -1,12 +1,12 @@
 package com.cjm721.overloaded.storage;
 
 import com.google.common.collect.Maps;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
 import javax.annotation.Nonnull;
@@ -54,12 +54,12 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
 
     @Override
     public NBTTagCompound serializeNBT() {
-        return writeNBT(null, this, null);
+        return writeNBT(GENERIC_DATA_STORAGE, this, null);
     }
 
     @Override
     public void deserializeNBT(NBTTagCompound tagCompound) {
-        readNBT(null, this, null, tagCompound);
+        readNBT(GENERIC_DATA_STORAGE, this, null, tagCompound);
     }
 
     @Nullable
@@ -96,15 +96,17 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
         Map<String, Double> doubles = instance.getDoubleMap();
 
         for (String key : tagCompound.getKeySet()) {
-            integers.put(key, tagCompound.getInteger(key));
-        }
-
-        for (String key : tagCompound.getKeySet()) {
-            booleans.put(key, tagCompound.getBoolean(key));
-        }
-
-        for (String key : tagCompound.getKeySet()) {
-            doubles.put(key, tagCompound.getDouble(key));
+            switch(tagCompound.getTagId(key)) {
+                case Constants.NBT.TAG_INT:
+                    integers.put(key, tagCompound.getInteger(key));
+                    break;
+                case Constants.NBT.TAG_BYTE:
+                    booleans.put(key, tagCompound.getBoolean(key));
+                    break;
+                case Constants.NBT.TAG_DOUBLE:
+                    doubles.put(key, tagCompound.getDouble(key));
+                    break;
+            }
         }
     }
 }
