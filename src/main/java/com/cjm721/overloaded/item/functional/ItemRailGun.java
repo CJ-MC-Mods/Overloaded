@@ -12,6 +12,7 @@ import com.google.common.primitives.Ints;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,7 +35,9 @@ import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.text.NumberFormat;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -51,6 +54,20 @@ public class ItemRailGun extends PowerModItem {
         setRegistryName("railgun");
         setUnlocalizedName("railgun");
         setCreativeTab(OverloadedCreativeTabs.TECH);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE, null);
+
+        if(cap != null) {
+            cap.suggestUpdate();
+            int energyRequirement = cap.getIntegerMap().getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.railGun.minEngery);
+            tooltip.add(String.format("Power Usage: %s", NumberFormat.getInstance().format(energyRequirement)));
+        }
+
+        super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
     @SideOnly(Side.CLIENT)
@@ -155,6 +172,6 @@ public class ItemRailGun extends PowerModItem {
         integerMap.put(RAILGUN_POWER_KEY, power);
         cap.suggestSave();
 
-        player.sendStatusMessage(new TextComponentString("Power usage set to: " + power), true);
+        player.sendStatusMessage(new TextComponentString("Power usage set to: " +  NumberFormat.getInstance().format(power)), true);
     }
 }
