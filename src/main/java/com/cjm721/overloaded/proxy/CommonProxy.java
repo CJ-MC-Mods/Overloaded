@@ -72,15 +72,18 @@ public class CommonProxy {
         networkWrapper = new SimpleNetworkWrapper("overloaded");
 
         int dis = 0;
-        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::leftClickOnBlockServer), LeftClickBlockMessage.class, dis++, Side.SERVER);
-        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.itemMultiTool::rightClickWithItem), RightClickBlockMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.multiTool::leftClickOnBlockServer), LeftClickBlockMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.multiTool::rightClickWithItem), RightClickBlockMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.rayGun::handleMessage), RayGunMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.customHelmet::updateSettings), MultiArmorSettingsMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.railgun::handleFireMessage), RailGunFireMessage.class, dis++, Side.SERVER);
+        networkWrapper.registerMessage(new PlayerMessageHandler<>(ModItems.railgun::handleSettingsMessage), RailGunSettingsMessage.class, dis++, Side.SERVER);
 
         networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, dis++, Side.CLIENT);
 
-        MinecraftForge.EVENT_BUS.register(ModItems.itemMultiTool);
+        MinecraftForge.EVENT_BUS.register(ModItems.multiTool);
+        MinecraftForge.EVENT_BUS.register(ModItems.railgun);
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());

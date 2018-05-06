@@ -7,9 +7,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MultiArmorCapabilityProvider extends GenericDataStorage implements ICapabilityProvider {
+public class GenericDataCapabilityProvider extends GenericDataStorage implements ICapabilityProvider {
 
-    public MultiArmorCapabilityProvider() { }
+    public GenericDataCapabilityProvider() { }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing enumFacing) {

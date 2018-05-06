@@ -6,7 +6,7 @@ import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
-import com.cjm721.overloaded.storage.MultiArmorCapabilityProvider;
+import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,7 +41,7 @@ public class ArmorEventHandler {
     @SubscribeEvent
     public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) {
-            event.addCapability(new ResourceLocation(MODID, "playerData"), new MultiArmorCapabilityProvider());
+            event.addCapability(new ResourceLocation(MODID, "playerData"), new GenericDataCapabilityProvider());
         }
     }
 

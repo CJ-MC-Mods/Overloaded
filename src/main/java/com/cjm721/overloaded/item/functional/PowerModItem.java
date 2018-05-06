@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.item.ModItem;
+import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -11,8 +12,11 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
@@ -60,7 +64,12 @@ public abstract class PowerModItem extends ModItem {
     @Nullable
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new IntEnergyWrapper(stack);
+        return new CapabilityContainer().addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
     }
 
+    public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
+        collection.add(new IntEnergyWrapper(stack));
+
+        return collection;
+    }
 }

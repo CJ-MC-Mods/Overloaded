@@ -48,10 +48,9 @@ public class ClientProxy extends CommonProxy {
 
         if(OverloadedConfig.specialConfig.noClipRenderFix)
             Minecraft.getMinecraft().renderGlobal = new RenderGlobalSpectator(Minecraft.getMinecraft());
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.itemMultiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
+        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.multiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
 
         noClipKeybind = new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V, "overloaded.cat.key.multiarmor");
-
         ClientRegistry.registerKeyBinding(noClipKeybind);
     }
 

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ModItems {
     public static ModItem linkingCard;
-    public static ItemMultiTool itemMultiTool;
+    public static ItemMultiTool multiTool;
 
     public static ItemEnergyShield energyShield;
     public static ItemAmountSelector amountSelector;
@@ -51,7 +51,7 @@ public class ModItems {
 
     public static void init() {
         linkingCard = registerItem(new ItemLinkingCard());
-        itemMultiTool = registerItem(new ItemMultiTool());
+        multiTool = registerItem(new ItemMultiTool());
 
         energyCore = registerItem(new ItemEnergyCore());
         fluidCore = registerItem(new ItemFluidCore());
@@ -62,11 +62,11 @@ public class ModItems {
         customLeggins = registerItem(new ItemMultiLeggings());
         customBoots = registerItem(new ItemMultiBoots());
         rayGun = registerItem(new ItemRayGun());
+        railgun = registerItem(new ItemRailGun());
 
         if (OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
-            railgun = registerItem(new ItemRailGun());
             for(int i = 0; i < 10; i++) {
                 registerItem(new InDevItem("in_dev_item_"+i));
             }

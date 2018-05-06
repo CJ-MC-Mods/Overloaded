@@ -23,4 +23,6 @@ public class OverloadedConfig {
     public static SpecialConfig specialConfig = new SpecialConfig();
     @Config.Name("Ray Gun")
     public static RayGunConfig rayGun = new RayGunConfig();
+    @Config.Name("Rail Gun")
+    public static RailGunConfig railGun = new RailGunConfig();
 }

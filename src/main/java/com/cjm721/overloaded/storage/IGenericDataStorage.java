@@ -13,4 +13,6 @@ public interface IGenericDataStorage {
 
     @Nonnull
     Map<String,Double> getDoubleMap();
+
+    default void suggestSave() { }
 }

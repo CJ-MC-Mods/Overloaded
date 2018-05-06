@@ -30,7 +30,7 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
     public static void register() {
         CapabilityManager.INSTANCE.register(IGenericDataStorage.class,
                 new GenericDataStorage(),
-                GenericDataStorage.class
+                GenericDataStorage::new
         );
     }
 

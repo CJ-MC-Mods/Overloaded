@@ -25,14 +25,6 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
         NBTTagCompound tagCompound = this.stack.getTagCompound();
         if (tagCompound == null) {
             tagCompound = new NBTTagCompound();
-        }
-
-        if (!tagCompound.hasKey("IntEnergyStorage")) {
-            LongEnergyStorage storage = new LongEnergyStorage(this);
-            NBTTagCompound storageTag = storage.serializeNBT();
-
-
-            tagCompound.setTag("IntEnergyStorage", storageTag);
             this.stack.setTagCompound(tagCompound);
         }
     }

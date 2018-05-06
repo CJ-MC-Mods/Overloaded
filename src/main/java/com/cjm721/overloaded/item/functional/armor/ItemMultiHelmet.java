@@ -4,6 +4,7 @@ import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGene
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
+import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -71,6 +72,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 
     @Override
     public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
+        collection.add(new GenericDataCapabilityProvider());
         return super.collectCapabilities(collection, stack, nbt);
     }
 
