@@ -87,7 +87,7 @@ public class ItemRailGun extends PowerModItem {
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void onMouseEvent(MouseEvent event) {
+    public void onMouseEvent(@Nonnull MouseEvent event) {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
             ItemStack stack = player.getHeldItemMainhand();
@@ -103,7 +103,7 @@ public class ItemRailGun extends PowerModItem {
         }
     }
 
-    public void handleFireMessage(EntityPlayerMP player, RailGunFireMessage message) {
+    public void handleFireMessage(@Nonnull EntityPlayerMP player, @Nonnull RailGunFireMessage message) {
         ItemStack itemStack = player.getHeldItem(message.hand);
         if (itemStack.getItem() != this) {
             return;

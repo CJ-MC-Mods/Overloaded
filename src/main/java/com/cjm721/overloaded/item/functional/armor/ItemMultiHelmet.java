@@ -84,11 +84,17 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
         settings.suggestUpdate();
 
         Map<String, Float> floats = settings.getFloatMap();
-        floats.put(FLIGHT_SPEED, Floats.constrainToRange(message.flightSpeed, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed));
-        floats.put(GROUND_SPEED, Floats.constrainToRange(message.groundSpeed, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed));
+        floats.put(DataKeys.FLIGHT_SPEED, Floats.constrainToRange(message.flightSpeed, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed));
+        floats.put(DataKeys.GROUND_SPEED, Floats.constrainToRange(message.groundSpeed, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed));
 
         Map<String, Boolean> booleans = settings.getBooleanMap();
-        booleans.put(NOCLIP_FLIGHT_LOCK, message.noclipFlightLock);
+        booleans.put(DataKeys.NOCLIP_FLIGHT_LOCK, message.noclipFlightLock);
+        booleans.put(DataKeys.FLIGHT, message.flight);
+        booleans.put(DataKeys.FEED, message.feed);
+        booleans.put(DataKeys.HEAL, message.heal);
+        booleans.put(DataKeys.REMOVE_HARMFUL, message.removeHarmful);
+        booleans.put(DataKeys.GIVE_AIR, message.air);
+        booleans.put(DataKeys.EXTINGUISH, message.extinguish);
 
         settings.suggestSave();
     }

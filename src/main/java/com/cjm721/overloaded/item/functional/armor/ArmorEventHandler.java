@@ -4,9 +4,9 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
+import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
-import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +34,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.*;
+import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
+import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Default;
 import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -60,16 +61,30 @@ public class ArmorEventHandler {
 
         if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
             IGenericDataStorage armorDataStorage = getHelmetDataStorage(player);
-
+            Map<String, Boolean> armorBooleans = armorDataStorage.getBooleanMap();
 
             playerDataStorage.getBooleanMap().put(set, true);
 
-            tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
-            tryFeedPlayer(player, event.side);
-            tryHealPlayer(player, event.side);
-            tryRemoveHarmful(player, event.side);
-            tryExtinguish(player, event.side);
-            tryGiveAir(player, event.side);
+            if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
+                tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
+            } else {
+                disableFlight(player,playerDataStorage,event.side);
+            }
+            if (armorBooleans.getOrDefault(DataKeys.FEED, Default.FEED)) {
+                tryFeedPlayer(player, event.side);
+            }
+            if (armorBooleans.getOrDefault(DataKeys.HEAL, Default.HEAL)) {
+                tryHealPlayer(player, event.side);
+            }
+            if (armorBooleans.getOrDefault(DataKeys.REMOVE_HARMFUL, Default.REMOVE_HARMFUL)) {
+                tryRemoveHarmful(player, event.side);
+            }
+            if (armorBooleans.getOrDefault(DataKeys.EXTINGUISH, Default.EXTINGUISH)) {
+                tryExtinguish(player, event.side);
+            }
+            if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
+                tryGiveAir(player, event.side);
+            }
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
@@ -92,7 +107,7 @@ public class ArmorEventHandler {
         if (playerBooleans.containsKey(set) && playerBooleans.get(set) && playerBooleans.containsKey(noClip) && playerBooleans.get(noClip)) {
             if (extractEnergy(player, OverloadedConfig.multiArmorConfig.noClipEnergyPerTick, side.isClient())) {
                 player.noClip = true;
-                if(armorBooleans.getOrDefault(NOCLIP_FLIGHT_LOCK, DEFAULT_NOCLIP_FLIGHT_LOCK)) {
+                if (armorBooleans.getOrDefault(DataKeys.NOCLIP_FLIGHT_LOCK, Default.NOCLIP_FLIGHT_LOCK)) {
                     tryEnableFlight(player, dataStorage, helmetDataStorage, side);
                     player.capabilities.isFlying = true;
                 }
@@ -164,9 +179,9 @@ public class ArmorEventHandler {
 
         player.capabilities.allowFlying = true;
         if (side.isClient()) {
-            player.capabilities.setFlySpeed(armorFloats.getOrDefault(FLIGHT_SPEED,DEFAULT_ARMOR_FLIGHT_SPEED));
+            player.capabilities.setFlySpeed(armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED));
         }
-        player.capabilities.setPlayerWalkSpeed(armorFloats.getOrDefault(GROUND_SPEED, DEFAULT_ARMOR_GROUND_SPEED));
+        player.capabilities.setPlayerWalkSpeed(armorFloats.getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED));
         booleans.put(set, true);
 
         if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient())) {

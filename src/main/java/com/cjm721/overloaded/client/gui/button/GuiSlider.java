@@ -82,4 +82,9 @@ public class GuiSlider extends GuiButton {
     public float getSliderValue() {
         return sliderValue;
     }
+
+    public void setSliderValue(float sliderValue) {
+        this.sliderValue = sliderValue ;
+        resetDisplayString();
+    }
 }
