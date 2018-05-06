@@ -13,13 +13,21 @@ public class GenericDataCapabilityProviderWrapper extends GenericDataCapabilityP
 
     private final ItemStack stack;
 
-    public GenericDataCapabilityProviderWrapper(ItemStack stack, @Nullable NBTTagCompound nbt) {
+    public GenericDataCapabilityProviderWrapper(ItemStack stack, @Nullable NBTTagCompound baseNBT) {
         this.stack = stack;
 
-        if (this.stack.getTagCompound() == null) {
+        NBTTagCompound itemNBT = this.stack.getTagCompound();
+        if (itemNBT == null) {
             this.stack.setTagCompound(new NBTTagCompound());
-        } else if(this.stack.getTagCompound().hasKey(NBT_TAG)){
-            this.readNBT(GENERIC_DATA_STORAGE,this,null, this.stack.getTagCompound().getCompoundTag(NBT_TAG));
+        }
+    }
+
+    @Override
+    public void suggestUpdate() {
+        NBTTagCompound itemNBT = this.stack.getTagCompound();
+
+        if(itemNBT.hasKey(NBT_TAG)) {
+            this.readNBT(GENERIC_DATA_STORAGE,this, null, this.stack.getTagCompound().getTag(NBT_TAG));
         }
     }
 

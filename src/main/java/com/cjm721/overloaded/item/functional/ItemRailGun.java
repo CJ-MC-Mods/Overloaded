@@ -110,7 +110,9 @@ public class ItemRailGun extends PowerModItem {
 
         IEnergyStorage energy = itemStack.getCapability(ENERGY, null);
 
-        int energyRequired = itemStack.getCapability(GENERIC_DATA_STORAGE, null).getIntegerMap().getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.railGun.minEngery);
+        IGenericDataStorage settingCapability = itemStack.getCapability(GENERIC_DATA_STORAGE, null);
+        settingCapability.suggestUpdate();
+        int energyRequired = settingCapability.getIntegerMap().getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.railGun.minEngery);
 
         if (energy.getEnergyStored() < energyRequired) {
             player.sendStatusMessage(new TextComponentString("Not enough power to fire."), true);
@@ -125,7 +127,8 @@ public class ItemRailGun extends PowerModItem {
         } else if (player.getDistance(entity) > OverloadedConfig.rayGun.maxRange) {
             player.sendStatusMessage(new TextComponentString("Target out of range."), true);
         } else if (entity.attackEntityFrom(DamageSource.causePlayerDamage(player), OverloadedConfig.railGun.damagePerRF * energyExtracted)) {
-            entity.addVelocity(message.moveVector.x, message.moveVector.y, message.moveVector.z);
+            Vec3d knockback = message.moveVector.scale(energyExtracted * OverloadedConfig.railGun.knockbackPerRF);
+            entity.addVelocity(knockback.x, knockback.y, knockback.z);
         }
     }
 
