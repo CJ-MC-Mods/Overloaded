@@ -4,8 +4,10 @@ import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -34,6 +36,21 @@ abstract class PowerModItem extends ModItem {
         tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
 
         super.addInformation(stack, worldIn, tooltip, flagIn);
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+        super.getSubItems(tab, items);
+
+        if (this.isInCreativeTab(tab)) {
+            ItemStack item = new ItemStack(this);
+            IEnergyStorage cap = item.getCapability(ENERGY, null);
+
+            if(cap != null) {
+                cap.receiveEnergy(Integer.MAX_VALUE,false);
+                items.add(item);
+            }
+        }
     }
 
     @Override

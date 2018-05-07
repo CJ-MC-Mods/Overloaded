@@ -8,6 +8,7 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.init.SoundEvents;
@@ -15,6 +16,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -45,6 +47,21 @@ abstract class AbstractMultiArmor extends ItemArmor implements IModRegistrable, 
 
         setCreativeTab(OverloadedCreativeTabs.TECH);
         ModItems.addToSecondaryInit(this);
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+        super.getSubItems(tab, items);
+
+        if (this.isInCreativeTab(tab)) {
+            ItemStack item = new ItemStack(this);
+            IEnergyStorage cap = item.getCapability(ENERGY, null);
+
+            if(cap != null) {
+                cap.receiveEnergy(Integer.MAX_VALUE,false);
+                items.add(item);
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
