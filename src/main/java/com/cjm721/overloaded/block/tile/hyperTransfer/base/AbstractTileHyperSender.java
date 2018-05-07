@@ -23,7 +23,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
     private final Capability<H> capability;
 
-    public AbstractTileHyperSender(Capability<H> capability) {
+    protected AbstractTileHyperSender(Capability<H> capability) {
         this.capability = capability;
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
         return null;
     }
 
-    protected void send(@Nonnull AbstractTileHyperReceiver<T, H> partner) {
+    private void send(@Nonnull AbstractTileHyperReceiver<T, H> partner) {
         for (EnumFacing side : EnumFacing.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
@@ -103,7 +103,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
         }
     }
 
-    protected void send(@Nonnull AbstractTileHyperReceiver<T, H> partner, @Nonnull TileEntity te, @Nonnull EnumFacing side) {
+    private void send(@Nonnull AbstractTileHyperReceiver<T, H> partner, @Nonnull TileEntity te, @Nonnull EnumFacing side) {
         H handler = te.getCapability(capability, side.getOpposite());
         T itemStack = handler.take(generate(Long.MAX_VALUE), false);
         if (itemStack.getAmount() > 0) {

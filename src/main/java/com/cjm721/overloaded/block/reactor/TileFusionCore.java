@@ -29,6 +29,7 @@ public class TileFusionCore extends TileEntity {
     }
 
     @Override
+    @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         return super.writeToNBT(compound);
     }

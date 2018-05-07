@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 @Optional.Interface(iface = "mcjty.theoneprobe.api.IProbeInfoAccessor", modid = "theoneprobe")
 public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider, IProbeInfoAccessor {
 
-    public AbstractBlockHyperSender(@Nonnull Material materialIn) {
+    protected AbstractBlockHyperSender(@Nonnull Material materialIn) {
         super(materialIn);
     }
 

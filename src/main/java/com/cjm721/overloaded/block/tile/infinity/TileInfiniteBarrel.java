@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public class TileInfiniteBarrel extends TileEntity implements IDataUpdate {
 
     @Nonnull
-    private LongItemStorage itemStorage;
+    private final LongItemStorage itemStorage;
 
     public TileInfiniteBarrel() {
         itemStorage = new LongItemStorage(this);

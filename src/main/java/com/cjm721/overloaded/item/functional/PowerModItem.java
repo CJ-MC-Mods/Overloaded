@@ -21,9 +21,9 @@ import java.util.List;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public abstract class PowerModItem extends ModItem {
+abstract class PowerModItem extends ModItem {
 
-    public PowerModItem() {
+    PowerModItem() {
         setMaxStackSize(1);
     }
 
@@ -67,7 +67,7 @@ public abstract class PowerModItem extends ModItem {
         return new CapabilityContainer().addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
     }
 
-    public Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
+    Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
         collection.add(new IntEnergyWrapper(stack));
 
         return collection;

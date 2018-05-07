@@ -17,7 +17,7 @@ public class CompressedConfig {
     @Config.Comment("Show the hardness of compressed blocks when in item form. [Default: true")
     public boolean showHardness = true;
 
-    public static final CompressedEntry[] defaults = new CompressedEntry[]{
+    private static final CompressedEntry[] defaults = new CompressedEntry[]{
             new CompressedEntry("minecraft:cobblestone", "compressed_cobblestone", 0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:sand", "compressed_sand", 0, "minecraft:textures/blocks/sand.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:stone", "compressed_stone", 0, "minecraft:textures/blocks/stone.png", 16, 9.0f, true),

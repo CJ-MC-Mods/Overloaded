@@ -12,7 +12,7 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
 
     private final Capability<H> capability;
 
-    public AbstractTileHyperReceiver(Capability<H> capability) {
+    protected AbstractTileHyperReceiver(Capability<H> capability) {
         this.capability = capability;
     }
 

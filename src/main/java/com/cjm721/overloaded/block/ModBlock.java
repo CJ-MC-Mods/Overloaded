@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 
 public abstract class ModBlock extends Block implements IModRegistrable {
-    public ModBlock(@Nonnull Material materialIn) {
+    protected ModBlock(@Nonnull Material materialIn) {
         super(materialIn);
         setHardness(1);
         setCreativeTab(OverloadedCreativeTabs.TECH);

@@ -20,7 +20,7 @@ import static com.cjm721.overloaded.client.render.dynamic.ImageUtil.getTextureIn
 @SideOnly(Side.CLIENT)
 public class ResizeableTextureGenerator {
 
-    private static List<ResizableTexture> toCreateTextures = new ArrayList<>();
+    private static final List<ResizableTexture> toCreateTextures = new ArrayList<>();
 
     public static void addToTextureQueue(ResizableTexture location) {
         toCreateTextures.add(location);
@@ -57,9 +57,9 @@ public class ResizeableTextureGenerator {
     }
 
     public static class ResizableTexture {
-        public final ResourceLocation originalTexture;
-        public final ResourceLocation generatedName;
-        public final int resizeToWidth;
+        final ResourceLocation originalTexture;
+        final ResourceLocation generatedName;
+        final int resizeToWidth;
 
         public ResizableTexture(ResourceLocation originalTexture, ResourceLocation generatedName, int resizeToWidth) {
             this.originalTexture = originalTexture;

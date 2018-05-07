@@ -40,8 +40,8 @@ public class CommonProxy {
 
     public SimpleNetworkWrapper networkWrapper;
 
-    public static List<Block> blocksToRegister = new LinkedList<>();
-    public static List<Item> itemToRegister = new LinkedList<>();
+    public static final List<Block> blocksToRegister = new LinkedList<>();
+    public static final List<Item> itemToRegister = new LinkedList<>();
     public static Fluid pureMatter;
 
 

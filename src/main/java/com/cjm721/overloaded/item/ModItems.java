@@ -14,6 +14,7 @@ import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
+import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,15 +32,15 @@ public class ModItems {
     public static ItemRayGun rayGun;
     public static ItemRailGun railgun;
 
-    public static ModItem energyCore;
-    public static ModItem fluidCore;
-    public static ModItem itemCore;
+    private static ModItem energyCore;
+    private static ModItem fluidCore;
+    private static ModItem itemCore;
 
     public static ItemMultiHelmet customHelmet;
     public static ItemMultiChestplate customChestplate;
     public static ItemMultiLeggings customLeggins;
     public static ItemMultiBoots customBoots;
-    public static LinkedList<ItemCompressedBlock> compressedItemBlocks;
+    private static LinkedList<ItemCompressedBlock> compressedItemBlocks;
 
     private static List<IModRegistrable> registerList = new LinkedList<>();
 
@@ -87,7 +88,7 @@ public class ModItems {
     }
 
     private static <T extends Item> T registerItem(T item) {
-        Overloaded.proxy.itemToRegister.add(item);
+        CommonProxy.itemToRegister.add(item);
         if (item instanceof IModRegistrable)
             ModItems.addToSecondaryInit((IModRegistrable) item);
 

@@ -43,9 +43,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        TileEntity te = new TileEnergyExtractor().setFacing(EnumFacing.getFront(meta));
-
-        return te;
+        return new TileEnergyExtractor().setFacing(EnumFacing.getFront(meta));
     }
 
     @Override

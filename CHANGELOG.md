@@ -2,6 +2,7 @@ Version: 0.0.50 (RELEASE)
 * Changelog will now be appended with previous info (pulled changelogs from last two days also)
 * Added One Probe Integration for Item Interface / Player Interface / Hyper * Senders / Infinity Capacitor
 * Linking Card will no longer forget the receiver when binding.
+* Code Cleanup using IDEA's automated tasks 
 
 Fixed:
 * NPE if you somehow placed a Player Interface without setting the placer

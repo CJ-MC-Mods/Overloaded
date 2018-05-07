@@ -37,9 +37,9 @@ public class BlockPureMatterFluid extends BlockFluidClassic implements IModRegis
     }
 
     private class FluidStateMapper extends StateMapperBase implements ItemMeshDefinition {
-        public final ModelResourceLocation location;
+        final ModelResourceLocation location;
 
-        public FluidStateMapper() {
+        FluidStateMapper() {
             this.location = new ModelResourceLocation(BlockPureMatterFluid.this.getRegistryName(), "all");
         }
 

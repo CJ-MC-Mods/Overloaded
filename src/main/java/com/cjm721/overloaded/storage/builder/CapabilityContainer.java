@@ -13,7 +13,7 @@ import java.util.List;
 public class CapabilityContainer implements ICapabilityProvider {
 
     @Nonnull
-    private List<ICapabilityProvider> capabilityProviders;
+    private final List<ICapabilityProvider> capabilityProviders;
 
     public CapabilityContainer() {
         capabilityProviders = new ArrayList<>();

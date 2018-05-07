@@ -77,7 +77,7 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess worldIn,@Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 

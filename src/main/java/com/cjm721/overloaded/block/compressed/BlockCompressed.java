@@ -155,12 +155,6 @@ public class BlockCompressed extends ModBlock {
         return getBlockHardness(world.getBlockState(pos), world, pos) / 5.0F;
     }
 
-    @Override
-    @Nonnull
-    public String getUnlocalizedName() {
-        return super.getUnlocalizedName();
-    }
-
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag advanced) {

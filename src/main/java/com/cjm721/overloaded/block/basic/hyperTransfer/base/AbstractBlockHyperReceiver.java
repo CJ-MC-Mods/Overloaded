@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 
 public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode implements ITileEntityProvider {
 
-    public AbstractBlockHyperReceiver(@Nonnull Material materialIn) {
+    protected AbstractBlockHyperReceiver(@Nonnull Material materialIn) {
         super(materialIn);
     }
 

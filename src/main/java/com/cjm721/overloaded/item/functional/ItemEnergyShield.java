@@ -31,8 +31,8 @@ import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HAND
 
 public class ItemEnergyShield extends ModItem {
 
-    public final long constantUseCost = 100L;
-    public final long initialUseCost = 10000L;
+    private final long constantUseCost = 100L;
+    private final long initialUseCost = 10000L;
 
     public ItemEnergyShield() {
         setMaxStackSize(1);

@@ -17,14 +17,14 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractBlockInfiniteContainer extends ModBlock {
-    public AbstractBlockInfiniteContainer(Material materialIn) {
+abstract class AbstractBlockInfiniteContainer extends ModBlock {
+    AbstractBlockInfiniteContainer(Material materialIn) {
         super(materialIn);
     }
 
     @Override
     @Nonnull
-    public final List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, @Nonnull IBlockState state, int fortune) {
+    public final List<ItemStack> getDrops(@Nonnull IBlockAccess world,@Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune) {
         IHyperType stack = getHyperStack(world, pos);
 
         if (stack != null && stack.getAmount() != 0) {

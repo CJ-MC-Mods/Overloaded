@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 public abstract class AbstractTileEntityFaceable extends TileEntity {
 
 
-    protected EnumFacing front;
+    private EnumFacing front;
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
@@ -31,7 +31,7 @@ public abstract class AbstractTileEntityFaceable extends TileEntity {
         return this;
     }
 
-    public EnumFacing getFacing() {
+    EnumFacing getFacing() {
         return front;
     }
 }

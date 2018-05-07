@@ -20,7 +20,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class CompressedBlockAssets {
 
-    private static List<CompressedResourceLocation> toCreateTextures = new ArrayList<>();
+    private static final List<CompressedResourceLocation> toCreateTextures = new ArrayList<>();
 
     public static void addToTextureQueue(CompressedResourceLocation location) {
         toCreateTextures.add(location);
@@ -53,7 +53,7 @@ public class CompressedBlockAssets {
         return new ResourceLocation(base.getResourceDomain(), "textures/blocks/" + base.getResourcePath() + ".png");
     }
 
-    public static ResourceLocation getJsonPath(@Nonnull ResourceLocation base) {
+    private static ResourceLocation getJsonPath(@Nonnull ResourceLocation base) {
         return new ResourceLocation(base.getResourceDomain(), "blockstates/" + base.getResourcePath() + ".json");
     }
 
@@ -105,9 +105,9 @@ public class CompressedBlockAssets {
     }
 
     public static class CompressedResourceLocation {
-        public final String baseTexture;
-        public final ResourceLocation compressed;
-        public final int compressionAmount;
+        final String baseTexture;
+        final ResourceLocation compressed;
+        final int compressionAmount;
 
         public CompressedResourceLocation(String baseTexture, @Nonnull ResourceLocation compressed, int compressionAmount) {
             this.baseTexture = baseTexture;

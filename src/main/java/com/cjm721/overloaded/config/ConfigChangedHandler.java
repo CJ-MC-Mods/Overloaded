@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 @Mod.EventBusSubscriber
-public class ConfigChangedHandler {
+class ConfigChangedHandler {
 
     @SubscribeEvent
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {

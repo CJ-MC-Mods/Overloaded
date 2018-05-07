@@ -19,7 +19,7 @@ import java.util.List;
  * Used for general rendering stuff
  */
 @SideOnly(Side.CLIENT)
-public class ModelUtils implements IResourceManagerReloadListener {
+class ModelUtils implements IResourceManagerReloadListener {
     public static void renderQuads(List<BakedQuad> listQuads) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexbuffer = tessellator.getBuffer();

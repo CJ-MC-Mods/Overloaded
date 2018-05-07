@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 public class InDevBlock extends ModBlock {
 
     @Nonnull
-    String name;
+    private final String name;
 
     public InDevBlock(@Nonnull String name) {
         super(Material.ROCK);

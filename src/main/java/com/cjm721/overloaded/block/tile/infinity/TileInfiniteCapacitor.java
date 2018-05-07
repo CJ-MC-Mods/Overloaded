@@ -16,7 +16,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
 
     @Nonnull
-    private LongEnergyStorage energyStorage;
+    private final LongEnergyStorage energyStorage;
 
     public TileInfiniteCapacitor() {
         energyStorage = new LongEnergyStorage(this);

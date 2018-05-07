@@ -24,7 +24,7 @@ import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABI
 
 public class TileMatterPurifier extends TileEntity implements ITickable, IItemHandler {
 
-    private FluidTank fluidStorage;
+    private final FluidTank fluidStorage;
     private EnergyStorage energyStorage;
     private ItemStack stack;
 

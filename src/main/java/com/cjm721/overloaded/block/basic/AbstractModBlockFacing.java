@@ -16,10 +16,10 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 
 
-public abstract class AbstractModBlockFacing extends ModBlock {
+abstract class AbstractModBlockFacing extends ModBlock {
     private static final PropertyDirection FACING = BlockDirectional.FACING;
 
-    public AbstractModBlockFacing(@Nonnull Material materialIn) {
+    AbstractModBlockFacing(@Nonnull Material materialIn) {
         super(materialIn);
     }
 

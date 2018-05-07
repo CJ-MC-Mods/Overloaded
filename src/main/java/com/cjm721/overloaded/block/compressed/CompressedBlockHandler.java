@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CompressedBlockHandler {
 
-    public static BlockCompressed CreateCompressedBlock(CompressedEntry entry) {
+    private static BlockCompressed CreateCompressedBlock(CompressedEntry entry) {
         return new BlockCompressed(entry.compressedPathRegistryName, entry.compressedPathRegistryName, entry);
     }
 

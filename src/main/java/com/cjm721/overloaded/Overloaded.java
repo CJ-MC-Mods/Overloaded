@@ -20,10 +20,10 @@ public class Overloaded {
     public static Overloaded instance;
 
     public static final String MODID = "overloaded";
-    public static final String VERSION = "${mod_version}";
+    static final String VERSION = "${mod_version}";
 
-    public static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
-    public static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.CommonProxy";
+    private static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
+    private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.CommonProxy";
 
     @SidedProxy(clientSide = Overloaded.PROXY_CLIENT, serverSide = Overloaded.PROXY_SERVER)
     public static CommonProxy proxy;

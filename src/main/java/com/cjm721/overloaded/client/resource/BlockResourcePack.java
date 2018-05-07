@@ -19,19 +19,14 @@ import java.util.Set;
 @SideOnly(Side.CLIENT)
 public class BlockResourcePack extends AbstractInjectableResoucePack {
 
-    public static BlockResourcePack INSTANCE;
+    public static final BlockResourcePack INSTANCE = new BlockResourcePack();
 
-    static {
-        INSTANCE = new BlockResourcePack();
-    }
+    private BlockResourcePack() {}
 
-    private BlockResourcePack() {
-    }
+    private final Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
+    private final Map<ResourceLocation, String> blockStates = Maps.newHashMap();
 
-    private Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
-    private Map<ResourceLocation, String> blockStates = Maps.newHashMap();
-
-    private Set<String> domains = Sets.newHashSet();
+    private final Set<String> domains = Sets.newHashSet();
 
     public void addImage(@Nonnull ResourceLocation res, @Nonnull BufferedImage image) {
         images.put(res, image);
@@ -86,17 +81,18 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IMetadataSection> T getPackMetadata(@Nonnull MetadataSerializer metadataSerializer, @Nonnull String metadataSectionName) throws IOException {
+    public <T extends IMetadataSection> T getPackMetadata(@Nonnull MetadataSerializer metadataSerializer, @Nonnull String metadataSectionName) {
         return null;
     }
 
     @Override
     @Nonnull
-    public BufferedImage getPackImage() throws IOException {
+    public BufferedImage getPackImage() {
         return null;
     }
 
     @Override
+    @Nonnull
     public String getPackName() {
         return "Overloaded Compressed Textures";
     }

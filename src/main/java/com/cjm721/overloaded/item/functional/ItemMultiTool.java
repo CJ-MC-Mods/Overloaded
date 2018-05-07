@@ -161,8 +161,7 @@ public class ItemMultiTool extends PowerModItem {
     }
 
     private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
-        float floatBreakCost = (float) ((hardness * OverloadedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1)) + (OverloadedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
-        return floatBreakCost;
+        return (float) ((hardness * OverloadedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1)) + (OverloadedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
     }
 
     /**

@@ -16,7 +16,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
 
-    private static IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[]{
+    private static final IFluidTankProperties[] fluidTankProperties = new IFluidTankProperties[]{
             new FluidTankProperties(FluidRegistry.getFluidStack("water", Integer.MAX_VALUE), Integer.MAX_VALUE, false, true)
     };
 

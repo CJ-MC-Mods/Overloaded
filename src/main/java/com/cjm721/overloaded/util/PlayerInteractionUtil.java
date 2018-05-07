@@ -125,7 +125,7 @@ public class PlayerInteractionUtil {
         return false;
     }
 
-    public static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
+    private static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
         int size = inventory.getSlots();
         for (int i = 0; i < size; i++) {
             ItemStack stack = inventory.getStackInSlot(i);

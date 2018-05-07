@@ -15,7 +15,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteTank extends TileEntity implements IDataUpdate {
 
-    private LongFluidStorage fluidStorage;
+    private final LongFluidStorage fluidStorage;
 
     public TileInfiniteTank() {
         fluidStorage = new LongFluidStorage(this);

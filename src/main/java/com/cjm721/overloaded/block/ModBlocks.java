@@ -11,6 +11,7 @@ import com.cjm721.overloaded.block.compressed.CompressedBlockHandler;
 import com.cjm721.overloaded.block.fluid.BlockPureMatterFluid;
 import com.cjm721.overloaded.block.reactor.BlockFusionCore;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.CraftingRegistry;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
@@ -27,34 +28,34 @@ import java.util.List;
 public final class ModBlocks {
 
     public static ModBlock basicGenerator;
-    public static ModBlock infiniteBarrel;
-    public static ModBlock infiniteTank;
-    public static ModBlock infiniteCapacitor;
+    private static ModBlock infiniteBarrel;
+    private static ModBlock infiniteTank;
+    private static ModBlock infiniteCapacitor;
 
-    public static ModBlock hyperItemReceiver;
-    public static ModBlock hyperItemSender;
-    public static ModBlock hyperFluidReceiver;
-    public static ModBlock hyperFluidSender;
-    public static ModBlock hyperEnergyReceiver;
-    public static ModBlock hyperEnergySender;
+    private static ModBlock hyperItemReceiver;
+    private static ModBlock hyperItemSender;
+    private static ModBlock hyperFluidReceiver;
+    private static ModBlock hyperFluidSender;
+    private static ModBlock hyperEnergyReceiver;
+    private static ModBlock hyperEnergySender;
 
-    public static ModBlock infiniteWaterSource;
+    private static ModBlock infiniteWaterSource;
 
-    public static ModBlock energyExtractor;
+    private static ModBlock energyExtractor;
 
-    public static ModBlock netherStarBlock;
-    public static ModBlock playerInterface;
-    public static ModBlock itemInterface;
+    private static ModBlock netherStarBlock;
+    private static ModBlock playerInterface;
+    private static ModBlock itemInterface;
 
-    public static ModBlock matterPurifier;
-    public static BlockPureMatterFluid pureMatterFluidBlock;
-    public static ModBlock fusionCore;
+    private static ModBlock matterPurifier;
+    private static BlockPureMatterFluid pureMatterFluidBlock;
+    private static ModBlock fusionCore;
     public static ModBlock energyInjectorChest;
     public static List<BlockCompressed> compressedBlocks;
 
 
     public static ModBlock itemManipulator;
-    private static List<IModRegistrable> registerList = new LinkedList<>();
+    private static final List<IModRegistrable> registerList = new LinkedList<>();
 
     public static void init() {
         basicGenerator = registerFull(new BlockCreativeGenerator());
@@ -114,13 +115,13 @@ public final class ModBlocks {
     private static <T extends ModBlock> T registerFull(T block) {
         registerBlock(block);
 
-        Overloaded.proxy.itemToRegister.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+        CommonProxy.itemToRegister.add(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 
         return block;
     }
 
     private static <T extends Block> T registerBlock(T block) {
-        Overloaded.proxy.blocksToRegister.add(block);
+        CommonProxy.blocksToRegister.add(block);
 
         if (block instanceof ModBlock) {
             ((ModBlock) block).baseInit();

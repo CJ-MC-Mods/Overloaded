@@ -68,7 +68,7 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
                 tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
             } else {
-                disableFlight(player, playerDataStorage, event.side);
+                disableFlight(player, event.side);
             }
             if (armorBooleans.getOrDefault(DataKeys.FEED, Default.FEED)) {
                 tryFeedPlayer(player, event.side);
@@ -85,19 +85,19 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
-            tryGroundSpeed(player, playerDataStorage, armorDataStorage, event.side);
+            tryGroundSpeed(player, armorDataStorage, event.side);
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
-                disableFlight(player, playerDataStorage, event.side);
-                disableNoClip(player, playerDataStorage, event.side);
+                disableFlight(player, event.side);
+                disableNoClip(player, playerDataStorage);
                 disableGroundSpeed(player);
             }
         }
     }
 
-    private void tryGroundSpeed(EntityPlayer player, IGenericDataStorage playerDataStorage, IGenericDataStorage armorDataStorage, Side side) {
+    private void tryGroundSpeed(EntityPlayer player, IGenericDataStorage armorDataStorage, Side side) {
         float groundSpeed = armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED);
 
         float powerRequired = (player.distanceWalkedModified - player.prevDistanceWalkedModified) / 0.6F *
@@ -115,7 +115,7 @@ public class ArmorEventHandler {
         player.capabilities.setPlayerWalkSpeed(0.1F);
     }
 
-    private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, Side side) {
+    private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage) {
         player.noClip = false;
         dataStorage.getBooleanMap().put(noClip, false);
     }
@@ -208,11 +208,11 @@ public class ArmorEventHandler {
         int energyCost = Math.round(OverloadedConfig.multiArmorConfig.energyPerTickFlying * flightSpeed * OverloadedConfig.multiArmorConfig.energyMultiplerPerFlightSpeed);
 
         if (player.capabilities.isFlying && !extractEnergy(player, energyCost, side.isClient())) {
-            disableFlight(player, dataStorage, side);
+            disableFlight(player, side);
         }
     }
 
-    private void disableFlight(@Nonnull EntityPlayer player, @Nonnull IGenericDataStorage dataStorage, @Nonnull Side side) {
+    private void disableFlight(@Nonnull EntityPlayer player, @Nonnull Side side) {
         player.capabilities.allowFlying = false;
         player.capabilities.isFlying = false;
         if (side.isClient()) {
@@ -277,12 +277,12 @@ public class ArmorEventHandler {
     }
 
     private boolean extractEnergy(EntityPlayer player, int energyCost, boolean simulated) {
-        final int orignalCost = energyCost;
+        final int originalCost = energyCost;
         for (ItemStack stack : player.getArmorInventoryList()) {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY, null);
 
             if (energyStorage != null)
-                energyCost -= energyStorage.extractEnergy(orignalCost / 4, simulated);
+                energyCost -= energyStorage.extractEnergy(originalCost / 4, simulated);
 
             if (energyCost <= 0) {
                 return true;

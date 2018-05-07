@@ -79,7 +79,7 @@ public final class CraftingRegistry {
      * @param output an itemstack, usualy the one the the recipe produces
      * @return a unique ResourceLocation based off the item item
      */
-    public static ResourceLocation getNameForRecipe(ItemStack output) {
+    private static ResourceLocation getNameForRecipe(ItemStack output) {
         ModContainer activeContainer = Loader.instance().activeModContainer();
         ResourceLocation baseLoc = new ResourceLocation(activeContainer.getModId(), output.getItem().getRegistryName().getResourcePath());
         ResourceLocation recipeLoc = baseLoc;

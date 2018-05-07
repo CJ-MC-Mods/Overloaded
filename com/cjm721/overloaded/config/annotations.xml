@@ -1,0 +1,7 @@
+<root>
+    <item name='com.cjm721.overloaded.config.MultiToolConfig'>
+        <annotation name='java.lang.SuppressWarnings'>
+            <val val="&quot;CanBeFinal&quot;"/>
+        </annotation>
+    </item>
+</root>

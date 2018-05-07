@@ -47,7 +47,7 @@ public class BlockFusionInterface extends ModBlock implements ITileEntityProvide
      */
     @Nullable
     @Override
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileFusionInterface();
     }
 }
