@@ -2,6 +2,9 @@ Version: 0.0.50 (RELEASE)
 * Changelog will now be appended with previous info (pulled changelogs from last two days also)
 * Added One Probe Integration for Item Interface / Player Interface / Hyper * Senders / Infinity Capacitor
 
+Fixed:
+* NPE if you somehow placed a Player Interface without setting the placer
+
 -------------------------------------------------------------------
 Version: 0.0.49 (RELEASE)
 
