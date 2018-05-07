@@ -68,7 +68,7 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
                 tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
             } else {
-                disableFlight(player,playerDataStorage,event.side);
+                disableFlight(player, playerDataStorage, event.side);
             }
             if (armorBooleans.getOrDefault(DataKeys.FEED, Default.FEED)) {
                 tryFeedPlayer(player, event.side);
@@ -85,17 +85,34 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
-            
-            player.capabilities.setPlayerWalkSpeed(armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED));
+            tryGroundSpeed(player, playerDataStorage, armorDataStorage, event.side);
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
                 disableFlight(player, playerDataStorage, event.side);
                 disableNoClip(player, playerDataStorage, event.side);
-                player.capabilities.setPlayerWalkSpeed(0.1F);
+                disableGroundSpeed(player);
             }
         }
+    }
+
+    private void tryGroundSpeed(EntityPlayer player, IGenericDataStorage playerDataStorage, IGenericDataStorage armorDataStorage, Side side) {
+        float groundSpeed = armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED);
+
+        float powerRequired = (player.distanceWalkedModified - player.prevDistanceWalkedModified) / 0.6F *
+                OverloadedConfig.multiArmorConfig.energyPerBlockWalked *
+                OverloadedConfig.multiArmorConfig.energyMulitplerPerGoundSpeed * groundSpeed;
+
+        if (extractEnergy(player, Math.round(powerRequired), side.isClient())) {
+            player.capabilities.setPlayerWalkSpeed(groundSpeed);
+        } else {
+            disableGroundSpeed(player);
+        }
+    }
+
+    private void disableGroundSpeed(EntityPlayer player) {
+        player.capabilities.setPlayerWalkSpeed(0.1F);
     }
 
     private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage, Side side) {

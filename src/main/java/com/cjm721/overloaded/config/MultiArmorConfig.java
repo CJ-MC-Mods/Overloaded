@@ -37,4 +37,8 @@ public class MultiArmorConfig {
     public float maxFlightSpeed = 5.0f;
     @Config.Comment("Max ground speed. [Default: 10]")
     public float maxGroundSpeed = 10.0f;
+    @Config.Comment("Energy per block walked. [Default: 10]")
+    public float energyPerBlockWalked = 10.0f;
+    @Config.Comment("Energy multiplier per ground speed")
+    public float energyMulitplerPerGoundSpeed = 5.0F;
 }
