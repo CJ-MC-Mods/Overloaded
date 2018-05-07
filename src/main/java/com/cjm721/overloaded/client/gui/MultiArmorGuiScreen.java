@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 import javax.annotation.Nullable;
@@ -59,6 +60,7 @@ public class MultiArmorGuiScreen extends GuiScreen {
 
         if (data == null) {
             this.mc.displayGuiScreen(null);
+            this.mc.player.sendStatusMessage(new TextComponentString("Multi-Helmet not equipped."), true);
             return;
         }
 
