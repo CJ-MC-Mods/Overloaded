@@ -61,6 +61,7 @@ public class ModItems {
         customChestplate = registerItem(new ItemMultiChestplate());
         customLeggins = registerItem(new ItemMultiLeggings());
         customBoots = registerItem(new ItemMultiBoots());
+        settingsEditor = registerItem(new ItemSettingEditor());
         rayGun = registerItem(new ItemRayGun());
         railgun = registerItem(new ItemRailGun());
 
@@ -70,8 +71,6 @@ public class ModItems {
             for(int i = 0; i < 10; i++) {
                 registerItem(new InDevItem("in_dev_item_"+i));
             }
-
-            settingsEditor = registerItem(new ItemSettingEditor());
         }
 
         compressedItemBlocks = new LinkedList<>();
