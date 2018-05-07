@@ -48,7 +48,6 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
                         int z = tag.getInteger("Z");
 
                         bindToPartner(worldIn, pos, worldID, new BlockPos(x, y, z));
-                        heldItem.setTagCompound(null);
                         if (worldIn.isRemote) {
                             playerIn.sendStatusMessage(new TextComponentString("Bound Hyper Nodes"), true);
                         }
