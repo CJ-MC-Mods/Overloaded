@@ -85,12 +85,15 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
+
+            player.capabilities.setPlayerWalkSpeed(armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED));
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
                 disableFlight(player, playerDataStorage, event.side);
                 disableNoClip(player, playerDataStorage, event.side);
+                player.capabilities.setPlayerWalkSpeed(0.1F);
             }
         }
     }
@@ -181,7 +184,6 @@ public class ArmorEventHandler {
         if (side.isClient()) {
             player.capabilities.setFlySpeed(armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED));
         }
-        player.capabilities.setPlayerWalkSpeed(armorFloats.getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED));
         booleans.put(set, true);
 
         if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient())) {
@@ -195,7 +197,6 @@ public class ArmorEventHandler {
         if (side.isClient()) {
             player.capabilities.setFlySpeed(0.05F);
         }
-        player.capabilities.setPlayerWalkSpeed(0.1F);
     }
 
 
