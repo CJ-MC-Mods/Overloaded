@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -37,7 +38,7 @@ public class ItemSettingEditor extends ModItem {
             playerIn.openGui(Overloaded.instance, OverloadedGuiHandler.MULTI_ARMOR,worldIn,(int) playerIn.posX, (int) playerIn.posY, (int) playerIn.posZ);
         }
 
-        return super.onItemRightClick(worldIn, playerIn, handIn);
+        return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 
 
