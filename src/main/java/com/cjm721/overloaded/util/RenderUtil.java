@@ -36,7 +36,8 @@ public class RenderUtil {
             }
             renderQuads(alpha, worldRenderer, model.getQuads(null, null, 0), state, worldObj, blockPos);
             tessellator.draw();
-        } catch (UnsupportedOperationException ignored) { }
+        } catch (UnsupportedOperationException ignored) {
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -66,7 +67,7 @@ public class RenderUtil {
             final BlockPos blockPos) {
         IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(itemStack);
 
-        renderGhostModel(model,state,worldObj,blockPos);
+        renderGhostModel(model, state, worldObj, blockPos);
     }
 
     @SideOnly(Side.CLIENT)

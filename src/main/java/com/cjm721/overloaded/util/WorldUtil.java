@@ -32,7 +32,7 @@ public class WorldUtil {
 
         int length = (int) Math.ceil(startingLocation.subtract(endingLocation).lengthVector());
 
-        for(double i = 0; i < length; i+= 0.1) {
+        for (double i = 0; i < length; i += 0.1) {
             vertexes[0] += direction.x * i;
             vertexes[1] += direction.y * i;
             vertexes[2] += direction.z * i;
@@ -63,7 +63,7 @@ public class WorldUtil {
             if (entity != null) {
                 RayTraceResult intercept = boundingBox.calculateIntercept(startingLocation, endingLocation);
 
-                if(intercept != null) {
+                if (intercept != null) {
                     Vec3d hitVec = intercept.hitVec;
                     return new RayTraceResult(entity, hitVec == null ? new Vec3d(0.5, 0.5, 0.5) : hitVec);
                 }

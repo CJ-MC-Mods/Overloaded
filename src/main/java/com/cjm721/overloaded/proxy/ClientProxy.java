@@ -46,7 +46,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        if(OverloadedConfig.specialConfig.noClipRenderFix)
+        if (OverloadedConfig.specialConfig.noClipRenderFix)
             Minecraft.getMinecraft().renderGlobal = new RenderGlobalSpectator(Minecraft.getMinecraft());
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.multiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
 

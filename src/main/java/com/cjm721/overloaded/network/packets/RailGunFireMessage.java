@@ -6,15 +6,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-import java.util.UUID;
-
 public class RailGunFireMessage implements IMessage {
 
     public int id;
     public Vec3d moveVector;
     public EnumHand hand;
 
-    public RailGunFireMessage() { }
+    public RailGunFireMessage() {
+    }
 
     public RailGunFireMessage(int id, Vec3d vector, EnumHand hand) {
         this.id = id;
@@ -43,6 +42,6 @@ public class RailGunFireMessage implements IMessage {
     public void toBytes(ByteBuf buf) {
         buf.writeInt(id);
         MessageUtility.toBytes(buf, moveVector);
-        ByteBufUtils.writeUTF8String(buf,hand.name());
+        ByteBufUtils.writeUTF8String(buf, hand.name());
     }
 }

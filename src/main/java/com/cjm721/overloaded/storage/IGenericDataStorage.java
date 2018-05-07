@@ -17,7 +17,9 @@ public interface IGenericDataStorage {
     @Nonnull
     Map<String, Float> getFloatMap();
 
-    default void suggestUpdate() {}
+    default void suggestUpdate() {
+    }
 
-    default void suggestSave() { }
+    default void suggestSave() {
+    }
 }

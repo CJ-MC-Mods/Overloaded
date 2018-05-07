@@ -129,7 +129,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
             if (toSpawn.isEmpty())
                 return true;
 
-            ItemHandlerHelper.giveItemToPlayer(playerIn,toSpawn,playerIn.inventory.currentItem);
+            ItemHandlerHelper.giveItemToPlayer(playerIn, toSpawn, playerIn.inventory.currentItem);
         }
 
         return true;
@@ -138,9 +138,9 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if(te != null && te instanceof TileItemInterface) {
+        if (te != null && te instanceof TileItemInterface) {
             ItemStack item = ((TileItemInterface) te).getStoredItem();
-            if(!item.isEmpty()) {
+            if (!item.isEmpty()) {
                 probeInfo.horizontal().item(item).itemLabel(item);
             }
         }

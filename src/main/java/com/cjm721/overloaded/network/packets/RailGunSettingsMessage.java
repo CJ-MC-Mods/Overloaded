@@ -7,7 +7,8 @@ public class RailGunSettingsMessage implements IMessage {
 
     public int powerDelta;
 
-    public RailGunSettingsMessage() {}
+    public RailGunSettingsMessage() {
+    }
 
     public RailGunSettingsMessage(int powerDelta) {
         this.powerDelta = powerDelta;

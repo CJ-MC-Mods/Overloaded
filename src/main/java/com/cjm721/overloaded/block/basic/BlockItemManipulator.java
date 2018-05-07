@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemManipulator;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;

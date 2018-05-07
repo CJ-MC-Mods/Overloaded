@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperEnergyReceiver;
 import net.minecraft.block.material.Material;

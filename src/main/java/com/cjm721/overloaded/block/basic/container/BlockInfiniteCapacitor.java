@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.block.basic.container;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -76,7 +75,6 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
             if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
                 LongEnergyStack stack = ((TileInfiniteCapacitor) worldIn.getTileEntity(pos)).getStorage().status();
 
-                // TODO Make the exact number show in a tooltip so it can be easier to read at a glance
                 double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
                 playerIn.sendStatusMessage(new TextComponentString(String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)), false);
                 return true;
@@ -99,7 +97,7 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if(te != null && te instanceof TileInfiniteCapacitor) {
+        if (te != null && te instanceof TileInfiniteCapacitor) {
             IProgressStyle style = probeInfo.defaultProgressStyle().showText(true).numberFormat(NumberFormat.COMPACT).suffix("RF");
             probeInfo.progress(((TileInfiniteCapacitor) te).getStorage().status().getAmount(), Long.MAX_VALUE, style);
         }

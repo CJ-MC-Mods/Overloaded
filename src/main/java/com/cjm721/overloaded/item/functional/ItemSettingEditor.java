@@ -34,8 +34,8 @@ public class ItemSettingEditor extends ModItem {
     @Override
     @Nonnull
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        if(worldIn.isRemote) {
-            playerIn.openGui(Overloaded.instance, OverloadedGuiHandler.MULTI_ARMOR,worldIn,(int) playerIn.posX, (int) playerIn.posY, (int) playerIn.posZ);
+        if (worldIn.isRemote) {
+            playerIn.openGui(Overloaded.instance, OverloadedGuiHandler.MULTI_ARMOR, worldIn, (int) playerIn.posX, (int) playerIn.posY, (int) playerIn.posZ);
         }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));

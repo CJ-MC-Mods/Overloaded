@@ -68,8 +68,8 @@ public class ModItems {
         if (OverloadedConfig.developmentConfig.wipStuff) {
 //            energyShield = registerItem(new ItemEnergyShield());
 //            amountSelector = registerItem(new ItemAmountSelector());
-            for(int i = 0; i < 10; i++) {
-                registerItem(new InDevItem("in_dev_item_"+i));
+            for (int i = 0; i < 10; i++) {
+                registerItem(new InDevItem("in_dev_item_" + i));
             }
         }
 

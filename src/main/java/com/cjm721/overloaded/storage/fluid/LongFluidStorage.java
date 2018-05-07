@@ -5,7 +5,6 @@ import com.cjm721.overloaded.storage.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -37,7 +36,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
      */
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        if(storedFluid.fluidStack != null)
+        if (storedFluid.fluidStack != null)
             storedFluid.fluidStack.amount = (int) Math.min(Integer.MAX_VALUE, storedFluid.amount);
         return new FluidTankProperties[]{new FluidTankProperties(storedFluid.fluidStack, Integer.MAX_VALUE, true, true)};
     }

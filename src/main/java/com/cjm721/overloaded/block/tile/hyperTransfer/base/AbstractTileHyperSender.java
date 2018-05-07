@@ -21,7 +21,6 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     private BlockPos partnerBlockPos;
     private int partnerWorldID;
 
-
     private final Capability<H> capability;
 
     public AbstractTileHyperSender(Capability<H> capability) {

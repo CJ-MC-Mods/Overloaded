@@ -83,8 +83,8 @@ public final class ModBlocks {
             pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
 //            itemManipulator = new BlockItemManipulator();
 //            energyInjectorChest = new BlockEnergyInjectorChest();
-            for(int i = 0; i < 10; i++) {
-                registerFull(new InDevBlock("in_dev_block_"+i));
+            for (int i = 0; i < 10; i++) {
+                registerFull(new InDevBlock("in_dev_block_" + i));
             }
         }
 

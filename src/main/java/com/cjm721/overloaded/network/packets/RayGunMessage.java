@@ -8,7 +8,8 @@ public class RayGunMessage implements IMessage {
 
     public Vec3d vector;
 
-    public RayGunMessage() { }
+    public RayGunMessage() {
+    }
 
     public RayGunMessage(Vec3d vector) {
         this.vector = vector;
@@ -31,6 +32,6 @@ public class RayGunMessage implements IMessage {
      */
     @Override
     public void toBytes(ByteBuf buf) {
-        MessageUtility.toBytes(buf,vector);
+        MessageUtility.toBytes(buf, vector);
     }
 }

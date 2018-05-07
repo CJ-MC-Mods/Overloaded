@@ -5,5 +5,5 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import javax.annotation.Nonnull;
 
 public interface IPlayerMessageMethod<T> {
-    void handleMessage(@Nonnull EntityPlayerMP playerMP,@Nonnull T message);
+    void handleMessage(@Nonnull EntityPlayerMP playerMP, @Nonnull T message);
 }

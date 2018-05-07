@@ -15,7 +15,7 @@ public class OverloadedGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        switch(ID) {
+        switch (ID) {
             case MULTI_ARMOR:
                 return null;
         }
@@ -26,7 +26,7 @@ public class OverloadedGuiHandler implements IGuiHandler {
     @Nullable
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        switch(ID) {
+        switch (ID) {
             case MULTI_ARMOR:
                 return new MultiArmorGuiScreen();
         }

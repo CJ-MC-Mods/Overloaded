@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.block.basic.container;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;

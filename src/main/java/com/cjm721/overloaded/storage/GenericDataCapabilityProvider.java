@@ -9,7 +9,8 @@ import javax.annotation.Nullable;
 
 public class GenericDataCapabilityProvider extends GenericDataStorage implements ICapabilityProvider {
 
-    public GenericDataCapabilityProvider() { }
+    public GenericDataCapabilityProvider() {
+    }
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing enumFacing) {

@@ -2,12 +2,10 @@ package com.cjm721.overloaded.block.reactor;
 
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
-import com.cjm721.overloaded.storage.item.LongItemStorage;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidTank;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -46,10 +44,9 @@ public class TileFusionCore extends TileEntity {
             if (capability == FLUID_HANDLER_CAPABILITY) {
                 return true;
             }
-        }
-        else {
-            if(capability == ENERGY) {
-               return true;
+        } else {
+            if (capability == ENERGY) {
+                return true;
             }
         }
 
@@ -63,9 +60,8 @@ public class TileFusionCore extends TileEntity {
             if (capability == FLUID_HANDLER_CAPABILITY) {
                 return null;
             }
-        }
-        else {
-            if(capability == ENERGY) {
+        } else {
+            if (capability == ENERGY) {
                 return null;
             }
         }

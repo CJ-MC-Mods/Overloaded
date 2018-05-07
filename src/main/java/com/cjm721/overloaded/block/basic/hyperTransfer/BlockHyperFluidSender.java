@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperSender;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperFluidSender;
 import net.minecraft.block.material.Material;

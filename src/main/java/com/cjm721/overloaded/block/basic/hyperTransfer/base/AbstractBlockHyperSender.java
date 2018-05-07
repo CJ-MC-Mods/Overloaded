@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.block.tile.hyperTransfer.base.AbstractTileHyperSender;
-import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.item.ModItems;
-import mcjty.theoneprobe.api.*;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProbeInfoAccessor;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -71,7 +73,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if(te != null && te instanceof AbstractTileHyperSender) {
+        if (te != null && te instanceof AbstractTileHyperSender) {
             probeInfo.text(((AbstractTileHyperSender) te).getRightClickMessage());
         }
     }

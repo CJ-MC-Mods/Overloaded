@@ -111,7 +111,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
             if (te instanceof TilePlayerInterface) {
                 UUID placer = ((TilePlayerInterface) te).getPlacer();
 
-                if(placer == null) {
+                if (placer == null) {
                     playerIn.sendMessage(new TextComponentString("Not bound to anyone..... ghosts placed this."));
                 } else {
                     String username = UsernameCache.getLastKnownUsername(placer);
@@ -128,7 +128,7 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
         TileEntity te = world.getTileEntity(data.getPos());
         if (te != null && te instanceof TilePlayerInterface) {
             UUID placer = ((TilePlayerInterface) te).getPlacer();
-            if(placer == null) {
+            if (placer == null) {
                 probeInfo.text("Not bound to anyone.");
             } else {
                 String username = UsernameCache.getLastKnownUsername(placer);

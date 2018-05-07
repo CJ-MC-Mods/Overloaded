@@ -28,7 +28,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.*;
+import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
 import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
 
 public class ItemMultiHelmet extends AbstractMultiArmor {

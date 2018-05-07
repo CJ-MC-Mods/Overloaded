@@ -28,7 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -66,13 +65,13 @@ public class ItemRayGun extends PowerModItem {
     @Nonnull
     @SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        if(!worldIn.isRemote)
+        if (!worldIn.isRemote)
             new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 
 
         RayTraceResult ray = rayTraceWithEntities(worldIn, playerIn.getPositionEyes(Minecraft.getMinecraft().getRenderPartialTicks()), playerIn.getLook(Minecraft.getMinecraft().getRenderPartialTicks()), playerIn, 128);
 
-        if(ray != null) {
+        if (ray != null) {
             IMessage message = new RayGunMessage(ray.hitVec);
             Overloaded.proxy.networkWrapper.sendToServer(message);
         }
@@ -88,25 +87,25 @@ public class ItemRayGun extends PowerModItem {
 
         IEnergyStorage energy = itemStack.getCapability(ENERGY, null);
 
-        if(energy.getEnergyStored() < OverloadedConfig.rayGun.energyPerShot) {
+        if (energy.getEnergyStored() < OverloadedConfig.rayGun.energyPerShot) {
             player.sendStatusMessage(new TextComponentString("Not enough power to fire."), true);
             return;
         }
 
         Vec3d eyePos = player.getPositionEyes(1);
 
-        if(eyePos.distanceTo(message.vector) > OverloadedConfig.rayGun.maxRange) {
+        if (eyePos.distanceTo(message.vector) > OverloadedConfig.rayGun.maxRange) {
             player.sendStatusMessage(new TextComponentString("Target out of range."), true);
             return;
         }
 
-        RayTraceResult sanityCheckVec = player.world.rayTraceBlocks(eyePos, message.vector,false,false,false);
-        if(sanityCheckVec != null && sanityCheckVec.typeOfHit != RayTraceResult.Type.MISS) {
+        RayTraceResult sanityCheckVec = player.world.rayTraceBlocks(eyePos, message.vector, false, false, false);
+        if (sanityCheckVec != null && sanityCheckVec.typeOfHit != RayTraceResult.Type.MISS) {
             player.sendStatusMessage(new TextComponentString("Target no longer in sight."), true);
             return;
         }
 
-        energy.extractEnergy(OverloadedConfig.rayGun.energyPerShot,false);
-        player.world.addWeatherEffect(new EntityLightningBolt(player.world,message.vector.x,message.vector.y,message.vector.z, false));
+        energy.extractEnergy(OverloadedConfig.rayGun.energyPerShot, false);
+        player.world.addWeatherEffect(new EntityLightningBolt(player.world, message.vector.x, message.vector.y, message.vector.z, false));
     }
 }

@@ -61,7 +61,7 @@ public class ItemRailGun extends PowerModItem {
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE, null);
 
-        if(cap != null) {
+        if (cap != null) {
             cap.suggestUpdate();
             int energyRequirement = cap.getIntegerMap().getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.railGun.minEngery);
             tooltip.add(String.format("Power Usage: %s", NumberFormat.getInstance().format(energyRequirement)));
@@ -86,7 +86,7 @@ public class ItemRailGun extends PowerModItem {
     @Nonnull
     @SideOnly(Side.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
-        if(worldIn.isRemote) {
+        if (worldIn.isRemote) {
             RayTraceResult ray = rayTraceWithEntities(worldIn, playerIn.getPositionEyes(1), playerIn.getLook(1), playerIn, OverloadedConfig.railGun.maxRange);
             if (ray != null && ray.entityHit != null) {
                 Vec3d moveVev = playerIn.getPositionEyes(1).subtract(ray.hitVec).normalize().scale(-1.0);
@@ -172,6 +172,6 @@ public class ItemRailGun extends PowerModItem {
         integerMap.put(RAILGUN_POWER_KEY, power);
         cap.suggestSave();
 
-        player.sendStatusMessage(new TextComponentString("Power usage set to: " +  NumberFormat.getInstance().format(power)), true);
+        player.sendStatusMessage(new TextComponentString("Power usage set to: " + NumberFormat.getInstance().format(power)), true);
     }
 }

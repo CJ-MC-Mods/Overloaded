@@ -152,7 +152,7 @@ public class BlockCompressed extends ModBlock {
 
     @Override
     public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
-        return getBlockHardness(world.getBlockState(pos), world,pos)/ 5.0F;
+        return getBlockHardness(world.getBlockState(pos), world, pos) / 5.0F;
     }
 
     @Override

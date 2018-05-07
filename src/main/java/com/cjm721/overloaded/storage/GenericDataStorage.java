@@ -1,7 +1,8 @@
 package com.cjm721.overloaded.storage;
 
 import com.google.common.collect.Maps;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
@@ -110,7 +111,7 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
         Map<String, Double> doubles = instance.getDoubleMap();
 
         for (String key : tagCompound.getKeySet()) {
-            switch(tagCompound.getTagId(key)) {
+            switch (tagCompound.getTagId(key)) {
                 case Constants.NBT.TAG_INT:
                     integers.put(key, tagCompound.getInteger(key));
                     break;
@@ -118,7 +119,7 @@ public class GenericDataStorage implements IGenericDataStorage, INBTSerializable
                     booleans.put(key, tagCompound.getBoolean(key));
                     break;
                 case Constants.NBT.TAG_FLOAT:
-                    floats.put(key,tagCompound.getFloat(key));
+                    floats.put(key, tagCompound.getFloat(key));
                     break;
                 case Constants.NBT.TAG_DOUBLE:
                     doubles.put(key, tagCompound.getDouble(key));

@@ -146,7 +146,7 @@ public class ItemMultiTool extends PowerModItem {
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
         return 0f;
     }
-    
+
     @Override
     @Nonnull
     @SideOnly(Side.CLIENT)
@@ -302,7 +302,7 @@ public class ItemMultiTool extends PowerModItem {
         float chance = event.getDropChance();
         for (ItemStack stack : event.getDrops()) {
             if (world.rand.nextFloat() <= chance) {
-                ItemHandlerHelper.giveItemToPlayer(player,stack);
+                ItemHandlerHelper.giveItemToPlayer(player, stack);
             }
         }
         event.getDrops().clear();
@@ -496,14 +496,14 @@ public class ItemMultiTool extends PowerModItem {
 
         switch (getAssistMode()) {
             case PLACE_PREVIEW:
-                if(!stack.isEmpty())
+                if (!stack.isEmpty())
                     renderBlockPreview(event, player, stack, result, state);
                 break;
             case REMOVE_PREVIEW:
                 renderRemovePreview(event, player, result);
                 break;
             case BOTH_PREVIEW:
-                if(!stack.isEmpty())
+                if (!stack.isEmpty())
                     renderBlockPreview(event, player, stack, result, state);
                 renderRemovePreview(event, player, result);
                 break;

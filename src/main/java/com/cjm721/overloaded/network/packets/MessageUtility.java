@@ -10,7 +10,7 @@ public final class MessageUtility {
         double y = buf.readDouble();
         double z = buf.readDouble();
 
-        return new Vec3d(x,y,z);
+        return new Vec3d(x, y, z);
     }
 
     public static void toBytes(ByteBuf buf, Vec3d vector) {

@@ -13,12 +13,12 @@ public class GuiToggle extends GuiButton {
         super(buttonId, x, y, 150, 20, baseText);
         this.baseText = baseText;
         this.booleanState = startingState;
-        this.displayString = String.format("%s %b", baseText,startingState);
+        this.displayString = String.format("%s %b", baseText, startingState);
     }
 
     public void toggle() {
         booleanState = !booleanState;
-        this.displayString = String.format("%s %b", baseText,booleanState);
+        this.displayString = String.format("%s %b", baseText, booleanState);
     }
 
     public boolean getBooleanState() {

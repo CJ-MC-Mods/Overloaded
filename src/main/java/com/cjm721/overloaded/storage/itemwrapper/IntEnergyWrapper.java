@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.storage.itemwrapper;
 
-import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

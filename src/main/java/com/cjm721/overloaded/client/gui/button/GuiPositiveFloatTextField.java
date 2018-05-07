@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.client.gui.button;
 
-import com.google.common.primitives.Floats;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -21,8 +20,8 @@ public class GuiPositiveFloatTextField extends GuiTextField {
         String validChars = "0123456789.-Ee";
 
 
-        for(char c: text.toCharArray()) {
-            if(!validChars.contains(c + "")) {
+        for (char c : text.toCharArray()) {
+            if (!validChars.contains(c + "")) {
                 return false;
             }
         }
@@ -33,30 +32,30 @@ public class GuiPositiveFloatTextField extends GuiTextField {
     public void setFocused(boolean isFocusedIn) {
         super.setFocused(isFocusedIn);
 
-        if(!isFocusedIn) {
+        if (!isFocusedIn) {
             this.setText(Float.toString(getFloatValue()));
         }
     }
 
     public float getFloatValue() {
         String text = this.getText();
-        if(text.isEmpty()) {
+        if (text.isEmpty()) {
             return min;
         }
 
         try {
             float value;
-            if(text.endsWith(".")) {
-                value = Float.parseFloat(text.substring(0,text.length()-1));
+            if (text.endsWith(".")) {
+                value = Float.parseFloat(text.substring(0, text.length() - 1));
             } else {
                 value = Float.parseFloat(text);
             }
 
-            if(value < min) {
+            if (value < min) {
                 value = min;
             }
 
-            if(value > max) {
+            if (value > max) {
                 value = max;
             }
 

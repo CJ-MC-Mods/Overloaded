@@ -1,7 +1,5 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
