@@ -12,9 +12,6 @@ public class MultiArmorConfig {
     public float absoluteDamageMultiplier = 10;
     @Config.Comment("Energy Multiplier for Unblockable Damage. [Default: 10]")
     public float unblockableMultiplier = 10;
-
-    @Config.Comment("Energy used per tick while flying. [Default:10]")
-    public int energyPerTickFlying = 10;
     @Config.Comment("Max level to feed up too. [Default By Vanilla MC: 20]")
     public int maxFoodLevel = 20;
     @Config.Comment("Max saturation level to add too. [Default By Vanilla MC: 5")
@@ -33,12 +30,18 @@ public class MultiArmorConfig {
     public int costPerAir = 10;
     @Config.Comment("Energy Per Tick to use No Clip")
     public int noClipEnergyPerTick = 100000;
+
+    @Config.Comment("Energy used per tick while flying. [Default:10]")
+    public int energyPerTickFlying = 10;
     @Config.Comment("Max flight speed. [Default: 5]")
     public float maxFlightSpeed = 5.0f;
+    @Config.Comment("Energy use multiple per flight speed. [Default: 10]")
+    public float energyMultiplerPerFlightSpeed = 10f;
+
     @Config.Comment("Max ground speed. [Default: 10]")
     public float maxGroundSpeed = 10.0f;
     @Config.Comment("Energy per block walked. [Default: 10]")
     public float energyPerBlockWalked = 10.0f;
-    @Config.Comment("Energy multiplier per ground speed")
-    public float energyMulitplerPerGoundSpeed = 5.0F;
+    @Config.Comment("Energy use multiplier per ground speed. [Default: 5]")
+    public float energyMultiplierPerGroundSpeed = 5.0f;
 }

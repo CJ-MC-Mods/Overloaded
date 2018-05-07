@@ -102,7 +102,7 @@ public class ArmorEventHandler {
 
         float powerRequired = (player.distanceWalkedModified - player.prevDistanceWalkedModified) / 0.6F *
                 OverloadedConfig.multiArmorConfig.energyPerBlockWalked *
-                OverloadedConfig.multiArmorConfig.energyMulitplerPerGoundSpeed * groundSpeed;
+                OverloadedConfig.multiArmorConfig.energyMultiplierPerGroundSpeed * groundSpeed;
 
         if (extractEnergy(player, Math.round(powerRequired), side.isClient())) {
             player.capabilities.setPlayerWalkSpeed(groundSpeed);
@@ -197,13 +197,17 @@ public class ArmorEventHandler {
         final Map<String, Boolean> booleans = dataStorage.getBooleanMap();
         final Map<String, Float> armorFloats = armorDataStorage.getFloatMap();
 
+        float flightSpeed = armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
+
         player.capabilities.allowFlying = true;
         if (side.isClient()) {
             player.capabilities.setFlySpeed(armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED));
         }
         booleans.put(set, true);
 
-        if (player.capabilities.isFlying && !extractEnergy(player, OverloadedConfig.multiArmorConfig.energyPerTickFlying, side.isClient())) {
+        int energyCost = Math.round(OverloadedConfig.multiArmorConfig.energyPerTickFlying * flightSpeed * OverloadedConfig.multiArmorConfig.energyMultiplerPerFlightSpeed);
+
+        if (player.capabilities.isFlying && !extractEnergy(player, energyCost, side.isClient())) {
             disableFlight(player, dataStorage, side);
         }
     }
