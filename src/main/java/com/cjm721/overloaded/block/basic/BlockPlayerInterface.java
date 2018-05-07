@@ -40,7 +40,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class BlockPlayerInterface extends ModBlock implements ITileEntityProvider {
 
     public BlockPlayerInterface() {
-        super(Material.WOOD);
+        super(Material.ROCK);
     }
 
     @Override
