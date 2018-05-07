@@ -85,7 +85,7 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
-
+            
             player.capabilities.setPlayerWalkSpeed(armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED));
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
