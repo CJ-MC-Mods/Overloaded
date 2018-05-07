@@ -1,8 +1,11 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.proxy.CommonProxy;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -12,6 +15,7 @@ import java.io.File;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "[1.12,1.13)",
+        certificateFingerprint = "${FINGERPRINT}",
         useMetadata = true
 )
 public class Overloaded {
@@ -47,5 +51,10 @@ public class Overloaded {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+    }
+
+    @Mod.EventHandler
+    public void onFingerprintException(FMLFingerprintViolationEvent event) {
+        FMLLog.log.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
     }
 }

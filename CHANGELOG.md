@@ -1,3 +1,7 @@
+**Version: 0.0.51 (RELEASE)**
+* jar is now signed (Because why not?)
+
+-------------------------------------------------------------------
 **Version: 0.0.50 (RELEASE)**
 
 Mostly quality of life changes / just getting the code base in a better state.
