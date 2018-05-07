@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -68,6 +69,7 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        OreDictionary.registerOre("blockNetherStar", ModBlocks.netherStarBlock);
         ModBlocks.secondaryCompressedInit();
         networkWrapper = new SimpleNetworkWrapper("overloaded");
 
@@ -103,5 +105,4 @@ public class CommonProxy {
         for (Item item : itemToRegister)
             event.getRegistry().register(item);
     }
-
 }

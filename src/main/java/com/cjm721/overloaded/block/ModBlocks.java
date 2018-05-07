@@ -20,6 +20,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -43,7 +44,7 @@ public final class ModBlocks {
 
     private static ModBlock energyExtractor;
 
-    private static ModBlock netherStarBlock;
+    public static ModBlock netherStarBlock;
     private static ModBlock playerInterface;
     private static ModBlock itemInterface;
 

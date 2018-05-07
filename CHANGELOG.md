@@ -1,14 +1,16 @@
-Version: 0.0.50 (RELEASE)
+**Version: 0.0.50 (RELEASE)**
+
 * Changelog will now be appended with previous info (pulled changelogs from last two days also)
 * Added One Probe Integration for Item Interface / Player Interface / Hyper * Senders / Infinity Capacitor
-* Linking Card will no longer forget the receiver when binding.
+* Linking Card will no longer forget the receiver when binding
+* Nether Star Block is now Ore Dictionaryed to blockNetherStar 
 * Code Cleanup using IDEA's automated tasks 
 
 Fixed:
 * NPE if you somehow placed a Player Interface without setting the placer
 
 -------------------------------------------------------------------
-Version: 0.0.49 (RELEASE)
+**Version: 0.0.49 (RELEASE)**
 
 * Multi-Armor Settings Editor Implemented (+Recipe)
   * Right Click in GUI to change to more precise input mode for sliders.
@@ -24,7 +26,7 @@ Fixed:
 * Compressed Block now have blast resistance that corresponds to their hardness.
 
 -------------------------------------------------------------------
-Version: 0.0.48 (BETA)
+**Version: 0.0.48 (BETA)**
 
 Making build as beta as most likely will also push an update within next 24 hours to move settings GUI out of Dev Mode. All changes should be stable.
 
