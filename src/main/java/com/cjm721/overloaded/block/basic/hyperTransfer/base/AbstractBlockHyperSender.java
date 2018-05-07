@@ -1,22 +1,27 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.block.tile.hyperTransfer.base.AbstractTileHyperSender;
+import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.item.ModItems;
+import mcjty.theoneprobe.api.*;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider {
+@Optional.Interface(iface = "mcjty.theoneprobe.api.IProbeInfoAccessor", modid = "theoneprobe")
+public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode implements ITileEntityProvider, IProbeInfoAccessor {
 
     public AbstractBlockHyperSender(@Nonnull Material materialIn) {
         super(materialIn);
@@ -64,6 +69,13 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode im
         ((AbstractTileHyperSender) world.getTileEntity(pos)).setPartnerInfo(partnerWorldId, partnerPos);
     }
 
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        TileEntity te = world.getTileEntity(data.getPos());
+        if(te != null && te instanceof AbstractTileHyperSender) {
+            probeInfo.text(((AbstractTileHyperSender) te).getRightClickMessage());
+        }
+    }
 }
 
 

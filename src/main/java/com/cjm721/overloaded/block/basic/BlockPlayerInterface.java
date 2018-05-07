@@ -1,12 +1,14 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TilePlayerInterface;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.mojang.authlib.GameProfile;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProbeInfoAccessor;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +40,8 @@ import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-public class BlockPlayerInterface extends ModBlock implements ITileEntityProvider {
+@Optional.Interface(iface = "mcjty.theoneprobe.api.IProbeInfoAccessor", modid = "theoneprobe")
+public class BlockPlayerInterface extends ModBlock implements ITileEntityProvider, IProbeInfoAccessor {
 
     public BlockPlayerInterface() {
         super(Material.ROCK);
@@ -106,12 +110,32 @@ public class BlockPlayerInterface extends ModBlock implements ITileEntityProvide
 
             if (te instanceof TilePlayerInterface) {
                 UUID placer = ((TilePlayerInterface) te).getPlacer();
-                String username = UsernameCache.getLastKnownUsername(placer);
 
-                playerIn.sendMessage(new TextComponentString("Bound to player: " + username == null ? placer.toString() : username));
+                if(placer == null) {
+                    playerIn.sendMessage(new TextComponentString("Not bound to anyone..... ghosts placed this."));
+                } else {
+                    String username = UsernameCache.getLastKnownUsername(placer);
+                    playerIn.sendMessage(new TextComponentString("Bound to player: " + (username == null ? placer.toString() : username)));
+                }
             }
         }
 
         return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
+        TileEntity te = world.getTileEntity(data.getPos());
+        if (te != null && te instanceof TilePlayerInterface) {
+            UUID placer = ((TilePlayerInterface) te).getPlacer();
+            if(placer == null) {
+                probeInfo.text("Not bound to anyone.");
+            } else {
+                String username = UsernameCache.getLastKnownUsername(placer);
+                probeInfo.text("Bound to player: " + (username == null ? placer.toString() : username));
+
+            }
+
+        }
     }
 }
