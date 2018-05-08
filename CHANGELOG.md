@@ -1,5 +1,8 @@
-**Version: 0.0.51 (RELEASE)**
+**Version: 0.0.50.1 (RELEASE)**
+Hotfix to disable ground speed modifications
+
 * jar is now signed (Because why not?)
+* Disable ground speed modifications as the way I am currently doing it breaks servers
 
 -------------------------------------------------------------------
 **Version: 0.0.50 (RELEASE)**
