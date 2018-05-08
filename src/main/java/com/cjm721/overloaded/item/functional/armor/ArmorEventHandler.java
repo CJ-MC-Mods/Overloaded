@@ -85,14 +85,14 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
-            tryGroundSpeed(player, armorDataStorage, event.side);
+//            tryGroundSpeed(player, armorDataStorage, event.side);
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
                 disableFlight(player, event.side);
                 disableNoClip(player, playerDataStorage);
-                disableGroundSpeed(player);
+//                disableGroundSpeed(player,event.side);
             }
         }
     }
@@ -105,14 +105,18 @@ public class ArmorEventHandler {
                 OverloadedConfig.multiArmorConfig.energyMultiplierPerGroundSpeed * groundSpeed;
 
         if (extractEnergy(player, Math.round(powerRequired), side.isClient())) {
-            player.capabilities.setPlayerWalkSpeed(groundSpeed);
+            if(side.isClient()) {
+                player.capabilities.setPlayerWalkSpeed(groundSpeed);
+            }
         } else {
-            disableGroundSpeed(player);
+            disableGroundSpeed(player,side);
         }
     }
 
-    private void disableGroundSpeed(EntityPlayer player) {
-        player.capabilities.setPlayerWalkSpeed(0.1F);
+    private void disableGroundSpeed(EntityPlayer player, Side side) {
+        if(side.isClient()) {
+            player.capabilities.setPlayerWalkSpeed(0.1F);
+        }
     }
 
     private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage) {
