@@ -1,3 +1,8 @@
+**Version: 0.0.51 (RELEASE)**
+* Enable ground speed modifier again. (Why can't flight and walk speed be done the same way... 
+to many one offs for my liking, although I like how ground speed is done now, might make some more features out of it) 
+
+-------------------------------------------------------------------
 **Version: 0.0.50.1 (RELEASE)**
 Hotfix to disable ground speed modifications
 

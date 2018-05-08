@@ -7,8 +7,12 @@ import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -32,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
@@ -50,6 +55,8 @@ public class ArmorEventHandler {
 
     private static final String set = "set";
     private static final String noClip = "noClip";
+    private static final UUID groundSpeedAttribute = UUID.fromString("3248a207-cc70-4fc5-ad06-89cebfbb274e");
+
 
     @SubscribeEvent
     public void onPlayerTickEvent(@Nonnull TickEvent.PlayerTickEvent event) {
@@ -85,14 +92,14 @@ public class ArmorEventHandler {
             if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
                 tryGiveAir(player, event.side);
             }
-//            tryGroundSpeed(player, armorDataStorage, event.side);
+            tryGroundSpeed(player, armorDataStorage, event.side);
         } else {
             Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
             if (boolMap.containsKey(set) && boolMap.get(set)) {
                 boolMap.put(set, false);
                 disableFlight(player, event.side);
                 disableNoClip(player, playerDataStorage);
-//                disableGroundSpeed(player,event.side);
+                disableGroundSpeed(player,event.side);
             }
         }
     }
@@ -102,21 +109,23 @@ public class ArmorEventHandler {
 
         float powerRequired = (player.distanceWalkedModified - player.prevDistanceWalkedModified) / 0.6F *
                 OverloadedConfig.multiArmorConfig.energyPerBlockWalked *
-                OverloadedConfig.multiArmorConfig.energyMultiplierPerGroundSpeed * groundSpeed;
+                OverloadedConfig.multiArmorConfig.energyMultiplierPerGroundSpeed * (groundSpeed - Default.GROUND_SPEED);
 
         if (extractEnergy(player, Math.round(powerRequired), side.isClient())) {
-            if(side.isClient()) {
-                player.capabilities.setPlayerWalkSpeed(groundSpeed);
-            }
-        } else {
+            Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+            multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(groundSpeedAttribute, "Ground Speed modifier", (double) groundSpeed, 0));
+
+            player.getAttributeMap().applyAttributeModifiers(multimap);
+        }else {
             disableGroundSpeed(player,side);
         }
     }
 
     private void disableGroundSpeed(EntityPlayer player, Side side) {
-        if(side.isClient()) {
-            player.capabilities.setPlayerWalkSpeed(0.1F);
-        }
+        Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+        multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(groundSpeedAttribute, "Ground Speed modifier", (double) 0.2F, 0));
+
+        player.getAttributeMap().removeAttributeModifiers(multimap);
     }
 
     private void disableNoClip(EntityPlayer player, IGenericDataStorage dataStorage) {
@@ -281,6 +290,10 @@ public class ArmorEventHandler {
     }
 
     private boolean extractEnergy(EntityPlayer player, int energyCost, boolean simulated) {
+        if(energyCost <= 0) {
+            return true;
+        }
+
         final int originalCost = energyCost;
         for (ItemStack stack : player.getArmorInventoryList()) {
             IEnergyStorage energyStorage = stack.getCapability(ENERGY, null);
