@@ -1,9 +1,18 @@
+**Dev/Alpha/Beta Build**
+
+* Can now upload to Curse from command line. Means most likely will start to have lots of alpha builds. Don't know how 
+often I want to push to curse yet.
+
+
+-------------------------------------------------------------------
 **Version: 0.0.51 (RELEASE)**
+
 * Enable ground speed modifier again. (Why can't flight and walk speed be done the same way... 
 to many one offs for my liking, although I like how ground speed is done now, might make some more features out of it) 
 
 -------------------------------------------------------------------
 **Version: 0.0.50.1 (RELEASE)**
+
 Hotfix to disable ground speed modifications
 
 * jar is now signed (Because why not?)

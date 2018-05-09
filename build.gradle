@@ -5,13 +5,18 @@ buildscript {
         maven {
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.10"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 apply plugin: 'maven'
 apply plugin: 'idea'
@@ -109,4 +114,16 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     keyPass = project.findProperty('keyStoreKeyPass')
     inputFile = jar.archivePath
     outputFile = jar.archivePath
+}
+
+reobfJar.finalizedBy(signJar)
+
+curseforge {
+    apiKey = project.findProperty('curseForgeAPIKey')
+    project {
+        id = '264601'
+        changelog = file('CHANGELOG.md') // A file can also be set using: changelog = file('changelog.txt')
+        changelogType = 'markdown'
+        releaseType = 'alpha'
+    }
 }
