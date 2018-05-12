@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.compressed;
 
-import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.compressed.CompressedEntry;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class CompressedBlockHandler {
     public static List<BlockCompressed> initFromConfig() throws IOException {
         List<BlockCompressed> compressedBlocks = new LinkedList<>();
 
-        for (CompressedEntry entry : OverloadedConfig.compressedConfig.getCompressedEntries()) {
+        for (CompressedEntry entry : Overloaded.cachedConfig.compressedConfig.getCompressedEntries()) {
             BlockCompressed compressedBlock = CompressedBlockHandler.CreateCompressedBlock(entry);
             compressedBlocks.add(compressedBlock);
         }

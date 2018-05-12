@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiChestplate;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -50,14 +50,14 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/armors/multi_body.png"),
                 new ResourceLocation(MODID, "textures/dynamic/armors/multi_body.png"),
-                OverloadedConfig.textureResolutions.multiArmorResolution));
+                Overloaded.cachedConfig.textureResolutions.multiArmorResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/armors/multi_left_arm.png"),
                 new ResourceLocation(MODID, "textures/dynamic/armors/multi_left_arm.png"),
-                OverloadedConfig.textureResolutions.multiArmorResolution));
+                Overloaded.cachedConfig.textureResolutions.multiArmorResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/armors/multi_right_arm.png"),
                 new ResourceLocation(MODID, "textures/dynamic/armors/multi_right_arm.png"),
-                OverloadedConfig.textureResolutions.multiArmorResolution));
+                Overloaded.cachedConfig.textureResolutions.multiArmorResolution));
     }
 }

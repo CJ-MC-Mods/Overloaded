@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -50,6 +50,6 @@ public class ItemMultiBoots extends AbstractMultiArmor {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
                 new ResourceLocation(MODID, "textures/dynamic/armors/multi_boot.png"),
-                OverloadedConfig.textureResolutions.multiArmorResolution));
+                Overloaded.cachedConfig.textureResolutions.multiArmorResolution));
     }
 }

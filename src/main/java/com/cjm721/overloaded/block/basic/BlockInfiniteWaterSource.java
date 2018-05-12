@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileInfiniteWaterSource;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -55,7 +55,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_water_source.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_water_source.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @SideOnly(Side.CLIENT)

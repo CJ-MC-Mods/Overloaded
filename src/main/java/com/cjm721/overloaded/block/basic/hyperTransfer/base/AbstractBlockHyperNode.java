@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -46,27 +46,27 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_item_sender.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_item_sender.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_item_receiver.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_item_receiver.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_fluid_sender.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_fluid_sender.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_fluid_receiver.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_fluid_receiver.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_energy_sender.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_energy_sender.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/hyper_energy_receiver.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/hyper_energy_receiver.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @SideOnly(Side.CLIENT)

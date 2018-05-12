@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemInterface;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoAccessor;
@@ -61,7 +61,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/block.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/block.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemManipulator;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -57,7 +57,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/item_manipulator.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/item_manipulator.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.AssistMode;
@@ -101,7 +100,7 @@ public class ItemMultiTool extends PowerModItem {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/items/ntool.png"),
                 new ResourceLocation(MODID, "textures/dynamic/items/ntool.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @SideOnly(Side.CLIENT)
@@ -161,7 +160,7 @@ public class ItemMultiTool extends PowerModItem {
     }
 
     private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
-        return (float) ((hardness * OverloadedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1)) + (OverloadedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
+        return (float) ((hardness * Overloaded.cachedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1)) + (Overloaded.cachedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1)) + distance);
     }
 
     /**
@@ -189,11 +188,16 @@ public class ItemMultiTool extends PowerModItem {
             }
         }
 
+        if(player.getDistanceSq(blockPos) > Overloaded.cachedConfig.multiToolConfig.reach * Overloaded.cachedConfig.multiToolConfig.reach ) {
+            return BlockResult.FAIL_RANGE;
+        }
+
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
         MinecraftForge.EVENT_BUS.post(event);
 
-        if (event.isCanceled())
+        if (event.isCanceled()) {
             return BlockResult.FAIL_REMOVE;
+        }
 
         boolean result = PlayerInteractionUtil.tryHarvestBlock(player, worldIn, blockPos);
         return result ? BlockResult.SUCCESS : BlockResult.FAIL_REMOVE;
@@ -212,7 +216,7 @@ public class ItemMultiTool extends PowerModItem {
         World world = source.getEntityWorld();
         double distanceToEnd = endingLocation.distanceTo(startingLocation);
         // Make the reach check unnessicary * Change to for loop
-        while (distanceToEnd > 0.3D && distanceToEnd < (OverloadedConfig.multiToolConfig.reach * 2)) {
+        while (distanceToEnd > 0.3D && distanceToEnd < (Overloaded.cachedConfig.multiToolConfig.reach * 2)) {
             world.spawnParticle(type, startingLocation.x, startingLocation.y, startingLocation.z, 0, 0, 0);//direction.xCoord, direction.yCoord, direction.zCoord);
             startingLocation = startingLocation.add(direction.scale(0.25D));
             distanceToEnd = endingLocation.distanceTo(startingLocation);
@@ -267,18 +271,18 @@ public class ItemMultiTool extends PowerModItem {
 
     private void changeHelpMode(int dwheel) {
         AssistMode[] values = AssistMode.values();
-        int mode = (OverloadedConfig.multiToolConfig.assistMode + Integer.signum(dwheel)) % values.length;
+        int mode = (Overloaded.cachedConfig.multiToolConfig.assistMode + Integer.signum(dwheel)) % values.length;
         if (mode < 0)
             mode += values.length;
 
-        OverloadedConfig.multiToolConfig.assistMode = mode;
+        Overloaded.cachedConfig.multiToolConfig.assistMode = mode;
         ConfigManager.sync(MODID, Config.Type.INSTANCE);
     }
 
     @Nonnull
     private AssistMode getAssistMode() {
         AssistMode[] values = AssistMode.values();
-        int mode = OverloadedConfig.multiToolConfig.assistMode;
+        int mode = Overloaded.cachedConfig.multiToolConfig.assistMode;
 
         for (AssistMode assistMode : values) {
             if (assistMode.getMode() == mode) {
@@ -354,6 +358,9 @@ public class ItemMultiTool extends PowerModItem {
                     break;
                 case FAIL_UNBREAKABLE:
                     player.sendStatusMessage(new TextComponentString("Block is unbreakable"), true);
+                    break;
+                case FAIL_RANGE:
+                    player.sendStatusMessage(new TextComponentString("Block is out of range."), true);
                     break;
                 case SUCCESS:
                     break;

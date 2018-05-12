@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
@@ -62,7 +62,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/armors/multi_helmet.png"),
                 new ResourceLocation(MODID, "textures/dynamic/armors/multi_helmet.png"),
-                OverloadedConfig.textureResolutions.multiArmorResolution));
+                Overloaded.cachedConfig.textureResolutions.multiArmorResolution));
     }
 
     public void updateSettings(EntityPlayerMP entityPlayerMP, MultiArmorSettingsMessage message) {
@@ -84,8 +84,8 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
         settings.suggestUpdate();
 
         Map<String, Float> floats = settings.getFloatMap();
-        floats.put(DataKeys.FLIGHT_SPEED, Floats.constrainToRange(message.flightSpeed, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed));
-        floats.put(DataKeys.GROUND_SPEED, Floats.constrainToRange(message.groundSpeed, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed));
+        floats.put(DataKeys.FLIGHT_SPEED, Floats.constrainToRange(message.flightSpeed, 0, Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed));
+        floats.put(DataKeys.GROUND_SPEED, Floats.constrainToRange(message.groundSpeed, 0, Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed));
 
         Map<String, Boolean> booleans = settings.getBooleanMap();
         booleans.put(DataKeys.NOCLIP_FLIGHT_LOCK, message.noclipFlightLock);

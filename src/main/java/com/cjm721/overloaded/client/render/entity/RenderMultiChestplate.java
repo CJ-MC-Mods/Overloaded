@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.config.OverloadedConfig.textureResolutions;
+import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
 /**
  * Created by CJ on 5/25/2017.
@@ -17,7 +17,7 @@ import static com.cjm721.overloaded.config.OverloadedConfig.textureResolutions;
 public class RenderMultiChestplate extends ModelBiped {
 
     public RenderMultiChestplate() {
-        super(0, 0, textureResolutions.multiArmorResolution, textureResolutions.multiArmorResolution);
+        super(0, 0, cachedConfig.textureResolutions.multiArmorResolution, cachedConfig.textureResolutions.multiArmorResolution);
         this.bipedBody.cubeList.clear();
         this.bipedRightArm.cubeList.clear();
         this.bipedLeftArm.cubeList.clear();

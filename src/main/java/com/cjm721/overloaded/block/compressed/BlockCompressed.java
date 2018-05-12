@@ -4,7 +4,6 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.config.compressed.CompressedEntry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -158,7 +157,7 @@ public class BlockCompressed extends ModBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag advanced) {
-        if (OverloadedConfig.compressedConfig.showHardness)
+        if (Overloaded.cachedConfig.compressedConfig.showHardness)
             tooltip.add(String.format("Hardness: %.0f", ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()).getBlockHardness(null, null)));
 
         super.addInformation(stack, world, tooltip, advanced);

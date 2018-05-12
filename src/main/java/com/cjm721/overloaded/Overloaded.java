@@ -1,7 +1,9 @@
 package com.cjm721.overloaded;
 
+import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
 import com.cjm721.overloaded.proxy.CommonProxy;
-import net.minecraft.client.Minecraft;
+import com.google.gson.Gson;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -12,6 +14,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+
+import static com.cjm721.overloaded.config.ForgeOverloadedConfigHolder.overloadedConfig;
 
 @Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
         acceptedMinecraftVersions = "[1.12,1.13)",
@@ -27,7 +31,7 @@ public class Overloaded {
     static final String VERSION = "${mod_version}";
 
     private static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
-    private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.CommonProxy";
+    private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.ServerProxy";
 
     @SidedProxy(clientSide = Overloaded.PROXY_CLIENT, serverSide = Overloaded.PROXY_SERVER)
     public static CommonProxy proxy;
@@ -35,11 +39,14 @@ public class Overloaded {
     public static File configFolder;
     public static Logger logger;
 
+    public static OverloadedConfig cachedConfig;
+
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Overloaded.logger = event.getModLog();
         configFolder = new File(event.getModConfigurationDirectory(), "overloaded/");
         configFolder.mkdir();
+        ConfigSyncHandler.INSTANCE.updateConfig();
         proxy.preInit(event);
     }
 

@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.block.basic.container;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperType;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import mcjty.theoneprobe.api.*;
@@ -65,7 +65,7 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_capacitor.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_capacitor.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @Override

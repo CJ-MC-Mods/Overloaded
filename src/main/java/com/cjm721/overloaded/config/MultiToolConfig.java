@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.config.Config;
 
 public class MultiToolConfig {
 
+    @SyncToClient
     @Config.Comment({"Max range Multi-Tool can edit blocks [Default: 128]"})
     public int reach = 128;
 

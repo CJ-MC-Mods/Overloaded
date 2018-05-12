@@ -3,7 +3,6 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RayGunMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -58,7 +57,7 @@ public class ItemRayGun extends PowerModItem {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/items/ray_gun.png"),
                 new ResourceLocation(MODID, "textures/dynamic/items/ray_gun.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @Override
@@ -87,14 +86,14 @@ public class ItemRayGun extends PowerModItem {
 
         IEnergyStorage energy = itemStack.getCapability(ENERGY, null);
 
-        if (energy.getEnergyStored() < OverloadedConfig.rayGun.energyPerShot) {
+        if (energy.getEnergyStored() < Overloaded.cachedConfig.rayGun.energyPerShot) {
             player.sendStatusMessage(new TextComponentString("Not enough power to fire."), true);
             return;
         }
 
         Vec3d eyePos = player.getPositionEyes(1);
 
-        if (eyePos.distanceTo(message.vector) > OverloadedConfig.rayGun.maxRange) {
+        if (eyePos.distanceTo(message.vector) > Overloaded.cachedConfig.rayGun.maxRange) {
             player.sendStatusMessage(new TextComponentString("Target out of range."), true);
             return;
         }
@@ -105,7 +104,7 @@ public class ItemRayGun extends PowerModItem {
             return;
         }
 
-        energy.extractEnergy(OverloadedConfig.rayGun.energyPerShot, false);
+        energy.extractEnergy(Overloaded.cachedConfig.rayGun.energyPerShot, false);
         player.world.addWeatherEffect(new EntityLightningBolt(player.world, message.vector.x, message.vector.y, message.vector.z, false));
     }
 }

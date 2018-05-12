@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -15,6 +16,8 @@ class ConfigChangedHandler {
     public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.getModID().equals(MODID)) {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
+
+            ConfigSyncHandler.INSTANCE.updateConfig();
         }
     }
 }

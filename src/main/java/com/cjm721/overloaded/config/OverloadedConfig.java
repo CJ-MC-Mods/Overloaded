@@ -1,28 +1,31 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.config.Config;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
-
-@Config(modid = MODID)
 public class OverloadedConfig {
-
     @Config.Name("Compressed Blocks")
-    public static CompressedConfig compressedConfig = new CompressedConfig();
+    public CompressedConfig compressedConfig = new CompressedConfig();
+    @SyncToClient
     @Config.Name("Multi-Tool")
-    public static MultiToolConfig multiToolConfig = new MultiToolConfig();
+    public MultiToolConfig multiToolConfig = new MultiToolConfig();
+    @SyncToClient
     @Config.Name("Multi-Armor")
-    public static MultiArmorConfig multiArmorConfig = new MultiArmorConfig();
+    public MultiArmorConfig multiArmorConfig = new MultiArmorConfig();
+    @SyncToClient
     @Config.Name("Development")
-    public static DevelopmentConfig developmentConfig = new DevelopmentConfig();
+    public DevelopmentConfig developmentConfig = new DevelopmentConfig();
     @Config.Name("Texture Resolutions")
-    public static ResolutionConfig textureResolutions = new ResolutionConfig();
+    public ResolutionConfig textureResolutions = new ResolutionConfig();
+    @SyncToClient
     @Config.Name("Matter Purifier")
-    public static PurifierConfig purifierConfig = new PurifierConfig();
+    public PurifierConfig purifierConfig = new PurifierConfig();
     @Config.Name("Special Entires")
-    public static SpecialConfig specialConfig = new SpecialConfig();
+    public SpecialConfig specialConfig = new SpecialConfig();
+    @SyncToClient
     @Config.Name("Ray Gun")
-    public static RayGunConfig rayGun = new RayGunConfig();
+    public RayGunConfig rayGun = new RayGunConfig();
+    @SyncToClient
     @Config.Name("Rail Gun")
-    public static RailGunConfig railGun = new RailGunConfig();
+    public RailGunConfig railGun = new RailGunConfig();
 }

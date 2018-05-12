@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.block.basic.container;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperType;
 import com.cjm721.overloaded.storage.LongFluidStack;
 import net.minecraft.block.ITileEntityProvider;
@@ -59,7 +59,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_tank.png"),
                 new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_tank.png"),
-                OverloadedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution));
     }
 
     @Override

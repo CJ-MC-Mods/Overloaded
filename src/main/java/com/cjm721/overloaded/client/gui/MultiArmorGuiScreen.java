@@ -4,7 +4,6 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.gui.button.GuiPositiveFloatTextField;
 import com.cjm721.overloaded.client.gui.button.GuiSlider;
 import com.cjm721.overloaded.client.gui.button.GuiToggle;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
@@ -73,13 +72,13 @@ public class MultiArmorGuiScreen extends GuiScreen {
         this.cancel = addButton(new GuiButton(id++, this.width / 2 - 150, this.height / 4 + 100, 150, 20, "Cancel"));
 
         float flightSpeedValue = floats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
-        this.flightSpeed = addButton(new GuiSlider(id++, this.width / 2 - 150, this.height / 4, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed, flightSpeedValue, "Flight Speed:"));
-        this.flightSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer, this.flightSpeed.x, this.flightSpeed.y, this.flightSpeed.width, this.flightSpeed.height, flightSpeedValue, 0, OverloadedConfig.multiArmorConfig.maxFlightSpeed);
+        this.flightSpeed = addButton(new GuiSlider(id++, this.width / 2 - 150, this.height / 4, 0, Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed, flightSpeedValue, "Flight Speed:"));
+        this.flightSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer, this.flightSpeed.x, this.flightSpeed.y, this.flightSpeed.width, this.flightSpeed.height, flightSpeedValue, 0, Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed);
         this.flightSpeedTextBox.setVisible(false);
 
         float groundSpeedValue = floats.getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED);
-        this.groundSpeed = addButton(new GuiSlider(id++, this.width / 2, this.height / 4, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed, groundSpeedValue, "Ground Speed:"));
-        this.groundSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer, this.groundSpeed.x, this.groundSpeed.y, this.groundSpeed.width, this.groundSpeed.height, groundSpeedValue, 0, OverloadedConfig.multiArmorConfig.maxGroundSpeed);
+        this.groundSpeed = addButton(new GuiSlider(id++, this.width / 2, this.height / 4, 0, Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed, groundSpeedValue, "Ground Speed:"));
+        this.groundSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer, this.groundSpeed.x, this.groundSpeed.y, this.groundSpeed.width, this.groundSpeed.height, groundSpeedValue, 0, Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed);
         this.groundSpeedTextBox.setVisible(false);
 
         this.flightEnabled = addButton(new GuiToggle(id++, this.width / 2 - 150, this.height / 4 + 20, booleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT), "Flight:"));

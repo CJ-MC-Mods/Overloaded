@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.client.render.dynamic.compressed.block;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -94,8 +94,8 @@ public class CompressedBlockAssets {
 
         BufferedImage compressedImage = new BufferedImage(image.getColorModel(), raster, false, null);
 
-        if (compressedImage.getWidth() > OverloadedConfig.compressedConfig.maxTextureWidth) {
-            compressedImage = ImageUtil.scaleDownToWidth(compressedImage, OverloadedConfig.compressedConfig.maxTextureWidth);
+        if (compressedImage.getWidth() > Overloaded.cachedConfig.compressedConfig.maxTextureWidth) {
+            compressedImage = ImageUtil.scaleDownToWidth(compressedImage, Overloaded.cachedConfig.compressedConfig.maxTextureWidth);
         }
 
         ResourceLocation rl = getTexturePath(locations.compressed);

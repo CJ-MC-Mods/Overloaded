@@ -1,8 +1,9 @@
 **Dev/Alpha/Beta Build**
 
-* Can now upload to Curse from command line. Means most likely will start to have lots of alpha builds. Don't know how 
-often I want to push to curse yet.
-
+* Config is now synced from server to client
+* Config rewrite - physical files are the same though   
+* Can now upload to Curse from command line. (No mod changes)
+* Forge version compiled against bumped up to 2611, should still be compatible with old versions.
 
 -------------------------------------------------------------------
 **Version: 0.0.51 (RELEASE)**

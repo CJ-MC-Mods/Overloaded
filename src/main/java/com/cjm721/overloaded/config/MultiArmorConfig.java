@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.config.Config;
 
 public class MultiArmorConfig {
@@ -31,13 +32,15 @@ public class MultiArmorConfig {
     @Config.Comment("Energy Per Tick to use No Clip")
     public int noClipEnergyPerTick = 100000;
 
-    @Config.Comment("Energy used per tick while flying. [Default:10]")
-    public int energyPerTickFlying = 10;
+    @SyncToClient
     @Config.Comment("Max flight speed. [Default: 5]")
     public float maxFlightSpeed = 5.0f;
+    @Config.Comment("Energy used per tick while flying. [Default:10]")
+    public int energyPerTickFlying = 10;
     @Config.Comment("Energy use multiple per flight speed. [Default: 10]")
     public float energyMultiplerPerFlightSpeed = 10f;
 
+    @SyncToClient
     @Config.Comment("Max ground speed. [Default: 10]")
     public float maxGroundSpeed = 10.0f;
     @Config.Comment("Energy per block walked. [Default: 10]")

@@ -2,9 +2,11 @@ package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.OverloadedGuiHandler;
+import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
@@ -84,9 +86,13 @@ public class CommonProxy {
         networkWrapper.registerMessage(KeyBindPressedHandler.class, KeyBindPressedMessage.class, dis++, Side.SERVER);
         networkWrapper.registerMessage(NoClipUpdateHandler.class, NoClipStatusMessage.class, dis++, Side.CLIENT);
 
+        networkWrapper.registerMessage(ConfigSyncHandler.INSTANCE, ConfigSyncMessage.class, dis++, Side.CLIENT);
+
+
         MinecraftForge.EVENT_BUS.register(ModItems.multiTool);
         MinecraftForge.EVENT_BUS.register(ModItems.railgun);
         MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
     }

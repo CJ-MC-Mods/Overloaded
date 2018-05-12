@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.config.Config;
 
 public class RailGunConfig {
@@ -10,6 +11,7 @@ public class RailGunConfig {
     public int maxEnergy = 2000000000;
     @Config.Comment("Energy change step (via scroll wheel). [Default: 10,000,000]")
     public int stepEnergy = 10000000;
+    @SyncToClient
     @Config.Comment("Max range to shoot. [Default: 128]")
     public int maxRange = 128;
     @Config.Comment("Damage per RF(FE) spent. [Default: 0.00001")

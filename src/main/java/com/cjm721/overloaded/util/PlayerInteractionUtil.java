@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.util;
 
-import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.Overloaded;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.BlockStructure;
@@ -98,7 +98,7 @@ public class PlayerInteractionUtil {
 
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(), newPosition.getY(), newPosition.getZ()));
 
-        long cost = OverloadedConfig.multiToolConfig.placeBaseCost + OverloadedConfig.multiToolConfig.costPerMeterAway * distance;
+        long cost = Overloaded.cachedConfig.multiToolConfig.placeBaseCost + Overloaded.cachedConfig.multiToolConfig.costPerMeterAway * distance;
         if (!player.capabilities.isCreativeMode && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
             return false;
 
@@ -140,7 +140,7 @@ public class PlayerInteractionUtil {
     @Nullable
     @SideOnly(Side.CLIENT)
     public static RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
-        RayTraceResult result = player.rayTrace(OverloadedConfig.multiToolConfig.reach, partialTicks);
+        RayTraceResult result = player.rayTrace(Overloaded.cachedConfig.multiToolConfig.reach, partialTicks);
 
         if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK)
             return null;
