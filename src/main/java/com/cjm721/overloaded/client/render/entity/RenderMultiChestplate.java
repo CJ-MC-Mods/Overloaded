@@ -14,10 +14,9 @@ import static com.cjm721.overloaded.Overloaded.cachedConfig;
 /**
  * Created by CJ on 5/25/2017.
  */
-public class RenderMultiChestplate extends ModelBiped {
+public class RenderMultiChestplate extends AbstractRenderMultiArmor {
 
     public RenderMultiChestplate() {
-        super(0, 0, cachedConfig.textureResolutions.multiArmorResolution, cachedConfig.textureResolutions.multiArmorResolution);
         this.bipedBody.cubeList.clear();
         this.bipedRightArm.cubeList.clear();
         this.bipedLeftArm.cubeList.clear();

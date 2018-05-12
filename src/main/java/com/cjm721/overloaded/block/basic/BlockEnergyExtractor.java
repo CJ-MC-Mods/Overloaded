@@ -2,6 +2,7 @@ package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.util.FacingStateMapper;
 import net.minecraft.block.ITileEntityProvider;
@@ -67,15 +68,10 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     @Override
     @SideOnly(Side.CLIENT)
     public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+        super.registerModel();
 
-        FacingStateMapper stateMapper = new FacingStateMapper(getRegistryName());
-        ModelLoader.setCustomStateMapper(this, stateMapper);
-
-        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+        ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/blocks/energy_extractor.png"),
-                new ResourceLocation(MODID, "textures/dynamic/blocks/energy_extractor.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 }

@@ -11,11 +11,9 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
-public class RenderMultiHelmet extends ModelBiped {
+public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
     public RenderMultiHelmet() {
-        super(0, 0, cachedConfig.textureResolutions.multiArmorResolution, cachedConfig.textureResolutions.multiArmorResolution);
-
         this.bipedHead.cubeList.clear();
         //this.bipedHeadwear.cubeList.clear();
 

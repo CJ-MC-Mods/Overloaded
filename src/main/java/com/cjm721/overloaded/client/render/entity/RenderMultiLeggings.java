@@ -11,11 +11,9 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
-public class RenderMultiLeggings extends ModelBiped {
+public class RenderMultiLeggings extends AbstractRenderMultiArmor {
 
     public RenderMultiLeggings() {
-        super(0, 0, cachedConfig.textureResolutions.multiArmorResolution, cachedConfig.textureResolutions.multiArmorResolution);
-
         this.bipedBody.cubeList.clear();
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();

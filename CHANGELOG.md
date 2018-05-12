@@ -1,9 +1,13 @@
 **Dev/Alpha/Beta Build**
 
+* Code Cleanup
+  * Dynamic Registration now in single place
+  * Abstracted multi-armor rendering
+* **New config entry for item texture size**. Before item texture size was tied to block resolution
 * Config is now synced from server to client
 * Config rewrite - physical files are the same though   
-* Can now upload to Curse from command line. (No mod changes)
-* Forge version compiled against bumped up to 2611, should still be compatible with old versions.
+* Can now upload to Curse from command line (No mod changes)
+* Forge version compiled against bumped up to 2611, should still be compatible with old versions
 
 -------------------------------------------------------------------
 **Version: 0.0.51 (RELEASE)**

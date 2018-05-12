@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,13 +8,10 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
-public class RenderMultiBoots extends ModelBiped {
+public class RenderMultiBoots extends AbstractRenderMultiArmor {
 
     public RenderMultiBoots() {
-        super(0, 0, cachedConfig.textureResolutions.multiArmorResolution, cachedConfig.textureResolutions.multiArmorResolution);
-
         this.bipedRightLeg.cubeList.clear();
         this.bipedLeftLeg.cubeList.clear();
 

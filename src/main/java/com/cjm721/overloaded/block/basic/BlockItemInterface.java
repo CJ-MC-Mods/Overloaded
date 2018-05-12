@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemInterface;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import mcjty.theoneprobe.api.IProbeHitData;
@@ -58,10 +59,9 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
         ClientRegistry.bindTileEntitySpecialRenderer(TileItemInterface.class, new ItemInterfaceRenderer());
 
-        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+        ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/blocks/block.png"),
-                new ResourceLocation(MODID, "textures/dynamic/blocks/block.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 
     @Override

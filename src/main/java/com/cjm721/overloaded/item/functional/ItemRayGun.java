@@ -2,6 +2,7 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.network.packets.RayGunMessage;
 import net.minecraft.client.Minecraft;
@@ -54,10 +55,9 @@ public class ItemRayGun extends PowerModItem {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "ray_gun"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
-        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+        ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/items/ray_gun.png"),
-                new ResourceLocation(MODID, "textures/dynamic/items/ray_gun.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.itemResolution);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.cjm721.overloaded.client.render.dynamic;
 
+import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,5 +33,13 @@ public class ImageUtil {
 
     public static InputStream getTextureInputStream(ResourceLocation location) throws IOException {
         return Minecraft.getMinecraft().getResourceManager().getResource(location).getInputStream();
+    }
+
+    public static void registerDynamicTexture(@Nonnull ResourceLocation location, int resolution) {
+        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+                location,
+                new ResourceLocation(location.getResourceDomain(),
+                        location.getResourcePath().replaceFirst("textures", "textures/dynamic")),
+                resolution));
     }
 }

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemManipulator;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
@@ -54,10 +55,9 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+        ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/blocks/item_manipulator.png"),
-                new ResourceLocation(MODID, "textures/dynamic/blocks/item_manipulator.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 
     @Override

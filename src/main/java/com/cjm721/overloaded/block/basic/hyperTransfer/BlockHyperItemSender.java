@@ -1,9 +1,12 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperSender;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperItemSender;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -35,5 +38,14 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
     @Override
     public String getType() {
         return "Item";
+    }
+
+    @Override
+    public void registerModel() {
+        super.registerModel();
+
+        ImageUtil.registerDynamicTexture(
+                new ResourceLocation(MODID, "textures/blocks/hyper_item_sender.png"),
+                Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 }

@@ -2,6 +2,7 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
@@ -75,10 +76,9 @@ public class ItemRailGun extends PowerModItem {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
-        ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
+        ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/items/railgun.png"),
-                new ResourceLocation(MODID, "textures/dynamic/items/railgun.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution));
+                Overloaded.cachedConfig.textureResolutions.itemResolution);
     }
 
     @Override
