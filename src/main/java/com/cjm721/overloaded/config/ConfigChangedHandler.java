@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -17,6 +18,9 @@ class ConfigChangedHandler {
         if (event.getModID().equals(MODID)) {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
 
+            if(Minecraft.getMinecraft().isSingleplayer()) {
+                ConfigSyncHandler.INSTANCE.clearServerConfigOptions();
+            }
             ConfigSyncHandler.INSTANCE.updateConfig();
         }
     }

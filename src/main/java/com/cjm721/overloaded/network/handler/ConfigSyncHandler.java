@@ -6,7 +6,9 @@ import com.cjm721.overloaded.config.syncer.ConfigSyncMerger;
 import com.cjm721.overloaded.network.packets.ConfigSyncMessage;
 import com.google.gson.Gson;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -48,5 +50,9 @@ public class ConfigSyncHandler implements IMessageHandler<ConfigSyncMessage, IMe
             Minecraft.getMinecraft().player.sendMessage(new TextComponentString("Unable to sync settings with server. Some GUIs / items may not behave as expected."));
             e.printStackTrace();
         }
+    }
+
+    public void clearServerConfigOptions() {
+        this.serverConfigOptions = null;
     }
 }
