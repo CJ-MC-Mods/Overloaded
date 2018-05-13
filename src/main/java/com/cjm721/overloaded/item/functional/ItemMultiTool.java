@@ -3,13 +3,9 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
-import com.cjm721.overloaded.util.AssistMode;
-import com.cjm721.overloaded.util.BlockResult;
-import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import com.cjm721.overloaded.util.RenderUtil;
+import com.cjm721.overloaded.util.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -167,40 +163,40 @@ public class ItemMultiTool extends PowerModItem {
      * @return True if the break was successful, false otherwise
      */
     @Nonnull
-    private BlockResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy, @Nonnull EntityPlayerMP player, int efficiency, int unbreaking) {
+    private BlockBreakResult breakAndUseEnergy(@Nonnull World worldIn, @Nonnull BlockPos blockPos, @Nonnull IEnergyStorage energy, @Nonnull EntityPlayerMP player, int efficiency, int unbreaking) {
         IBlockState state = worldIn.getBlockState(blockPos);
         //state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
         if (!player.capabilities.isCreativeMode) {
             float hardness = state.getBlockHardness(worldIn, blockPos);
             if (hardness < 0) {
-                return BlockResult.FAIL_UNBREAKABLE;
+                return BlockBreakResult.FAIL_UNBREAKABLE;
             }
 
             float floatBreakCost = getBreakCost(hardness, efficiency, unbreaking, getDistance(player, blockPos));
             if (Float.isInfinite(floatBreakCost) || Float.isNaN(floatBreakCost))
-                return BlockResult.FAIL_ENERGY;
+                return BlockBreakResult.FAIL_ENERGY;
 
             int breakCost = Math.round(floatBreakCost);
 
             if (breakCost < 0 || energy.getEnergyStored() < breakCost) {
-                return BlockResult.FAIL_ENERGY;
+                return BlockBreakResult.FAIL_ENERGY;
             }
         }
 
         if(player.getDistanceSq(blockPos) > Overloaded.cachedConfig.multiToolConfig.reach * Overloaded.cachedConfig.multiToolConfig.reach ) {
-            return BlockResult.FAIL_RANGE;
+            return BlockBreakResult.FAIL_RANGE;
         }
-
+        
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
-            return BlockResult.FAIL_REMOVE;
+            return BlockBreakResult.FAIL_REMOVE;
         }
 
         boolean result = PlayerInteractionUtil.tryHarvestBlock(player, worldIn, blockPos);
-        return result ? BlockResult.SUCCESS : BlockResult.FAIL_REMOVE;
+        return result ? BlockBreakResult.SUCCESS : BlockBreakResult.FAIL_REMOVE;
     }
 
     public void drawParticleStreamTo(@Nonnull EntityPlayer source, @Nonnull Vec3d endingLocation, @Nonnull EnumParticleTypes type) {
@@ -399,10 +395,21 @@ public class ItemMultiTool extends PowerModItem {
         Vec3i sideVector = sideHit.getDirectionVec();
         BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
 
-
-        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
-            player.sendStatusMessage(new TextComponentString("Unable to place blocks"), true);
-            return;
+        switch(placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
+            case FAIL_PREREQUISITE:
+                player.sendStatusMessage(new TextComponentString("Do not have the required items"), true);
+                return;
+            case FAIL_DENY:
+                player.sendStatusMessage(new TextComponentString("Unable to place blocks"), true);
+                return;
+            case FAIL_RANGE:
+                player.sendStatusMessage(new TextComponentString("To far away"), true);
+                return;
+            case FAIL_ENERGY:
+                player.sendStatusMessage(new TextComponentString("Not enough energy"), true);
+                return;
+            case SUCCESS:
+                // Ok Continue
         }
         if (player.isSneaking()) {
             BlockPos playerPos = player.getPosition();
@@ -410,42 +417,42 @@ public class ItemMultiTool extends PowerModItem {
                 case UP:
                     while (newPosition.getY() < playerPos.getY()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;
                 case DOWN:
                     while (newPosition.getY() > playerPos.getY()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;
                 case NORTH:
                     while (newPosition.getZ() > playerPos.getZ()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;
                 case SOUTH:
                     while (newPosition.getZ() < playerPos.getZ()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;
                 case EAST:
                     while (newPosition.getX() < playerPos.getX()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;
                 case WEST:
                     while (newPosition.getX() > playerPos.getX()) {
                         newPosition.move(sideHit);
-                        if (!placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ))
+                        if (placeBlock(blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ) != BlockPlaceResult.SUCCESS)
                             break;
                     }
                     break;

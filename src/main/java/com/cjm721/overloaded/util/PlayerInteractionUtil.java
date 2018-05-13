@@ -85,28 +85,29 @@ public class PlayerInteractionUtil {
         return flag;
     }
 
-    public static boolean placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull IEnergyStorage energy, float hitX, float hitY, float hitZ) {
+    @Nonnull
+    public static BlockPlaceResult placeBlock(@Nonnull ItemStack searchStack, @Nonnull EntityPlayerMP player, @Nonnull World worldIn, @Nonnull BlockPos newPosition, @Nonnull EnumFacing facing, @Nonnull IEnergyStorage energy, float hitX, float hitY, float hitZ) {
         // Can we place a block at this Pos
         ItemBlock itemBlock = ((ItemBlock) searchStack.getItem());
         if (!worldIn.mayPlace(itemBlock.getBlock(), newPosition, false, facing, null)) {
-            return false;
+            return BlockPlaceResult.FAIL_DENY;
         }
 
         BlockEvent.PlaceEvent event = ForgeEventFactory.onPlayerBlockPlace(player, new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition)), facing, EnumHand.MAIN_HAND);
         if (event.isCanceled())
-            return false;
+            return BlockPlaceResult.FAIL_DENY;
 
         long distance = Math.round(player.getPosition().getDistance(newPosition.getX(), newPosition.getY(), newPosition.getZ()));
 
         long cost = Overloaded.cachedConfig.multiToolConfig.placeBaseCost + Overloaded.cachedConfig.multiToolConfig.costPerMeterAway * distance;
         if (!player.capabilities.isCreativeMode && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
-            return false;
+            return BlockPlaceResult.FAIL_ENERGY;
 
         IItemHandler inventory = player.getCapability(ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
 
         int foundStackSlot = findItemStackSlot(searchStack, inventory);
         if (foundStackSlot == -1) {
-            return false;
+            return BlockPlaceResult.FAIL_PREREQUISITE;
         }
         ItemStack foundStack = inventory.extractItem(foundStackSlot, 1, player.capabilities.isCreativeMode);
 
@@ -119,10 +120,10 @@ public class PlayerInteractionUtil {
 
             if (!player.capabilities.isCreativeMode)
                 energy.extractEnergy((int) cost, false);
-            return true;
+            return BlockPlaceResult.SUCCESS;
         }
         inventory.insertItem(foundStackSlot, foundStack, player.capabilities.isCreativeMode);
-        return false;
+        return BlockPlaceResult.FAIL_DENY;
     }
 
     private static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {

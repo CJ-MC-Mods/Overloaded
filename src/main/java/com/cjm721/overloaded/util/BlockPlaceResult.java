@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.util;
 
-public enum BlockResult {
+public enum BlockPlaceResult {
     SUCCESS,
     FAIL_RANGE,
-    FAIL_REMOVE,
     FAIL_ENERGY,
-    FAIL_UNBREAKABLE,
+    FAIL_PREREQUISITE,
+    FAIL_DENY
 }
