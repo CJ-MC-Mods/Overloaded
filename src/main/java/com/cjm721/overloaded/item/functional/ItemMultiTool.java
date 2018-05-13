@@ -187,7 +187,11 @@ public class ItemMultiTool extends PowerModItem {
         if(player.getDistanceSq(blockPos) > Overloaded.cachedConfig.multiToolConfig.reach * Overloaded.cachedConfig.multiToolConfig.reach ) {
             return BlockBreakResult.FAIL_RANGE;
         }
-        
+
+        if(!state.getBlock().canEntityDestroy(state,worldIn,blockPos,player)) {
+            return BlockBreakResult.FAIL_REMOVE;
+        }
+
         BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
         MinecraftForge.EVENT_BUS.post(event);
 
