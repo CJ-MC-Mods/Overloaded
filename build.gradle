@@ -124,6 +124,6 @@ curseforge {
         id = '264601'
         changelog = file('CHANGELOG.md') // A file can also be set using: changelog = file('changelog.txt')
         changelogType = 'markdown'
-        releaseType = 'alpha'
+        releaseType = 'release'
     }
 }

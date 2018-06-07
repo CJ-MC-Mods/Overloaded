@@ -1,5 +1,7 @@
-**Dev/Alpha/Beta Build**
+**Version: 0.0.52 (RELEASE)**
 
+* Multi-Tool now gives better error message when unable to break / place
+* Multi-Tool now also respect's server's range limits
 * Code Cleanup
   * Dynamic Registration now in single place
   * Abstracted multi-armor rendering
