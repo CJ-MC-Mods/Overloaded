@@ -62,6 +62,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -106,7 +107,6 @@ public class ItemMultiTool extends PowerModItem {
 
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
-
 
     @Override
     public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
@@ -255,44 +255,7 @@ public class ItemMultiTool extends PowerModItem {
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void onMouseEvent(MouseEvent event) {
-        EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
-            ItemStack stack = player.getHeldItemMainhand();
-            if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
-                changeHelpMode(event.getDwheel());
-                player.sendStatusMessage(new TextComponentString("Assist Mode: " + getAssistMode().getName()), true);
-                event.setCanceled(true);
-            }
-        }
-    }
 
-    private void changeHelpMode(int dwheel) {
-        AssistMode[] values = AssistMode.values();
-        int mode = (Overloaded.cachedConfig.multiToolConfig.assistMode + Integer.signum(dwheel)) % values.length;
-        if (mode < 0)
-            mode += values.length;
-
-        Overloaded.cachedConfig.multiToolConfig.assistMode = mode;
-        ConfigManager.sync(MODID, Config.Type.INSTANCE);
-    }
-
-    @Nonnull
-    private AssistMode getAssistMode() {
-        AssistMode[] values = AssistMode.values();
-        int mode = Overloaded.cachedConfig.multiToolConfig.assistMode;
-
-        for (AssistMode assistMode : values) {
-            if (assistMode.getMode() == mode) {
-                return assistMode;
-            }
-        }
-        // Invalid Config Entry so causing an update;
-        changeHelpMode(0);
-        return AssistMode.NONE;
-    }
 
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -464,7 +427,8 @@ public class ItemMultiTool extends PowerModItem {
         }
     }
 
-    private ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
+    @Nonnull
+    public ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
         NBTTagCompound tagCompound = multiTool.getTagCompound();
 
         if (tagCompound == null || !tagCompound.hasKey("Item")) {
@@ -490,79 +454,6 @@ public class ItemMultiTool extends PowerModItem {
     @Override
     public boolean canHarvestBlock(@Nonnull IBlockState state, ItemStack stack) {
         return true;
-    }
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void renderWorldLastEvent(RenderWorldLastEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        if (player.getHeldItemMainhand().getItem() != this)
-            return;
-
-        RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
-        if (result == null) return;
-
-        ItemStack stack = getSelectedBlockItemStack(player.getHeldItemMainhand());
-
-        IBlockState state;
-        if (stack.getItem() instanceof ItemBlock) {
-            state = ((ItemBlock) stack.getItem()).getBlock().getDefaultState();
-        } else {
-            state = Blocks.COBBLESTONE.getDefaultState();
-        }
-
-        switch (getAssistMode()) {
-            case PLACE_PREVIEW:
-                if (!stack.isEmpty())
-                    renderBlockPreview(event, player, stack, result, state);
-                break;
-            case REMOVE_PREVIEW:
-                renderRemovePreview(event, player, result);
-                break;
-            case BOTH_PREVIEW:
-                if (!stack.isEmpty())
-                    renderBlockPreview(event, player, stack, result, state);
-                renderRemovePreview(event, player, result);
-                break;
-        }
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void renderRemovePreview(RenderWorldLastEvent event, EntityPlayer player, RayTraceResult result) {
-        try {
-            IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
-            IBakedModel bakeModel = model.bake(TRSRTransformation.identity(), DefaultVertexFormats.ITEM, location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString()));
-
-            BlockPos toRenderAt = result.getBlockPos();
-
-            final float partialTicks = event.getPartialTicks();
-            final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-            final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-            final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-            RenderUtil.renderGhostModel(bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(), toRenderAt);
-            GlStateManager.popMatrix();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void renderBlockPreview(RenderWorldLastEvent event, EntityPlayer player, ItemStack stack, RayTraceResult result, IBlockState state) {
-        BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
-
-        final float partialTicks = event.getPartialTicks();
-        final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-        final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-        final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-        RenderUtil.renderGhostModel(stack, state, player.getEntityWorld(), toRenderAt);
-        GlStateManager.popMatrix();
     }
 
     @Override
