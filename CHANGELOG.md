@@ -1,3 +1,9 @@
+**Version: 0.0.53 (RELEASE)**
+
+* Refactor ItemMultiTool (Code cleanup)
+* Add lang file for zn_cn (provided by DazzleCool)
+
+-------------------------------------------------------------------
 **Version: 0.0.52 (RELEASE)**
 
 * Multi-Tool now gives better error message when unable to break / place
