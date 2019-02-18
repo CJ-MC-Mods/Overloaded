@@ -22,7 +22,7 @@ public class CompressedConfig {
             new CompressedEntry("minecraft:sand", "compressed_sand", 0, "minecraft:textures/blocks/sand.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:stone", "compressed_stone", 0, "minecraft:textures/blocks/stone.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:obsidian", "compressed_obsidian", 0, "minecraft:textures/blocks/obsidian.png", 16, 9.0f, true),
-            new CompressedEntry("minecraft:netherrack", "compressed_netherrack", 0, "minecraft:textures/blocks/cobblestone.png", 16, 9.0f, true),
+            new CompressedEntry("minecraft:netherrack", "compressed_netherrack", 0, "minecraft:textures/blocks/netherrack.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:dirt", "compressed_dirt", 0, "minecraft:textures/blocks/dirt.png", 16, 9.0f, true),
             new CompressedEntry("minecraft:gravel", "compressed_gravel", 0, "minecraft:textures/blocks/gravel.png", 16, 9.0f, true)
     };
