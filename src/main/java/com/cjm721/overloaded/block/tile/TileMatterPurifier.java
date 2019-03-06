@@ -36,6 +36,10 @@ public class TileMatterPurifier extends TileEntity implements ITickable, IItemHa
 
     @Override
     public void update() {
+        if(this.getWorld().isRemote) {
+            return;
+        }
+
         if (stack.isEmpty())
             return;
 

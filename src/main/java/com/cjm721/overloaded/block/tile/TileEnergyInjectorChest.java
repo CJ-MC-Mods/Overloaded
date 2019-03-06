@@ -19,6 +19,10 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable implemen
      */
     @Override
     public void update() {
+        if(this.getWorld().isRemote) {
+            return;
+        }
+
         BlockPos me = this.getPos();
         TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 

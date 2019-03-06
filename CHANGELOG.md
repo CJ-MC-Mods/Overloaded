@@ -4,6 +4,7 @@
 * Improve Multi-Armor rendering on Non-player entities
 * Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance decrease. Default to disabled. 
 * Update invalid fingerprint message to say report to cjm721
+* Forgot to do sided checks for some Tile Entities (cause weirdness in single player only)
 
 -------------------------------------------------------------------
 **Version: 0.0.53 (RELEASE)**

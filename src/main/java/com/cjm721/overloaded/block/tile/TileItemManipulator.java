@@ -60,6 +60,10 @@ public class TileItemManipulator extends TileEntity implements ITickable {
 
     @Override
     public void update() {
+        if(this.getWorld().isRemote) {
+            return;
+        }
+
         ItemStack currentItem = itemStack.getStackInSlot(0);
         if (currentItem.isEmpty())
             return;

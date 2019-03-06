@@ -27,6 +27,10 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
      */
     @Override
     public void update() {
+        if(getWorld().isRemote) {
+            return;
+        }
+
         BlockPos me = this.getPos();
         TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 
