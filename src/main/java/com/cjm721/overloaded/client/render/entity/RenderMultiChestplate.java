@@ -1,15 +1,13 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
 /**
  * Created by CJ on 5/25/2017.
@@ -47,19 +45,17 @@ public class RenderMultiChestplate extends AbstractRenderMultiArmor {
     }
 
     @Override
-    public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        if (entity != null && entity instanceof EntityPlayer) {
-            super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        }
+    public void render(@Nullable Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 
         GlStateManager.pushMatrix();
-        if (entity != null && entity.isSneaking()) {
+        if (this.isSneak) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedBody.render(f5);
-        this.bipedRightArm.render(f5);
-        this.bipedLeftArm.render(f5);
+        this.bipedBody.render(scale);
+        this.bipedRightArm.render(scale);
+        this.bipedLeftArm.render(scale);
 
         GlStateManager.popMatrix();
     }

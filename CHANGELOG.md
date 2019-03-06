@@ -1,6 +1,8 @@
 **Version: 0.0.54 (RELEASE)**
 
 * Update to new Forge and Mapping snapshots.
+* Improve Multi-Armor rendering on Non-player entities
+
 
 **Version: 0.0.53 (RELEASE)**
 

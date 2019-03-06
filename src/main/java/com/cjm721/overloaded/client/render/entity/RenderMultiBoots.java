@@ -2,7 +2,6 @@ package com.cjm721.overloaded.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -32,12 +31,10 @@ public class RenderMultiBoots extends AbstractRenderMultiArmor {
 
     @Override
     public void render(@Nullable Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        if (entity != null && entity instanceof EntityPlayer) {
-            super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
-        }
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 
         GlStateManager.pushMatrix();
-        if (entity != null && entity.isSneaking()) {
+        if (this.isSneak) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 

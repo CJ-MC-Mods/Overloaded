@@ -1,21 +1,18 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.Overloaded.cachedConfig;
 
 public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
     public RenderMultiHelmet() {
         this.bipedHead.cubeList.clear();
-        //this.bipedHeadwear.cubeList.clear();
+        this.bipedHeadwear.cubeList.clear();
 
         ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_helmet.obj"));
         head.offsetY = -0.1F;
@@ -24,23 +21,18 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
         head.scale = 1F / 13F;
 
         this.bipedHead.addChild(head);
-
-
     }
 
     @Override
-    public void render(@Nullable Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-
-        if (entity != null && entity instanceof EntityPlayer) {
-            super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        }
+    public void render(@Nullable Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 
         GlStateManager.pushMatrix();
-        if (entity != null && entity.isSneaking()) {
+        if (this.isSneak) {
             GlStateManager.translate(0.0F, 0.2F, 0.0F);
         }
 
-        this.bipedHead.render(f5);
+        this.bipedHead.render(scale);
 
         GlStateManager.popMatrix();
 
