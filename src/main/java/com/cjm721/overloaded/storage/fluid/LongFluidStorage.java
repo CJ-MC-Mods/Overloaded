@@ -27,7 +27,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
         this.dataUpdate = dataUpdate;
         storedFluid = new LongFluidStack(null, 0);
     }
-
+    
     /**
      * Returns an array of objects which represent the internal tanks.
      * These objects cannot be used to manipulate the internal tanks.
