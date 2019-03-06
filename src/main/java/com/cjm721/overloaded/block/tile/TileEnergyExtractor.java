@@ -34,8 +34,8 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
             return;
 
         IHyperHandlerEnergy storage = frontTE.getCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite());
-        LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE), false);
         for (EnumFacing facing : EnumFacing.values()) {
+            LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE), false);
             if (energy.getAmount() == 0L)
                 return;
 
@@ -52,8 +52,8 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
 
             int acceptedAmount = receiver.receiveEnergy((int) Math.min(energy.getAmount(), Integer.MAX_VALUE), true);
             if (acceptedAmount != 0) {
-                receiver.receiveEnergy(acceptedAmount, false);
-                energy = storage.take(new LongEnergyStack(acceptedAmount), true);
+                LongEnergyStack actualTaken = storage.take(new LongEnergyStack(acceptedAmount), true);
+                receiver.receiveEnergy((int) Math.min(actualTaken.getAmount(), Integer.MAX_VALUE), false);
             }
         }
     }
