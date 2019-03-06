@@ -62,6 +62,6 @@ public class Overloaded {
 
     @Mod.EventHandler
     public void onFingerprintException(FMLFingerprintViolationEvent event) {
-        FMLLog.log.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the author!");
+        FMLLog.log.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the cjm721!");
     }
 }
