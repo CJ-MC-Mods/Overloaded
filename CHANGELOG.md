@@ -4,6 +4,7 @@
 * Improve Multi-Armor rendering on Non-player entities
 * Update invalid fingerprint message to say report to cjm721 
 
+-------------------------------------------------------------------
 **Version: 0.0.53 (RELEASE)**
 
 * Refactor ItemMultiTool (Code cleanup)

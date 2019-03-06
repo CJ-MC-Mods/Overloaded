@@ -2,7 +2,6 @@ package com.cjm721.overloaded.client.render.item;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.item.ModItems;
-import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import com.cjm721.overloaded.util.RenderUtil;
