@@ -2,7 +2,8 @@
 
 * Update to new Forge and Mapping snapshots.
 * Improve Multi-Armor rendering on Non-player entities
-* Update invalid fingerprint message to say report to cjm721 
+* Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance decrease. Default to disabled. 
+* Update invalid fingerprint message to say report to cjm721
 
 -------------------------------------------------------------------
 **Version: 0.0.53 (RELEASE)**
