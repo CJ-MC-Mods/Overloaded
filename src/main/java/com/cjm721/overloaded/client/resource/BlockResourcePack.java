@@ -43,7 +43,7 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
     @Override
     @Nonnull
     public InputStream getInputStream(@Nonnull ResourceLocation location) throws IOException {
-        if (location.getResourcePath().endsWith(".png")) {
+        if (location.getPath().endsWith(".png")) {
             return getImageInputStream(location);
         } else {
             String state = blockStates.get(location);

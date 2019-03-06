@@ -38,7 +38,7 @@ public class ItemRayGun extends PowerModItem {
 
     public ItemRayGun() {
         setRegistryName("ray_gun");
-        setUnlocalizedName("ray_gun");
+        setTranslationKey("ray_gun");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

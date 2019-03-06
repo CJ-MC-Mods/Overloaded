@@ -25,7 +25,7 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
     @Override
     public void baseInit() {
         setRegistryName("hyper_energy_receiver");
-        setUnlocalizedName("hyper_energy_receiver");
+        setTranslationKey("hyper_energy_receiver");
 
         GameRegistry.registerTileEntity(TileHyperEnergyReceiver.class, MODID + ":hyper_energy_receiver");
     }

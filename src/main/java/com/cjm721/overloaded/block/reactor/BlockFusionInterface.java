@@ -26,7 +26,7 @@ public class BlockFusionInterface extends ModBlock implements ITileEntityProvide
     @Override
     public void baseInit() {
         setRegistryName("fusion_interface");
-        setUnlocalizedName("fusion_interface");
+        setTranslationKey("fusion_interface");
 
 
         GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_interface");

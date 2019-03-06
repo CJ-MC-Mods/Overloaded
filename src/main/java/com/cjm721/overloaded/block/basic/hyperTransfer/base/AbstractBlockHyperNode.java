@@ -48,7 +48,7 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

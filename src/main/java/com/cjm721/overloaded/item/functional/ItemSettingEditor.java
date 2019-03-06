@@ -27,7 +27,7 @@ public class ItemSettingEditor extends ModItem {
     public ItemSettingEditor() {
         setMaxStackSize(1);
         setRegistryName("settings_editor");
-        setUnlocalizedName("settings_editor");
+        setTranslationKey("settings_editor");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

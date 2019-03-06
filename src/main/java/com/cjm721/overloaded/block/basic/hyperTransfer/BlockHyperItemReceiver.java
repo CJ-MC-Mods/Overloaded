@@ -25,7 +25,7 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
     @Override
     public void baseInit() {
         setRegistryName("hyper_item_receiver");
-        setUnlocalizedName("hyper_item_receiver");
+        setTranslationKey("hyper_item_receiver");
 
         GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID + ":hyper_item_receiver");
     }

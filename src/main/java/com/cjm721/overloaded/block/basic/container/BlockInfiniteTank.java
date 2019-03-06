@@ -45,7 +45,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
     @Override
     public void baseInit() {
         setRegistryName("infinite_tank");
-        setUnlocalizedName("infinite_tank");
+        setTranslationKey("infinite_tank");
 
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }

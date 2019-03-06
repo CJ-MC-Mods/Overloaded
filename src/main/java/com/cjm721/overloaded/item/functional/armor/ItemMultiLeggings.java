@@ -28,7 +28,7 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
         super(0, EntityEquipmentSlot.LEGS);
 
         setRegistryName("multi_leggings");
-        setUnlocalizedName("multi_leggings");
+        setTranslationKey("multi_leggings");
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }

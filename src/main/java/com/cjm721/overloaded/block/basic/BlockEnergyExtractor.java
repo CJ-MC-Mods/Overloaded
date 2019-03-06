@@ -36,7 +36,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     @Override
     public void baseInit() {
         setRegistryName("energy_extractor");
-        setUnlocalizedName("energy_extractor");
+        setTranslationKey("energy_extractor");
 
         GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID + ":energy_extractor");
     }
@@ -44,7 +44,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileEnergyExtractor().setFacing(EnumFacing.getFront(meta));
+        return new TileEnergyExtractor().setFacing(EnumFacing.byIndex(meta));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

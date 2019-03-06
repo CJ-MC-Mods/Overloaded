@@ -18,7 +18,7 @@ public class ItemEnergyCore extends ModItem {
     public ItemEnergyCore() {
         setMaxStackSize(64);
         setRegistryName("energy_core");
-        setUnlocalizedName("energy_core");
+        setTranslationKey("energy_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

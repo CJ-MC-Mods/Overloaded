@@ -48,7 +48,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
     @Override
     public void baseInit() {
         setRegistryName("item_interface");
-        setUnlocalizedName("item_interface");
+        setTranslationKey("item_interface");
 
         GameRegistry.registerTileEntity(TileItemInterface.class, MODID + ":item_interface");
     }
@@ -96,7 +96,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

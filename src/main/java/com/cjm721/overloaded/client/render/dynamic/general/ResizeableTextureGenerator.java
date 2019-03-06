@@ -48,10 +48,10 @@ public class ResizeableTextureGenerator {
 
     @Nonnull
     private ResourceLocation cleanForSprite(@Nonnull ResourceLocation location) {
-        String path = location.getResourcePath();
+        String path = location.getPath();
 
         if (path.startsWith("textures/")) {
-            return new ResourceLocation(location.getResourceDomain(), path.substring(9).replace(".png", ""));
+            return new ResourceLocation(location.getNamespace(), path.substring(9).replace(".png", ""));
         }
         return location;
     }

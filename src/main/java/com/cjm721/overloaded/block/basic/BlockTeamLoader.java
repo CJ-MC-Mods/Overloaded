@@ -22,7 +22,7 @@ public class BlockTeamLoader extends ModBlock implements ITileEntityProvider {
     @Override
     public void baseInit() {
         setRegistryName("team_loader");
-        setUnlocalizedName("team_loader");
+        setTranslationKey("team_loader");
 
         GameRegistry.registerTileEntity(TileTeamLoader.class, MODID + ":team_loader");
     }

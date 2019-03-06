@@ -42,7 +42,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     @Override
     public void baseInit() {
         setRegistryName("infinite_water_source");
-        setUnlocalizedName("infinite_water_source");
+        setTranslationKey("infinite_water_source");
 
         GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }
@@ -61,7 +61,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

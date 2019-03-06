@@ -28,7 +28,7 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
         super(0, EntityEquipmentSlot.CHEST);
 
         setRegistryName("multi_chestplate");
-        setUnlocalizedName("multi_chestplate");
+        setTranslationKey("multi_chestplate");
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }

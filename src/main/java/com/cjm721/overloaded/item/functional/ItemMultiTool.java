@@ -70,7 +70,7 @@ public class ItemMultiTool extends PowerModItem {
 
     public ItemMultiTool() {
         setRegistryName("multi_tool");
-        setUnlocalizedName("multi_tool");
+        setTranslationKey("multi_tool");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
@@ -208,7 +208,7 @@ public class ItemMultiTool extends PowerModItem {
         double yOffset = -.25;
         double zOffset = 0;//.25;
 
-        Vec3d startingLocation = source.getPositionEyes(1).addVector(xOffset, yOffset, zOffset);
+        Vec3d startingLocation = source.getPositionEyes(1).add(xOffset, yOffset, zOffset);
         startingLocation = startingLocation.add(source.getLookVec().rotateYaw((float) (Math.PI / -2.0D)).scale(0.5D));
         Vec3d direction = endingLocation.subtract(startingLocation).normalize();
 

@@ -18,7 +18,7 @@ public class ItemItemCore extends ModItem {
     public ItemItemCore() {
         setMaxStackSize(64);
         setRegistryName("item_core");
-        setUnlocalizedName("item_core");
+        setTranslationKey("item_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

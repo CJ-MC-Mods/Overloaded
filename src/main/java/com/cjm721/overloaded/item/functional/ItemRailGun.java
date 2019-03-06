@@ -52,7 +52,7 @@ public class ItemRailGun extends PowerModItem {
 
     public ItemRailGun() {
         setRegistryName("railgun");
-        setUnlocalizedName("railgun");
+        setTranslationKey("railgun");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

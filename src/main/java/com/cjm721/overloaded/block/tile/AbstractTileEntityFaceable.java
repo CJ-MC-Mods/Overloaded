@@ -15,7 +15,7 @@ public abstract class AbstractTileEntityFaceable extends TileEntity {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        this.front = EnumFacing.getFront(compound.getInteger("Front"));
+        this.front = EnumFacing.byIndex(compound.getInteger("Front"));
     }
 
     @Override

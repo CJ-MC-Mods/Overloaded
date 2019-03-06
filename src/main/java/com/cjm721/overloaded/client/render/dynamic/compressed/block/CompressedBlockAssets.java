@@ -46,15 +46,15 @@ public class CompressedBlockAssets {
     }
 
     private static ResourceLocation getBlocksPath(@Nonnull ResourceLocation base) {
-        return new ResourceLocation(base.getResourceDomain(), "blocks/" + base.getResourcePath());
+        return new ResourceLocation(base.getNamespace(), "blocks/" + base.getPath());
     }
 
     private static ResourceLocation getTexturePath(@Nonnull ResourceLocation base) {
-        return new ResourceLocation(base.getResourceDomain(), "textures/blocks/" + base.getResourcePath() + ".png");
+        return new ResourceLocation(base.getNamespace(), "textures/blocks/" + base.getPath() + ".png");
     }
 
     private static ResourceLocation getJsonPath(@Nonnull ResourceLocation base) {
-        return new ResourceLocation(base.getResourceDomain(), "blockstates/" + base.getResourcePath() + ".json");
+        return new ResourceLocation(base.getNamespace(), "blockstates/" + base.getPath() + ".json");
     }
 
     @SubscribeEvent

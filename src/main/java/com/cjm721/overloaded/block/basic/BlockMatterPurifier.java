@@ -29,7 +29,7 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
     @Override
     public void baseInit() {
         setRegistryName("matter_purifier");
-        setUnlocalizedName("matter_purifier");
+        setTranslationKey("matter_purifier");
 
         GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
     }

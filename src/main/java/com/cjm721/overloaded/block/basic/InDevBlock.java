@@ -21,7 +21,7 @@ public class InDevBlock extends ModBlock {
     @Override
     public void baseInit() {
         setRegistryName(name);
-        setUnlocalizedName(name);
+        setTranslationKey(name);
     }
 
     @Override

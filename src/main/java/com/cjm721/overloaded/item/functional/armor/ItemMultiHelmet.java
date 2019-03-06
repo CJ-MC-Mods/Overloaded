@@ -40,7 +40,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
         super(0, EntityEquipmentSlot.HEAD);
 
         setRegistryName("multi_helmet");
-        setUnlocalizedName("multi_helmet");
+        setTranslationKey("multi_helmet");
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }

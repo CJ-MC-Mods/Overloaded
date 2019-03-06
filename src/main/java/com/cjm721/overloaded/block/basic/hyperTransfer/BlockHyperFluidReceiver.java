@@ -25,7 +25,7 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
     @Override
     public void baseInit() {
         setRegistryName("hyper_fluid_receiver");
-        setUnlocalizedName("hyper_fluid_receiver");
+        setTranslationKey("hyper_fluid_receiver");
 
         GameRegistry.registerTileEntity(TileHyperFluidReceiver.class, MODID + ":hyper_fluid_receiver");
     }

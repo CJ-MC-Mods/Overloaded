@@ -42,7 +42,7 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
     @Override
     public void baseInit() {
         setRegistryName("infinite_barrel");
-        setUnlocalizedName("infinite_barrel");
+        setTranslationKey("infinite_barrel");
 
         GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }

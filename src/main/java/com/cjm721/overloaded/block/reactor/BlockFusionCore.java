@@ -38,7 +38,7 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     @Override
     public void baseInit() {
         setRegistryName("fusion_core");
-        setUnlocalizedName("fusion_core");
+        setTranslationKey("fusion_core");
 
         GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_core");
     }
@@ -84,7 +84,7 @@ public class BlockFusionCore extends ModBlock implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return TRANSLUCENT;
     }
 

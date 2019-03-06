@@ -36,7 +36,7 @@ public class RightClickBlockMessage implements IMessage {
         int facing = buf.readInt();
 
         this.pos = new BlockPos(x, y, z);
-        this.hitSide = EnumFacing.getFront(facing);
+        this.hitSide = EnumFacing.byIndex(facing);
 
 
         hitX = buf.readFloat();

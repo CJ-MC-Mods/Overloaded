@@ -19,7 +19,7 @@ public class BlockReactorCasing extends ModBlock {
     @Override
     public void baseInit() {
         setRegistryName("reactor_casing");
-        setUnlocalizedName("reactor_casing");
+        setTranslationKey("reactor_casing");
     }
 
     @SideOnly(Side.CLIENT)

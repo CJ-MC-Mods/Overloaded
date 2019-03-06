@@ -37,7 +37,7 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
     @Override
     public void baseInit() {
         setRegistryName("energy_injector_chest");
-        setUnlocalizedName("energy_injector_chest");
+        setTranslationKey("energy_injector_chest");
 
         GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID + ":energy_injector_chest");
     }
@@ -61,13 +61,13 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileEnergyInjectorChest().setFacing(EnumFacing.getFront(meta));
+        return new TileEnergyInjectorChest().setFacing(EnumFacing.byIndex(meta));
     }
 
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

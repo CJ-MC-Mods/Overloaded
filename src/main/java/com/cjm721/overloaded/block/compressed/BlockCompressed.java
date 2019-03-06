@@ -69,7 +69,7 @@ public class BlockCompressed extends ModBlock {
     @Override
     public void baseInit() {
         setRegistryName(registryName);
-        setUnlocalizedName(unlocalizedName);
+        setTranslationKey(unlocalizedName);
     }
 
     public boolean baseBlockInit() {
@@ -80,7 +80,7 @@ public class BlockCompressed extends ModBlock {
             Overloaded.logger.error("Invalid Compressed config entry: Base Block does not exist. %s", entry.baseRegistryName);
             return false;
         }
-        Field blockMaterialField = ReflectionHelper.findField(Block.class, "blockMaterial", "field_149764_J");
+        Field blockMaterialField = ReflectionHelper.findField(Block.class, "material", "field_149764_J");
         Field blockMapColorIn = ReflectionHelper.findField(Block.class, "blockMapColor", "field_181083_K");
 
         blockMaterialField.setAccessible(true);
@@ -169,7 +169,7 @@ public class BlockCompressed extends ModBlock {
         Map<IBlockState, ModelResourceLocation> states = new HashMap<>();
 
         for (int meta = 0; meta < maxCompressionAmount; meta++) {
-            ResourceLocation rl = new ResourceLocation(getRegistryName().getResourceDomain(), getRegistryName().getResourcePath() + meta);
+            ResourceLocation rl = new ResourceLocation(getRegistryName().getNamespace(), getRegistryName().getPath() + meta);
             CompressedBlockAssets.addToTextureQueue(new CompressedBlockAssets.CompressedResourceLocation(entry.texturePath, rl, meta + 1));
             ModelResourceLocation ml = new ModelResourceLocation(rl, "normal");
 

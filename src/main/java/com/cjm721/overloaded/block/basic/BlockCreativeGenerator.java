@@ -34,7 +34,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     @Override
     public void baseInit() {
         setRegistryName("creative_generator");
-        setUnlocalizedName("creative_generator");
+        setTranslationKey("creative_generator");
 
         GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
     }
@@ -60,7 +60,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     @SideOnly(Side.CLIENT)
     @Override
     @Nonnull
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

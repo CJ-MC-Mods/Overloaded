@@ -38,7 +38,7 @@ public class ItemEnergyShield extends ModItem {
         setMaxStackSize(1);
         setMaxDamage(500);
         setRegistryName("energy_shield");
-        setUnlocalizedName("energy_shield");
+        setTranslationKey("energy_shield");
         setCreativeTab(OverloadedCreativeTabs.TECH);
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);

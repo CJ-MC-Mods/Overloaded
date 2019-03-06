@@ -26,7 +26,7 @@ public class ItemMultiBoots extends AbstractMultiArmor {
         super(0, EntityEquipmentSlot.FEET);
 
         setRegistryName("multi_boots");
-        setUnlocalizedName("multi_boots");
+        setTranslationKey("multi_boots");
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
     }

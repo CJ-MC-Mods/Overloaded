@@ -38,8 +38,8 @@ public class ImageUtil {
     public static void registerDynamicTexture(@Nonnull ResourceLocation location, int resolution) {
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 location,
-                new ResourceLocation(location.getResourceDomain(),
-                        location.getResourcePath().replaceFirst("textures", "textures/dynamic")),
+                new ResourceLocation(location.getNamespace(),
+                        location.getPath().replaceFirst("textures", "textures/dynamic")),
                 resolution));
     }
 }

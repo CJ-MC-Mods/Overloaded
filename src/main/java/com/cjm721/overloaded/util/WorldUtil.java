@@ -30,7 +30,7 @@ public class WorldUtil {
         vertexes[4] = startingLocation.y + 0.5D;
         vertexes[5] = startingLocation.z + 0.5D;
 
-        int length = (int) Math.ceil(startingLocation.subtract(endingLocation).lengthVector());
+        int length = (int) Math.ceil(startingLocation.subtract(endingLocation).length());
 
         for (double i = 0; i < length; i += 0.1) {
             vertexes[0] += direction.x * i;

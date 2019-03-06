@@ -32,7 +32,7 @@ public class BlockPureMatterFluid extends BlockFluidClassic implements IModRegis
     @SideOnly(Side.CLIENT)
     @Nonnull
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

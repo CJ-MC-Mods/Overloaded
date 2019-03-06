@@ -44,7 +44,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
     @Override
     public void baseInit() {
         setRegistryName("item_manipulator");
-        setUnlocalizedName("item_manipulator");
+        setTranslationKey("item_manipulator");
 
         GameRegistry.registerTileEntity(TileItemManipulator.class, MODID + ":item_manipulator");
     }
@@ -74,7 +74,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
     @Override
     @Nonnull
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+        return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
     }
 
     /**
@@ -86,7 +86,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileItemManipulator().setFacing(EnumFacing.getFront(meta));
+        return new TileItemManipulator().setFacing(EnumFacing.byIndex(meta));
     }
 
     @Override

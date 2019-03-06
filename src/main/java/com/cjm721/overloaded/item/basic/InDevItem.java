@@ -11,7 +11,7 @@ public class InDevItem extends ModItem {
 
     public InDevItem(String name) {
         setRegistryName(name);
-        setUnlocalizedName(name);
+        setTranslationKey(name);
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

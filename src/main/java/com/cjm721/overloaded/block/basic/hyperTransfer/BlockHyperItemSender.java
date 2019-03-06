@@ -23,7 +23,7 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
     @Override
     public void baseInit() {
         setRegistryName("hyper_item_sender");
-        setUnlocalizedName("hyper_item_sender");
+        setTranslationKey("hyper_item_sender");
 
         GameRegistry.registerTileEntity(TileHyperItemSender.class, MODID + ":hyper_item_sender");
     }

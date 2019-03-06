@@ -22,7 +22,7 @@ public class BlockNetherStar extends ModBlock {
     @Override
     public void baseInit() {
         setRegistryName("nether_star_block");
-        setUnlocalizedName("nether_star_block");
+        setTranslationKey("nether_star_block");
     }
 
     @SideOnly(Side.CLIENT)

@@ -26,7 +26,7 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
     @Override
     public void baseInit() {
         setRegistryName("hyper_energy_sender");
-        setUnlocalizedName("hyper_energy_sender");
+        setTranslationKey("hyper_energy_sender");
 
         GameRegistry.registerTileEntity(TileHyperEnergySender.class, MODID + ":hyper_energy_sender");
     }

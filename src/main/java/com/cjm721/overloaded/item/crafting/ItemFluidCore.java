@@ -18,7 +18,7 @@ public class ItemFluidCore extends ModItem {
     public ItemFluidCore() {
         setMaxStackSize(64);
         setRegistryName("fluid_core");
-        setUnlocalizedName("fluid_core");
+        setTranslationKey("fluid_core");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 

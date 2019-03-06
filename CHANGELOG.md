@@ -1,3 +1,7 @@
+**Version: 0.0.54 (RELEASE)**
+
+* Update to new Forge and Mapping snapshots.
+
 **Version: 0.0.53 (RELEASE)**
 
 * Refactor ItemMultiTool (Code cleanup)

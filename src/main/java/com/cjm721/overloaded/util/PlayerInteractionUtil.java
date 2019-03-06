@@ -79,7 +79,7 @@ public class PlayerInteractionUtil {
         boolean flag = iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest);
 
         if (flag) {
-            iblockstate.getBlock().onBlockDestroyedByPlayer(world, pos, iblockstate);
+            iblockstate.getBlock().onPlayerDestroy(world, pos, iblockstate);
         }
 
         return flag;

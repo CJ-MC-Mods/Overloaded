@@ -25,7 +25,7 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
     @Override
     public void baseInit() {
         setRegistryName("hyper_fluid_sender");
-        setUnlocalizedName("hyper_fluid_sender");
+        setTranslationKey("hyper_fluid_sender");
 
         GameRegistry.registerTileEntity(TileHyperFluidSender.class, MODID + ":hyper_fluid_sender");
     }

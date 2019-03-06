@@ -25,7 +25,7 @@ public class ItemLinkingCard extends ModItem {
     public ItemLinkingCard() {
         setMaxStackSize(1);
         setRegistryName("linking_card");
-        setUnlocalizedName("linking_card");
+        setTranslationKey("linking_card");
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
