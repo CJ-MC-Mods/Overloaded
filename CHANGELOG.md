@@ -1,6 +1,7 @@
 **Version: 0.0.54 (RELEASE)**
 
 * Update to new Forge and Mapping snapshots.
+* Fix default compressed netherrack looking like Cobblestone. Will have to manually reset config to see change (or apply change yourself).
 * Improve Multi-Armor rendering on Non-player entities
 * Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance decrease. Default to disabled. 
 * Update invalid fingerprint message to say report to cjm721
