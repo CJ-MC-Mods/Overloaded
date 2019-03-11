@@ -5,6 +5,7 @@
 * Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance decrease. Default to disabled. 
 * Update invalid fingerprint message to say report to cjm721
 * Forgot to do sided checks for some Tile Entities (cause weirdness in single player only)
+* Wrote a test (Really wish I could write tests for everything, but Minecraft makes it very annoying)
 
 -------------------------------------------------------------------
 **Version: 0.0.53 (RELEASE)**
