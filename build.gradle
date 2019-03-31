@@ -41,6 +41,9 @@ repositories  {
         name = "CoFH Maven"
         url = "http://maven.covers1624.net"
     }
+    maven {
+        url "http://tehnut.info/maven"
+    }
 }
 
 configFile.withReader {
@@ -76,6 +79,7 @@ minecraft {
 
 dependencies {
     deobfCompile ("mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.22-13:api") { transitive = false }
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2:api"
 
     testCompile 'junit:junit:4.12'
     testCompile "org.mockito:mockito-core:+"

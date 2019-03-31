@@ -1,3 +1,7 @@
+**Version: 0.0.55 (RELEASE)**
+* Added Waila (Hwyla) support for Hyper Energy Capability (Infinity Capacitor)
+
+-------------------------------------------------------------------
 **Version: 0.0.54 (RELEASE)**
 
 * Update to new Forge and Mapping snapshots.
