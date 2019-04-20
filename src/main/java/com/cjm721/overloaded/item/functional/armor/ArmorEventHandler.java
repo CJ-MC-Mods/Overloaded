@@ -344,7 +344,7 @@ public class ArmorEventHandler {
         return setEquipped;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
         if (((ClientProxy) Overloaded.proxy).noClipKeybind.isPressed() && isMultiArmorSetEquipped(Minecraft.getMinecraft().player)) {

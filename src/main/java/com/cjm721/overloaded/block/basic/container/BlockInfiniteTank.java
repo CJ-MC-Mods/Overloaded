@@ -50,7 +50,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
         GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_tank"), null);

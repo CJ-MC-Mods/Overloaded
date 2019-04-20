@@ -1,13 +1,10 @@
 package com.cjm721.overloaded.client.gui.button;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiSlider extends GuiButton {
 
     private final String baseText;
@@ -31,39 +28,45 @@ public class GuiSlider extends GuiButton {
         return 0;
     }
 
-    @Override
-    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
-        if (this.visible) {
-            if (this.dragging) {
-                this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8) * maxValue;
-                this.sliderValue = MathHelper.clamp(this.sliderValue, minValue, maxValue);
-                resetDisplayString();
-            }
-
-            mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.drawTexturedModalRect(this.x + (int) (this.sliderValue / maxValue * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
-            this.drawTexturedModalRect(this.x + (int) (this.sliderValue / maxValue * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
-        }
-    }
 
     @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (super.mousePressed(mc, mouseX, mouseY)) {
-            this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
-            this.sliderValue = MathHelper.clamp(this.sliderValue, minValue, maxValue);
-            this.dragging = true;
-            resetDisplayString();
-            return true;
-        } else {
-            return false;
-        }
+    public boolean mouseDragged(double p_mouseDragged_1_, double p_mouseDragged_3_, int p_mouseDragged_5_, double p_mouseDragged_6_, double p_mouseDragged_8_) {
+        return super.mouseDragged(p_mouseDragged_1_, p_mouseDragged_3_, p_mouseDragged_5_, p_mouseDragged_6_, p_mouseDragged_8_);
     }
 
-    @Override
-    public void mouseReleased(int mouseX, int mouseY) {
-        this.dragging = false;
-    }
+//    @Override
+//    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+//        if (this.visible) {
+//            if (this.dragging) {
+//                this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8) * maxValue;
+//                this.sliderValue = MathHelper.clamp(this.sliderValue, minValue, maxValue);
+//                resetDisplayString();
+//            }
+//
+//            mc.getTextureManager().bindTexture(BUTTON_TEXTURES);
+//            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+//            this.drawTexturedModalRect(this.x + (int) (this.sliderValue / maxValue * (float) (this.width - 8)), this.y, 0, 66, 4, 20);
+//            this.drawTexturedModalRect(this.x + (int) (this.sliderValue / maxValue * (float) (this.width - 8)) + 4, this.y, 196, 66, 4, 20);
+//        }
+//    }
+//
+//    @Override
+//    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+//        if (super.mousePressed(mc, mouseX, mouseY)) {
+//            this.sliderValue = (float) (mouseX - (this.x + 4)) / (float) (this.width - 8);
+//            this.sliderValue = MathHelper.clamp(this.sliderValue, minValue, maxValue);
+//            this.dragging = true;
+//            resetDisplayString();
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//    @Override
+//    public void mouseReleased(int mouseX, int mouseY) {
+//        this.dragging = false;
+//    }
 
     private void resetDisplayString() {
         this.displayString = String.format("%s %.2f", baseText, sliderValue);

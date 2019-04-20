@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.List;
 
 public class RenderUtil {
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private static void renderModel(
             final IBakedModel model,
             final IBlockState state,
@@ -40,7 +40,7 @@ public class RenderUtil {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private static void renderQuads(
             final int alpha,
             final BufferBuilder renderer,
@@ -54,12 +54,12 @@ public class RenderUtil {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private static int getTint(final int alpha, final int tintIndex, final IBlockState state, final World worldObj, final BlockPos blockPos) {
         return alpha | Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, worldObj, blockPos, tintIndex);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderGhostModel(
             final ItemStack itemStack,
             final IBlockState state,
@@ -70,7 +70,7 @@ public class RenderUtil {
         renderGhostModel(model, state, worldObj, blockPos);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void renderGhostModel(
             final IBakedModel model,
             final IBlockState state,

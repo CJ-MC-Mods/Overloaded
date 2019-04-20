@@ -154,7 +154,7 @@ public class BlockCompressed extends ModBlock {
         return getBlockHardness(world.getBlockState(pos), world, pos) / 5.0F;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(@Nonnull ItemStack stack, @Nullable World world, @Nonnull List<String> tooltip, ITooltipFlag advanced) {
         if (Overloaded.cachedConfig.compressedConfig.showHardness)
@@ -163,7 +163,7 @@ public class BlockCompressed extends ModBlock {
         super.addInformation(stack, world, tooltip, advanced);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         Map<IBlockState, ModelResourceLocation> states = new HashMap<>();
@@ -188,7 +188,7 @@ public class BlockCompressed extends ModBlock {
 
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     private ModelResourceLocation getBaseModelLocation() {
         return new ModelResourceLocation(this.baseBlock.getRegistryName(), null);

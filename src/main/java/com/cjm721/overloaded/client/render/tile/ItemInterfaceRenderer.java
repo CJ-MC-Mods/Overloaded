@@ -4,18 +4,18 @@ import com.cjm721.overloaded.block.tile.TileItemInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
 
-public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInterface> {
+public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface> {
 
     @Override
-    public void render(TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushAttrib();
+    public void render(TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
+        GlStateManager.pushLightingAttrib();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y, z);
+        GlStateManager.translated(x, y, z);
         GlStateManager.disableRescaleNormal();
 
         renderItem(te);
@@ -34,12 +34,12 @@ public class ItemInterfaceRenderer extends TileEntitySpecialRenderer<TileItemInt
         GlStateManager.enableLighting();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(.5, .5, .5);
-        GlStateManager.scale(.5f, .5f, .5f);
+        GlStateManager.translated(.5, .5, .5);
+        GlStateManager.scalef(.5f, .5f, .5f);
         long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
+        GlStateManager.rotated(angle, 0, 1, 0);
 
-        Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
+        Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
 
         GlStateManager.popMatrix();
     }

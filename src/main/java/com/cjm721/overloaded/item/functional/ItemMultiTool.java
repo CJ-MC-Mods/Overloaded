@@ -89,7 +89,7 @@ public class ItemMultiTool extends PowerModItem {
         return this.getItemStackLimit(stack) == 1;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
@@ -100,7 +100,7 @@ public class ItemMultiTool extends PowerModItem {
                 Overloaded.cachedConfig.textureResolutions.itemResolution);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add("Assist Mode: " + getAssistMode().getName());
@@ -144,7 +144,7 @@ public class ItemMultiTool extends PowerModItem {
 
     @Override
     @Nonnull
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(@Nonnull World worldIn, @Nonnull EntityPlayer player, @Nonnull EnumHand hand) {
         if (worldIn.isRemote) {
             RayTraceResult result = PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, Minecraft.getMinecraft().getRenderPartialTicks());
@@ -226,7 +226,7 @@ public class ItemMultiTool extends PowerModItem {
 
     // Registering only on client side
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
         if (event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
             return;
@@ -239,7 +239,7 @@ public class ItemMultiTool extends PowerModItem {
 
     // Registering only on client side
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
         if (event.getSide() == Side.SERVER || event.getEntityPlayer() != Minecraft.getMinecraft().player)
             return;
@@ -274,7 +274,7 @@ public class ItemMultiTool extends PowerModItem {
         event.getDrops().clear();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private void leftClickOnBlockClient(BlockPos pos, Vec3d hitVec) {
         IMessage message = new LeftClickBlockMessage(pos);
         Overloaded.proxy.networkWrapper.sendToServer(message);

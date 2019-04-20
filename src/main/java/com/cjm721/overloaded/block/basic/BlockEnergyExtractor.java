@@ -58,7 +58,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getRenderLayer() {
@@ -66,7 +66,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing implements ITil
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         super.registerModel();
 

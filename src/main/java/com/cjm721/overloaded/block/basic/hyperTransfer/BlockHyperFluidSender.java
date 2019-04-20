@@ -43,7 +43,7 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         super.registerModel();
 

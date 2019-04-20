@@ -29,7 +29,7 @@ abstract class PowerModItem extends ModItem {
         setMaxStackSize(1);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IEnergyStorage handler = stack.getCapability(ENERGY, null);

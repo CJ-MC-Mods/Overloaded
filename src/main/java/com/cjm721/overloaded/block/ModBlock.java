@@ -18,7 +18,7 @@ public abstract class ModBlock extends Block implements IModRegistrable {
 
     public abstract void baseInit();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public abstract void registerModel();
 }

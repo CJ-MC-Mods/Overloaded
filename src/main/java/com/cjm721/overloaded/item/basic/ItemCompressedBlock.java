@@ -49,7 +49,7 @@ public class ItemCompressedBlock extends ItemBlock implements IModRegistrable {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     public String getItemStackDisplayName(@Nonnull ItemStack stack) {
         Item item = Item.getItemFromBlock(compressedBlock.getBaseBlock());

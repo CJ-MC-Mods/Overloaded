@@ -23,7 +23,7 @@ public class ItemEnergyCore extends ModItem {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(this, 0, location);

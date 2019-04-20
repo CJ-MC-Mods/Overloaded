@@ -34,7 +34,7 @@ public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider
         GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");

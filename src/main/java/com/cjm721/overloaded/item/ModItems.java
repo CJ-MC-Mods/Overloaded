@@ -80,7 +80,7 @@ public class ModItems {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void registerModels() {
         for (IModRegistrable item : registerList)
             item.registerModel();

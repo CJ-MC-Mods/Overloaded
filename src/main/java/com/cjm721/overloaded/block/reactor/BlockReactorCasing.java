@@ -22,7 +22,7 @@ public class BlockReactorCasing extends ModBlock {
         setTranslationKey("reactor_casing");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);

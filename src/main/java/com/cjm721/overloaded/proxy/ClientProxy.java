@@ -25,7 +25,7 @@ import org.lwjgl.input.Keyboard;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 

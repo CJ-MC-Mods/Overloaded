@@ -35,14 +35,14 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
 
     @Nullable
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
         if (armorModel == null)
             armorModel = new RenderMultiChestplate();
         return armorModel;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");

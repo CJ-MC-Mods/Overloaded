@@ -4,6 +4,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IModRegistrable {
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     void registerModel();
 }

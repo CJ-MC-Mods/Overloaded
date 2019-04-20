@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderMultiToolAssist {
 
     @SubscribeEvent
@@ -110,7 +110,7 @@ public class RenderMultiToolAssist {
 
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private void renderRemovePreview(RenderWorldLastEvent event, EntityPlayer player, RayTraceResult result) {
         try {
             IModel model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
@@ -132,7 +132,7 @@ public class RenderMultiToolAssist {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private void renderBlockPreview(RenderWorldLastEvent event, EntityPlayer player, ItemStack stack, RayTraceResult result, IBlockState state) {
         BlockPos toRenderAt = result.getBlockPos().add(result.sideHit.getDirectionVec());
 

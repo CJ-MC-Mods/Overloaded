@@ -18,7 +18,7 @@ import java.util.List;
  * Created by brandon3055 on 9/4/2016.
  * Used for general rendering stuff
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 class ModelUtils implements IResourceManagerReloadListener {
     public static void renderQuads(List<BakedQuad> listQuads) {
         Tessellator tessellator = Tessellator.getInstance();

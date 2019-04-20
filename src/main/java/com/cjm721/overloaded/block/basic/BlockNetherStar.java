@@ -25,7 +25,7 @@ public class BlockNetherStar extends ModBlock {
         setTranslationKey("nether_star_block");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "nether_star_block"), null);

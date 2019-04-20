@@ -50,7 +50,7 @@ public class BlockItemManipulator extends ModBlock implements ITileEntityProvide
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);

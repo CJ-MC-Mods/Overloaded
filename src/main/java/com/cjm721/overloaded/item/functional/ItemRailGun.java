@@ -56,7 +56,7 @@ public class ItemRailGun extends PowerModItem {
         setCreativeTab(OverloadedCreativeTabs.TECH);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE, null);
@@ -70,7 +70,7 @@ public class ItemRailGun extends PowerModItem {
         super.addInformation(stack, worldIn, tooltip, flagIn);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
@@ -83,7 +83,7 @@ public class ItemRailGun extends PowerModItem {
 
     @Override
     @Nonnull
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, @Nonnull EnumHand handIn) {
         if (worldIn.isRemote) {
             RayTraceResult ray = rayTraceWithEntities(worldIn, playerIn.getPositionEyes(1), playerIn.getLook(1), playerIn, Overloaded.cachedConfig.railGun.maxRange);
@@ -101,7 +101,7 @@ public class ItemRailGun extends PowerModItem {
         return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onMouseEvent(@Nonnull MouseEvent event) {
         EntityPlayerSP player = Minecraft.getMinecraft().player;

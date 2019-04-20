@@ -53,7 +53,7 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
         GameRegistry.registerTileEntity(TileItemInterface.class, MODID + ":item_interface");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
@@ -88,12 +88,12 @@ public class BlockItemInterface extends ModBlock implements ITileEntityProvider,
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getRenderLayer() {

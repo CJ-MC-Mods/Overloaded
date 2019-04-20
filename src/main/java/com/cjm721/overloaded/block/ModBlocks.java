@@ -103,7 +103,7 @@ public final class ModBlocks {
         registerList.add(block);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void registerModels() {
         for (IModRegistrable block : registerList) {
             block.registerModel();

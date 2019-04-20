@@ -47,7 +47,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
         GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_water_source"), null);
@@ -58,7 +58,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
                 Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     @Nonnull
     public BlockRenderLayer getRenderLayer() {

@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ImageUtil {
     public static BufferedImage scaleDownToWidth(@Nonnull BufferedImage original, int width) {
         double scale = original.getWidth() / (double) width;

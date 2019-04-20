@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.cjm721.overloaded.client.render.dynamic.ImageUtil.getTextureInputStream;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ResizeableTextureGenerator {
 
     private static final List<ResizableTexture> toCreateTextures = new ArrayList<>();

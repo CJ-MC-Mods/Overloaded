@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.Map;
 import java.util.Set;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BlockResourcePack extends AbstractInjectableResoucePack {
 
     public static final BlockResourcePack INSTANCE = new BlockResourcePack();

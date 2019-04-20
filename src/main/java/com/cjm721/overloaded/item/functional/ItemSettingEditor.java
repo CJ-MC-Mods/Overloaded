@@ -42,7 +42,7 @@ public class ItemSettingEditor extends ModItem {
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "settings_editor"), null);

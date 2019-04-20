@@ -45,7 +45,7 @@ public class ItemEnergyShield extends ModItem {
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "energy_shield"), null);
@@ -120,7 +120,7 @@ public class ItemEnergyShield extends ModItem {
         return new LongEnergyWrapper(stack);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         IHyperHandlerEnergy handler = stack.getCapability(HYPER_ENERGY_HANDLER, null);

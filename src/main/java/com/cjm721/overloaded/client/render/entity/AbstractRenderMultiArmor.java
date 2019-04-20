@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.client.render.entity;
 
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.entity.model.ModelBiped;
 
 import static com.cjm721.overloaded.Overloaded.cachedConfig;
 

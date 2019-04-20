@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class CompressedBlockAssets {
 
     private static final List<CompressedResourceLocation> toCreateTextures = new ArrayList<>();

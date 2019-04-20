@@ -47,7 +47,7 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
         GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);

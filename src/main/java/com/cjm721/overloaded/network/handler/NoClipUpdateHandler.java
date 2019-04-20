@@ -20,7 +20,7 @@ public class NoClipUpdateHandler implements IMessageHandler<NoClipStatusMessage,
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private void clientSide(NoClipStatusMessage message) {
         Minecraft.getMinecraft().addScheduledTask(() -> {
             ArmorEventHandler.setNoClip(Minecraft.getMinecraft().player, message.isEnabled());

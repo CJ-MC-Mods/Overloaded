@@ -30,6 +30,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -48,7 +50,10 @@ public class CommonProxy {
     public static Fluid pureMatter;
 
 
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(FMLCommonSetupEvent event) {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
+
         createFluids();
         ModBlocks.init();
         ModItems.init();

@@ -42,7 +42,7 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID + ":energy_injector_chest");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         super.registerModel();
@@ -64,7 +64,7 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements 
         return new TileEnergyInjectorChest().setFacing(EnumFacing.byIndex(meta));
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getRenderLayer() {

@@ -23,13 +23,13 @@ public class BlockPureMatterFluid extends BlockFluidClassic implements IModRegis
         setRegistryName("pure_matter");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelLoader.setCustomStateMapper(this, new FluidStateMapper());
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getRenderLayer() {

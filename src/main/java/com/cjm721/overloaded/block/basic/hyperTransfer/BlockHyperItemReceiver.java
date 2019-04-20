@@ -43,7 +43,7 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         super.registerModel();
 

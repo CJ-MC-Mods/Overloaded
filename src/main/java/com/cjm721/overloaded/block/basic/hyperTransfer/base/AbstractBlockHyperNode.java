@@ -29,7 +29,7 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
     @Nonnull
     protected abstract String getType();
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
@@ -45,7 +45,7 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements ITileEn
         ModelLoader.setCustomStateMapper(this, ignoreState);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Nonnull
     @Override
     public BlockRenderLayer getRenderLayer() {

@@ -46,7 +46,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
@@ -57,7 +57,7 @@ public class BlockCreativeGenerator extends ModBlock implements ITileEntityProvi
                 Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     @Nonnull
     public BlockRenderLayer getRenderLayer() {

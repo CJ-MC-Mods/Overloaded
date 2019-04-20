@@ -18,7 +18,7 @@ import org.lwjgl.opengl.GL11;
 /**
  * Based off brandon3055's work
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 class ModelRenderOBJ extends ModelRenderer {
     //    private CCModel model;
     private int displayList;

@@ -44,7 +44,7 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender implements 
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void registerModel() {
         super.registerModel();
         ImageUtil.registerDynamicTexture(

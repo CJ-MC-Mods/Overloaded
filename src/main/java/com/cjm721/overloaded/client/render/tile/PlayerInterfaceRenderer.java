@@ -4,8 +4,8 @@ import com.cjm721.overloaded.block.tile.TilePlayerInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -13,14 +13,14 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.UUID;
 
-public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlayerInterface> {
+public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterface> {
 
     @Override
-    public void render(TilePlayerInterface te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushAttrib();
+    public void render(TilePlayerInterface te, double x, double y, double z, float partialTicks, int alpha) {
+        GlStateManager.pushLightingAttrib();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y, z);
+        GlStateManager.translated(x, y, z);
         GlStateManager.disableRescaleNormal();
 
         renderPlayer(te);
@@ -45,10 +45,9 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
                 renderItem(stackCache);
             } else {
                 uuidCache = uuid;
-                stackCache = new ItemStack(Items.SKULL, 1, 3);
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("SkullOwner", uuid.toString());
-                stackCache.setTagCompound(tag);
+                tag.putString("SkullOwner", uuid.toString());
+                stackCache = new ItemStack(Items.PLAYER_HEAD, 1, tag);
                 renderItem(stackCache);
             }
             return;
@@ -58,12 +57,12 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.enableLighting();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(.5, .3, .5);
-        GlStateManager.scale(.2f, .2f, .2f);
+        GlStateManager.translated(.5, .3, .5);
+        GlStateManager.scaled(.2f, .2f, .2f);
         long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
+        GlStateManager.rotated(angle, 0, 1, 0);
 
-        Minecraft.getMinecraft().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
+        Minecraft.getInstance().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
 
         GlStateManager.popMatrix();
     }
@@ -73,12 +72,12 @@ public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlaye
         GlStateManager.enableLighting();
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(.5, .65, .5);
-        GlStateManager.scale(.5f, .5f, .5f);
+        GlStateManager.translated(.5, .65, .5);
+        GlStateManager.scalef(.5f, .5f, .5f);
         long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
+        GlStateManager.rotated(angle, 0, 1, 0);
 
-        Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
+        Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
 
         GlStateManager.popMatrix();
     }

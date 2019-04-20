@@ -139,7 +139,7 @@ public class PlayerInteractionUtil {
     }
 
     @Nullable
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static RayTraceResult getBlockPlayerLookingAtClient(EntityPlayer player, float partialTicks) {
         RayTraceResult result = player.rayTrace(Overloaded.cachedConfig.multiToolConfig.reach, partialTicks);
 
