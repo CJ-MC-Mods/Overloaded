@@ -1,7 +1,9 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -25,6 +27,9 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
     @Override
     public void render(@Nullable Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        if (entity instanceof EntityArmorStand) {
+            netHeadYaw = ((EntityArmorStand) entity).rotationYawHead;
+        }
         super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 
         GlStateManager.pushMatrix();
