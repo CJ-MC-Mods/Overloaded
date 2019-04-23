@@ -1,6 +1,6 @@
 **Version: 0.0.56 (RELEASE)**
 
-* Multi-Armor Helmet now looks forward 
+* Multi-Armor Helmet now looks forward when on armor stands.
 
 -------------------------------------------------------------------
 **Version: 0.0.55 (RELEASE)**
