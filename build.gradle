@@ -127,7 +127,9 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
 reobfJar.finalizedBy(signJar)
 
 curseforge {
-    apiKey = project.findProperty('curseForgeAPIKey')
+    if (project.hasProperty('curseForgeAPIKey')) {
+        apiKey = project.findProperty('curseForgeAPIKey')
+    }
     project {
         id = '264601'
         changelog = file('CHANGELOG.md') // A file can also be set using: changelog = file('changelog.txt')
