@@ -28,7 +28,7 @@ public class RenderUtil {
             final int alpha) {
         final Tessellator tessellator = Tessellator.getInstance();
         final BufferBuilder worldRenderer = tessellator.getBuffer();
-        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
         try {
             for (final EnumFacing enumfacing : EnumFacing.values()) {
