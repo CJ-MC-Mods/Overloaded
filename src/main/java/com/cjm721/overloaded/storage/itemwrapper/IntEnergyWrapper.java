@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.storage.itemwrapper;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,9 +18,9 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IDataUpdate {
 
-    private final ItemStack stack;
+    @Nonnull private final ItemStack stack;
 
-    public IntEnergyWrapper(ItemStack stack) {
+    public IntEnergyWrapper(@Nonnull ItemStack stack) {
         this.stack = stack;
 
         NBTTagCompound tagCompound = this.stack.getTagCompound();
@@ -84,6 +86,13 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
 
     @Nonnull
     private EnergyStorage getStorage() {
+        if(stack.getTagCompound() == null) {
+            Overloaded.logger.log(
+                    Level.ERROR,
+                    (CharSequence)"Something has changed private internal state in an invalid way. Resetting State.",
+                    new IllegalStateException("private internal state changed. Stack's Tag Compound is null"));
+            stack.setTagCompound(new NBTTagCompound());
+        }
         int energy = stack.getTagCompound().getInteger("IntEnergyStorage");
 
         return new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, energy);
