@@ -2,7 +2,7 @@
   {
     "modid": "overloaded",
     "name": "Overloaded",
-    "description": "Adds various complicated and tedius things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
+    "description": "Adds various complicated and tedious things that will minimize your need to destroy your server with your chunk sized arrays of machines.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "logoFile": "logo.png",
