@@ -1,6 +1,10 @@
 **Version: 0.0.56 (RELEASE)**
 
 * Multi-Armor Helmet now looks forward when on armor stands.
+* Updated Gradle build system
+* Correct Spelling Error (Fixes #68)
+* Add countermeasure for invalid state changes of Overloaded's power items (Fixes #65)
+* Change Render format to block for ghost blocks (changes text render posistion)
 
 -------------------------------------------------------------------
 **Version: 0.0.55 (RELEASE)**
