@@ -1,4 +1,4 @@
-**Version: 0.0.56 (RELEASE)**
+**Version: 0.0.57 (RELEASE)**
 
 * Fixes fluid storage converting fluids (Fixes #69)
 * Compiled against forge version bump
