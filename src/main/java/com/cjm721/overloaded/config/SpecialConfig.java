@@ -1,12 +1,36 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-public class SpecialConfig {
-    @Config.RequiresMcRestart
-    @Config.Comment("Fix for rending while noClip is active. May cause issues with some other mods. [Default: true]")
-    public boolean noClipRenderFix = true;
+public class SpecialConfig implements ConfigSectionHandler {
+  public boolean noClipRenderFix;
+  private ForgeConfigSpec.BooleanValue noClipRenderFixSpec;
 
-    @Config.Comment("Do not change without reading https://github.com/CJ-MC-Mods/Overloaded/wiki/Minecraft-Inventory-Mechanic-Bugs#slots-for-infinity-barrel. Reduces performance for compatibility. [Default:: false]")
-    public boolean infinityBarrelAdditionalSlot = false;
+  public boolean infinityBarrelAdditionalSlot;
+  private ForgeConfigSpec.BooleanValue infinityBarrelAdditionalSlotSpec;
+
+  @Override
+  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+    builder.push("special");
+
+    noClipRenderFixSpec =
+        builder
+            .comment(
+                "Fix for rending while noClip is active. May cause issues with some other mods. [Default: true]")
+            .define("noClipRenderFix", true);
+
+    infinityBarrelAdditionalSlotSpec =
+        builder
+            .comment(
+                "Do not change without reading https://github.com/CJ-MC-Mods/Overloaded/wiki/Minecraft-Inventory-Mechanic-Bugs#slots-for-infinity-barrel. Reduces performance for compatibility. [Default:: false]")
+            .define("infinityBarrelAdditionalSlot", false);
+
+    builder.pop();
+  }
+
+  @Override
+  public void update() {
+    noClipRenderFix = noClipRenderFixSpec.get();
+    infinityBarrelAdditionalSlot = infinityBarrelAdditionalSlotSpec.get();
+  }
 }

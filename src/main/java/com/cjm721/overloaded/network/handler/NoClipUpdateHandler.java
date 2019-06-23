@@ -3,29 +3,36 @@ package com.cjm721.overloaded.network.handler;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class NoClipUpdateHandler implements IMessageHandler<NoClipStatusMessage, IMessage> {
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
-    @Override
-    public IMessage onMessage(NoClipStatusMessage message, MessageContext ctx) {
-        if (ctx.side.isClient()) {
-            clientSide(message);
-        }
-        return null;
+public class NoClipUpdateHandler
+    implements BiConsumer<NoClipStatusMessage, Supplier<NetworkEvent.Context>> {
+
+  @OnlyIn(Dist.CLIENT)
+  private void clientSide(NoClipStatusMessage message, Supplier<NetworkEvent.Context> ctx) {
+    ctx.get()
+        .enqueueWork(
+            () -> {
+              ArmorEventHandler.setNoClip(Minecraft.getInstance().player, message.isEnabled());
+              Minecraft.getInstance()
+                  .player
+                  .sendStatusMessage(
+                      new StringTextComponent("No Clip: " + message.isEnabled()), true);
+            });
+  }
+
+  @Override
+  public void accept(NoClipStatusMessage message, Supplier<NetworkEvent.Context> ctx) {
+    if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+      clientSide(message, ctx);
     }
-
-    @SideOnly(Side.CLIENT)
-    private void clientSide(NoClipStatusMessage message) {
-        Minecraft.getMinecraft().addScheduledTask(() -> {
-            ArmorEventHandler.setNoClip(Minecraft.getMinecraft().player, message.isEnabled());
-            Minecraft.getMinecraft().player.sendStatusMessage(new TextComponentString("No Clip: " + message.isEnabled()), true);
-        });
-    }
-
+    ctx.get().setPacketHandled(true);
+  }
 }

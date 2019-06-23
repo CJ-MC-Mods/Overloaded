@@ -1,0 +1,5 @@
+<root>
+    <item name='com.cjm721.overloaded.block.basic.container.AbstractBlockInfiniteContainer java.util.List&lt;net.minecraft.item.ItemStack&gt; getDrops(net.minecraft.block.BlockState, net.minecraft.world.storage.loot.LootContext.Builder) 1'>
+        <annotation name='javax.annotation.Nonnull'/>
+    </item>
+</root>

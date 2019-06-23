@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.storage;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 
 public interface INBTConvertible {
-    void readFromNBT(NBTTagCompound compound);
+  void read(CompoundNBT compound);
 
-    NBTTagCompound writeToNBT(NBTTagCompound compound);
+  CompoundNBT write(CompoundNBT compound);
 }

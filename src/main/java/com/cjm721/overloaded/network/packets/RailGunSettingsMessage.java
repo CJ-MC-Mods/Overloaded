@@ -1,26 +1,22 @@
 package com.cjm721.overloaded.network.packets;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 
-public class RailGunSettingsMessage implements IMessage {
+public class RailGunSettingsMessage {
 
-    public int powerDelta;
+  public int powerDelta;
 
-    public RailGunSettingsMessage() {
-    }
+  public RailGunSettingsMessage() {}
 
-    public RailGunSettingsMessage(int powerDelta) {
-        this.powerDelta = powerDelta;
-    }
+  public RailGunSettingsMessage(int powerDelta) {
+    this.powerDelta = powerDelta;
+  }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        powerDelta = buf.readInt();
-    }
+  public static RailGunSettingsMessage fromBytes(PacketBuffer buf) {
+    return new RailGunSettingsMessage(buf.readInt());
+  }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(powerDelta);
-    }
+  public static void toBytes(RailGunSettingsMessage message, PacketBuffer buf) {
+    buf.writeInt(message.powerDelta);
+  }
 }

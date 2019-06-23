@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.energy;
 
 import com.cjm721.overloaded.storage.LongEnergyStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -115,8 +115,8 @@ public class LongEnergyStorageTest {
 
     @Test
     public void deserializeNBT_normalValues() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setLong("Count",  1000L);
+        CompoundNBT tag = new CompoundNBT();
+        tag.putLong("Count",  1000L);
 
         storage.deserializeNBT(tag);
 
@@ -125,11 +125,11 @@ public class LongEnergyStorageTest {
 
     @Test
     public void serializeNBT_normalValues() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setLong("Count",  1000L);
+        CompoundNBT tag = new CompoundNBT();
+        tag.putLong("Count",  1000L);
         storage.deserializeNBT(tag);
 
-        NBTTagCompound serializedTag = storage.serializeNBT();
+        CompoundNBT serializedTag = storage.serializeNBT();
 
         assertThat(serializedTag).isEqualTo(tag);
     }

@@ -3,8 +3,10 @@ package com.cjm721.overloaded.block.tile.hyperTransfer.base;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
@@ -12,20 +14,22 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
 
     private final Capability<H> capability;
 
-    protected AbstractTileHyperReceiver(Capability<H> capability) {
+    protected AbstractTileHyperReceiver(TileEntityType<?> type, Capability<H> capability) {
+        super(type);
         this.capability = capability;
     }
 
     @Nonnull
     public Type receive(@Nonnull Type stack) {
-        for (EnumFacing side : EnumFacing.values()) {
+        for (Direction side : Direction.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
-            if (te == null || !te.hasCapability(capability, side.getOpposite()))
-                continue;
+            LazyOptional<H> cap = te.getCapability(capability, side.getOpposite());
 
-            IHyperHandler<Type> temp = te.getCapability(capability, side.getOpposite());
-            stack = temp.give(stack, true);
+            if (!cap.isPresent()) {
+                continue;
+            }
+            stack = cap.orElse(null).give(stack, true);
 
             if (stack.getAmount() == 0L)
                 return stack;

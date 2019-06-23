@@ -1,46 +1,32 @@
 package com.cjm721.overloaded.network.packets;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class LeftClickBlockMessage implements IMessage {
+public class LeftClickBlockMessage {
 
-    private BlockPos pos;
+  private BlockPos pos;
 
-    public LeftClickBlockMessage() {
-    }
+  public LeftClickBlockMessage() {}
 
-    public LeftClickBlockMessage(BlockPos pos) {
-        this.pos = pos;
-    }
+  public LeftClickBlockMessage(BlockPos pos) {
+    this.pos = pos;
+  }
 
-    /**
-     * Convert from the supplied buffer into your specific message type
-     *
-     * @param buf
-     */
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        int x = buf.readInt();
-        int y = buf.readInt();
-        int z = buf.readInt();
-        pos = new BlockPos(x, y, z);
-    }
+  public static LeftClickBlockMessage fromBytes(PacketBuffer buf) {
+    int x = buf.readInt();
+    int y = buf.readInt();
+    int z = buf.readInt();
+    return new LeftClickBlockMessage(new BlockPos(x, y, z));
+  }
 
-    /**
-     * Deconstruct your message into the supplied byte buffer
-     *
-     * @param buf
-     */
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(pos.getX());
-        buf.writeInt(pos.getY());
-        buf.writeInt(pos.getZ());
-    }
+  public static void toBytes(LeftClickBlockMessage message, PacketBuffer buf) {
+    buf.writeInt(message.pos.getX());
+    buf.writeInt(message.pos.getY());
+    buf.writeInt(message.pos.getZ());
+  }
 
-    public BlockPos getPos() {
-        return pos;
-    }
+  public BlockPos getPos() {
+    return pos;
+  }
 }

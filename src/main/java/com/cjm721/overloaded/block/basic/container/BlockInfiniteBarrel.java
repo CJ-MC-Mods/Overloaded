@@ -1,29 +1,28 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
+import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
 import com.cjm721.overloaded.storage.LongItemStack;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,27 +30,25 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
-public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implements ITileEntityProvider {
+public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer {
 
     public BlockInfiniteBarrel() {
-        super(Material.ROCK);
-
-        setLightOpacity(0);
+        super(ModBlock.getDefaultProperties());
     }
 
     @Override
     public void baseInit() {
         setRegistryName("infinite_barrel");
-        setTranslationKey("infinite_barrel");
+//        setTranslationKey("infinite_barrel");
 
-        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
+//        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_barrel.png"),
@@ -60,36 +57,24 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer implemen
     }
 
     @Override
-    @Nonnull
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+        LongItemStack stack = ((TileInfiniteBarrel) world.getTileEntity(pos)).getStorage().status();
+        if (stack.getItemStack().isEmpty()) {
+            player.sendStatusMessage(new StringTextComponent("Item: EMPTY"), false);
+        } else {
+            player.sendStatusMessage(new StringTextComponent("Item: ").appendSibling(stack.getItemStack().getTextComponent()).appendText(String.format(" Amount %,d", stack.getAmount())), false);
+        }
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileInfiniteBarrel();
     }
 
+    @Nonnull
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
-                LongItemStack stack = ((TileInfiniteBarrel) worldIn.getTileEntity(pos)).getStorage().status();
-                if (stack.getItemStack().isEmpty()) {
-                    playerIn.sendStatusMessage(new TextComponentString("Item: EMPTY"), false);
-                } else {
-                    playerIn.sendStatusMessage(new TextComponentString("Item: ").appendSibling(stack.getItemStack().getTextComponent()).appendText(String.format(" Amount %,d", stack.getAmount())), false);
-                }
-                return true;
-            }
-        }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
-    }
-
-    @Override
-    @Nullable
-    protected IHyperType getHyperStack(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-
-        if (te != null && te instanceof TileInfiniteBarrel) {
-            return te.getCapability(HYPER_ITEM_HANDLER, EnumFacing.UP).status();
-        }
-        return null;
+    <T extends IHyperHandler> Capability<T> getHyperCapabilityType() {
+        return (Capability<T>)HYPER_ITEM_HANDLER;
     }
 }

@@ -1,99 +1,113 @@
 package com.cjm721.overloaded.client.resource;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.client.resources.data.IMetadataSection;
-import net.minecraft.client.resources.data.MetadataSerializer;
+import net.minecraft.resources.ResourcePackType;
+import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BlockResourcePack extends AbstractInjectableResoucePack {
 
-    public static final BlockResourcePack INSTANCE = new BlockResourcePack();
+  public static final BlockResourcePack INSTANCE = new BlockResourcePack();
 
-    private BlockResourcePack() {}
+  private BlockResourcePack() {}
 
-    private final Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
-    private final Map<ResourceLocation, String> blockStates = Maps.newHashMap();
+  private final Map<ResourceLocation, BufferedImage> images = Maps.newHashMap();
+  private final Map<ResourceLocation, String> blockStates = Maps.newHashMap();
 
-    private final Set<String> domains = Sets.newHashSet();
+  private final Set<String> domains = Sets.newHashSet();
 
-    public void addImage(@Nonnull ResourceLocation res, @Nonnull BufferedImage image) {
-        images.put(res, image);
+  public void addImage(@Nonnull ResourceLocation res, @Nonnull BufferedImage image) {
+    images.put(res, image);
+  }
+
+  public void addBlockState(ResourceLocation res, String state) {
+    blockStates.put(res, state);
+  }
+
+  public void addDomain(String domain) {
+    domains.add(domain);
+  }
+
+  private InputStream getImageInputStream(@Nonnull ResourceLocation location) throws IOException {
+    BufferedImage image = images.get(location);
+    if (image != null) {
+      ByteArrayOutputStream os = new ByteArrayOutputStream();
+      ImageIO.write(image, "png", os);
+      return new ByteArrayInputStream(os.toByteArray());
     }
+    throw new FileNotFoundException(location.toString());
+  }
 
-    public void addBlockState(ResourceLocation res, String state) {
-        blockStates.put(res, state);
+  @Override
+  @Nonnull
+  public InputStream getRootResourceStream(String fileName) throws IOException {
+    return null;
+  }
+
+  @Override
+  public InputStream getResourceStream(ResourcePackType type, ResourceLocation location)
+      throws IOException {
+    if (location.getPath().endsWith(".png")) {
+      return getImageInputStream(location);
+    } else {
+      String state = blockStates.get(location);
+
+      if (state != null) {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        os.write(state.getBytes());
+        return new ByteArrayInputStream(os.toByteArray());
+      }
     }
+    throw new FileNotFoundException(location.toString());
+  }
 
-    public void addDomain(String domain) {
-        domains.add(domain);
-    }
+  @Override
+  public Collection<ResourceLocation> getAllResourceLocations(
+      ResourcePackType type, String pathIn, int maxDepth, Predicate<String> filter) {
+    return ImmutableList.<ResourceLocation>builder()
+        .addAll(images.keySet())
+        .addAll(blockStates.keySet())
+        .build();
+  }
 
-    @Override
-    @Nonnull
-    public InputStream getInputStream(@Nonnull ResourceLocation location) throws IOException {
-        if (location.getPath().endsWith(".png")) {
-            return getImageInputStream(location);
-        } else {
-            String state = blockStates.get(location);
+  @Override
+  public boolean resourceExists(ResourcePackType type, ResourceLocation location) {
+    return images.containsKey(location) || blockStates.containsKey(location);
+  }
 
-            if (state != null) {
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                os.write(state.getBytes());
-                return new ByteArrayInputStream(os.toByteArray());
-            }
-        }
-        throw new FileNotFoundException(location.toString());
-    }
+  @Override
+  public Set<String> getResourceNamespaces(ResourcePackType type) {
+    return ImmutableSet.copyOf(domains);
+  }
 
-    private InputStream getImageInputStream(@Nonnull ResourceLocation location) throws IOException {
-        BufferedImage image = images.get(location);
-        if (image != null) {
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", os);
-            return new ByteArrayInputStream(os.toByteArray());
-        }
-        throw new FileNotFoundException(location.toString());
-    }
+  @Nullable
+  @Override
+  public <T> T getMetadata(IMetadataSectionSerializer<T> deserializer) throws IOException {
+    return null;
+  }
 
+  @Override
+  @Nonnull
+  public String getName() {
+    return "Overloaded Dynamic Textures";
+  }
 
-    @Override
-    public boolean resourceExists(@Nonnull ResourceLocation location) {
-        return images.containsKey(location) || blockStates.containsKey(location);
-    }
-
-    @Override
-    @Nonnull
-    public Set<String> getResourceDomains() {
-        return ImmutableSet.copyOf(domains);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends IMetadataSection> T getPackMetadata(@Nonnull MetadataSerializer metadataSerializer, @Nonnull String metadataSectionName) {
-        return null;
-    }
-
-    @Override
-    @Nonnull
-    public BufferedImage getPackImage() {
-        return null;
-    }
-
-    @Override
-    @Nonnull
-    public String getPackName() {
-        return "Overloaded Compressed Textures";
-    }
+  @Override
+  public void close() throws IOException {}
 }

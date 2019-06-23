@@ -1,15 +1,16 @@
 package com.cjm721.overloaded.block.tile;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import com.cjm721.overloaded.block.ModBlocks;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,79 +18,69 @@ import java.util.UUID;
 
 public class TilePlayerInterface extends TileEntity {
 
-    private UUID placer;
+  private UUID placer;
 
-    @Override
-    @Nonnull
-    public NBTTagCompound getUpdateTag() {
-        return writeToNBT(new NBTTagCompound());
+  public TilePlayerInterface() {
+    super(
+        TileEntityType.Builder.create(TilePlayerInterface::new, ModBlocks.playerInterface)
+            .build(null));
+  }
+
+  @Override
+  @Nonnull
+  public CompoundNBT getUpdateTag() {
+    return write(new CompoundNBT());
+  }
+
+  @Nullable
+  @Override
+  public SUpdateTileEntityPacket getUpdatePacket() {
+    CompoundNBT tag = new CompoundNBT();
+    write(tag);
+
+    return new SUpdateTileEntityPacket(getPos(), 1, tag);
+  }
+
+  @Override
+  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+    this.read(pkt.getNbtCompound());
+  }
+
+  @Override
+  public void read(@Nonnull CompoundNBT compound) {
+    if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
+
+    super.read(compound);
+  }
+
+  @Override
+  @Nonnull
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+    if (placer != null) compound.putString("Placer", placer.toString());
+
+    return super.write(compound);
+  }
+
+  public void setPlacer(@Nonnull LivingEntity placer) {
+    if (placer instanceof PlayerEntity) this.placer = placer.getUniqueID();
+  }
+
+  @Nonnull
+  @Override
+  public <T> LazyOptional<T> getCapability(
+      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+    if (this.placer != null) {
+      PlayerEntity player = this.getWorld().getPlayerByUuid(this.placer);
+
+      if (player != null) {
+        return player.getCapability(capability, facing);
+      }
     }
 
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound tag = new NBTTagCompound();
-        writeToNBT(tag);
+    return super.getCapability(capability, facing);
+  }
 
-        return new SPacketUpdateTileEntity(getPos(), 1, tag);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        this.readFromNBT(pkt.getNbtCompound());
-    }
-
-    @Override
-    public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        if (compound.hasKey("Placer"))
-            placer = UUID.fromString(compound.getString("Placer"));
-
-        super.readFromNBT(compound);
-    }
-
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        if (placer != null)
-            compound.setString("Placer", placer.toString());
-
-        return super.writeToNBT(compound);
-    }
-
-    public void setPlacer(@Nonnull EntityLivingBase placer) {
-        if (placer instanceof EntityPlayer)
-            this.placer = placer.getUniqueID();
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if (this.placer != null) {
-            EntityPlayer player = this.getWorld().getPlayerEntityByUUID(this.placer);
-
-            if (player != null) {
-                return player.hasCapability(capability, facing);
-            }
-        }
-
-        return super.hasCapability(capability, facing);
-    }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if (this.placer != null) {
-            EntityPlayer player = this.getWorld().getPlayerEntityByUUID(this.placer);
-
-            if (player != null) {
-                return player.getCapability(capability, facing);
-            }
-        }
-
-        return super.getCapability(capability, facing);
-    }
-
-    public UUID getPlacer() {
-        return placer;
-    }
+  public UUID getPlacer() {
+    return placer;
+  }
 }

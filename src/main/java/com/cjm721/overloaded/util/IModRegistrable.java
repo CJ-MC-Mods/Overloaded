@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.util;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IModRegistrable {
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     void registerModel();
 }

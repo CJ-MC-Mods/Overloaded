@@ -3,58 +3,50 @@ package com.cjm721.overloaded.block.basic.container;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.storage.IHyperType;
+import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.LongFluidStack;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements ITileEntityProvider {
+public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
 
     public BlockInfiniteTank() {
-        super(Material.GLASS);
-
-        setLightOpacity(0);
+        super(getDefaultProperties());
     }
 
     @Override
     public void baseInit() {
         setRegistryName("infinite_tank");
-        setTranslationKey("infinite_tank");
+//        setTranslationKey("infinite_tank");
 
-        GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
+//        GameRegistry.registerTileEntity(TileInfiniteTank.class, MODID + ":infinite_tank");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_tank"), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_tank.png"),
@@ -64,40 +56,42 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer implements
 
     @Override
     @Nonnull
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileInfiniteTank();
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
-                LongFluidStack storedFluid = ((TileInfiniteTank) worldIn.getTileEntity(pos)).getStorage().getFluidStack();
-                if (storedFluid == null || storedFluid.fluidStack == null) {
-                    playerIn.sendStatusMessage(new TextComponentString("Fluid: EMPTY"), false);
-                } else {
-                    playerIn.sendStatusMessage(new TextComponentString(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)), false);
-                }
+    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        if (!world.isRemote) {
+            ItemStack heldItem = player.getActiveItemStack();
+            if (heldItem.isEmpty() && player.getActiveHand() == Hand.MAIN_HAND) {
+                sendPlayerStatus(world, pos, player);
+                return;
             } else {
-                TileEntity te = worldIn.getTileEntity(pos);
-                if (te != null && te instanceof TileInfiniteTank) {
-                    IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, side);
-                    FluidUtil.interactWithFluidHandler(playerIn, hand, handler); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof TileInfiniteTank) {
+                    IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
+                    FluidUtil.interactWithFluidHandler(player, player.getActiveHand(), handler);
                 }
             }
         }
-        return true;
+        super.onBlockClicked(state,world,pos,player);
     }
 
-    @Override
-    @Nullable
-    protected IHyperType getHyperStack(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
 
-        if (te != null && te instanceof TileInfiniteTank) {
-            return te.getCapability(HYPER_FLUID_HANDLER, EnumFacing.UP).status();
+    @Override
+    protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+        LongFluidStack storedFluid = ((TileInfiniteTank) world.getTileEntity(pos)).getStorage().getFluidStack();
+        if (storedFluid == null || storedFluid.fluidStack == null) {
+            player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
+        } else {
+            player.sendStatusMessage(new StringTextComponent(String.format("Fluid: %s Amount %,d", storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)), false);
         }
-        return null;
+    }
+
+    @Nonnull
+    @Override
+    <T extends IHyperHandler> Capability<T> getHyperCapabilityType() {
+        return (Capability<T>)HYPER_FLUID_HANDLER;
     }
 }

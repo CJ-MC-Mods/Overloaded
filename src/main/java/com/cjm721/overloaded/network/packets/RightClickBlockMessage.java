@@ -1,78 +1,71 @@
 package com.cjm721.overloaded.network.packets;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-/**
- * Created by CJ on 4/15/2017.
- */
-public class RightClickBlockMessage implements IMessage {
+public class RightClickBlockMessage {
 
-    private EnumFacing hitSide;
-    private BlockPos pos;
-    private float hitX;
-    private float hitY;
-    private float hitZ;
+  private Direction hitSide;
+  private BlockPos pos;
+  private float hitX;
+  private float hitY;
+  private float hitZ;
 
-    // Used by FML Reflection to create message
-    public RightClickBlockMessage() {
-    }
+  // Used by FML Reflection to create message
+  public RightClickBlockMessage() {}
 
-    public RightClickBlockMessage(BlockPos pos, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
-        this.pos = pos;
-        this.hitSide = hitSide;
-        this.hitX = hitX;
-        this.hitY = hitY;
-        this.hitZ = hitZ;
-    }
+  public RightClickBlockMessage(
+      BlockPos pos, Direction hitSide, float hitX, float hitY, float hitZ) {
+    this.pos = pos;
+    this.hitSide = hitSide;
+    this.hitX = hitX;
+    this.hitY = hitY;
+    this.hitZ = hitZ;
+  }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        int x = buf.readInt();
-        int y = buf.readInt();
-        int z = buf.readInt();
-        int facing = buf.readInt();
+  public static RightClickBlockMessage fromBytes(PacketBuffer buf) {
+    int x = buf.readInt();
+    int y = buf.readInt();
+    int z = buf.readInt();
+    int facing = buf.readInt();
 
-        this.pos = new BlockPos(x, y, z);
-        this.hitSide = EnumFacing.byIndex(facing);
+    return new RightClickBlockMessage(
+        new BlockPos(x, y, z),
+        Direction.byIndex(facing),
+        buf.readFloat(),
+        buf.readFloat(),
+        buf.readFloat());
+  }
 
+  public static void toBytes(RightClickBlockMessage message, PacketBuffer buf) {
+    buf.writeInt(message.pos.getX());
+    buf.writeInt(message.pos.getY());
+    buf.writeInt(message.pos.getZ());
+    buf.writeInt(message.hitSide.getIndex());
 
-        hitX = buf.readFloat();
-        hitY = buf.readFloat();
-        hitZ = buf.readFloat();
-    }
+    buf.writeFloat(message.hitX);
+    buf.writeFloat(message.hitY);
+    buf.writeFloat(message.hitZ);
+  }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(pos.getX());
-        buf.writeInt(pos.getY());
-        buf.writeInt(pos.getZ());
-        buf.writeInt(hitSide.getIndex());
+  public BlockPos getPos() {
+    return pos;
+  }
 
-        buf.writeFloat(hitX);
-        buf.writeFloat(hitY);
-        buf.writeFloat(hitZ);
-    }
+  public Direction getHitSide() {
+    return hitSide;
+  }
 
-    public BlockPos getPos() {
-        return pos;
-    }
+  public float getHitX() {
+    return hitX;
+  }
 
-    public EnumFacing getHitSide() {
-        return hitSide;
-    }
+  public float getHitY() {
+    return hitY;
+  }
 
-    public float getHitX() {
-        return hitX;
-    }
-
-    public float getHitY() {
-        return hitY;
-    }
-
-    public float getHitZ() {
-        return hitZ;
-    }
+  public float getHitZ() {
+    return hitZ;
+  }
 }

@@ -1,11 +1,15 @@
 package com.cjm721.overloaded.block.tile.infinity;
 
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -15,51 +19,46 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
 
-    @Nonnull
-    private final LongEnergyStorage energyStorage;
+  @Nonnull private final LongEnergyStorage energyStorage;
 
-    public TileInfiniteCapacitor() {
-        energyStorage = new LongEnergyStorage(this);
-    }
+  public TileInfiniteCapacitor() {
+    super(
+        TileEntityType.Builder.create(TileInfiniteCapacitor::new, ModBlocks.infiniteCapacitor)
+            .build(null));
+    energyStorage = new LongEnergyStorage(this);
+  }
 
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        NBTTagCompound energy = energyStorage.serializeNBT();
-        compound.setTag("Energy", energy);
-        return compound;
-    }
+  @Override
+  @Nonnull
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+    super.write(compound);
+    CompoundNBT energy = energyStorage.serializeNBT();
+    compound.put("Energy", energy);
+    return compound;
+  }
 
-    @Override
-    public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        energyStorage.deserializeNBT(compound.getCompoundTag("Energy"));
-    }
+  @Override
+  public void read(@Nonnull CompoundNBT compound) {
+    super.read(compound);
+    energyStorage.deserializeNBT((CompoundNBT) compound.get("Energy"));
+  }
 
-    public LongEnergyStorage getStorage() {
-        return energyStorage;
-    }
+  public LongEnergyStorage getStorage() {
+    return energyStorage;
+  }
 
-    @Override
-    @Nullable
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
-            return (T) energyStorage;
-        }
-        return super.getCapability(capability, facing);
+  @Override
+  @Nonnull
+  public <T> LazyOptional<T> getCapability(
+      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+    if (capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
+      return LazyOptional.of(() -> energyStorage).cast();
     }
+    return super.getCapability(capability, facing);
+  }
 
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if (capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public void dataUpdated() {
-        markDirty();
-    }
+  @Override
+  public void dataUpdated() {
+    markDirty();
+  }
 }

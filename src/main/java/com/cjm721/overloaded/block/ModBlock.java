@@ -1,24 +1,25 @@
 package com.cjm721.overloaded.block;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 public abstract class ModBlock extends Block implements IModRegistrable {
-    protected ModBlock(@Nonnull Material materialIn) {
-        super(materialIn);
-        setHardness(1);
-        setCreativeTab(OverloadedCreativeTabs.TECH);
-    }
+  public static Properties getDefaultProperties() {
+    return Properties.create(Material.ROCK).hardnessAndResistance(3);
+  }
 
-    public abstract void baseInit();
+  protected ModBlock(@Nonnull Properties properties) {
+    super(properties);
+  }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public abstract void registerModel();
+  public abstract void baseInit();
+
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public abstract void registerModel();
 }

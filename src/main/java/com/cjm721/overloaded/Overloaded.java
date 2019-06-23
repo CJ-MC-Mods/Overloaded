@@ -1,67 +1,61 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
+import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.proxy.CommonProxy;
-import com.google.gson.Gson;
-import net.minecraftforge.fml.common.FMLLog;
+import com.cjm721.overloaded.proxy.ServerProxy;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-
-import static com.cjm721.overloaded.config.ForgeOverloadedConfigHolder.overloadedConfig;
-
-@Mod(modid = Overloaded.MODID, version = Overloaded.VERSION,
-        acceptedMinecraftVersions = "[1.12,1.13)",
-        certificateFingerprint = "${FINGERPRINT}",
-        useMetadata = true
-)
+@Mod(value = Overloaded.MODID)
 public class Overloaded {
 
-    @Mod.Instance(Overloaded.MODID)
-    public static Overloaded instance;
+  public static Overloaded instance;
 
-    public static final String MODID = "overloaded";
-    static final String VERSION = "${mod_version}";
+  public static final String MODID = "overloaded";
+  static final String VERSION = "${mod_version}";
 
-    private static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
-    private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.ServerProxy";
+  private static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
+  private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.ServerProxy";
 
-    @SidedProxy(clientSide = Overloaded.PROXY_CLIENT, serverSide = Overloaded.PROXY_SERVER)
-    public static CommonProxy proxy;
+  public static CommonProxy proxy =
+      DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
-    public static File configFolder;
-    public static Logger logger;
+  public static final Logger logger = LogManager.getLogger();
 
-    public static OverloadedConfig cachedConfig;
+  public static OverloadedConfig cachedConfig;
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        Overloaded.logger = event.getModLog();
-        configFolder = new File(event.getModConfigurationDirectory(), "overloaded/");
-        configFolder.mkdir();
-        ConfigSyncHandler.INSTANCE.updateConfig();
-        proxy.preInit(event);
-    }
+  public Overloaded() {
+    instance = this;
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFingerprintException);
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.init(event);
-    }
+    ModLoadingContext.get()
+        .registerConfig(
+            ModConfig.Type.COMMON,
+            OverloadedConfig.INSTANCE.load(FMLPaths.CONFIGDIR.get().resolve(MODID + ".toml")));
 
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
-    }
+    MinecraftForge.EVENT_BUS.register(OverloadedConfig.INSTANCE);
+  }
 
-    @Mod.EventHandler
-    public void onFingerprintException(FMLFingerprintViolationEvent event) {
-        FMLLog.log.warn("Invalid fingerprint detected! The file " + event.getSource().getName() + " may have been tampered with. This version will NOT be supported by the cjm721!");
-    }
+  private void preInit(final FMLCommonSetupEvent event) {
+
+    proxy.commonSetup(event);
+  }
+
+  private void onFingerprintException(FMLFingerprintViolationEvent event) {
+    logger.warn(
+        "Invalid fingerprint detected! The file "
+            + event.getSource().getName()
+            + " may have been tampered with. This version will NOT be supported by the cjm721!");
+  }
 }

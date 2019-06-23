@@ -1,55 +1,40 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.block.ModBlock;
+import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.block.tile.TileMatterPurifier;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
+public class BlockMatterPurifier extends ModBlockTile {
 
-public class BlockMatterPurifier extends ModBlock implements ITileEntityProvider {
+  public BlockMatterPurifier() {
+    super(getDefaultProperties());
+  }
 
-    public BlockMatterPurifier() {
-        super(Material.ROCK);
+  @Override
+  public void baseInit() {
+    setRegistryName("matter_purifier");
+    //        setTranslationKey("matter_purifier");
 
-        setLightOpacity(0);
-    }
+    //        GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
+  }
 
-    @Override
-    public void baseInit() {
-        setRegistryName("matter_purifier");
-        setTranslationKey("matter_purifier");
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void registerModel() {
+    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
+    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+  }
 
-        GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-    }
-
-    /**
-     * Returns a new instance of a block's tile entity class. Called on placing the block.
-     *
-     * @param worldIn
-     * @param meta
-     */
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileMatterPurifier();
-    }
+  @Nullable
+  @Override
+  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    return new TileMatterPurifier();
+  }
 }

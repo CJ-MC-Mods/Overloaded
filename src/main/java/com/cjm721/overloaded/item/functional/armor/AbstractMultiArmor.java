@@ -1,29 +1,34 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.OverloadedCreativeTabs;
+import com.cjm721.overloaded.OverloadedItemGroups;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import com.cjm721.overloaded.util.IModRegistrable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+import net.minecraft.item.Rarity;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,129 +40,208 @@ import java.util.UUID;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-abstract class AbstractMultiArmor extends ItemArmor implements IModRegistrable, IMultiArmor {
-    private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
-    private static final ArmorMaterial pureMatter = EnumHelper.addArmorMaterial("pureMatter", "overloaded:na", 100, new int[]{6, 12, 16, 6}, 50, SoundEvents.ITEM_ARMOR_EQUIP_GOLD, 4);
-
-    AbstractMultiArmor(int render_index, EntityEquipmentSlot equipmentSlot) {
-        super(pureMatter, render_index, equipmentSlot);
-
-        setMaxDamage(-1);
-        setMaxStackSize(1);
-
-        setCreativeTab(OverloadedCreativeTabs.TECH);
-        ModItems.addToSecondaryInit(this);
-    }
-
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-        super.getSubItems(tab, items);
-
-        if (this.isInCreativeTab(tab)) {
-            ItemStack item = new ItemStack(this);
-            IEnergyStorage cap = item.getCapability(ENERGY, null);
-
-            if(cap != null) {
-                cap.receiveEnergy(Integer.MAX_VALUE,false);
-                items.add(item);
-            }
+abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
+  private static final UUID[] ARMOR_MODIFIERS =
+      new UUID[] {
+        UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"),
+        UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),
+        UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"),
+        UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")
+      };
+  private static final IArmorMaterial pureMatter =
+      new IArmorMaterial() {
+        @Override
+        public int getDurability(@Nonnull EquipmentSlotType equipmentSlotType) {
+          return -1;
         }
+
+        @Override
+        public int getDamageReductionAmount(@Nonnull EquipmentSlotType equipmentSlotType) {
+          return 100;
+        }
+
+        @Override
+        public int getEnchantability() {
+          return 100;
+        }
+
+        @Override
+        @Nonnull
+        public SoundEvent getSoundEvent() {
+          return SoundEvents.ITEM_ARMOR_EQUIP_GOLD;
+        }
+
+        @Override
+        @Nonnull
+        public Ingredient getRepairMaterial() {
+          return Ingredient.EMPTY;
+        }
+
+        @Override
+        public String getName() {
+          return "pureMatter";
+        }
+
+        @Override
+        public float getToughness() {
+          return 100;
+        }
+      };
+
+  AbstractMultiArmor(EquipmentSlotType equipmentSlot) {
+    super(
+        pureMatter,
+        equipmentSlot,
+        new Properties()
+            .maxDamage(-1)
+            .maxStackSize(1)
+            .rarity(Rarity.EPIC)
+            .group(OverloadedItemGroups.TECH));
+
+    DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+    ModItems.addToSecondaryInit(this);
+  }
+
+  //    @Override
+  //    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+  //        super.getSubItems(tab, items);
+  //
+  //        if (this.isInCreativeTab(tab)) {
+  //            ItemStack item = new ItemStack(this);
+  //            IEnergyStorage cap = item.getCapability(ENERGY, null);
+  //
+  //            if(cap != null) {
+  //                cap.receiveEnergy(Integer.MAX_VALUE,false);
+  //                items.add(item);
+  //            }
+  //        }
+  //    }
+
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void addInformation(
+      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    stack
+        .getCapability(ENERGY)
+        .ifPresent(
+            handler ->
+                tooltip.add(
+                    new StringTextComponent(
+                        "Energy Stored: "
+                            + NumberFormat.getInstance().format(handler.getEnergyStored()))));
+
+    super.addInformation(stack, worldIn, tooltip, flagIn);
+  }
+
+  @Override
+  public int getItemEnchantability(ItemStack stack) {
+    return 15;
+  }
+
+  @Override
+  public boolean isEnchantable(@Nonnull ItemStack stack) {
+    return this.getItemStackLimit(stack) == 1;
+  }
+
+  @Override
+  public boolean isDamageable() {
+    return false;
+  }
+
+  @Override
+  public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
+    return true;
+  }
+
+  @Override
+  public double getDurabilityForDisplay(ItemStack stack) {
+    LazyOptional<IEnergyStorage> optionalStorage = stack.getCapability(ENERGY);
+
+    if (optionalStorage.isPresent()) {
+      return 1D
+          - optionalStorage.orElse(null).getEnergyStored()
+              / (double) optionalStorage.orElse(null).getMaxEnergyStored();
     }
+    return 1D;
+  }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        IEnergyStorage handler = stack.getCapability(ENERGY, null);
-        tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
+  @Nullable
+  @Override
+  public CompoundNBT getShareTag(ItemStack stack) {
+    return new CompoundNBT();
+  }
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
+  @Nullable
+  @Override
+  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    return new CapabilityContainer()
+        .addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
+  }
+
+  Collection<ICapabilityProvider> collectCapabilities(
+      @Nonnull Collection<ICapabilityProvider> collection,
+      ItemStack stack,
+      @Nullable CompoundNBT nbt) {
+    collection.add(new IntEnergyWrapper(stack));
+
+    return collection;
+  }
+
+  @Override
+  @Nonnull
+  public Multimap<String, AttributeModifier> getAttributeModifiers(
+      @Nullable EquipmentSlotType equipmentSlot) {
+    return HashMultimap.create();
+  }
+
+  @Override
+  public Multimap<String, AttributeModifier> getAttributeModifiers(
+      EquipmentSlotType slot, ItemStack stack) {
+    if (hasPower(stack)) {
+      Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot);
+
+      if (slot == this.getEquipmentSlot()) {
+        multimap.put(
+            SharedMonsterAttributes.ARMOR.getName(),
+            new AttributeModifier(
+                ARMOR_MODIFIERS[slot.getIndex()],
+                "Armor modifier",
+                (double) this.damageReduceAmount,
+                AttributeModifier.Operation.ADDITION));
+        multimap.put(
+            SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(),
+            new AttributeModifier(
+                ARMOR_MODIFIERS[slot.getIndex()],
+                "Armor toughness",
+                (double) this.toughness,
+                AttributeModifier.Operation.ADDITION));
+        multimap.put(
+            SharedMonsterAttributes.MAX_HEALTH.getName(),
+            new AttributeModifier(
+                ARMOR_MODIFIERS[slot.getIndex()],
+                "Max Health",
+                this.damageReduceAmount / 2,
+                AttributeModifier.Operation.ADDITION));
+      }
+
+      return multimap;
+    } else {
+      return getAttributeModifiers(slot);
     }
+  }
 
-    @Override
-    public int getItemEnchantability(ItemStack stack) {
-        return 15;
-    }
+  private boolean hasPower(ItemStack stack) {
+    return stack.getCapability(ENERGY).orElse(null).getEnergyStored() > 0;
+  }
 
-    @Override
-    public boolean isEnchantable(@Nonnull ItemStack stack) {
-        return this.getItemStackLimit(stack) == 1;
-    }
+  @Override
+  @Nonnull
+  public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
+    return super.getDisplayName(stack).applyTextStyle(TextFormatting.GOLD);
+  }
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
-
-    @Override
-    public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
-        return true;
-    }
-
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        IEnergyStorage storage = stack.getCapability(ENERGY, null);
-
-        if (storage != null)
-            return 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored();
-
-        return 1D;
-    }
-
-    @Override
-    public boolean getShareTag() {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new CapabilityContainer().addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
-    }
-
-    Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
-        collection.add(new IntEnergyWrapper(stack));
-
-        return collection;
-    }
-
-    @Override
-    @Nonnull
-    @Deprecated
-    public Multimap<String, AttributeModifier> getItemAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot) {
-        return HashMultimap.create();
-    }
-
-    @Nonnull
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(@Nonnull EntityEquipmentSlot equipmentSlot, ItemStack stack) {
-        if (hasPower(stack)) {
-            Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
-
-            if (equipmentSlot == this.armorType) {
-                multimap.put(SharedMonsterAttributes.ARMOR.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor modifier", (double) this.damageReduceAmount, 0));
-                multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Armor toughness", (double) this.toughness, 0));
-                multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), new AttributeModifier(ARMOR_MODIFIERS[equipmentSlot.getIndex()], "Max Health", this.damageReduceAmount / 2, 0));
-            }
-
-            return multimap;
-        } else
-            return HashMultimap.create();
-    }
-
-    private boolean hasPower(ItemStack stack) {
-        IEnergyStorage energy = stack.getCapability(ENERGY, null);
-
-        return energy.getEnergyStored() > 0;
-    }
-
-    @Override
-    @Nonnull
-    public String getItemStackDisplayName(@Nonnull ItemStack stack) {
-        return TextFormatting.GOLD + super.getItemStackDisplayName(stack);
-    }
-
-    @Override
-    public boolean hasEffect(ItemStack stack) {
-        return false;
-    }
+  @Override
+  public boolean hasEffect(ItemStack stack) {
+    return false;
+  }
 }

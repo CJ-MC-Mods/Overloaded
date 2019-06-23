@@ -1,37 +1,40 @@
 package com.cjm721.overloaded.block.tile;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
 
 public abstract class AbstractTileEntityFaceable extends TileEntity {
+  private Direction front;
 
+  public AbstractTileEntityFaceable(TileEntityType<?> te) {
+    super(te);
+  }
 
-    private EnumFacing front;
+  @Override
+  public void read(CompoundNBT compound) {
+    super.read(compound);
 
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
+    this.front = Direction.byIndex(compound.getInt("Front"));
+  }
 
-        this.front = EnumFacing.byIndex(compound.getInteger("Front"));
-    }
+  @Override
+  @Nonnull
+  public CompoundNBT write(CompoundNBT compound) {
+    compound.putInt("Front", this.front.getIndex());
 
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        compound.setInteger("Front", this.front.getIndex());
+    return super.write(compound);
+  }
 
-        return super.writeToNBT(compound);
-    }
+  public AbstractTileEntityFaceable setFacing(Direction front) {
+    this.front = front;
+    return this;
+  }
 
-    public AbstractTileEntityFaceable setFacing(EnumFacing front) {
-        this.front = front;
-        return this;
-    }
-
-    EnumFacing getFacing() {
-        return front;
-    }
+  Direction getFacing() {
+    return front;
+  }
 }

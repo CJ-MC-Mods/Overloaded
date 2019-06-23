@@ -1,66 +1,54 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.storage.IHyperType;
+import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.LongEnergyStack;
-import mcjty.theoneprobe.api.*;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
-@Optional.Interface(iface = "mcjty.theoneprobe.api.IProbeInfoAccessor", modid = "theoneprobe")
-public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer implements ITileEntityProvider, IProbeInfoAccessor {
+public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer {
 
     public BlockInfiniteCapacitor() {
-        super(Material.ROCK);
-
-        setLightOpacity(0);
+        super(ModBlock.getDefaultProperties());
     }
 
     @Override
     public void baseInit() {
         setRegistryName("infinite_capacitor");
-        setTranslationKey("infinite_capacitor");
+//        setTranslationKey("infinite_capacitor");
 
-        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infinite_capacitor");
+//        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID + ":infinite_capacitor");
     }
 
     @Override
     @Nonnull
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileInfiniteCapacitor();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ResizeableTextureGenerator.addToTextureQueue(new ResizeableTextureGenerator.ResizableTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_capacitor.png"),
@@ -69,37 +57,16 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer imple
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote) {
-            ItemStack heldItem = playerIn.getHeldItem(hand);
-            if (heldItem.isEmpty() && hand == EnumHand.MAIN_HAND) {
-                LongEnergyStack stack = ((TileInfiniteCapacitor) worldIn.getTileEntity(pos)).getStorage().status();
+    protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+        LongEnergyStack stack = ((TileInfiniteCapacitor) world.getTileEntity(pos)).getStorage().status();
 
-                double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
-                playerIn.sendStatusMessage(new TextComponentString(String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)), false);
-                return true;
-            }
-        }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, side, hitX, hitY, hitZ);
+        double percent = (double) stack.getAmount() / (double) Long.MAX_VALUE;
+        player.sendStatusMessage(new StringTextComponent(String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)), false);
     }
 
-    @Nullable
+    @Nonnull
     @Override
-    protected IHyperType getHyperStack(IBlockAccess world, BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-
-        if (te != null && te instanceof TileInfiniteCapacitor) {
-            return te.getCapability(HYPER_ENERGY_HANDLER, EnumFacing.UP).status();
-        }
-        return null;
-    }
-
-    @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-        TileEntity te = world.getTileEntity(data.getPos());
-        if (te != null && te instanceof TileInfiniteCapacitor) {
-            IProgressStyle style = probeInfo.defaultProgressStyle().showText(true).numberFormat(NumberFormat.COMPACT).suffix("RF");
-            probeInfo.progress(((TileInfiniteCapacitor) te).getStorage().status().getAmount(), Long.MAX_VALUE, style);
-        }
+    <T extends IHyperHandler> Capability<T> getHyperCapabilityType() {
+        return (Capability<T>)HYPER_ENERGY_HANDLER;
     }
 }

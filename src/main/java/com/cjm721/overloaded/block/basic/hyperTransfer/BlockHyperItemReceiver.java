@@ -4,13 +4,12 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperItemReceiver;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
@@ -18,37 +17,38 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
-    public BlockHyperItemReceiver() {
-        super(Material.ROCK);
-    }
+  public BlockHyperItemReceiver() {
+    super(getDefaultProperties());
+  }
 
-    @Override
-    public void baseInit() {
-        setRegistryName("hyper_item_receiver");
-        setTranslationKey("hyper_item_receiver");
+  @Override
+  public void baseInit() {
+    setRegistryName("hyper_item_receiver");
+    //        setTranslationKey("hyper_item_receiver");
 
-        GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID + ":hyper_item_receiver");
-    }
+    //        GameRegistry.registerTileEntity(TileHyperItemReceiver.class, MODID +
+    // ":hyper_item_receiver");
+  }
 
-    @Override
-    @Nonnull
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileHyperItemReceiver();
-    }
+  @Override
+  @Nonnull
+  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    return new TileHyperItemReceiver();
+  }
 
-    @Nonnull
-    @Override
-    protected String getType() {
-        return "Item";
-    }
+  @Nonnull
+  @Override
+  protected String getType() {
+    return "Item";
+  }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel() {
-        super.registerModel();
+  @Override
+  @OnlyIn(Dist.CLIENT)
+  public void registerModel() {
+    super.registerModel();
 
-        ImageUtil.registerDynamicTexture(
-                new ResourceLocation(MODID, "textures/blocks/hyper_item_receiver.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution);
-    }
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/blocks/hyper_item_receiver.png"),
+        Overloaded.cachedConfig.textureResolutions.blockResolution);
+  }
 }

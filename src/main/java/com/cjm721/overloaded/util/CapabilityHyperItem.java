@@ -4,9 +4,9 @@ import com.cjm721.overloaded.storage.LongItemStack;
 import com.cjm721.overloaded.storage.item.IHyperHandlerItem;
 import com.cjm721.overloaded.storage.item.LongItemStorage;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -14,31 +14,43 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import javax.annotation.Nonnull;
 
 public class CapabilityHyperItem {
-    @CapabilityInject(IHyperHandlerItem.class)
-    public static Capability<IHyperHandlerItem> HYPER_ITEM_HANDLER = null;
+  @CapabilityInject(IHyperHandlerItem.class)
+  public static Capability<IHyperHandlerItem> HYPER_ITEM_HANDLER = null;
 
-    public static void register() {
-        CapabilityManager.INSTANCE.register(IHyperHandlerItem.class, new Capability.IStorage<IHyperHandlerItem>() {
-            @Override
-            public NBTBase writeNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side) {
-                NBTTagCompound tag = new NBTTagCompound();
-                LongItemStack stack = instance.status();
-                if (!stack.getItemStack().isEmpty()) {
-                    tag.setLong("Count", stack.getAmount());
-                    tag.setTag("Item", stack.getItemStack().serializeNBT());
-                }
-                return tag;
+  public static void register() {
+    CapabilityManager.INSTANCE.register(
+        IHyperHandlerItem.class,
+        new Capability.IStorage<IHyperHandlerItem>() {
+          @Override
+          public INBT writeNBT(
+              Capability<IHyperHandlerItem> capability,
+              @Nonnull IHyperHandlerItem instance,
+              Direction side) {
+            CompoundNBT tag = new CompoundNBT();
+            LongItemStack stack = instance.status();
+            if (!stack.getItemStack().isEmpty()) {
+              tag.putLong("Count", stack.getAmount());
+              tag.put("Item", stack.getItemStack().serializeNBT());
             }
+            return tag;
+          }
 
-            @Override
-            public void readNBT(Capability<IHyperHandlerItem> capability, @Nonnull IHyperHandlerItem instance, EnumFacing side, @Nonnull NBTBase nbt) {
-                NBTTagCompound tag = (NBTTagCompound) nbt;
+          @Override
+          public void readNBT(
+              Capability<IHyperHandlerItem> capability,
+              @Nonnull IHyperHandlerItem instance,
+              Direction side,
+              @Nonnull INBT nbt) {
+            CompoundNBT tag = (CompoundNBT) nbt;
 
-                if (tag.hasKey("Item")) {
-                    LongItemStack stack = new LongItemStack(new ItemStack((NBTTagCompound) tag.getTag("Item")), tag.getLong("Count"));
-                    instance.give(stack, false);
-                }
+            if (tag.contains("Item")) {
+              LongItemStack stack =
+                  new LongItemStack(
+                      ItemStack.read((CompoundNBT) tag.get("Item")), tag.getLong("Count"));
+              instance.give(stack, false);
             }
-        }, LongItemStorage.class);
-    }
+          }
+        },
+        () -> new LongItemStorage(() -> {}));
+  }
 }

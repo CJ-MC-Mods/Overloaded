@@ -4,61 +4,58 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileInfiniteWaterSource;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityProvider {
+public class BlockInfiniteWaterSource extends ModBlock {
 
     public BlockInfiniteWaterSource() {
-        super(Material.GLASS);
+        super(getDefaultProperties());
+    }
 
-        setLightOpacity(0);
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
     }
 
     @Override
     public void baseInit() {
         setRegistryName("infinite_water_source");
-        setTranslationKey("infinite_water_source");
+//        setTranslationKey("infinite_water_source");
 
-        GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
+//        GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID + ":infinite_water_source");
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void registerModel() {
         ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(MODID, "infinite_water_source"), null);
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
         ImageUtil.registerDynamicTexture(
                 new ResourceLocation(MODID, "textures/blocks/infinite_water_source.png"),
                 Overloaded.cachedConfig.textureResolutions.blockResolution);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     @Nonnull
     public BlockRenderLayer getRenderLayer() {
@@ -66,29 +63,23 @@ public class BlockInfiniteWaterSource extends ModBlock implements ITileEntityPro
     }
 
     @Override
-    @Deprecated
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
     @Nonnull
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileInfiniteWaterSource();
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te != null && te instanceof TileInfiniteWaterSource) {
-                IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY, facing);
-                FluidActionResult result = FluidUtil.tryFillContainerAndStow(playerIn.getHeldItem(hand), handler, null, Integer.MAX_VALUE, playerIn); // FluidUtil.interactWithFluidHandler(playerIn.getHeldItem(hand), te.getCapability(FLUID_HANDLER_CAPABILITY, facing), playerIn);
+    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        if (!world.isRemote && player.getActiveHand() == Hand.MAIN_HAND) {
+            TileEntity te = world.getTileEntity(pos);
+            if (te instanceof TileInfiniteWaterSource) {
+                IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
+                FluidActionResult result = FluidUtil.tryFillContainerAndStow(player.getActiveItemStack(), handler, null, Integer.MAX_VALUE, player, true);
 
-                if (result.isSuccess())
-                    playerIn.setHeldItem(hand, result.getResult());
+                if (result.isSuccess()){
+                    player.setHeldItem(Hand.MAIN_HAND, result.getResult());
+                }
             }
         }
-        return true;
     }
 }

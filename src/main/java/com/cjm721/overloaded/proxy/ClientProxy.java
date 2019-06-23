@@ -1,70 +1,62 @@
 package com.cjm721.overloaded.proxy;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.client.render.RenderGlobalSpectator;
-import com.cjm721.overloaded.client.render.dynamic.compressed.block.CompressedBlockAssets;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.item.RenderMultiToolAssist;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-@SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
-    public KeyBinding noClipKeybind;
+  public KeyBinding noClipKeybind;
 
-    @Override
-    public void preInit(FMLPreInitializationEvent e) {
-        super.preInit(e);
+  @Override
+  public void commonSetup(FMLCommonSetupEvent event) {
+    super.commonSetup(event);
 
-        OBJLoader.INSTANCE.addDomain(MODID);
-        MinecraftForge.EVENT_BUS.register(new CompressedBlockAssets());
-        MinecraftForge.EVENT_BUS.register(new ResizeableTextureGenerator());
+    OBJLoader.INSTANCE.addDomain(MODID);
+    MinecraftForge.EVENT_BUS.register(new ResizeableTextureGenerator());
 
-        BlockResourcePack.INSTANCE.addDomain("overloaded");
-        BlockResourcePack.INSTANCE.inject();
-    }
+    BlockResourcePack.INSTANCE.addDomain("overloaded");
+    BlockResourcePack.INSTANCE.inject();
 
-    @Override
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
+    //    if (Overloaded.cachedConfig.specialConfig.noClipRenderFix)
+    //      Minecraft.getInstance().renderGlobal = new
+    // RenderGlobalSpectator(Minecraft.getInstance());
+    //    Minecraft.getInstance()
+    //        .getItemColors()
+    //        .registerItemColorHandler(
+    //            (stack, tintIndex) -> java.awt.Color.CYAN.getRGB(),
+    //            ModItems.multiTool,
+    //            ModItems.customBoots,
+    //            ModItems.customLeggins,
+    //            ModItems.customChestplate,
+    //            ModItems.customHelmet);
 
-        if (Overloaded.cachedConfig.specialConfig.noClipRenderFix)
-            Minecraft.getMinecraft().renderGlobal = new RenderGlobalSpectator(Minecraft.getMinecraft());
-        Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> java.awt.Color.CYAN.getRGB(), ModItems.multiTool, ModItems.customBoots, ModItems.customLeggins, ModItems.customChestplate, ModItems.customHelmet);
+    //    noClipKeybind =
+    //        new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V,
+    // "overloaded.cat.key.multiarmor");
+    //    ClientRegistry.registerKeyBinding(noClipKeybind);
 
-        noClipKeybind = new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V, "overloaded.cat.key.multiarmor");
-        ClientRegistry.registerKeyBinding(noClipKeybind);
+    MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
+  }
 
-        MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
-    }
-
-    @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-    }
-
-    @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent event) {
-        ModBlocks.registerModels();
-        ModItems.registerModels();
-    }
+  @SubscribeEvent
+  public static void registerModels(ModelRegistryEvent event) {
+    ModBlocks.registerModels();
+    ModItems.registerModels();
+  }
 }

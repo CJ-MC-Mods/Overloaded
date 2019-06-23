@@ -4,15 +4,14 @@ import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,68 +24,82 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 abstract class PowerModItem extends ModItem {
 
-    PowerModItem() {
-        setMaxStackSize(1);
-    }
+  PowerModItem() {
+    super(new Properties().maxStackSize(1));
+  }
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        IEnergyStorage handler = stack.getCapability(ENERGY, null);
-        tooltip.add("Energy Stored: " + NumberFormat.getInstance().format(handler.getEnergyStored()));
+  PowerModItem(Properties properties) {
+    super(properties.maxStackSize(1));
+  }
 
-        super.addInformation(stack, worldIn, tooltip, flagIn);
-    }
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void addInformation(
+      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    stack
+        .getCapability(ENERGY, null)
+        .ifPresent(
+            handler ->
+                tooltip.add(
+                    new StringTextComponent(
+                        "Energy Stored: "
+                            + NumberFormat.getInstance().format(handler.getEnergyStored()))));
 
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-        super.getSubItems(tab, items);
+    super.addInformation(stack, worldIn, tooltip, flagIn);
+  }
 
-        if (this.isInCreativeTab(tab)) {
-            ItemStack item = new ItemStack(this);
-            IEnergyStorage cap = item.getCapability(ENERGY, null);
+  //  @Override
+  //  public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
+  //    super.getSubItems(tab, items);
+  //
+  //    if (this.isInCreativeTab(tab)) {
+  //      ItemStack item = new ItemStack(this);
+  //      IEnergyStorage cap = item.getCapability(ENERGY, null);
+  //
+  //      if (cap != null) {
+  //        cap.receiveEnergy(Integer.MAX_VALUE, false);
+  //        items.add(item);
+  //      }
+  //    }
+  //  }
 
-            if(cap != null) {
-                cap.receiveEnergy(Integer.MAX_VALUE,false);
-                items.add(item);
-            }
-        }
-    }
+  @Override
+  public boolean isDamageable() {
+    return false;
+  }
 
-    @Override
-    public boolean isDamageable() {
-        return false;
-    }
+  @Override
+  public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
+    return true;
+  }
 
-    @Override
-    public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
-        return true;
-    }
+  @Override
+  public double getDurabilityForDisplay(ItemStack stack) {
+    return stack
+        .getCapability(ENERGY, null)
+        .map(storage -> 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored())
+        .orElse(1D);
+  }
 
-    @Override
-    public double getDurabilityForDisplay(ItemStack stack) {
-        IEnergyStorage storage = stack.getCapability(ENERGY, null);
+  @Nullable
+  @Override
+  public CompoundNBT getShareTag(ItemStack stack) {
+    return stack.getTag();
+  }
 
-        if (storage != null)
-            return 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored();
+  @Nullable
+  @Override
+  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+    return new CapabilityContainer()
+        .addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
+  }
 
-        return 1D;
-    }
+  Collection<ICapabilityProvider> collectCapabilities(
+      @Nonnull Collection<ICapabilityProvider> collection,
+      ItemStack stack,
+      @Nullable CompoundNBT nbt) {
+    collection.add(new IntEnergyWrapper(stack));
 
-    @Override
-    public boolean getShareTag() {
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new CapabilityContainer().addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
-    }
-
-    Collection<ICapabilityProvider> collectCapabilities(@Nonnull Collection<ICapabilityProvider> collection, ItemStack stack, @Nullable NBTTagCompound nbt) {
-        collection.add(new IntEnergyWrapper(stack));
-
-        return collection;
-    }
+    return collection;
+  }
 }

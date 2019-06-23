@@ -2,19 +2,15 @@ package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
-import net.minecraft.block.BlockDispenser;
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 
@@ -22,34 +18,31 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ItemMultiBoots extends AbstractMultiArmor {
 
-    public ItemMultiBoots() {
-        super(0, EntityEquipmentSlot.FEET);
+  public ItemMultiBoots() {
+    super(EquipmentSlotType.FEET);
 
-        setRegistryName("multi_boots");
-        setTranslationKey("multi_boots");
+    setRegistryName("multi_boots");
+    //        setTranslationKey("multi_boots");
+  }
 
-        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
-    }
+  @Nullable
+  @Override
+  public <A extends BipedModel<?>> A getArmorModel(
+      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
+    if (armorModel == null) armorModel = new RenderMultiBoots();
+    return (A) armorModel;
+  }
 
-    @Nullable
-    @Override
-    @SideOnly(Side.CLIENT)
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        if (armorModel == null)
-            armorModel = new RenderMultiBoots();
-        return armorModel;
-    }
+  private RenderMultiBoots armorModel;
 
-    private RenderMultiBoots armorModel;
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void registerModel() {
+    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
+    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-        ModelLoader.setCustomModelResourceLocation(this, 0, location);
-
-        ImageUtil.registerDynamicTexture(
-                new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
-                Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
-    }
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
+        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+  }
 }

@@ -1,141 +1,89 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.block.ModBlock;
+import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.block.tile.TilePlayerInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
-import mcjty.theoneprobe.api.IProbeHitData;
-import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.IProbeInfoAccessor;
-import mcjty.theoneprobe.api.ProbeMode;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Optional;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-@Optional.Interface(iface = "mcjty.theoneprobe.api.IProbeInfoAccessor", modid = "theoneprobe")
-public class BlockPlayerInterface extends ModBlock implements ITileEntityProvider, IProbeInfoAccessor {
+public class BlockPlayerInterface extends ModBlockTile {
 
-    public BlockPlayerInterface() {
-        super(Material.ROCK);
-    }
+  public BlockPlayerInterface() {
+    super(getDefaultProperties());
+  }
 
-    @Override
-    public void baseInit() {
-        setRegistryName("player_interface");
-        setTranslationKey("player_interface");
+  @Override
+  public void baseInit() {
+    setRegistryName("player_interface");
+  }
 
-        GameRegistry.registerTileEntity(TilePlayerInterface.class, MODID + ":player_interface");
-    }
+  @Nullable
+  @Override
+  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    return new TilePlayerInterface();
+  }
 
-    @Nullable
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TilePlayerInterface();
-    }
+  @Override
+  public void onBlockPlacedBy(
+      World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+    ((TilePlayerInterface) world.getTileEntity(pos)).setPlacer(entity);
 
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        ((TilePlayerInterface) worldIn.getTileEntity(pos)).setPlacer(placer);
+    super.onBlockPlacedBy(world, pos, state, entity, stack);
+  }
 
-        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-    }
+  @Override
+  @OnlyIn(Dist.CLIENT)
+  public void registerModel() {
+    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
+    // ModelResourceLocation(getRegistryName(), null));
+    ClientRegistry.bindTileEntitySpecialRenderer(
+        TilePlayerInterface.class, new PlayerInterfaceRenderer());
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), null));
-        ClientRegistry.bindTileEntitySpecialRenderer(TilePlayerInterface.class, new PlayerInterfaceRenderer());
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/blocks/block_player.png"),
+        Overloaded.cachedConfig.textureResolutions.blockResolution);
+  }
 
-        ImageUtil.registerDynamicTexture(
-                new ResourceLocation(MODID, "textures/blocks/block_player.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution);
-    }
+  @Override
+  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    if (!world.isRemote && player.getActiveHand() == Hand.MAIN_HAND) {
+      TileEntity te = world.getTileEntity(pos);
 
-    @Override
-    public boolean isBlockNormalCube(IBlockState blockState) {
-        return false;
-    }
+      if (te instanceof TilePlayerInterface) {
+        UUID placer = ((TilePlayerInterface) te).getPlacer();
 
-    @Override
-    public boolean isOpaqueCube(IBlockState blockState) {
-        return false;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos, EnumFacing side) {
-        return false;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Nonnull
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && hand == EnumHand.MAIN_HAND) {
-            TileEntity te = worldIn.getTileEntity(pos);
-
-            if (te instanceof TilePlayerInterface) {
-                UUID placer = ((TilePlayerInterface) te).getPlacer();
-
-                if (placer == null) {
-                    playerIn.sendMessage(new TextComponentString("Not bound to anyone..... ghosts placed this."));
-                } else {
-                    String username = UsernameCache.getLastKnownUsername(placer);
-                    playerIn.sendMessage(new TextComponentString("Bound to player: " + (username == null ? placer.toString() : username)));
-                }
-            }
+        if (placer == null) {
+          player.sendMessage(
+              new StringTextComponent("Not bound to anyone..... ghosts placed this."));
+        } else {
+          String username = UsernameCache.getLastKnownUsername(placer);
+          player.sendMessage(
+              new StringTextComponent(
+                  "Bound to player: " + (username == null ? placer.toString() : username)));
         }
-
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+      }
     }
 
-    @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
-        TileEntity te = world.getTileEntity(data.getPos());
-        if (te != null && te instanceof TilePlayerInterface) {
-            UUID placer = ((TilePlayerInterface) te).getPlacer();
-            if (placer == null) {
-                probeInfo.text("Not bound to anyone.");
-            } else {
-                String username = UsernameCache.getLastKnownUsername(placer);
-                probeInfo.text("Bound to player: " + (username == null ? placer.toString() : username));
-
-            }
-
-        }
-    }
+    super.onBlockClicked(state, world, pos, player);
+  }
 }

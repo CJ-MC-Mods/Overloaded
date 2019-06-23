@@ -1,31 +1,94 @@
 package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.config.syncer.SyncToClient;
-import net.minecraftforge.common.config.Config;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import com.google.common.collect.ImmutableList;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+
+import java.nio.file.Path;
 
 public class OverloadedConfig {
-    @Config.Name("Compressed Blocks")
-    public CompressedConfig compressedConfig = new CompressedConfig();
-    @SyncToClient
-    @Config.Name("Multi-Tool")
-    public MultiToolConfig multiToolConfig = new MultiToolConfig();
-    @SyncToClient
-    @Config.Name("Multi-Armor")
-    public MultiArmorConfig multiArmorConfig = new MultiArmorConfig();
-    @SyncToClient
-    @Config.Name("Development")
-    public DevelopmentConfig developmentConfig = new DevelopmentConfig();
-    @Config.Name("Texture Resolutions")
-    public ResolutionConfig textureResolutions = new ResolutionConfig();
-    @SyncToClient
-    @Config.Name("Matter Purifier")
-    public PurifierConfig purifierConfig = new PurifierConfig();
-    @Config.Name("Special Entires")
-    public SpecialConfig specialConfig = new SpecialConfig();
-    @SyncToClient
-    @Config.Name("Ray Gun")
-    public RayGunConfig rayGun = new RayGunConfig();
-    @SyncToClient
-    @Config.Name("Rail Gun")
-    public RailGunConfig railGun = new RailGunConfig();
+
+  public static OverloadedConfig INSTANCE = new OverloadedConfig();
+
+  @SyncToClient public MultiToolConfig multiToolConfig;
+
+  @SyncToClient public MultiArmorConfig multiArmorConfig;
+
+  @SyncToClient public DevelopmentConfig developmentConfig;
+
+  public ResolutionConfig textureResolutions;
+
+  @SyncToClient public PurifierConfig purifierConfig;
+
+  public SpecialConfig specialConfig;
+
+  @SyncToClient public RayGunConfig rayGun;
+
+  @SyncToClient public RailGunConfig railGun;
+
+  private final ImmutableList<ConfigSectionHandler> configsSections;
+
+  private OverloadedConfig() {
+    multiToolConfig = new MultiToolConfig();
+    multiArmorConfig = new MultiArmorConfig();
+    developmentConfig = new DevelopmentConfig();
+    textureResolutions = new ResolutionConfig();
+    purifierConfig = new PurifierConfig();
+    specialConfig = new SpecialConfig();
+    rayGun = new RayGunConfig();
+    railGun = new RailGunConfig();
+
+    configsSections =
+        ImmutableList.of(
+            multiToolConfig,
+            multiArmorConfig,
+            developmentConfig,
+            textureResolutions,
+            purifierConfig,
+            specialConfig,
+            rayGun,
+            railGun);
+  }
+
+  public ForgeConfigSpec load(Path path) {
+    CommentedFileConfig configData =
+        CommentedFileConfig.builder(path)
+            .sync()
+            .autosave()
+            .writingMode(WritingMode.REPLACE)
+            .build();
+
+    configData.load();
+
+    ForgeConfigSpec configSpec = getConfig();
+    configSpec.setConfig(configData);
+    // Update Cache
+    return configSpec;
+  }
+
+  @SubscribeEvent
+  public void onLoading(ModConfig.Loading loading) {
+    updateConfigs();
+  }
+
+  @SubscribeEvent
+  public void onConfigRelaoding(ModConfig.ConfigReloading configReloading) {
+    updateConfigs();
+  }
+
+  private ForgeConfigSpec getConfig() {
+    ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+
+    configsSections.stream().forEach(c -> c.appendToBuilder(builder));
+
+    return builder.build();
+  }
+
+  private void updateConfigs() {
+    configsSections.stream().forEach(ConfigSectionHandler::update);
+  }
 }

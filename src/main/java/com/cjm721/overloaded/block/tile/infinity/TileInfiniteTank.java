@@ -1,11 +1,14 @@
 package com.cjm721.overloaded.block.tile.infinity;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -15,51 +18,45 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileInfiniteTank extends TileEntity implements IDataUpdate {
 
-    private final LongFluidStorage fluidStorage;
+  private final LongFluidStorage fluidStorage;
 
-    public TileInfiniteTank() {
-        fluidStorage = new LongFluidStorage(this);
+  public TileInfiniteTank() {
+    super(TileEntityType.Builder.create(TileInfiniteTank::new, ModBlocks.infiniteTank).build(null));
+    fluidStorage = new LongFluidStorage(this);
+  }
+
+  @Override
+  @Nonnull
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+    super.write(compound);
+
+    return fluidStorage.write(compound);
+  }
+
+  @Override
+  public void read(@Nonnull CompoundNBT compound) {
+    super.read(compound);
+
+    fluidStorage.read(compound);
+  }
+
+  @Nonnull
+  public LongFluidStorage getStorage() {
+    return fluidStorage;
+  }
+
+  @Override
+  @Nullable
+  public <T> LazyOptional<T> getCapability(
+      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+    if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
+      return LazyOptional.of(() -> fluidStorage).cast();
     }
+    return super.getCapability(capability, facing);
+  }
 
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        super.writeToNBT(compound);
-
-        return fluidStorage.writeToNBT(compound);
-    }
-
-    @Override
-    public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        super.readFromNBT(compound);
-
-        fluidStorage.readFromNBT(compound);
-    }
-
-    @Nonnull
-    public LongFluidStorage getStorage() {
-        return fluidStorage;
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    @Nullable
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
-            return (T) fluidStorage;
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void dataUpdated() {
-        markDirty();
-    }
+  @Override
+  public void dataUpdated() {
+    markDirty();
+  }
 }

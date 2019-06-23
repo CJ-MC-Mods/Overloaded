@@ -1,63 +1,65 @@
 package com.cjm721.overloaded.block.tile.infinity;
 
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.storage.item.LongItemStorage;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TileInfiniteBarrel extends TileEntity implements IDataUpdate {
 
-    @Nonnull
-    private final LongItemStorage itemStorage;
+  @Nonnull private final LongItemStorage itemStorage;
 
-    public TileInfiniteBarrel() {
-        itemStorage = new LongItemStorage(this);
+  public TileInfiniteBarrel() {
+    super(
+        TileEntityType.Builder.create(TileInfiniteBarrel::new, ModBlocks.infiniteBarrel)
+            .build(null));
+    itemStorage = new LongItemStorage(this);
+  }
+
+  @Override
+  @Nonnull
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+    super.write(compound);
+    return itemStorage.write(compound);
+  }
+
+  @Override
+  public void read(CompoundNBT compound) {
+    super.read(compound);
+
+    itemStorage.read(compound);
+  }
+
+  @Nonnull
+  @Override
+  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+      return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(
+          cap, LazyOptional.of(() -> itemStorage));
+    }
+    if (cap == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
+      return CapabilityHyperItem.HYPER_ITEM_HANDLER.orEmpty(
+          cap, LazyOptional.of(() -> itemStorage));
     }
 
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        return itemStorage.writeToNBT(compound);
-    }
+    return super.getCapability(cap);
+  }
 
-    @Override
-    public void readFromNBT(@Nonnull NBTTagCompound compound) {
-        super.readFromNBT(compound);
+  public LongItemStorage getStorage() {
+    return itemStorage;
+  }
 
-        itemStorage.readFromNBT(compound);
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
-            return true;
-        }
-        return super.hasCapability(capability, facing);
-    }
-
-    @Override
-    @Nullable
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
-            return (T) itemStorage;
-        }
-        return super.getCapability(capability, facing);
-    }
-
-    public LongItemStorage getStorage() {
-        return itemStorage;
-    }
-
-    @Override
-    public void dataUpdated() {
-        markDirty();
-    }
+  @Override
+  public void dataUpdated() {
+    markDirty();
+  }
 }

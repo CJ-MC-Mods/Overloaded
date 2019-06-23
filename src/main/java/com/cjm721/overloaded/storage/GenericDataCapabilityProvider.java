@@ -1,28 +1,25 @@
 package com.cjm721.overloaded.storage;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class GenericDataCapabilityProvider extends GenericDataStorage implements ICapabilityProvider {
+public class GenericDataCapabilityProvider extends GenericDataStorage
+    implements ICapabilityProvider {
 
-    public GenericDataCapabilityProvider() {
-    }
+  public GenericDataCapabilityProvider() {}
 
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing enumFacing) {
-        return capability == GENERIC_DATA_STORAGE;
+  @Nonnull
+  @Override
+  public <T> LazyOptional<T> getCapability(
+      @Nonnull Capability<T> capability, @Nullable Direction Direction) {
+    if (capability == GENERIC_DATA_STORAGE) {
+      return LazyOptional.of(() -> this).cast();
     }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing enumFacing) {
-        if (capability == GENERIC_DATA_STORAGE) {
-            return GENERIC_DATA_STORAGE.cast(this);
-        }
-        return null;
-    }
+    return LazyOptional.empty();
+  }
 }

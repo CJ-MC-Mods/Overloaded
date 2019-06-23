@@ -1,26 +1,22 @@
 package com.cjm721.overloaded.network.packets;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.network.PacketBuffer;
 
-public class ConfigSyncMessage implements IMessage {
+public class ConfigSyncMessage {
 
-    public String config;
+  public String config;
 
-    public ConfigSyncMessage() {}
+  public ConfigSyncMessage() {}
 
-    public ConfigSyncMessage(String config) {
-        this.config = config;
-    }
+  public ConfigSyncMessage(String config) {
+    this.config = config;
+  }
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        config = ByteBufUtils.readUTF8String(buf);
-    }
+  public static ConfigSyncMessage fromBytes(PacketBuffer buf) {
+    return new ConfigSyncMessage(buf.readString());
+  }
 
-    @Override
-    public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeUTF8String(buf, config);
-    }
+  public static void toBytes(ConfigSyncMessage message, PacketBuffer buf) {
+    buf.writeString(message.config);
+  }
 }

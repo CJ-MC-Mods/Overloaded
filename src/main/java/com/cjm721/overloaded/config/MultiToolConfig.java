@@ -1,26 +1,73 @@
 package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.config.syncer.SyncToClient;
-import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-public class MultiToolConfig {
+public class MultiToolConfig implements ConfigSectionHandler {
 
-    @SyncToClient
-    @Config.Comment({"Max range Multi-Tool can edit blocks [Default: 128]"})
-    public int reach = 128;
+  @SyncToClient public int reach;
+  public ForgeConfigSpec.IntValue reachSpec;
 
-    @Config.Comment({"Cost that is added on to every place [Default: 100]"})
-    public int placeBaseCost = 100;
+  public int placeBaseCost;
+  public ForgeConfigSpec.IntValue placeBaseCostSpec;
 
-    @Config.Comment({"Cost per meter away [Default: 10]"})
-    public int costPerMeterAway = 10;
+  public int costPerMeterAway;
+  public ForgeConfigSpec.IntValue costPerMeterAwaySpec;
 
-    @Config.Comment({"Cost that is added on to every block break [Default: 100]"})
-    public int breakBaseCost = 100;
+  public int breakBaseCost;
+  public ForgeConfigSpec.IntValue breakBaseCostSpec;
 
-    @Config.Comment({"Multiples the Hardness Cost by this. [Default: 1]"})
-    public int breakCostMultiplier = 1;
+  public int breakCostMultiplier;
+  public ForgeConfigSpec.IntValue breakCostMultiplierSpec;
 
-    @Config.Comment({"0 - None, 1 Block Place Preview, 2 Block Break Preview, 3 Place/Break Preview. (2/3 WIP)[Default: 1]"})
-    public int assistMode = 1;
+  public int assistMode;
+  public ForgeConfigSpec.IntValue assistModeSpec;
+
+  @Override
+  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+    builder.push("multi-tool");
+
+    reachSpec =
+        builder
+            .comment("Max range Multi-Tool can edit blocks [Default: 128]")
+            .defineInRange("reach", 128, 0, Integer.MAX_VALUE);
+
+    placeBaseCostSpec =
+        builder
+            .comment("Cost that is added on to every place [Default: 100]")
+            .defineInRange("placeBaseCost", 100, 0, Integer.MAX_VALUE);
+
+    costPerMeterAwaySpec =
+        builder
+            .comment("Cost per meter away [Default: 10]")
+            .defineInRange("costPerMeterAway", 10, 0, Integer.MAX_VALUE);
+
+    breakBaseCostSpec =
+        builder
+            .comment("Cost that is added on to every block break [Default: 100]")
+            .defineInRange("breakBaseCost", 100, 0, Integer.MAX_VALUE);
+
+    breakCostMultiplierSpec =
+        builder
+            .comment("Multiples the Hardness Cost by this. [Default: 1]")
+            .defineInRange("breakCostMultiplier", 1, 0, Integer.MAX_VALUE);
+
+    assistModeSpec =
+        builder
+            .comment(
+                "0 - None, 1 Block Place Preview, 2 Block Break Preview, 3 Place/Break Preview. (2/3 WIP)[Default: 1]")
+            .defineInRange("assistMode", 1, 0, 3);
+
+    builder.pop();
+  }
+
+  @Override
+  public void update() {
+    reach = reachSpec.get();
+    placeBaseCost = placeBaseCostSpec.get();
+    costPerMeterAway = costPerMeterAwaySpec.get();
+    breakBaseCost = breakBaseCostSpec.get();
+    breakCostMultiplier = breakCostMultiplierSpec.get();
+    assistMode = assistModeSpec.get();
+  }
 }

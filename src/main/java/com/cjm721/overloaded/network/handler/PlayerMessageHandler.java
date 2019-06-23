@@ -1,27 +1,29 @@
 package com.cjm721.overloaded.network.handler;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
-public class PlayerMessageHandler<T extends IMessage> implements IMessageHandler<T, IMessage> {
+public class PlayerMessageHandler<T> implements BiConsumer<T, Supplier<NetworkEvent.Context>> {
 
-    private final IPlayerMessageMethod<T> method;
+  private final IPlayerMessageMethod<T> method;
 
-    public PlayerMessageHandler(@Nonnull IPlayerMessageMethod<T> method) {
-        this.method = method;
+  public PlayerMessageHandler(@Nonnull IPlayerMessageMethod<T> method) {
+    this.method = method;
+  }
+
+  @Override
+  public void accept(T message, Supplier<NetworkEvent.Context> ctx) {
+    ServerPlayerEntity player = ctx.get().getSender();
+
+    if (player == null) {
+      return;
     }
 
-    @Override
-    @Nullable
-    public IMessage onMessage(T message, MessageContext ctx) {
-        @Nonnull EntityPlayerMP player = ctx.getServerHandler().player;
-
-        player.getServerWorld().addScheduledTask(() -> method.handleMessage(player, message));
-        return null;
-    }
+    ctx.get().enqueueWork(() -> method.handleMessage(player, message));
+    ctx.get().setPacketHandled(true);
+  }
 }

@@ -1,85 +1,86 @@
 package com.cjm721.overloaded.client.render.tile;
 
 import com.cjm721.overloaded.block.tile.TilePlayerInterface;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 
 import java.util.UUID;
 
-public class PlayerInterfaceRenderer extends TileEntitySpecialRenderer<TilePlayerInterface> {
+public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterface> {
 
-    @Override
-    public void render(TilePlayerInterface te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushAttrib();
-        GlStateManager.pushMatrix();
+  @Override
+  public void render(
+      TilePlayerInterface te, double x, double y, double z, float partialTicks, int alpha) {
+    GlStateManager.pushLightingAttributes();
+    GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y, z);
-        GlStateManager.disableRescaleNormal();
+    GlStateManager.translated(x, y, z);
+    GlStateManager.disableRescaleNormal();
 
-        renderPlayer(te);
+    renderPlayer(te);
 
-        GlStateManager.popMatrix();
-        GlStateManager.popAttrib();
+    GlStateManager.popMatrix();
+    GlStateManager.popAttributes();
+  }
+
+  private UUID uuidCache;
+  private ItemStack stackCache;
+
+  private void renderPlayer(TilePlayerInterface te) {
+    UUID uuid = te.getPlacer();
+
+    if (uuid == null) return;
+
+    PlayerEntity player = te.getWorld().getPlayerByUuid(uuid);
+
+    if (player == null) {
+      if (uuid.equals(uuidCache)) {
+        renderItem(stackCache);
+      } else {
+        uuidCache = uuid;
+        CompoundNBT tag = new CompoundNBT();
+        tag.putString("SkullOwner", uuid.toString());
+        stackCache = new ItemStack(Items.PLAYER_HEAD, 1, tag);
+        renderItem(stackCache);
+      }
+      return;
     }
 
-    private UUID uuidCache;
-    private ItemStack stackCache;
+    RenderHelper.enableStandardItemLighting();
+    GlStateManager.enableLighting();
+    GlStateManager.pushMatrix();
 
-    private void renderPlayer(TilePlayerInterface te) {
-        UUID uuid = te.getPlacer();
+    GlStateManager.translated(.5, .3, .5);
+    GlStateManager.scaled(.2f, .2f, .2f);
+    long angle = (System.currentTimeMillis() / 10) % 360;
+    GlStateManager.rotated(angle, 0, 1, 0);
 
-        if (uuid == null)
-            return;
+    Minecraft.getInstance().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
 
-        EntityPlayer player = te.getWorld().getPlayerEntityByUUID(uuid);
+    GlStateManager.popMatrix();
+  }
 
-        if (player == null) {
-            if (uuid.equals(uuidCache)) {
-                renderItem(stackCache);
-            } else {
-                uuidCache = uuid;
-                stackCache = new ItemStack(Items.SKULL, 1, 3);
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("SkullOwner", uuid.toString());
-                stackCache.setTagCompound(tag);
-                renderItem(stackCache);
-            }
-            return;
-        }
+  private void renderItem(ItemStack stack) {
+    RenderHelper.enableStandardItemLighting();
+    GlStateManager.enableLighting();
+    GlStateManager.pushMatrix();
 
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.enableLighting();
-        GlStateManager.pushMatrix();
+    GlStateManager.translated(.5, .65, .5);
+    GlStateManager.scalef(.5f, .5f, .5f);
+    long angle = (System.currentTimeMillis() / 10) % 360;
+    GlStateManager.rotated(angle, 0, 1, 0);
 
-        GlStateManager.translate(.5, .3, .5);
-        GlStateManager.scale(.2f, .2f, .2f);
-        long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
+    Minecraft.getInstance()
+        .getItemRenderer()
+        .renderItem(stack, ItemCameraTransforms.TransformType.NONE);
 
-        Minecraft.getMinecraft().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
-
-        GlStateManager.popMatrix();
-    }
-
-    private void renderItem(ItemStack stack) {
-        RenderHelper.enableStandardItemLighting();
-        GlStateManager.enableLighting();
-        GlStateManager.pushMatrix();
-
-        GlStateManager.translate(.5, .65, .5);
-        GlStateManager.scale(.5f, .5f, .5f);
-        long angle = (System.currentTimeMillis() / 10) % 360;
-        GlStateManager.rotate(angle, 0, 1, 0);
-
-        Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.NONE);
-
-        GlStateManager.popMatrix();
-    }
+    GlStateManager.popMatrix();
+  }
 }

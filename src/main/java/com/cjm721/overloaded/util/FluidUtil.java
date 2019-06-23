@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.util;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -14,8 +14,8 @@ public final class FluidUtil {
 
         if (!a.isFluidEqual(b))
             return false;
-        NBTTagCompound compoundAlpha = a.tag;
-        NBTTagCompound compoundBeta = b.tag;
+        CompoundNBT compoundAlpha = a.tag;
+        CompoundNBT compoundBeta = b.tag;
         if (compoundAlpha == null)
             return compoundBeta == null;
         return compoundAlpha.equals(compoundBeta);

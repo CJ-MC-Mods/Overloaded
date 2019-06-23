@@ -1,12 +1,35 @@
 package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.config.syncer.SyncToClient;
-import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-public class RayGunConfig {
-    @Config.Comment("Energy used per shot. [Default: 100000]")
-    public int energyPerShot = 100000;
-    @SyncToClient
-    @Config.Comment("Max range to shoot. [Default: 128]")
-    public int maxRange = 128;
+public class RayGunConfig implements ConfigSectionHandler {
+  public int energyPerShot;
+  private ForgeConfigSpec.IntValue energyPerShotSpec;
+
+  @SyncToClient public int maxRange;
+  private ForgeConfigSpec.IntValue maxRangeSpec;
+
+  @Override
+  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+    builder.push("ray-gun");
+
+    energyPerShotSpec =
+        builder
+            .comment("Energy used per shot. [Default: 100000]")
+            .defineInRange("energyPerShot", 100000, 0, Integer.MAX_VALUE);
+
+    maxRangeSpec =
+        builder
+            .comment("Max range to shoot. [Default: 128]")
+            .defineInRange("maxRange", 128, 0, Integer.MAX_VALUE);
+
+    builder.pop();
+  }
+
+  @Override
+  public void update() {
+    energyPerShot = energyPerShotSpec.get();
+    maxRange = maxRangeSpec.get();
+  }
 }
