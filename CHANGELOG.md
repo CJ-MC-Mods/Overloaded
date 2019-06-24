@@ -42,7 +42,7 @@
 * Code Cleanup
   * Dynamic Registration now in single place
   * Abstracted multi-armor rendering
-* **New config entry for item texture size**. Before item texture size was tied to bl`ock resolution
+* **New config entry for item texture size**. Before item texture size was tied to block resolution
 * Config is now synced from server to client
 * Config rewrite - physical files are the same though   
 * Can now upload to Curse from command line (No mod changes)

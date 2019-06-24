@@ -48,7 +48,7 @@ archivesBaseName = "Overloaded"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190621-1.14.2'
+    mappings channel: 'snapshot', version: mappings_version
 
     runs {
         client {
@@ -99,7 +99,7 @@ jar {
                 "Specification-Vendor": "cjm721",
                 "Specification-Version": project.version,
                 "Implementation-Title": project.name,
-                "Implementation-Version": project.version,
+                "Implementation-Version": mod_version,
                 "Implementation-Vendor" :"cjm721",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
         ])
@@ -113,7 +113,7 @@ dependencies {
     testCompile "org.mockito:mockito-core:+"
     testCompile "com.google.truth:truth:+"
 
-    minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + '26.0.43'
+    minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 }
 
 version = "${minecraft_version}-${mod_version}"
@@ -123,7 +123,7 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'
 
-        expand 'version': project.version, 'mcversion': minecraft_version
+        expand 'version': project.version
     }
 
     from(sourceSets.main.resources.srcDirs) {
