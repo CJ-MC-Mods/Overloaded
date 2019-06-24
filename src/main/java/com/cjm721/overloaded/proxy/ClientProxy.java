@@ -12,6 +12,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -33,7 +34,7 @@ public class ClientProxy extends CommonProxy {
     BlockResourcePack.INSTANCE.addDomain("overloaded");
     BlockResourcePack.INSTANCE.inject();
 
-    //    if (Overloaded.cachedConfig.specialConfig.noClipRenderFix)
+    //    if (OverloadedConfig.INSTANCE.specialConfig.noClipRenderFix)
     //      Minecraft.getInstance().renderGlobal = new
     // RenderGlobalSpectator(Minecraft.getInstance());
     //    Minecraft.getInstance()
@@ -46,10 +47,8 @@ public class ClientProxy extends CommonProxy {
     //            ModItems.customChestplate,
     //            ModItems.customHelmet);
 
-    //    noClipKeybind =
-    //        new KeyBinding("overloaded.key.noclip", Keyboard.KEY_V,
-    // "overloaded.cat.key.multiarmor");
-    //    ClientRegistry.registerKeyBinding(noClipKeybind);
+    noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key.multiarmor");
+    ClientRegistry.registerKeyBinding(noClipKeybind);
 
     MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
   }

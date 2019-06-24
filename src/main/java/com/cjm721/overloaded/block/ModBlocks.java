@@ -9,6 +9,7 @@ import com.cjm721.overloaded.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.block.fluid.BlockPureMatterFluid;
 import com.cjm721.overloaded.block.reactor.BlockFusionCore;
 import com.cjm721.overloaded.block.reactor.BlockFusionInterface;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
@@ -73,7 +74,7 @@ public final class ModBlocks {
     playerInterface = registerFull(new BlockPlayerInterface());
     itemInterface = registerFull(new BlockItemInterface());
 
-    if (Overloaded.cachedConfig.developmentConfig.wipStuff) {
+    if (OverloadedConfig.INSTANCE.developmentConfig.wipStuff) {
       fusionCore = registerFull(new BlockFusionCore());
       fusionInterface = registerFull(new BlockFusionInterface());
       matterPurifier = registerFull(new BlockMatterPurifier());

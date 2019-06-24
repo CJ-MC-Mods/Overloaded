@@ -2,6 +2,7 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RayGunMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -59,7 +60,7 @@ public class ItemRayGun extends PowerModItem {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/items/ray_gun.png"),
-        Overloaded.cachedConfig.textureResolutions.itemResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @Override
@@ -94,14 +95,14 @@ public class ItemRayGun extends PowerModItem {
     LazyOptional<IEnergyStorage> energy = itemStack.getCapability(ENERGY, null);
 
     if (!energy.isPresent()
-        || energy.orElse(null).getEnergyStored() < Overloaded.cachedConfig.rayGun.energyPerShot) {
+        || energy.orElse(null).getEnergyStored() < OverloadedConfig.INSTANCE.rayGun.energyPerShot) {
       player.sendStatusMessage(new StringTextComponent("Not enough power to fire."), true);
       return;
     }
 
     Vec3d eyePos = player.getEyePosition(1);
 
-    if (eyePos.distanceTo(message.vector) > Overloaded.cachedConfig.rayGun.maxRange) {
+    if (eyePos.distanceTo(message.vector) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
       player.sendStatusMessage(new StringTextComponent("Target out of range."), true);
       return;
     }
@@ -119,7 +120,7 @@ public class ItemRayGun extends PowerModItem {
       return;
     }
 
-    energy.orElse(null).extractEnergy(Overloaded.cachedConfig.rayGun.energyPerShot, false);
+    energy.orElse(null).extractEnergy(OverloadedConfig.INSTANCE.rayGun.energyPerShot, false);
     player.world.addEntity(
         new LightningBoltEntity(
             player.world, message.vector.x, message.vector.y, message.vector.z, false));

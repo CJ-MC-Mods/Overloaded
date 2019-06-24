@@ -24,15 +24,10 @@ public class Overloaded {
   public static final String MODID = "overloaded";
   static final String VERSION = "${mod_version}";
 
-  private static final String PROXY_CLIENT = "com.cjm721.overloaded.proxy.ClientProxy";
-  private static final String PROXY_SERVER = "com.cjm721.overloaded.proxy.ServerProxy";
-
   public static CommonProxy proxy =
       DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
   public static final Logger logger = LogManager.getLogger();
-
-  public static OverloadedConfig cachedConfig;
 
   public Overloaded() {
     instance = this;
@@ -48,7 +43,6 @@ public class Overloaded {
   }
 
   private void preInit(final FMLCommonSetupEvent event) {
-
     proxy.commonSetup(event);
   }
 

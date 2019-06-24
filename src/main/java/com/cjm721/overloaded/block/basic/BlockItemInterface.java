@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.tile.TileItemInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -53,14 +53,14 @@ public class BlockItemInterface extends ModBlock {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/blocks/block.png"),
-        Overloaded.cachedConfig.textureResolutions.blockResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
-//  @Override
-//  public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-//    ((TileItemInterface) worldIn.getTileEntity(pos)).breakBlock();
-//    super.breakBlock(worldIn, pos, state);
-//  }
+  //  @Override
+  //  public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
+  //    ((TileItemInterface) worldIn.getTileEntity(pos)).breakBlock();
+  //    super.breakBlock(worldIn, pos, state);
+  //  }
 
   @Nullable
   @Override

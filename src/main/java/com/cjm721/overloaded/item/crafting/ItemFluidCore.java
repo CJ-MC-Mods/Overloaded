@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.item.crafting;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
@@ -32,6 +32,6 @@ public class ItemFluidCore extends ModItem {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/items/fluid_core.png"),
-        Overloaded.cachedConfig.textureResolutions.itemResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }

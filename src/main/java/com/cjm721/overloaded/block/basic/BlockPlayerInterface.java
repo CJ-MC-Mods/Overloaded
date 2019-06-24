@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.block.tile.TilePlayerInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,7 +61,7 @@ public class BlockPlayerInterface extends ModBlockTile {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/blocks/block_player.png"),
-        Overloaded.cachedConfig.textureResolutions.blockResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
   @Override

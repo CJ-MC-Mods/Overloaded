@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.TileItemManipulator;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
@@ -45,7 +45,7 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/blocks/item_manipulator.png"),
-        Overloaded.cachedConfig.textureResolutions.blockResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
   //    @Override

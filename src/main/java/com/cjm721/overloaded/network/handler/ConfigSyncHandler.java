@@ -25,7 +25,7 @@ public class ConfigSyncHandler
 
   public void updateConfig() {
     Gson gson = new Gson();
-    //    Overloaded.cachedConfig =
+    //    OverloadedConfig.INSTANCE =
     //        gson.fromJson(gson.toJsonTree(overloadedConfig), OverloadedConfig.class);
 
     if (this.serverConfigOptions == null) {
@@ -33,7 +33,7 @@ public class ConfigSyncHandler
     }
 
     try {
-      configSyncMerger.updateConfigFromServer(Overloaded.cachedConfig, this.serverConfigOptions);
+      configSyncMerger.updateConfigFromServer(OverloadedConfig.INSTANCE, this.serverConfigOptions);
     } catch (IllegalAccessException e) {
       Minecraft.getInstance()
           .player

@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
@@ -49,7 +50,7 @@ public class ArmorEventHandler {
   public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
     if (event.getObject() instanceof PlayerEntity) {
       event.addCapability(
-          new ResourceLocation(MODID, "playerData"), new GenericDataCapabilityProvider());
+          new ResourceLocation(MODID, "player_data"), new GenericDataCapabilityProvider());
     }
   }
 
@@ -112,8 +113,8 @@ public class ArmorEventHandler {
         (float)
             ((player.distanceWalkedModified - player.prevDistanceWalkedModified)
                 / 0.6F
-                * Overloaded.cachedConfig.multiArmorConfig.energyPerBlockWalked
-                * Overloaded.cachedConfig.multiArmorConfig.energyMultiplierPerGroundSpeed
+                * OverloadedConfig.INSTANCE.multiArmorConfig.energyPerBlockWalked
+                * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerGroundSpeed
                 * (groundSpeed - Default.GROUND_SPEED));
 
     if (extractEnergy(player, Math.round(powerRequired), side == LogicalSide.CLIENT)) {
@@ -164,7 +165,7 @@ public class ArmorEventHandler {
         && playerBooleans.get(noClip)) {
       if (extractEnergy(
           player,
-          Overloaded.cachedConfig.multiArmorConfig.noClipEnergyPerTick,
+          OverloadedConfig.INSTANCE.multiArmorConfig.noClipEnergyPerTick,
           side == LogicalSide.CLIENT)) {
         player.noClip = true;
         if (armorBooleans.getOrDefault(DataKeys.NOCLIP_FLIGHT_LOCK, Default.NOCLIP_FLIGHT_LOCK)) {
@@ -183,7 +184,7 @@ public class ArmorEventHandler {
     if (airNeeded > 0
         && extractEnergy(
             player,
-            airNeeded * Overloaded.cachedConfig.multiArmorConfig.costPerAir,
+            airNeeded * OverloadedConfig.INSTANCE.multiArmorConfig.costPerAir,
             side == LogicalSide.CLIENT)) {
       player.setAir(300);
     }
@@ -193,7 +194,7 @@ public class ArmorEventHandler {
     if (player.isBurning()
         && extractEnergy(
             player,
-            Overloaded.cachedConfig.multiArmorConfig.extinguishCost,
+            OverloadedConfig.INSTANCE.multiArmorConfig.extinguishCost,
             side == LogicalSide.CLIENT)) {
       player.extinguish();
     }
@@ -207,7 +208,7 @@ public class ArmorEventHandler {
     if (toHeal > 0
         && extractEnergy(
             player,
-            Overloaded.cachedConfig.multiArmorConfig.costPerHealth * toHeal,
+            OverloadedConfig.INSTANCE.multiArmorConfig.costPerHealth * toHeal,
             side == LogicalSide.CLIENT)) {
       player.setHealth(maxHealth);
     }
@@ -223,7 +224,7 @@ public class ArmorEventHandler {
 
       if (extractEnergy(
           player,
-          Overloaded.cachedConfig.multiArmorConfig.removeEffect,
+          OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
           side == LogicalSide.CLIENT)) {
         potionEffectIterator.remove();
       }
@@ -233,14 +234,14 @@ public class ArmorEventHandler {
   private void tryFeedPlayer(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
     FoodStats foodStats = player.getFoodStats();
     int foodLevel = foodStats.getFoodLevel();
-    int toFeed = Overloaded.cachedConfig.multiArmorConfig.maxFoodLevel - foodLevel;
+    int toFeed = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - foodLevel;
     float staturationLevel = foodStats.getSaturationLevel();
-    float toAdd = Overloaded.cachedConfig.multiArmorConfig.maxFoodLevel - staturationLevel;
+    float toAdd = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - staturationLevel;
 
     if (toFeed > 0
         && extractEnergy(
             player,
-            Math.round(Overloaded.cachedConfig.multiArmorConfig.costPerFood * toFeed),
+            Math.round(OverloadedConfig.INSTANCE.multiArmorConfig.costPerFood * toFeed),
             side == LogicalSide.CLIENT)) {
       foodStats.addStats(toFeed, 0);
     }
@@ -248,7 +249,7 @@ public class ArmorEventHandler {
     if (toAdd > 0.0F
         && extractEnergy(
             player,
-            (int) Math.round(Overloaded.cachedConfig.multiArmorConfig.costPerSaturation * toAdd),
+            (int) Math.round(OverloadedConfig.INSTANCE.multiArmorConfig.costPerSaturation * toAdd),
             side == LogicalSide.CLIENT)) {
       toFeed = Math.round(toAdd);
       foodStats.addStats(toFeed, 0.5F);
@@ -275,9 +276,9 @@ public class ArmorEventHandler {
     int energyCost =
         (int)
             Math.round(
-                Overloaded.cachedConfig.multiArmorConfig.energyPerTickFlying
+                OverloadedConfig.INSTANCE.multiArmorConfig.energyPerTickFlying
                     * flightSpeed
-                    * Overloaded.cachedConfig.multiArmorConfig.energyMultiplerPerFlightSpeed);
+                    * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplerPerFlightSpeed);
 
     if (player.abilities.isFlying
         && !extractEnergy(player, energyCost, side == LogicalSide.CLIENT)) {
@@ -304,16 +305,16 @@ public class ArmorEventHandler {
     if (setEquipped) {
       DamageSource damageSource = event.getSource();
 
-      int energyCost = Overloaded.cachedConfig.multiArmorConfig.baseCost;
+      int energyCost = OverloadedConfig.INSTANCE.multiArmorConfig.baseCost;
 
       float damageAmount =
-          (float) (event.getAmount() * Overloaded.cachedConfig.multiArmorConfig.damageMultiplier);
+          (float) (event.getAmount() * OverloadedConfig.INSTANCE.multiArmorConfig.damageMultiplier);
 
       if (damageSource.isDamageAbsolute())
-        damageAmount *= Overloaded.cachedConfig.multiArmorConfig.absoluteDamageMultiplier;
+        damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.absoluteDamageMultiplier;
 
       if (damageSource.isUnblockable())
-        damageAmount *= Overloaded.cachedConfig.multiArmorConfig.unblockableMultiplier;
+        damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.unblockableMultiplier;
 
       if (damageAmount > Integer.MAX_VALUE) return;
 

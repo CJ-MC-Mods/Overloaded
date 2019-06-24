@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.entity.RenderMultiChestplate;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
@@ -43,12 +43,12 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/armors/multi_body.png"),
-        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/armors/multi_left_arm.png"),
-        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/armors/multi_right_arm.png"),
-        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 }

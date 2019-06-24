@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperItemReceiver;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -49,6 +49,6 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/blocks/hyper_item_receiver.png"),
-        Overloaded.cachedConfig.textureResolutions.blockResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

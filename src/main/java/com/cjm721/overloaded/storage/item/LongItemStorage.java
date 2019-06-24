@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.storage.item;
 
-import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
@@ -26,7 +26,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
 
   @Override
   public int getSlots() {
-    return Overloaded.cachedConfig.specialConfig.infinityBarrelAdditionalSlot ? 2 : 1;
+    return OverloadedConfig.INSTANCE.specialConfig.infinityBarrelAdditionalSlot ? 2 : 1;
   }
 
   @Override

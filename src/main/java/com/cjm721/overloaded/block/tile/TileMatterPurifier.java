@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.tile;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -52,8 +52,8 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
     if (hardness <= 0) return;
 
     float ecFloat =
-        Overloaded.cachedConfig.purifierConfig.energyPerOperation
-            + Overloaded.cachedConfig.purifierConfig.energyPerHardness * hardness;
+        OverloadedConfig.INSTANCE.purifierConfig.energyPerOperation
+            + OverloadedConfig.INSTANCE.purifierConfig.energyPerHardness * hardness;
     int energyCost = Math.round(ecFloat);
 
     if (energyStorage.extractEnergy(energyCost, true) != energyCost) {

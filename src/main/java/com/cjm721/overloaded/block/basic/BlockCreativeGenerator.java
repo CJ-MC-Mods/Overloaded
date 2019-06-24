@@ -1,10 +1,9 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
@@ -20,40 +19,40 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class BlockCreativeGenerator extends ModBlockTile {
 
-    public BlockCreativeGenerator() {
-        super(getDefaultProperties());
-    }
+  public BlockCreativeGenerator() {
+    super(getDefaultProperties());
+  }
 
-    @Override
-    public void baseInit() {
-        setRegistryName("creative_generator");
-//        setTranslationKey("creative_generator");
+  @Override
+  public void baseInit() {
+    setRegistryName("creative_generator");
+    //        setTranslationKey("creative_generator");
 
-//        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID + ":creative_generator");
-    }
+    //        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID +
+    // ":creative_generator");
+  }
 
-    @Override
-    @Nonnull
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileCreativeGeneratorFE();
-    }
+  @Override
+  @Nonnull
+  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+    return new TileCreativeGeneratorFE();
+  }
 
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void registerModel() {
+    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
+    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
-//        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/blocks/creative_generator.png"),
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+  }
 
-        ImageUtil.registerDynamicTexture(
-                new ResourceLocation(MODID, "textures/blocks/creative_generator.png"),
-                Overloaded.cachedConfig.textureResolutions.blockResolution);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    @Nonnull
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  @Nonnull
+  public BlockRenderLayer getRenderLayer() {
+    return BlockRenderLayer.CUTOUT;
+  }
 }

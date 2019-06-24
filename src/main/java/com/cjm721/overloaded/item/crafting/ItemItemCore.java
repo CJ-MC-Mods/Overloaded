@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.item.crafting;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
@@ -13,25 +13,25 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ItemItemCore extends ModItem {
 
-    public ItemItemCore() {
+  public ItemItemCore() {
     super(new Properties().maxStackSize(64));
-        setRegistryName("item_core");
-//        setTranslationKey("item_core");
-    }
+    setRegistryName("item_core");
+    //        setTranslationKey("item_core");
+  }
 
-    @Override
-    public int getItemStackLimit(ItemStack stack) {
-        return 64;
-    }
+  @Override
+  public int getItemStackLimit(ItemStack stack) {
+    return 64;
+  }
 
-    @OnlyIn(Dist.CLIENT)
-    @Override
-    public void registerModel() {
-        ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-//        ModelLoader.setCustomModelResourceLocation(this, 0, location);
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void registerModel() {
+    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
+    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
-        ImageUtil.registerDynamicTexture(
-                new ResourceLocation(MODID, "textures/items/item_core.png"),
-                Overloaded.cachedConfig.textureResolutions.itemResolution);
-    }
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/items/item_core.png"),
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+  }
 }

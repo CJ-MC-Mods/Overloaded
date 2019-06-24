@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.client.render.item;
 
-import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
@@ -50,18 +50,18 @@ public class RenderMultiToolAssist {
   private static void changeHelpMode(int dwheel) {
     AssistMode[] values = AssistMode.values();
     int mode =
-        (Overloaded.cachedConfig.multiToolConfig.assistMode + Integer.signum(dwheel))
+        (OverloadedConfig.INSTANCE.multiToolConfig.assistMode + Integer.signum(dwheel))
             % values.length;
     if (mode < 0) mode += values.length;
 
-    Overloaded.cachedConfig.multiToolConfig.assistMode = mode;
+    OverloadedConfig.INSTANCE.multiToolConfig.assistMode = mode;
     //        ConfigManager.sync(MODID, Config.Type.INSTANCE);
   }
 
   @Nonnull
   public static AssistMode getAssistMode() {
     AssistMode[] values = AssistMode.values();
-    int mode = Overloaded.cachedConfig.multiToolConfig.assistMode;
+    int mode = OverloadedConfig.INSTANCE.multiToolConfig.assistMode;
 
     for (AssistMode assistMode : values) {
       if (assistMode.getMode() == mode) {

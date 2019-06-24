@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.item;
 
-import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.basic.InDevItem;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
@@ -61,7 +61,7 @@ public class ModItems {
     rayGun = registerItem(new ItemRayGun());
     railgun = registerItem(new ItemRailGun());
 
-    if (Overloaded.cachedConfig.developmentConfig.wipStuff) {
+    if (OverloadedConfig.INSTANCE.developmentConfig.wipStuff) {
       //            energyShield = registerItem(new ItemEnergyShield());
       //            amountSelector = registerItem(new ItemAmountSelector());
       for (int i = 0; i < 10; i++) {

@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.reactor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.tile.FusionCoreRenderer;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -44,12 +44,12 @@ public class BlockFusionCore extends ModBlockTile {
         new ResizeableTextureGenerator.ResizableTexture(
             new ResourceLocation(MODID, "textures/blocks/sun/yellow.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/sun/yellow.png"),
-            Overloaded.cachedConfig.textureResolutions.blockResolution));
+            OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
             new ResourceLocation(MODID, "textures/blocks/sun/red_two.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/sun/red_two.png"),
-            Overloaded.cachedConfig.textureResolutions.blockResolution));
+            OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }
 
   @Nullable

@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -56,6 +56,6 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/blocks/energy_extractor.png"),
-        Overloaded.cachedConfig.textureResolutions.blockResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

@@ -108,8 +108,8 @@ public class PlayerInteractionUtil {
     //    long distance = Math.round(Math.sqrt(player.getPosition().distanceSq(newPosition)));
     //
     //    long cost =
-    //        Overloaded.cachedConfig.multiToolConfig.placeBaseCost
-    //            + Overloaded.cachedConfig.multiToolConfig.costPerMeterAway * distance;
+    //        OverloadedConfig.INSTANCE.multiToolConfig.placeBaseCost
+    //            + OverloadedConfig.INSTANCE.multiToolConfig.costPerMeterAway * distance;
     //    if (!player.abilities.isCreativeMode
     //        && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
     //      return BlockPlaceResult.FAIL_ENERGY;
@@ -170,7 +170,7 @@ public class PlayerInteractionUtil {
   public static BlockRayTraceResult getBlockPlayerLookingAtClient(
       PlayerEntity player, float partialTicks) {
     //    RayTraceResult result =
-    //        player.rayTrace(Overloaded.cachedConfig.multiToolConfig.reach, partialTicks);
+    //        player.rayTrace(OverloadedConfig.INSTANCE.multiToolConfig.reach, partialTicks);
     //
     //    if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK) return null;
     //    return result;

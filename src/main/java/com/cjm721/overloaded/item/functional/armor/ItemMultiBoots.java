@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
@@ -43,6 +43,6 @@ public class ItemMultiBoots extends AbstractMultiArmor {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
-        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 }

@@ -54,18 +54,18 @@ package com.cjm721.overloaded.client.gui;
 //
 //        float flightSpeedValue = floats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
 //        this.flightSpeed = addButton(new GuiSlider(id++, this.width / 2 - 150, this.height / 4, 0,
-// Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed, flightSpeedValue, "Flight Speed:"));
+// OverloadedConfig.INSTANCE.multiArmorConfig.maxFlightSpeed, flightSpeedValue, "Flight Speed:"));
 //        this.flightSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer,
 // this.flightSpeed.x, this.flightSpeed.y, this.flightSpeed.width, this.flightSpeed.height,
-// flightSpeedValue, 0, Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed);
+// flightSpeedValue, 0, OverloadedConfig.INSTANCE.multiArmorConfig.maxFlightSpeed);
 //        this.flightSpeedTextBox.setVisible(false);
 //
 //        float groundSpeedValue = floats.getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED);
 //        this.groundSpeed = addButton(new GuiSlider(id++, this.width / 2, this.height / 4, 0,
-// Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed, groundSpeedValue, "Ground Speed:"));
+// OverloadedConfig.INSTANCE.multiArmorConfig.maxGroundSpeed, groundSpeedValue, "Ground Speed:"));
 //        this.groundSpeedTextBox = new GuiPositiveFloatTextField(id++, this.fontRenderer,
 // this.groundSpeed.x, this.groundSpeed.y, this.groundSpeed.width, this.groundSpeed.height,
-// groundSpeedValue, 0, Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed);
+// groundSpeedValue, 0, OverloadedConfig.INSTANCE.multiArmorConfig.maxGroundSpeed);
 //        this.groundSpeedTextBox.setVisible(false);
 //
 //        this.flightEnabled = addButton(new GuiToggle(id++, this.width / 2 - 150, this.height / 4 +

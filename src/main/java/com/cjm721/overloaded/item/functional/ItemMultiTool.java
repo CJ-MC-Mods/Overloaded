@@ -2,6 +2,7 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.BlockBreakResult;
@@ -94,7 +95,7 @@ public class ItemMultiTool extends PowerModItem {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/items/ntool.png"),
-        Overloaded.cachedConfig.textureResolutions.itemResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -172,8 +173,10 @@ public class ItemMultiTool extends PowerModItem {
 
   private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
     return (float)
-        ((hardness * Overloaded.cachedConfig.multiToolConfig.breakCostMultiplier / (efficiency + 1))
-            + (Overloaded.cachedConfig.multiToolConfig.breakBaseCost / (unbreaking + 1))
+        ((hardness
+                * OverloadedConfig.INSTANCE.multiToolConfig.breakCostMultiplier
+                / (efficiency + 1))
+            + (OverloadedConfig.INSTANCE.multiToolConfig.breakBaseCost / (unbreaking + 1))
             + distance);
   }
 
@@ -208,8 +211,8 @@ public class ItemMultiTool extends PowerModItem {
     }
 
     if (player.getDistanceSq(blockPos.getX(), blockPos.getY(), blockPos.getZ())
-        > Overloaded.cachedConfig.multiToolConfig.reach
-            * Overloaded.cachedConfig.multiToolConfig.reach) {
+        > OverloadedConfig.INSTANCE.multiToolConfig.reach
+            * OverloadedConfig.INSTANCE.multiToolConfig.reach) {
       return BlockBreakResult.FAIL_RANGE;
     }
 
@@ -247,7 +250,7 @@ public class ItemMultiTool extends PowerModItem {
   //    double distanceToEnd = endingLocation.distanceTo(startingLocation);
   //    // Make the reach check unnessicary * Change to for loop
   //    while (distanceToEnd > 0.3D
-  //        && distanceToEnd < (Overloaded.cachedConfig.multiToolConfig.reach * 2)) {
+  //        && distanceToEnd < (OverloadedConfig.INSTANCE.multiToolConfig.reach * 2)) {
   //      world.spawnParticle(
   //          type,
   //          startingLocation.x,

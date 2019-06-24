@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.item.functional;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
@@ -58,7 +58,7 @@ public class ItemRailGun extends PowerModItem {
               cap.suggestUpdate();
               int energyRequirement =
                   cap.getIntegerMap()
-                      .getOrDefault(RAILGUN_POWER_KEY, Overloaded.cachedConfig.railGun.minEnergy);
+                      .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
               tooltip.add(
                   new StringTextComponent(
                       String.format(
@@ -78,7 +78,7 @@ public class ItemRailGun extends PowerModItem {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/items/railgun.png"),
-        Overloaded.cachedConfig.textureResolutions.itemResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @Override
@@ -93,7 +93,7 @@ public class ItemRailGun extends PowerModItem {
       //              playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
       //              playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
       //              playerIn,
-      //              Overloaded.cachedConfig.railGun.maxRange);
+      //              OverloadedConfig.INSTANCE.railGun.maxRange);
       //      if (ray != null && ray.entityHit != null) {
       //        Vec3d moveVev =
       // playerIn.getPositionEyes(1).subtract(ray.hitVec).normalize().scale(-1.0);
@@ -117,7 +117,7 @@ public class ItemRailGun extends PowerModItem {
     //      ItemStack stack = player.getHeldItemMainhand();
     //      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
     //        int powerDelta =
-    //            Integer.signum(event.getDwheel()) * Overloaded.cachedConfig.railGun.stepEnergy;
+    //            Integer.signum(event.getDwheel()) * OverloadedConfig.INSTANCE.railGun.stepEnergy;
     //        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
     //            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
     //          powerDelta *= 100;
@@ -143,7 +143,7 @@ public class ItemRailGun extends PowerModItem {
     int energyRequired =
         settingCapability
             .getIntegerMap()
-            .getOrDefault(RAILGUN_POWER_KEY, Overloaded.cachedConfig.railGun.minEnergy);
+            .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
 
     if (energy.getEnergyStored() < energyRequired) {
       player.sendStatusMessage(new StringTextComponent("Not enough power to fire."), true);
@@ -155,14 +155,14 @@ public class ItemRailGun extends PowerModItem {
     @Nullable Entity entity = player.world.getEntityByID(message.id);
     if (entity == null || !entity.isAlive()) {
       return;
-    } else if (player.getDistance(entity) > Overloaded.cachedConfig.rayGun.maxRange) {
+    } else if (player.getDistance(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
       player.sendStatusMessage(new StringTextComponent("Target out of range."), true);
     } else if (entity.attackEntityFrom(
         DamageSource.causePlayerDamage(player),
-        (float) (Overloaded.cachedConfig.railGun.damagePerRF * energyExtracted))) {
+        (float) (OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted))) {
       Vec3d knockback =
           message.moveVector.scale(
-              energyExtracted * Overloaded.cachedConfig.railGun.knockbackPerRF);
+              energyExtracted * OverloadedConfig.INSTANCE.railGun.knockbackPerRF);
       entity.addVelocity(knockback.x, knockback.y, knockback.z);
     }
   }
@@ -191,8 +191,8 @@ public class ItemRailGun extends PowerModItem {
     power =
         Ints.constrainToRange(
             power,
-            Overloaded.cachedConfig.railGun.minEnergy,
-            Overloaded.cachedConfig.railGun.maxEnergy);
+            OverloadedConfig.INSTANCE.railGun.minEnergy,
+            OverloadedConfig.INSTANCE.railGun.maxEnergy);
 
     integerMap.put(RAILGUN_POWER_KEY, power);
     cap.suggestSave();

@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.item.ModItems;
@@ -24,6 +25,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.LinkedList;
@@ -32,7 +34,7 @@ import java.util.List;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static net.minecraftforge.fml.network.NetworkRegistry.newSimpleChannel;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 
   public SimpleChannel networkWrapper;
@@ -42,9 +44,9 @@ public class CommonProxy {
   public static Fluid pureMatter;
 
   public void commonSetup(FMLCommonSetupEvent event) {
+    FMLJavaModLoadingContext.get().getModEventBus().register(this);
+
     createFluids();
-    ModBlocks.init();
-    ModItems.init();
 
     CapabilityHyperItem.register();
     CapabilityHyperEnergy.register();
@@ -137,12 +139,18 @@ public class CommonProxy {
 
   @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    for (Block block : blocksToRegister) event.getRegistry().register(block);
+    ModBlocks.init();
+    for (Block block : blocksToRegister) {
+      event.getRegistry().register(block);
+    }
   }
 
   @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
-    for (Item item : itemToRegister) event.getRegistry().register(item);
+    ModItems.init();
+    for (Item item : itemToRegister) {
+      event.getRegistry().register(item);
+    }
   }
 
   @SubscribeEvent

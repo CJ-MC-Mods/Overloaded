@@ -231,7 +231,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
   }
 
   private boolean hasPower(ItemStack stack) {
-    return stack.getCapability(ENERGY).orElse(null).getEnergyStored() > 0;
+    return stack.getCapability(ENERGY).map(storage -> storage.getEnergyStored() > 0).orElse(false);
   }
 
   @Override

@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
@@ -55,7 +55,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/armors/multi_helmet.png"),
-        Overloaded.cachedConfig.textureResolutions.multiArmorResolution);
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 
   public void updateSettings(
@@ -84,11 +84,15 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     floats.put(
         DataKeys.FLIGHT_SPEED,
         Floats.constrainToRange(
-            message.flightSpeed, 0, (float) Overloaded.cachedConfig.multiArmorConfig.maxFlightSpeed));
+            message.flightSpeed,
+            0,
+            (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxFlightSpeed));
     floats.put(
         DataKeys.GROUND_SPEED,
         Floats.constrainToRange(
-            message.groundSpeed, 0, (float) Overloaded.cachedConfig.multiArmorConfig.maxGroundSpeed));
+            message.groundSpeed,
+            0,
+            (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxGroundSpeed));
 
     Map<String, Boolean> booleans = settings.getBooleanMap();
     booleans.put(DataKeys.NOCLIP_FLIGHT_LOCK, message.noclipFlightLock);
