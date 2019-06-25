@@ -1,11 +1,10 @@
-package com.cjm721.overloaded.block.tile.infinity;
+package com.cjm721.overloaded.tile.infinity;
 
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -21,7 +20,7 @@ public class TileInfiniteTank extends TileEntity implements IDataUpdate {
   private final LongFluidStorage fluidStorage;
 
   public TileInfiniteTank() {
-    super(TileEntityType.Builder.create(TileInfiniteTank::new, ModBlocks.infiniteTank).build(null));
+    super(ModTiles.infiniteTank);
     fluidStorage = new LongFluidStorage(this);
   }
 

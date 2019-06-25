@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.block.tile.TileMatterPurifier;
+import com.cjm721.overloaded.tile.functional.TileMatterPurifier;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
@@ -15,14 +15,7 @@ public class BlockMatterPurifier extends ModBlockTile {
 
   public BlockMatterPurifier() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("matter_purifier");
-    //        setTranslationKey("matter_purifier");
-
-    //        GameRegistry.registerTileEntity(TileMatterPurifier.class, MODID + ":matter_purifier");
   }
 
   @OnlyIn(Dist.CLIENT)

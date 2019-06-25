@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.infinity.TileInfiniteCapacitor;
+import com.cjm721.overloaded.tile.infinity.TileInfiniteCapacitor;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperHandler;
@@ -28,15 +28,7 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer {
 
   public BlockInfiniteCapacitor() {
     super(ModBlock.getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("infinite_capacitor");
-    //        setTranslationKey("infinite_capacitor");
-
-    //        GameRegistry.registerTileEntity(TileInfiniteCapacitor.class, MODID +
-    // ":infinite_capacitor");
   }
 
   @Override

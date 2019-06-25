@@ -23,14 +23,7 @@ public class BlockFusionCore extends ModBlockTile {
 
   public BlockFusionCore() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("fusion_core");
-    //        setTranslationKey("fusion_core");
-
-    //        GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_core");
   }
 
   @OnlyIn(Dist.CLIENT)

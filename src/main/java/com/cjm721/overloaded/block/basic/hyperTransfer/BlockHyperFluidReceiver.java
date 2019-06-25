@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
-import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperFluidReceiver;
+import com.cjm721.overloaded.tile.hyperTransfer.TileHyperFluidReceiver;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -19,15 +19,7 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
   public BlockHyperFluidReceiver() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("hyper_fluid_receiver");
-    //        setTranslationKey("hyper_fluid_receiver");
-
-    //        GameRegistry.registerTileEntity(TileHyperFluidReceiver.class, MODID +
-    // ":hyper_fluid_receiver");
   }
 
   @Override

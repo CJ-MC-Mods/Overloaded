@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
+import com.cjm721.overloaded.tile.functional.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -21,15 +21,7 @@ public class BlockCreativeGenerator extends ModBlockTile {
 
   public BlockCreativeGenerator() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("creative_generator");
-    //        setTranslationKey("creative_generator");
-
-    //        GameRegistry.registerTileEntity(TileCreativeGeneratorFE.class, MODID +
-    // ":creative_generator");
   }
 
   @Override

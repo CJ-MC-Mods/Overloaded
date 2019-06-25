@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.basic.container;
 
-import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
+import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,14 +17,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-abstract class AbstractBlockInfiniteContainer extends ModBlock {
+abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
     AbstractBlockInfiniteContainer(Properties materialIn) {
         super(materialIn);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 
     //    @Override

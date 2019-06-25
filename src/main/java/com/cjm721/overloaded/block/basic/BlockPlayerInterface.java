@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.block.tile.TilePlayerInterface;
+import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -30,10 +30,6 @@ public class BlockPlayerInterface extends ModBlockTile {
 
   public BlockPlayerInterface() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("player_interface");
   }
 

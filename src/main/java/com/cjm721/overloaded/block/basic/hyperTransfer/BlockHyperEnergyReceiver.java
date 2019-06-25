@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
-import com.cjm721.overloaded.block.tile.hyperTransfer.TileHyperEnergyReceiver;
+import com.cjm721.overloaded.tile.hyperTransfer.TileHyperEnergyReceiver;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -19,15 +19,7 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
   public BlockHyperEnergyReceiver() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("hyper_energy_receiver");
-    //        setTranslationKey("hyper_energy_receiver");
-
-    //        GameRegistry.registerTileEntity(TileHyperEnergyReceiver.class, MODID +
-    // ":hyper_energy_receiver");
   }
 
   @Override

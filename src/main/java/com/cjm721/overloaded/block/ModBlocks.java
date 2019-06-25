@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block;
 
-import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.OverloadedItemGroups;
 import com.cjm721.overloaded.block.basic.*;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteBarrel;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteCapacitor;
@@ -9,14 +9,12 @@ import com.cjm721.overloaded.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.block.fluid.BlockPureMatterFluid;
 import com.cjm721.overloaded.block.reactor.BlockFusionCore;
 import com.cjm721.overloaded.block.reactor.BlockFusionInterface;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,38 +51,36 @@ public final class ModBlocks {
 
   public static final List<IModRegistrable> registerList = new LinkedList<>();
 
-  public static void init() {
-    creativeGenerator = registerFull(new BlockCreativeGenerator());
-    infiniteBarrel = registerFull(new BlockInfiniteBarrel());
-    infiniteTank = registerFull(new BlockInfiniteTank());
-    infiniteCapacitor = registerFull(new BlockInfiniteCapacitor());
+  public static void init(IForgeRegistry<Block> registry) {
+    creativeGenerator = registerFull(registry, new BlockCreativeGenerator());
+    infiniteBarrel = registerFull(registry, new BlockInfiniteBarrel());
+    infiniteTank = registerFull(registry, new BlockInfiniteTank());
+    infiniteCapacitor = registerFull(registry, new BlockInfiniteCapacitor());
 
-    hyperItemReceiver = registerFull(new BlockHyperItemReceiver());
-    hyperItemSender = registerFull(new BlockHyperItemSender());
-    hyperFluidReceiver = registerFull(new BlockHyperFluidReceiver());
-    hyperFluidSender = registerFull(new BlockHyperFluidSender());
-    hyperEnergyReceiver = registerFull(new BlockHyperEnergyReceiver());
-    hyperEnergySender = registerFull(new BlockHyperEnergySender());
+    hyperItemReceiver = registerFull(registry, new BlockHyperItemReceiver());
+    hyperItemSender = registerFull(registry, new BlockHyperItemSender());
+    hyperFluidReceiver = registerFull(registry, new BlockHyperFluidReceiver());
+    hyperFluidSender = registerFull(registry, new BlockHyperFluidSender());
+    hyperEnergyReceiver = registerFull(registry, new BlockHyperEnergyReceiver());
+    hyperEnergySender = registerFull(registry, new BlockHyperEnergySender());
 
-    infiniteWaterSource = registerFull(new BlockInfiniteWaterSource());
+    infiniteWaterSource = registerFull(registry, new BlockInfiniteWaterSource());
 
-    energyExtractor = registerFull(new BlockEnergyExtractor());
+    energyExtractor = registerFull(registry, new BlockEnergyExtractor());
 
-    netherStarBlock = registerFull(new BlockNetherStar());
-    playerInterface = registerFull(new BlockPlayerInterface());
-    itemInterface = registerFull(new BlockItemInterface());
+    netherStarBlock = registerFull(registry, new BlockNetherStar());
+    playerInterface = registerFull(registry, new BlockPlayerInterface());
+    itemInterface = registerFull(registry, new BlockItemInterface());
 
-    if (OverloadedConfig.INSTANCE.developmentConfig.wipStuff) {
-      fusionCore = registerFull(new BlockFusionCore());
-      fusionInterface = registerFull(new BlockFusionInterface());
-      matterPurifier = registerFull(new BlockMatterPurifier());
-      teamLoader = registerFull(new BlockTeamLoader());
-      //            pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
-      //            itemManipulator = new BlockItemManipulator();
-      //            energyInjectorChest = new BlockEnergyInjectorChest();
-      for (int i = 0; i < 10; i++) {
-        registerFull(new InDevBlock("in_dev_block_" + i));
-      }
+    fusionCore = registerFull(registry, new BlockFusionCore());
+    fusionInterface = registerFull(registry, new BlockFusionInterface());
+    matterPurifier = registerFull(registry, new BlockMatterPurifier());
+    teamLoader = registerFull(registry, new BlockTeamLoader());
+    //        pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
+    itemManipulator = new BlockItemManipulator();
+    energyInjectorChest = new BlockEnergyInjectorChest();
+    for (int i = 0; i < 10; i++) {
+      registerFull(registry, new InDevBlock("in_dev_block_" + i));
     }
   }
 
@@ -92,33 +88,24 @@ public final class ModBlocks {
     registerList.add(block);
   }
 
-  @OnlyIn(Dist.CLIENT)
-  public static void registerModels() {
-    for (IModRegistrable block : registerList) {
-      block.registerModel();
-    }
-  }
-
-  private static <T extends ModBlock> T registerFull(T block) {
-    registerBlock(block);
+  private static <T extends ModBlock> T registerFull(IForgeRegistry<Block> registry, T block) {
+    registerBlock(registry, block);
 
     CommonProxy.itemToRegister.add(
-        new BlockItem(block, new Item.Properties()).setRegistryName(block.getRegistryName()));
+        new BlockItem(block, new Item.Properties().group(OverloadedItemGroups.TECH))
+            .setRegistryName(block.getRegistryName()));
 
     return block;
   }
 
-  private static <T extends Block> T registerBlock(T block) {
+  private static <T extends Block> T registerBlock(IForgeRegistry<Block> registry, T block) {
     CommonProxy.blocksToRegister.add(block);
-
-    if (block instanceof ModBlock) {
-      ((ModBlock) block).baseInit();
-    }
 
     if (block instanceof IModRegistrable) {
       ModBlocks.addToSecondaryInit((IModRegistrable) block);
     }
 
+    registry.register(block);
     return block;
   }
 }

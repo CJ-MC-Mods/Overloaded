@@ -1,13 +1,10 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.basic.BlockEnergyInjectorChest;
-import com.cjm721.overloaded.block.basic.BlockInfiniteWaterSource;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 
@@ -20,10 +17,7 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable
     implements ITickableTileEntity {
 
   public TileEnergyInjectorChest() {
-    super(
-        TileEntityType.Builder.create(
-            TileEnergyInjectorChest::new, ModBlocks.energyInjectorChest)
-            .build(null));
+    super(ModTiles.energyInjectorChest);
   }
 
   /** Like the old updateEntity(), except more generic. */

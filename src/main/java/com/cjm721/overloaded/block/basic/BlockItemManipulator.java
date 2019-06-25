@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.block.tile.TileItemManipulator;
+import com.cjm721.overloaded.tile.functional.TileItemManipulator;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -21,20 +21,12 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class BlockItemManipulator extends AbstractModBlockFacing {
   public BlockItemManipulator() {
     super(getDefaultProperties());
+    setRegistryName("item_manipulator");
   }
 
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
-  }
-
-  @Override
-  public void baseInit() {
-    setRegistryName("item_manipulator");
-    //        setTranslationKey("item_manipulator");
-
-    //        GameRegistry.registerTileEntity(TileItemManipulator.class, MODID +
-    // ":item_manipulator");
   }
 
   @Override

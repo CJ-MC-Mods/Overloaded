@@ -1,7 +1,8 @@
-package com.cjm721.overloaded.block.tile.hyperTransfer;
+package com.cjm721.overloaded.tile.hyperTransfer;
 
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.tile.hyperTransfer.base.AbstractTileHyperSender;
+import com.cjm721.overloaded.tile.ModTiles;
+import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.storage.LongFluidStack;
 import com.cjm721.overloaded.storage.fluid.IHyperHandlerFluid;
 import net.minecraft.tileentity.TileEntity;
@@ -15,10 +16,7 @@ public class TileHyperFluidSender
     extends AbstractTileHyperSender<LongFluidStack, IHyperHandlerFluid> {
 
   public TileHyperFluidSender() {
-      super(
-          TileEntityType.Builder.create(TileHyperFluidSender::new, ModBlocks.hyperFluidSender)
-              .build(null),
-        HYPER_FLUID_HANDLER);
+    super(ModTiles.hyperFluidSender, HYPER_FLUID_HANDLER);
   }
 
   @Override

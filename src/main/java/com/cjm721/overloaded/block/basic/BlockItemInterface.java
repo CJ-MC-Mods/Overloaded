@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.TileItemInterface;
+import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -28,19 +28,12 @@ public class BlockItemInterface extends ModBlock {
 
   public BlockItemInterface() {
     super(getDefaultProperties());
+    setRegistryName("item_interface");
   }
 
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
-  }
-
-  @Override
-  public void baseInit() {
-    setRegistryName("item_interface");
-    //        setTranslationKey("item_interface");
-
-    //        GameRegistry.registerTileEntity(TileItemInterface.class, MODID + ":item_interface");
   }
 
   @OnlyIn(Dist.CLIENT)

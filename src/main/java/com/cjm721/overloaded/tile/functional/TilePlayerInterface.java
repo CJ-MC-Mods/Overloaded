@@ -1,6 +1,7 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -21,9 +22,7 @@ public class TilePlayerInterface extends TileEntity {
   private UUID placer;
 
   public TilePlayerInterface() {
-    super(
-        TileEntityType.Builder.create(TilePlayerInterface::new, ModBlocks.playerInterface)
-            .build(null));
+    super(ModTiles.playerInterface);
   }
 
   @Override

@@ -11,6 +11,7 @@ import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.storage.GenericDataStorage;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
@@ -139,22 +140,18 @@ public class CommonProxy {
 
   @SubscribeEvent
   public static void registerBlocks(RegistryEvent.Register<Block> event) {
-    ModBlocks.init();
-    for (Block block : blocksToRegister) {
-      event.getRegistry().register(block);
-    }
+    ModBlocks.init(event.getRegistry());
   }
 
   @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
-    ModItems.init();
-    for (Item item : itemToRegister) {
-      event.getRegistry().register(item);
-    }
+    ModItems.init(event.getRegistry());
+
+    event.getRegistry().registerAll(itemToRegister.toArray(new Item[0]));
   }
 
   @SubscribeEvent
   public static void registerTileEntity(RegistryEvent.Register<TileEntityType<?>> event) {
-
+    ModTiles.init(event.getRegistry());
   }
 }

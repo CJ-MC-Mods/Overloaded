@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
-import com.cjm721.overloaded.block.tile.hyperTransfer.base.AbstractTileHyperSender;
+import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

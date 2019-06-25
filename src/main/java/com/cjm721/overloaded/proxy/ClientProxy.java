@@ -55,7 +55,7 @@ public class ClientProxy extends CommonProxy {
 
   @SubscribeEvent
   public static void registerModels(ModelRegistryEvent event) {
-    ModBlocks.registerModels();
+//    ModBlocks.registerModels();
     ModItems.registerModels();
   }
 }

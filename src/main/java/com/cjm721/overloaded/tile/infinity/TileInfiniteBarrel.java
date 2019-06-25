@@ -1,13 +1,11 @@
-package com.cjm721.overloaded.block.tile.infinity;
+package com.cjm721.overloaded.tile.infinity;
 
-import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.storage.item.LongItemStorage;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -19,9 +17,7 @@ public class TileInfiniteBarrel extends TileEntity implements IDataUpdate {
   @Nonnull private final LongItemStorage itemStorage;
 
   public TileInfiniteBarrel() {
-    super(
-        TileEntityType.Builder.create(TileInfiniteBarrel::new, ModBlocks.infiniteBarrel)
-            .build(null));
+    super(ModTiles.infiniteBarrel);
     itemStorage = new LongItemStorage(this);
   }
 

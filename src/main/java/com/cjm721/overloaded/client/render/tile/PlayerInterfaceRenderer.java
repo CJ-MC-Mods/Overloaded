@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.client.render.tile;
 
-import com.cjm721.overloaded.block.tile.TilePlayerInterface;
+import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;

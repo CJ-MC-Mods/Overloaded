@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperHandler;
@@ -29,14 +29,7 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer {
 
   public BlockInfiniteBarrel() {
     super(ModBlock.getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("infinite_barrel");
-    //        setTranslationKey("infinite_barrel");
-
-    //        GameRegistry.registerTileEntity(TileInfiniteBarrel.class, MODID + ":infinite_barrel");
   }
 
   @OnlyIn(Dist.CLIENT)

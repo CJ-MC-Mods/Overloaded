@@ -1,13 +1,12 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ServerWorld;
@@ -38,9 +37,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
   private Direction facing;
 
   public TileItemManipulator() {
-    super(
-        TileEntityType.Builder.create(TileItemManipulator::new, ModBlocks.itemManipulator)
-            .build(null));
+    super(ModTiles.itemManipulator);
     itemStack = new ItemStackHandler();
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
   }

@@ -13,12 +13,7 @@ public class BlockNetherStar extends ModBlock {
 
   public BlockNetherStar() {
     super(Properties.create(Material.IRON).hardnessAndResistance(16384));
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("nether_star_block");
-    //        setTranslationKey("nether_star_block");
   }
 
   @OnlyIn(Dist.CLIENT)

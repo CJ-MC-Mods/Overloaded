@@ -1,8 +1,7 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.basic.BlockItemInterface;
-import com.cjm721.overloaded.block.basic.BlockTeamLoader;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -26,7 +25,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
   private ItemStack storedItem;
 
   public TileItemInterface() {
-    super(TileEntityType.Builder.create(TileItemInterface::new,ModBlocks.itemInterface).build(null));
+    super(ModTiles.itemInterface);
     storedItem = ItemStack.EMPTY;
   }
 

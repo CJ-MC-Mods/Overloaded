@@ -1,14 +1,13 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.CommonProxy;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -32,9 +31,7 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
   private ItemStack stack;
 
   public TileMatterPurifier() {
-    super(
-        TileEntityType.Builder.create(TileMatterPurifier::new, ModBlocks.matterPurifier)
-            .build(null));
+    super(ModTiles.matterPurifier);
     fluidStorage = new FluidTank(Integer.MAX_VALUE);
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     stack = ItemStack.EMPTY;

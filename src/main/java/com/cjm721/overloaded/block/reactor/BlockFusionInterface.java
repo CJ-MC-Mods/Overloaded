@@ -14,14 +14,7 @@ public class BlockFusionInterface extends ModBlock {
 
   public BlockFusionInterface() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("fusion_interface");
-    //        setTranslationKey("fusion_interface");
-
-    //        GameRegistry.registerTileEntity(TileFusionCore.class, MODID + ":fusion_interface");
   }
 
   @OnlyIn(Dist.CLIENT)

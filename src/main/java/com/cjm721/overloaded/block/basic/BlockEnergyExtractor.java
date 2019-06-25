@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.block.tile.TileEnergyExtractor;
+import com.cjm721.overloaded.tile.functional.TileEnergyExtractor;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -20,20 +20,12 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing {
 
   public BlockEnergyExtractor() {
     super(getDefaultProperties());
+    setRegistryName("energy_extractor");
   }
 
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
-  }
-
-  @Override
-  public void baseInit() {
-    setRegistryName("energy_extractor");
-    //        setTranslationKey("energy_extractor");
-
-    //        GameRegistry.registerTileEntity(TileEnergyExtractor.class, MODID +
-    // ":energy_extractor");
   }
 
   @Nullable

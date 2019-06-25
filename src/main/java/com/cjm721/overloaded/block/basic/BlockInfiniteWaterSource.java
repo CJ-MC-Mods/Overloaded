@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.block.tile.TileInfiniteWaterSource;
+import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -29,20 +29,12 @@ public class BlockInfiniteWaterSource extends ModBlock {
 
   public BlockInfiniteWaterSource() {
     super(getDefaultProperties());
+    setRegistryName("infinite_water_source");
   }
 
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
-  }
-
-  @Override
-  public void baseInit() {
-    setRegistryName("infinite_water_source");
-    //        setTranslationKey("infinite_water_source");
-
-    //        GameRegistry.registerTileEntity(TileInfiniteWaterSource.class, MODID +
-    // ":infinite_water_source");
   }
 
   @OnlyIn(Dist.CLIENT)

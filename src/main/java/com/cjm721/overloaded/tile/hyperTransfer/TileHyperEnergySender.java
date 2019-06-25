@@ -1,11 +1,10 @@
-package com.cjm721.overloaded.block.tile.hyperTransfer;
+package com.cjm721.overloaded.tile.hyperTransfer;
 
-import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
+import com.cjm721.overloaded.tile.ModTiles;
+import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 
 import javax.annotation.Nonnull;
 
@@ -15,10 +14,7 @@ public class TileHyperEnergySender
     extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {
 
   public TileHyperEnergySender() {
-    super(
-        TileEntityType.Builder.create(TileHyperEnergySender::new, ModBlocks.hyperEnergySender)
-            .build(null),
-        HYPER_ENERGY_HANDLER);
+    super(ModTiles.hyperEnergySender, HYPER_ENERGY_HANDLER);
   }
 
   @Nonnull

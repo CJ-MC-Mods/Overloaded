@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.block.tile.TileEnergyInjectorChest;
+import com.cjm721.overloaded.tile.functional.TileEnergyInjectorChest;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.BlockState;
@@ -20,20 +20,12 @@ public class BlockEnergyInjectorChest extends AbstractModBlockFacing {
 
   public BlockEnergyInjectorChest() {
     super(getDefaultProperties());
+    setRegistryName("energy_injector_chest");
   }
 
   @Override
   public boolean hasTileEntity(BlockState state) {
     return true;
-  }
-
-  @Override
-  public void baseInit() {
-    setRegistryName("energy_injector_chest");
-    //        setTranslationKey("energy_injector_chest");
-
-    //        GameRegistry.registerTileEntity(TileEnergyInjectorChest.class, MODID +
-    // ":energy_injector_chest");
   }
 
   @OnlyIn(Dist.CLIENT)

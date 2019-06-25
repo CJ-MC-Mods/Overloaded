@@ -1,8 +1,7 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,9 +24,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
   //      };
 
   public TileInfiniteWaterSource() {
-    super(
-        TileEntityType.Builder.create(TileInfiniteWaterSource::new, ModBlocks.infiniteWaterSource)
-            .build(null));
+    super(ModTiles.infiniteWaterSource);
   }
 
   @Override

@@ -1,12 +1,11 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.storage.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.ForgeEnergyZero;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,9 +21,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 public class TileEnergyExtractor extends AbstractTileEntityFaceable implements ITickableTileEntity {
 
   public TileEnergyExtractor() {
-    super(
-        TileEntityType.Builder.create(TileEnergyExtractor::new, ModBlocks.energyExtractor)
-            .build(null));
+    super(ModTiles.energyExtractor);
   }
 
   @Override

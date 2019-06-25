@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.block.tile.hyperTransfer.base;
+package com.cjm721.overloaded.tile.hyperTransfer.base;
 
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;

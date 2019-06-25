@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;

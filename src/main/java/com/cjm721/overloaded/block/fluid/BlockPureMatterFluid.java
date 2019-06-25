@@ -23,9 +23,6 @@ public class BlockPureMatterFluid extends ModBlock implements IModRegistrable, I
     setRegistryName("pure_matter");
   }
 
-  @Override
-  public void baseInit() {}
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {

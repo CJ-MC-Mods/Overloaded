@@ -12,12 +12,7 @@ public class InDevBlock extends ModBlock {
   public InDevBlock(@Nonnull String name) {
     super(getDefaultProperties());
     this.name = name;
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName(name);
-    //        setTranslationKey(name);
   }
 
   @Override

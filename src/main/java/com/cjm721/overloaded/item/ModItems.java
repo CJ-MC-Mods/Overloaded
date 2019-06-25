@@ -15,6 +15,7 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ModItems {
     registerList.add(item);
   }
 
-  public static void init() {
+  public static void init(IForgeRegistry<Item> registry) {
     linkingCard = registerItem(new ItemLinkingCard());
     multiTool = registerItem(new ItemMultiTool());
 

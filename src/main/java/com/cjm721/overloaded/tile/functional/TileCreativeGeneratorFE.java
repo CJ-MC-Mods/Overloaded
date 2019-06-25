@@ -1,9 +1,8 @@
-package com.cjm721.overloaded.block.tile;
+package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -19,9 +18,7 @@ public class TileCreativeGeneratorFE extends TileEntity
     implements ITickableTileEntity, IEnergyStorage {
 
   public TileCreativeGeneratorFE() {
-    super(
-        TileEntityType.Builder.create(TileCreativeGeneratorFE::new, ModBlocks.creativeGenerator)
-            .build(null));
+    super(ModTiles.creativeGeneratorFE);
   }
 
   @Override

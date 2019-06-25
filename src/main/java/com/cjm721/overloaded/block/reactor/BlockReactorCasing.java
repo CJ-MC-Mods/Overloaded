@@ -9,12 +9,7 @@ public class BlockReactorCasing extends ModBlock {
 
   public BlockReactorCasing() {
     super(getDefaultProperties());
-  }
-
-  @Override
-  public void baseInit() {
     setRegistryName("reactor_casing");
-    //    setTranslationKey("reactor_casing");
   }
 
   @OnlyIn(Dist.CLIENT)

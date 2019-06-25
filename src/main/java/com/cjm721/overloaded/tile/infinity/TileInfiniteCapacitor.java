@@ -1,12 +1,10 @@
-package com.cjm721.overloaded.block.tile.infinity;
+package com.cjm721.overloaded.tile.infinity;
 
-import com.cjm721.overloaded.block.ModBlocks;
-import com.cjm721.overloaded.block.tile.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -22,9 +20,7 @@ public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
   @Nonnull private final LongEnergyStorage energyStorage;
 
   public TileInfiniteCapacitor() {
-    super(
-        TileEntityType.Builder.create(TileInfiniteCapacitor::new, ModBlocks.infiniteCapacitor)
-            .build(null));
+    super(ModTiles.infiniteCapacitor);
     energyStorage = new LongEnergyStorage(this);
   }
 
