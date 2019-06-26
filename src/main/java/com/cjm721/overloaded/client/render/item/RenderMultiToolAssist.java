@@ -18,22 +18,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-@OnlyIn(Dist.CLIENT)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RenderMultiToolAssist {
 
   @SubscribeEvent
-  public void onMouseEvent(InputEvent.MouseInputEvent event) {
+  public static void onMouseEvent(InputEvent.MouseInputEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
     //        if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
     //            ItemStack stack = player.getHeldItemMainhand();
@@ -74,7 +74,7 @@ public class RenderMultiToolAssist {
   }
 
   @SubscribeEvent
-  public void renderWorldLastEvent(RenderWorldLastEvent event) {
+  public static void renderWorldLastEvent(RenderWorldLastEvent event) {
     PlayerEntity player = Minecraft.getInstance().player;
     if (player.getHeldItemMainhand().getItem() != ModItems.multiTool) return;
 
@@ -105,8 +105,7 @@ public class RenderMultiToolAssist {
     }
   }
 
-  @OnlyIn(Dist.CLIENT)
-  private void renderRemovePreview(
+  private static void renderRemovePreview(
       RenderWorldLastEvent event, PlayerEntity player, RayTraceResult result) {
     try {
       IModel model =
@@ -142,8 +141,7 @@ public class RenderMultiToolAssist {
     }
   }
 
-  @OnlyIn(Dist.CLIENT)
-  private void renderBlockPreview(
+  private static void renderBlockPreview(
       RenderWorldLastEvent event,
       PlayerEntity player,
       ItemStack stack,

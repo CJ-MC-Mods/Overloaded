@@ -12,6 +12,6 @@ public class ModFluids {
     pureMatterSource = new FluidPureMatter.Source();
     pureMatterFlowing = new FluidPureMatter.Flowing();
 
-    registry.registerAll(pureMatterSource, pureMatterFlowing);
+//    registry.registerAll(pureMatterSource, pureMatterFlowing);
   }
 }

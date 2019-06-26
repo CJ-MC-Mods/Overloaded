@@ -40,6 +40,10 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
   @Nonnull
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+    // Defensive Hack
+    if (cap == null) {
+      return LazyOptional.empty();
+    }
     if (cap == ENERGY) {
       return LazyOptional.of(() -> this).cast();
     }

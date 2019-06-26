@@ -3,6 +3,7 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.BlockBreakResult;
@@ -43,9 +44,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -54,7 +55,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -67,8 +67,6 @@ public class ItemMultiTool extends PowerModItem {
             .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
             .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
     setRegistryName("multi_tool");
-    //        setTranslationKey("multi_tool");
-    //        setCreativeTab(OverloadedItemGroups.TECH);
   }
 
   @Override
@@ -102,7 +100,7 @@ public class ItemMultiTool extends PowerModItem {
   @Override
   public void addInformation(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
+    //    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
 
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }
@@ -263,56 +261,6 @@ public class ItemMultiTool extends PowerModItem {
   //      distanceToEnd = endingLocation.distanceTo(startingLocation);
   //    }
   //  }
-
-  // Registering only on client side
-  @SubscribeEvent(priority = EventPriority.LOWEST)
-  @OnlyIn(Dist.CLIENT)
-  public void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-    if (event.getSide() == LogicalSide.SERVER
-        || event.getEntityPlayer() != Minecraft.getInstance().player) return;
-
-    ItemStack stack = event.getItemStack();
-    if (stack.getItem().equals(this)) {
-      //      leftClickOnBlockClient(event.getPos(), event.getHitVec());
-    }
-  }
-
-  // Registering only on client side
-  @SubscribeEvent(priority = EventPriority.LOWEST)
-  @OnlyIn(Dist.CLIENT)
-  public void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
-    if (event.getSide() == LogicalSide.SERVER
-        || event.getEntityPlayer() != Minecraft.getInstance().player) return;
-
-    ItemStack stack = event.getItemStack();
-
-    if (stack.getItem().equals(this)) {
-      PlayerEntity entityLiving = event.getEntityPlayer();
-      BlockRayTraceResult result =
-          PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-              entityLiving, Minecraft.getInstance().getRenderPartialTicks());
-      if (result != null) {
-        //        leftClickOnBlockClient(result.getPos(), result.hitVec);
-      }
-    }
-  }
-
-  @SubscribeEvent(priority = EventPriority.LOWEST)
-  public void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
-    PlayerEntity player = event.getHarvester();
-    if (player == null
-        || event.getHarvester().getHeldItemMainhand().getItem() != this
-        || event.getDrops() instanceof ImmutableList) return;
-
-    IWorld world = event.getWorld();
-    float chance = event.getDropChance();
-    for (ItemStack stack : event.getDrops()) {
-      if (world.getRandom().nextFloat() <= chance) {
-        ItemHandlerHelper.giveItemToPlayer(player, stack);
-      }
-    }
-    event.getDrops().clear();
-  }
 
   @OnlyIn(Dist.CLIENT)
   private void leftClickOnBlockClient(BlockPos pos, Vec3d hitVec) {
@@ -504,5 +452,57 @@ public class ItemMultiTool extends PowerModItem {
   @Nonnull
   public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
     return super.getDisplayName(stack).applyTextStyle(TextFormatting.GOLD);
+  }
+
+  @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+  public static class ClientSideEvents {
+    @SubscribeEvent
+    public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
+      if (event.getSide() == LogicalSide.SERVER
+          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
+
+      ItemStack stack = event.getItemStack();
+      if (stack.getItem().equals(ModItems.multiTool)) {
+        //      leftClickOnBlockClient(event.getPos(), event.getHitVec());
+      }
+    }
+
+    @SubscribeEvent
+    public static void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
+      if (event.getSide() == LogicalSide.SERVER
+          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
+
+      ItemStack stack = event.getItemStack();
+
+      if (stack.getItem().equals(ModItems.multiTool)) {
+        PlayerEntity entityLiving = event.getEntityPlayer();
+        BlockRayTraceResult result =
+            PlayerInteractionUtil.getBlockPlayerLookingAtClient(
+                entityLiving, Minecraft.getInstance().getRenderPartialTicks());
+        if (result != null) {
+          //        leftClickOnBlockClient(result.getPos(), result.hitVec);
+        }
+      }
+    }
+  }
+
+  @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+  public static class CommonSideEvents {
+    @SubscribeEvent
+    public static void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
+      PlayerEntity player = event.getHarvester();
+      if (player == null
+          || event.getHarvester().getHeldItemMainhand().getItem() != ModItems.multiTool
+          || event.getDrops() instanceof ImmutableList) return;
+
+      IWorld world = event.getWorld();
+      float chance = event.getDropChance();
+      for (ItemStack stack : event.getDrops()) {
+        if (world.getRandom().nextFloat() <= chance) {
+          ItemHandlerHelper.giveItemToPlayer(player, stack);
+        }
+      }
+      event.getDrops().clear();
+    }
   }
 }

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 public class RenderMultiChestplate extends AbstractRenderMultiArmor {
 
   public RenderMultiChestplate() {
-//            this.bipedBody.cubeList.clear();
+            this.bipedBody.cubeList.clear();
             this.bipedRightArm.cubeList.clear();
             this.bipedLeftArm.cubeList.clear();
     //
@@ -41,7 +41,7 @@ public class RenderMultiChestplate extends AbstractRenderMultiArmor {
 
   }
 
-  @Override
+//  @Override
   public void render(
       @Nullable LivingEntity entity,
       float limbSwing,
@@ -50,15 +50,15 @@ public class RenderMultiChestplate extends AbstractRenderMultiArmor {
       float netHeadYaw,
       float headPitch,
       float scale) {
-    super.setRotationAngles(
-        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+//    super.setRotationAngles(
+//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
     GlStateManager.pushMatrix();
     if (this.isSneak) {
       GlStateManager.translatef(0.0F, 0.2F, 0.0F);
     }
 
-    //        this.bipedBody.render(scale);
+            this.bipedBody.render(scale);
     this.bipedRightArm.render(scale);
     this.bipedLeftArm.render(scale);
 

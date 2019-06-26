@@ -27,6 +27,7 @@ public class ItemMultiBoots extends AbstractMultiArmor {
 
   @Nullable
   @Override
+  @OnlyIn(Dist.CLIENT)
   public <A extends BipedModel<?>> A getArmorModel(
       LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
     if (armorModel == null) armorModel = new RenderMultiBoots();

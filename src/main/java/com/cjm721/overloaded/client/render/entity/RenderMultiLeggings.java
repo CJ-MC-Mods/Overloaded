@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 public class RenderMultiLeggings extends AbstractRenderMultiArmor {
 
   public RenderMultiLeggings() {
-    this.field_78116_c.cubeList.clear();
+    this.bipedBody.cubeList.clear();
     this.bipedRightLeg.cubeList.clear();
     this.bipedLeftLeg.cubeList.clear();
 
@@ -36,7 +36,7 @@ public class RenderMultiLeggings extends AbstractRenderMultiArmor {
     //    this.bipedLeftLeg.addChild(leftLeg);
   }
 
-  @Override
+//  @Override
   public void render(
       @Nullable LivingEntity entity,
       float limbSwing,
@@ -45,15 +45,15 @@ public class RenderMultiLeggings extends AbstractRenderMultiArmor {
       float netHeadYaw,
       float headPitch,
       float scale) {
-    super.setRotationAngles(
-        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+//    super.setRotationAngles(
+//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
     GlStateManager.pushMatrix();
     if (this.isSneak) {
       GlStateManager.translatef(0.0F, 0.2F, 0.0F);
     }
 
-    this.field_78116_c.render(scale);
+    this.bipedBody.render(scale);
     this.bipedRightLeg.render(scale);
     this.bipedLeftLeg.render(scale);
 

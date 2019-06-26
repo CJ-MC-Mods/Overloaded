@@ -10,14 +10,17 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.UUID;
 
+@OnlyIn(Dist.CLIENT)
 public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterface> {
 
   @Override
-  public void render(
-      TilePlayerInterface te, double x, double y, double z, float partialTicks, int alpha) {
+  public void func_199341_a(
+      TilePlayerInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
     GlStateManager.pushLightingAttributes();
     GlStateManager.pushMatrix();
 

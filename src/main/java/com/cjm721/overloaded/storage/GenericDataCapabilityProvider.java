@@ -17,6 +17,10 @@ public class GenericDataCapabilityProvider extends GenericDataStorage
   @Override
   public <T> LazyOptional<T> getCapability(
       @Nonnull Capability<T> capability, @Nullable Direction Direction) {
+    // Defensive Hack because some reason addTooltip data is being called before mod even inited.
+    if(capability == null) {
+      return LazyOptional.empty();
+    }
     if (capability == GENERIC_DATA_STORAGE) {
       return LazyOptional.of(() -> this).cast();
     }

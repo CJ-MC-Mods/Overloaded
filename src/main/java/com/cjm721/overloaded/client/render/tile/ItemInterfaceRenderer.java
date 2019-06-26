@@ -7,11 +7,14 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface> {
 
   @Override
-  public void render(
+  public void func_199341_a(
       TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
     GlStateManager.pushLightingAttributes();
     GlStateManager.pushMatrix();

@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
   public RenderMultiHelmet() {
-    this.field_78116_c.cubeList.clear();
+    this.bipedHead.cubeList.clear();
     this.bipedHeadwear.cubeList.clear();
 
     //        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,
@@ -23,7 +23,7 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
     //        this.bipedHead.addChild(head);
   }
 
-  @Override
+//  @Override
   public void render(
       @Nullable LivingEntity entity,
       float limbSwing,
@@ -35,15 +35,16 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
     if (entity instanceof ArmorStandEntity) {
       netHeadYaw = ((ArmorStandEntity) entity).rotationYawHead;
     }
-    super.setRotationAngles(
-        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+//    super.setRotationAngles(
+//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
     GlStateManager.pushMatrix();
     if (this.isSneak) {
       GlStateManager.translatef(0.0F, 0.2F, 0.0F);
     }
 
-    this.field_78116_c.render(scale);
+    this.bipedHead.render(scale);
+    this.bipedHeadwear.cubeList.clear();
 
     GlStateManager.popMatrix();
   }

@@ -26,6 +26,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import org.lwjgl.system.CallbackI;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +35,6 @@ import static net.minecraftforge.fml.network.NetworkRegistry.newSimpleChannel;
 
 @Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
-
   public SimpleChannel networkWrapper;
 
   public static final List<Block> blocksToRegister = new LinkedList<>();
@@ -42,7 +42,6 @@ public class CommonProxy {
 
   public void commonSetup(FMLCommonSetupEvent event) {
 //    FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
     CapabilityHyperItem.register();
     CapabilityHyperEnergy.register();
     CapabilityHyperFluid.register();
@@ -53,7 +52,7 @@ public class CommonProxy {
             ResourceLocation.create("overloaded_network", '_'), () -> "1.0", v -> true, v -> true);
 
     int dis = 0;
-    networkWrapper.<LeftClickBlockMessage>registerMessage(
+    networkWrapper.registerMessage(
         dis++,
         LeftClickBlockMessage.class,
         LeftClickBlockMessage::toBytes,
@@ -108,9 +107,6 @@ public class CommonProxy {
 //        ConfigSyncMessage.class,
 //        ConfigSyncHandler.INSTANCE);
 
-    MinecraftForge.EVENT_BUS.register(ModItems.multiTool);
-    MinecraftForge.EVENT_BUS.register(ModItems.railgun);
-    MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
     MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
 
 //    NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
@@ -128,9 +124,14 @@ public class CommonProxy {
 
   @SubscribeEvent
   public static void registerItems(RegistryEvent.Register<Item> event) {
-    ModItems.init(event.getRegistry());
+    ModItems.init();
 
     event.getRegistry().registerAll(itemToRegister.toArray(new Item[0]));
+  }
+
+  @SubscribeEvent
+  public static void registerAnything(RegistryEvent.Register<?> event) {
+    System.out.println("HIT");
   }
 
   @SubscribeEvent

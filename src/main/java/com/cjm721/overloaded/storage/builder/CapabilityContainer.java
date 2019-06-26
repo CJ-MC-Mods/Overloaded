@@ -35,8 +35,8 @@ public class CapabilityContainer implements ICapabilityProvider {
       @Nonnull Capability<T> capability, @Nullable Direction facing) {
     return capabilityProviders.stream()
         .map(cap -> cap.getCapability(capability, facing))
-        .filter(o -> o != null)
+        .filter(LazyOptional::isPresent)
         .findAny()
-        .orElse(null);
+        .orElse(LazyOptional.empty());
   }
 }

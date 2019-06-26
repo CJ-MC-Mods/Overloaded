@@ -28,7 +28,7 @@ public class RenderMultiBoots extends AbstractRenderMultiArmor {
     //        this.bipedLeftLeg.addChild(leftBoot);
   }
 
-  @Override
+//  @Override
   public void render(
       @Nullable LivingEntity entity,
       float limbSwing,
@@ -37,8 +37,8 @@ public class RenderMultiBoots extends AbstractRenderMultiArmor {
       float netHeadYaw,
       float headPitch,
       float scale) {
-    super.setRotationAngles(
-        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+//    super.setRotationAngles(
+//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
     GlStateManager.pushMatrix();
     if (this.isSneak) {

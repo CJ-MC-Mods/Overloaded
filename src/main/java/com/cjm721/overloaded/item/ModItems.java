@@ -46,7 +46,7 @@ public class ModItems {
     registerList.add(item);
   }
 
-  public static void init(IForgeRegistry<Item> registry) {
+  public static void init() {
     linkingCard = registerItem(new ItemLinkingCard());
     multiTool = registerItem(new ItemMultiTool());
 

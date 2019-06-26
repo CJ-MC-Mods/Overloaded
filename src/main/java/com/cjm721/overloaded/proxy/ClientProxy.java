@@ -51,6 +51,7 @@ public class ClientProxy extends CommonProxy {
     ClientRegistry.registerKeyBinding(noClipKeybind);
 
     MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
+    MinecraftForge.EVENT_BUS.register(ModItems.railgun);
   }
 
   @SubscribeEvent
