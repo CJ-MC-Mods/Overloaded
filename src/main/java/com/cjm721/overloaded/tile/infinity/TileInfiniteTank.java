@@ -4,7 +4,6 @@ import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -45,7 +44,7 @@ public class TileInfiniteTank extends AbstractTileInfinityStorage implements IDa
   }
 
   @Override
-  @Nullable
+  @Nonnull
   public <T> LazyOptional<T> getCapability(
       @Nonnull Capability<T> capability, @Nullable Direction facing) {
     if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {

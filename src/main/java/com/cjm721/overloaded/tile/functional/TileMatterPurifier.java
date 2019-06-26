@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.item.BlockItem;
@@ -58,19 +59,19 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
     }
 
     int createdFluid = Math.round(hardness);
-    FluidStack fluidStack = new FluidStack(CommonProxy.pureMatter, createdFluid);
-    int storedFluid = fluidStorage.fill(fluidStack, false);
-
-    if (storedFluid != createdFluid) {
-      return;
-    }
-
-    stack.shrink(1);
-    if (stack.getCount() == 0) stack = ItemStack.EMPTY;
-
-    fluidStorage.fill(fluidStack, true);
-    energyStorage.extractEnergy(energyCost, false);
-    markDirty();
+//    FluidStack fluidStack = new FluidStack(ModFluids.pureMatterSource, createdFluid);
+//    int storedFluid = fluidStorage.fill(fluidStack, false);
+//
+//    if (storedFluid != createdFluid) {
+//      return;
+//    }
+//
+//    stack.shrink(1);
+//    if (stack.getCount() == 0) stack = ItemStack.EMPTY;
+//
+//    fluidStorage.fill(fluidStack, true);
+//    energyStorage.extractEnergy(energyCost, false);
+//    markDirty();
   }
 
   @Override

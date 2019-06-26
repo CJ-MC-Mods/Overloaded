@@ -39,7 +39,7 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer {
   public void registerModel() {
     ModelResourceLocation location =
         new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
-    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(

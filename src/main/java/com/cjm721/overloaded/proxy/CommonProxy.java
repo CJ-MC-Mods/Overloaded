@@ -3,9 +3,9 @@ package com.cjm721.overloaded.proxy;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
+import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
-import com.cjm721.overloaded.network.handler.ConfigSyncHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
@@ -16,23 +16,20 @@ import com.cjm721.overloaded.util.CapabilityHyperEnergy;
 import com.cjm721.overloaded.util.CapabilityHyperFluid;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import net.minecraft.block.Block;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
 import static net.minecraftforge.fml.network.NetworkRegistry.newSimpleChannel;
 
 @Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -42,18 +39,14 @@ public class CommonProxy {
 
   public static final List<Block> blocksToRegister = new LinkedList<>();
   public static final List<Item> itemToRegister = new LinkedList<>();
-  public static Fluid pureMatter;
 
   public void commonSetup(FMLCommonSetupEvent event) {
-    FMLJavaModLoadingContext.get().getModEventBus().register(this);
-
-    createFluids();
+//    FMLJavaModLoadingContext.get().getModEventBus().register(this);
 
     CapabilityHyperItem.register();
     CapabilityHyperEnergy.register();
     CapabilityHyperFluid.register();
     GenericDataStorage.register();
-    //    OreDictionary.registerOre("blockNetherStar", ModBlocks.netherStarBlock);
 
     networkWrapper =
         newSimpleChannel(
@@ -123,19 +116,9 @@ public class CommonProxy {
 //    NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
   }
 
-  private void createFluids() {
-    String textureName = "blocks/pure_matter";
-    ResourceLocation still = new ResourceLocation(MODID, textureName + "_still");
-    //      ResourceLocation flowing = new ResourceLocation(MODID,textureName + "_flow");
-
-    pureMatter =
-        new Fluid("pure_matter", still, still)
-            .setDensity(3000)
-            .setViscosity(6000)
-            .setRarity(Rarity.EPIC);
-//    if (!FluidRegistry.registerFluid(pureMatter)) {
-//      pureMatter = FluidRegistry.getFluid("pure_matter");
-//    }
+  @SubscribeEvent
+  public static void registerFluids(RegistryEvent.Register<Fluid> event) {
+    ModFluids.init(event.getRegistry());
   }
 
   @SubscribeEvent

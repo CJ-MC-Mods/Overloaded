@@ -6,7 +6,6 @@ import com.cjm721.overloaded.block.basic.container.BlockInfiniteBarrel;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteCapacitor;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteTank;
 import com.cjm721.overloaded.block.basic.hyperTransfer.*;
-import com.cjm721.overloaded.block.fluid.BlockPureMatterFluid;
 import com.cjm721.overloaded.block.reactor.BlockFusionCore;
 import com.cjm721.overloaded.block.reactor.BlockFusionInterface;
 import com.cjm721.overloaded.proxy.CommonProxy;
@@ -14,12 +13,19 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Rarity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
+
 public final class ModBlocks {
+
+  public static Fluid pureMatter;
 
   public static ModBlock creativeGenerator;
   public static ModBlock infiniteBarrel;
@@ -42,7 +48,6 @@ public final class ModBlocks {
   public static ModBlock itemInterface;
 
   public static ModBlock matterPurifier;
-  public static BlockPureMatterFluid pureMatterFluidBlock;
   public static ModBlock fusionCore;
   public static ModBlock energyInjectorChest;
   public static ModBlock teamLoader;
@@ -52,6 +57,14 @@ public final class ModBlocks {
   public static final List<IModRegistrable> registerList = new LinkedList<>();
 
   public static void init(IForgeRegistry<Block> registry) {
+    String textureName = "blocks/pure_matter";
+
+    pureMatter =
+        new Fluid("pure_matter", new ResourceLocation(MODID, textureName + "_still"), new ResourceLocation(MODID,textureName + "_flow"))
+            .setDensity(3000)
+            .setViscosity(6000)
+            .setRarity(Rarity.EPIC);
+
     creativeGenerator = registerFull(registry, new BlockCreativeGenerator());
     infiniteBarrel = registerFull(registry, new BlockInfiniteBarrel());
     infiniteTank = registerFull(registry, new BlockInfiniteTank());

@@ -5,7 +5,6 @@ import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -38,13 +37,9 @@ public class TileInfiniteBarrel extends AbstractTileInfinityStorage implements I
   @Nonnull
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
-    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-      return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(
-          cap, LazyOptional.of(() -> itemStorage));
-    }
-    if (cap == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
-      return CapabilityHyperItem.HYPER_ITEM_HANDLER.orEmpty(
-          cap, LazyOptional.of(() -> itemStorage));
+    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+        || cap == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
+      return LazyOptional.of(() -> itemStorage).cast();
     }
 
     return super.getCapability(cap);
