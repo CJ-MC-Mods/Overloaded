@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class TileInfiniteCapacitor extends TileEntity implements IDataUpdate {
+public class TileInfiniteCapacitor extends AbstractTileInfinityStorage implements IDataUpdate {
 
   @Nonnull private final LongEnergyStorage energyStorage;
 

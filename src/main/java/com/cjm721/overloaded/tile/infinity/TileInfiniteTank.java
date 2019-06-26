@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class TileInfiniteTank extends TileEntity implements IDataUpdate {
+public class TileInfiniteTank extends AbstractTileInfinityStorage implements IDataUpdate {
 
   private final LongFluidStorage fluidStorage;
 

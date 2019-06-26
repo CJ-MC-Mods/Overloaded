@@ -3,6 +3,7 @@ package com.cjm721.overloaded.block.basic.container;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
+import com.cjm721.overloaded.tile.infinity.AbstractTileInfinityStorage;
 import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.ServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -40,17 +42,17 @@ abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
 //        return super.getDrops(state, world, pos, te, breaker,breakingItem);
 //    }
 
+
     @Override
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        // Note if changed also change BlockInfiniteTank
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!world.isRemote) {
             ItemStack heldItem = player.getActiveItemStack();
             if (heldItem.isEmpty() && player.getActiveHand() == Hand.MAIN_HAND) {
                 sendPlayerStatus(world, pos, player);
-                return;
+                return true;
             }
         }
-        super.onBlockClicked(state,world,pos,player);
+        return super.onBlockActivated(state,world,pos,player, handIn, hit);
     }
 
     protected abstract void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player);
@@ -59,7 +61,7 @@ abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
     protected final IHyperType getHyperStack(@Nonnull ServerWorld world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
 
-        if (te instanceof TileInfiniteBarrel) {
+        if (te instanceof AbstractTileInfinityStorage) {
             return (IHyperType) te.getCapability(getHyperCapabilityType()).<IHyperHandler>cast().map(IHyperHandler::status).orElse(null);
         }
         return null;

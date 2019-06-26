@@ -12,7 +12,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class TileInfiniteBarrel extends TileEntity implements IDataUpdate {
+public class TileInfiniteBarrel extends AbstractTileInfinityStorage implements IDataUpdate {
 
   @Nonnull private final LongItemStorage itemStorage;
 
