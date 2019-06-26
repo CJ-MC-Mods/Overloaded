@@ -141,7 +141,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
   public LongFluidStack take(@Nonnull LongFluidStack stack, boolean doAction) {
     if (storedFluid.fluidStack == null) return LongFluidStack.EMPTY_STACK;
 
-    if (!fluidsAreEqual(storedFluid.fluidStack, stack.fluidStack)) {
+    if (stack.fluidStack != null && !fluidsAreEqual(storedFluid.fluidStack, stack.fluidStack)) {
       return LongFluidStack.EMPTY_STACK;
     }
 
