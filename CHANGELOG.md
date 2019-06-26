@@ -1,3 +1,8 @@
+**Version: 0.0.58 (RELEASE)**
+
+* Fixes fluid storage not allowing un-filtered extraction (Fixes #71)
+
+-------------------------------------------------------------------
 **Version: 0.0.57 (RELEASE)**
 
 * Fixes fluid storage converting fluids (Fixes #69)
