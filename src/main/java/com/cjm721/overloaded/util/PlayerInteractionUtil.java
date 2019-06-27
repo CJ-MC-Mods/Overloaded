@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.util;
 
+import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CommandBlockBlock;
@@ -12,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -20,7 +21,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class PlayerInteractionUtil {
 
@@ -165,15 +165,24 @@ public class PlayerInteractionUtil {
     return -1;
   }
 
-  @Nullable
+  @Nonnull
   @OnlyIn(Dist.CLIENT)
   public static BlockRayTraceResult getBlockPlayerLookingAtClient(
       PlayerEntity player, float partialTicks) {
-    //    RayTraceResult result =
-    //        player.rayTrace(OverloadedConfig.INSTANCE.multiToolConfig.reach, partialTicks);
-    //
-    //    if (result == null || result.typeOfHit != RayTraceResult.Type.BLOCK) return null;
-    //    return result;
-    return null;
+    BlockRayTraceResult result =
+        player
+            .getEntityWorld()
+            .rayTraceBlocks(
+                new RayTraceContext(
+                    player.getEyePosition(partialTicks),
+                    player
+                        .getLook(partialTicks)
+                        .scale(OverloadedConfig.INSTANCE.multiToolConfig.reach)
+                        .add(player.getEyePosition(partialTicks)),
+                    RayTraceContext.BlockMode.COLLIDER,
+                    RayTraceContext.FluidMode.NONE,
+                    player));
+
+    return result;
   }
 }

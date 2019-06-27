@@ -36,7 +36,7 @@ public class Overloaded {
 
     ModLoadingContext.get()
         .registerConfig(
-            ModConfig.Type.COMMON,
+            ModConfig.Type.SERVER,
             OverloadedConfig.INSTANCE.load(FMLPaths.CONFIGDIR.get().resolve(MODID + ".toml")));
 
     MinecraftForge.EVENT_BUS.register(OverloadedConfig.INSTANCE);

@@ -26,10 +26,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -44,6 +41,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
@@ -126,7 +124,7 @@ public class ItemMultiTool extends PowerModItem {
     return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
   }
 
-  private double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {
+  private static double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {
     return Math.sqrt(entityLiving.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()));
   }
 
@@ -169,7 +167,7 @@ public class ItemMultiTool extends PowerModItem {
     return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
   }
 
-  private float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
+  private static float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
     return (float)
         ((hardness
                 * OverloadedConfig.INSTANCE.multiToolConfig.breakCostMultiplier
@@ -180,7 +178,7 @@ public class ItemMultiTool extends PowerModItem {
 
   /** @return True if the break was successful, false otherwise */
   @Nonnull
-  private BlockBreakResult breakAndUseEnergy(
+  private static BlockBreakResult breakAndUseEnergy(
       @Nonnull World worldIn,
       @Nonnull BlockPos blockPos,
       @Nonnull IEnergyStorage energy,
@@ -263,20 +261,19 @@ public class ItemMultiTool extends PowerModItem {
   //  }
 
   @OnlyIn(Dist.CLIENT)
-  private void leftClickOnBlockClient(BlockPos pos, Vec3d hitVec) {
+  private static void leftClickOnBlockClient(BlockPos pos) {
     Overloaded.proxy.networkWrapper.sendToServer(new LeftClickBlockMessage(pos));
-
-    //        PlayerEntitySP player = Minecraft.getMinecraft().player;
-    //        drawParticleStreamTo(player, hitVec,
-    // EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
+//            PlayerEntitySP player = Minecraft.getMinecraft().player;
+//            drawParticleStreamTo(player, hitVec,
+//     EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
   }
 
-  public void leftClickOnBlockServer(
+  public static void leftClickOnBlockServer(
       @Nonnull ServerPlayerEntity player, LeftClickBlockMessage message) {
     BlockPos pos = message.getPos();
     ServerWorld world = player.getServerWorld();
     ItemStack itemStack = player.getHeldItem(Hand.MAIN_HAND);
-    if (itemStack.getItem() != this || world.isAirBlock(pos)) {
+    if (itemStack.getItem() != ModItems.multiTool || world.isAirBlock(pos)) {
       return;
     }
 
@@ -298,7 +295,7 @@ public class ItemMultiTool extends PowerModItem {
       player.sendStatusMessage(
           new StringTextComponent("Bound tool to ").appendSibling(component), true);
     } else {
-      IEnergyStorage energy = itemStack.getCapability(ENERGY, null).orElse(null);
+      IEnergyStorage energy = itemStack.getCapability(ENERGY).orElse(null);
 
       int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
       int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
@@ -440,9 +437,6 @@ public class ItemMultiTool extends PowerModItem {
     return ItemStack.read(itemTag);
   }
 
-  private static final Set<String> toolClasses =
-      com.google.common.collect.ImmutableSet.of("pickaxe", "shovel", "axe");
-
   @Override
   public boolean canHarvestBlock(ItemStack stack, BlockState state) {
     return true;
@@ -458,12 +452,13 @@ public class ItemMultiTool extends PowerModItem {
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
+      // TODO This event is not firing on client currently.
       if (event.getSide() == LogicalSide.SERVER
           || event.getEntityPlayer() != Minecraft.getInstance().player) return;
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {
-        //      leftClickOnBlockClient(event.getPos(), event.getHitVec());
+        leftClickOnBlockClient(event.getPos());
       }
     }
 
@@ -479,16 +474,15 @@ public class ItemMultiTool extends PowerModItem {
         BlockRayTraceResult result =
             PlayerInteractionUtil.getBlockPlayerLookingAtClient(
                 entityLiving, Minecraft.getInstance().getRenderPartialTicks());
-        if (result != null) {
-          //        leftClickOnBlockClient(result.getPos(), result.hitVec);
-        }
+        if (result.getType() != RayTraceResult.Type.MISS)
+          leftClickOnBlockClient(result.getPos()); // result.getHitVec()
       }
     }
   }
 
   @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
   public static class CommonSideEvents {
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public static void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
       PlayerEntity player = event.getHarvester();
       if (player == null

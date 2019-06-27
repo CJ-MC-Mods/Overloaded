@@ -1,15 +1,18 @@
 package com.cjm721.overloaded.config;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.syncer.SyncToClient;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
 import java.nio.file.Path;
 
+@Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class OverloadedConfig {
 
   public static OverloadedConfig INSTANCE = new OverloadedConfig();
@@ -71,13 +74,13 @@ public class OverloadedConfig {
   }
 
   @SubscribeEvent
-  public void onLoading(ModConfig.Loading loading) {
-    updateConfigs();
+  public static void onLoading(ModConfig.Loading loading) {
+    INSTANCE.updateConfigs();
   }
 
   @SubscribeEvent
-  public void onConfigRelaoding(ModConfig.ConfigReloading configReloading) {
-    updateConfigs();
+  public static void onConfigRelaoding(ModConfig.ConfigReloading configReloading) {
+    INSTANCE.updateConfigs();
   }
 
   private ForgeConfigSpec getConfig() {

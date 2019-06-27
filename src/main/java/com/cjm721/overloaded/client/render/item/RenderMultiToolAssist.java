@@ -10,6 +10,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelDataManager;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.pipeline.BlockInfo;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -154,8 +159,25 @@ public class RenderMultiToolAssist {
     final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
     final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
+//    Minecraft.getInstance()
+//        .getBlockRendererDispatcher()
+//        .getBlockModelRenderer()
+//        .renderModel(
+//            player.getEntityWorld(),
+//            Minecraft.getInstance().getItemRenderer().getItemModelMesher().getItemModel(stack),
+//            state,
+//            toRenderAt,
+//            new BufferBuilder(1028),
+//            true,
+//            player.getRNG(),
+//            0,
+//            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
+
     GlStateManager.pushMatrix();
-    GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+    GlStateManager.translated(
+        toRenderAt.getX() - x,
+        toRenderAt.getY() - y - player.getEyeHeight(player.getPose()),
+        toRenderAt.getZ() - z);
     RenderUtil.renderGhostModel(stack, state, player.getEntityWorld(), toRenderAt);
     GlStateManager.popMatrix();
   }

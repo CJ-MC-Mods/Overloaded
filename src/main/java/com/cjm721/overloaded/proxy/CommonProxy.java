@@ -5,6 +5,7 @@ import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
@@ -41,7 +42,6 @@ public class CommonProxy {
   public static final List<Item> itemToRegister = new LinkedList<>();
 
   public void commonSetup(FMLCommonSetupEvent event) {
-//    FMLJavaModLoadingContext.get().getModEventBus().register(this);
     CapabilityHyperItem.register();
     CapabilityHyperEnergy.register();
     CapabilityHyperFluid.register();
@@ -57,7 +57,7 @@ public class CommonProxy {
         LeftClickBlockMessage.class,
         LeftClickBlockMessage::toBytes,
         LeftClickBlockMessage::fromBytes,
-        new PlayerMessageHandler<>(ModItems.multiTool::leftClickOnBlockServer));
+        new PlayerMessageHandler<>(ItemMultiTool::leftClickOnBlockServer));
 
     networkWrapper.registerMessage(
         dis++,
@@ -102,10 +102,6 @@ public class CommonProxy {
         NoClipStatusMessage::toBytes,
         NoClipStatusMessage::fromBytes,
         new NoClipUpdateHandler());
-
-//    networkWrapper.registerMessage(dis++,
-//        ConfigSyncMessage.class,
-//        ConfigSyncHandler.INSTANCE);
 
     MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
 
