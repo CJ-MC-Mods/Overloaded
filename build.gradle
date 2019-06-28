@@ -4,11 +4,15 @@ buildscript {
         maven {
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: "1.+"
     }
 }
 
@@ -18,6 +22,7 @@ apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 apply plugin: 'maven'
 apply plugin: 'idea'
+apply plugin: 'com.matthewprenger.cursegradle'
 
 
 idea{
@@ -138,4 +143,36 @@ task sourcesJar(type: Jar) {
 
 artifacts {
     archives sourcesJar
+}
+
+//task signJar(type: SignJar, dependsOn: reobfJar) {
+//
+//    // Skips if the keyStore property is missing.
+//    onlyIf {
+//        project.hasProperty('keyStore')
+//    }
+//
+//    // findProperty allows us to reference the property without it existing.
+//    // Using project.propName would cause the script to fail validation if
+//    // the property did not exist.
+//    keyStore = project.findProperty('keyStore')
+//    alias = project.findProperty('keyStoreAlias')
+//    storePass = project.findProperty('keyStorePass')
+//    keyPass = project.findProperty('keyStoreKeyPass')
+//    inputFile = jar.archivePath
+//    outputFile = jar.archivePath
+//}
+//
+//reobfJar.finalizedBy(signJar)
+
+curseforge {
+    if (project.hasProperty('curseForgeAPIKey')) {
+        apiKey = project.findProperty('curseForgeAPIKey')
+    }
+    project {
+        id = '264601'
+        changelog = file('CHANGELOG.md') // A file can also be set using: changelog = file('changelog.txt')
+        changelogType = 'markdown'
+        releaseType = 'alpha'
+    }
 }

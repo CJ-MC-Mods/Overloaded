@@ -1,3 +1,11 @@
+**Version: 0.0.59 (ALPHA)
+
+* Initial 1.14 Port
+* Many Features are Missing
+* Textures are Missing
+* Will be reworking storage containers so do not expect them to keep contents 
+
+-------------------------------------------------------------------
 **Version: 0.0.58 (RELEASE)**
 
 * Fixes fluid storage not allowing un-filtered extraction (Fixes #71)
