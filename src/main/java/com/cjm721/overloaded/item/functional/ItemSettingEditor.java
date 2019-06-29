@@ -46,7 +46,7 @@ public class ItemSettingEditor extends ModItem {
     //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/settings_editor.png"),
+        new ResourceLocation(MODID, "textures/item/settings_editor.png"),
         OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }

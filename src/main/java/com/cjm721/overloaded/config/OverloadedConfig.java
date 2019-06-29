@@ -70,6 +70,7 @@ public class OverloadedConfig {
     ForgeConfigSpec configSpec = getConfig();
     configSpec.setConfig(configData);
     // Update Cache
+    this.updateConfigs();
     return configSpec;
   }
 

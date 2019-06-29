@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.block.basic.container;
 
-import com.cjm721.overloaded.tile.infinity.TileInfiniteTank;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.LongFluidStack;
+import com.cjm721.overloaded.tile.infinity.TileInfiniteTank;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -44,7 +45,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/blocks/infinite_tank.png"),
+            new ResourceLocation(MODID, "textures/block/infinite_tank.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_tank.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }
@@ -56,21 +57,29 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
   }
 
   @Override
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+  public boolean onBlockActivated(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand handIn,
+      BlockRayTraceResult hit) {
     if (!world.isRemote) {
-      ItemStack heldItem = player.getActiveItemStack();
-      if (heldItem.isEmpty() && player.getActiveHand() == Hand.MAIN_HAND) {
+      ItemStack heldItem = player.getHeldItem(handIn);
+      if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
         sendPlayerStatus(world, pos, player);
-        return;
+        return true;
       } else {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileInfiniteTank) {
           IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
-          FluidUtil.interactWithFluidHandler(player, player.getActiveHand(), handler);
+          if (FluidUtil.interactWithFluidHandler(player, handIn, handler)) {
+            return true;
+          }
         }
       }
     }
-    super.onBlockClicked(state, world, pos, player);
+    return false;
   }
 
   @Override

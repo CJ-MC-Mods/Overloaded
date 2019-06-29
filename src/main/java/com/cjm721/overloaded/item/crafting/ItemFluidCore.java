@@ -31,7 +31,7 @@ public class ItemFluidCore extends ModItem {
     //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/fluid_core.png"),
+        new ResourceLocation(MODID, "textures/item/fluid_core.png"),
         OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }

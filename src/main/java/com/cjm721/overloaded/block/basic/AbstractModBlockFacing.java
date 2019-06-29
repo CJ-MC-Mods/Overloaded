@@ -1,60 +1,55 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-abstract class AbstractModBlockFacing extends ModBlock {
-  public static final DirectionProperty FACING =
-      DirectionProperty.create(
-          "facing",
-          Direction.NORTH,
-          Direction.EAST,
-          Direction.SOUTH,
-          Direction.WEST,
-          Direction.UP,
-          Direction.DOWN);
+public abstract class AbstractModBlockFacing extends ModBlock {
+  public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
   AbstractModBlockFacing(@Nonnull Properties materialIn) {
     super(materialIn);
+
+    this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
   }
 
-  //    @Override
-  //    @Nonnull
-  //    public BlockStateContainer createBlockState() {
-  //        return new BlockStateContainer.Builder(this).add(FACING).build();
-  //    }
-  //
-  //    @Override
-  //    public int getMetaFromState(BlockState state) {
-  //        return ((Direction) state.getProperties().get(FACING)).getIndex();
-  //    }
-  //
-  //    @Override
-  //    @Nonnull
-  //    public BlockState getStateFromMeta(int meta) {
-  //        return getDefaultState().withProperty(FACING, Direction.byIndex(meta));
-  //    }
+  @Nullable
+  @Override
+  public BlockState getStateForPlacement(BlockItemUseContext context) {
+    return this.getDefaultState().with(FACING, context.getNearestLookingDirection());
+  }
 
-  //  @Override
-  //  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-  //    world.setBlockState(
-  //        pos,
-  //        state.withProperty(
-  //            FACING, getFront(placer))); // Direction.getDirectionFromEntityLiving(pos,placer)
-  //    super.onBlockClicked(state,world,pos,player);
-  //  }
+  @Override
+  public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
+    return state.with(FACING,  direction.rotate(state.get(FACING)));
+  }
 
-  private Direction getFront(PlayerEntity placer) {
-    Vec3d lookVec = placer.getLookVec();
-    return Direction.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
+  @Override
+  public BlockState mirror(BlockState state, Mirror mirrorIn) {
+    return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+  }
+
+  @Override
+  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+  {
+    builder.add(FACING);
   }
 
   @Override

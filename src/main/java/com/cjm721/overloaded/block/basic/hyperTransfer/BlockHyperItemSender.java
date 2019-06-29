@@ -38,7 +38,7 @@ public class BlockHyperItemSender extends AbstractBlockHyperSender {
     super.registerModel();
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/hyper_item_sender.png"),
+        new ResourceLocation(MODID, "textures/block/hyper_item_sender.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

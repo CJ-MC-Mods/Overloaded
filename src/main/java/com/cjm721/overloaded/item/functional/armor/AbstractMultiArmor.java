@@ -79,7 +79,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 
         @Override
         public String getName() {
-          return "pureMatter";
+          return "overloaded:pure_matter";
         }
 
         @Override

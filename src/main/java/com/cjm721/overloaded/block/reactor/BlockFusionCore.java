@@ -35,12 +35,12 @@ public class BlockFusionCore extends ModBlockTile {
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/blocks/sun/yellow.png"),
+            new ResourceLocation(MODID, "textures/block/sun/yellow.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/sun/yellow.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/blocks/sun/red_two.png"),
+            new ResourceLocation(MODID, "textures/block/sun/red_two.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/sun/red_two.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }

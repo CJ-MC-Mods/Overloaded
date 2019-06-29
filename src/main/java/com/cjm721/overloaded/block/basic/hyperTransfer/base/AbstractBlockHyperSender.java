@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 
@@ -20,9 +21,9 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
     }
 
     @Override
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (player.getActiveHand() == Hand.MAIN_HAND) {
-            ItemStack heldItem = player.getActiveItemStack();
+            ItemStack heldItem = player.getHeldItem(hand);
             if (heldItem.isEmpty()) {
                 // SubIf so that Else block does not also need to check for heldItem == null
                 // Should find a cleaner way of showing all of this
@@ -50,10 +51,10 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                     }
                 }
             }
-            return;
+            return true;
         }
 
-        super.onBlockClicked(state, world,pos,player);
+        return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
     }
 
     private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, int partnerWorldId, @Nonnull BlockPos partnerPos) {

@@ -1,11 +1,13 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
+
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
@@ -13,17 +15,17 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
     this.bipedHead.cubeList.clear();
     this.bipedHeadwear.cubeList.clear();
 
-    //        ModelRenderOBJ head = new ModelRenderOBJ(this, new ResourceLocation(MODID,
-    // "item/armor/multi_helmet.obj"));
-    //        head.offsetY = -0.1F;
-    //        head.offsetX = -0.033F;
-    //        head.offsetZ = 0.1F;
-    //        head.scale = 1F / 13F;
-    //
-    //        this.bipedHead.addChild(head);
+    ModelRenderOBJ head =
+        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_helmet.obj"));
+    head.offsetY = -0.1F;
+    head.offsetX = -0.033F;
+    head.offsetZ = 0.1F;
+    head.scale = 1F / 13F;
+
+    this.bipedHead.addChild(head);
   }
 
-//  @Override
+  @Override
   public void render(
       @Nullable LivingEntity entity,
       float limbSwing,
@@ -35,8 +37,8 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
     if (entity instanceof ArmorStandEntity) {
       netHeadYaw = ((ArmorStandEntity) entity).rotationYawHead;
     }
-//    super.setRotationAngles(
-//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    super.setRotationAngles(
+        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
     GlStateManager.pushMatrix();
     if (this.isSneak) {

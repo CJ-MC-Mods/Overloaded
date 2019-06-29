@@ -104,11 +104,11 @@ public class ModTiles {
             TileEnergyExtractor::new,
             ModBlocks.energyExtractor,
             TileResourceLocations.energyExtractor));
-    registry.register(
-        build(
-            TileEnergyInjectorChest::new,
-            ModBlocks.energyInjectorChest,
-            TileResourceLocations.energyInjectorChest));
+//    registry.register(
+//        build(
+//            TileEnergyInjectorChest::new,
+//            ModBlocks.energyInjectorChest,
+//            TileResourceLocations.energyInjectorChest));
     registry.register(
         build(
             TileInfiniteWaterSource::new,
@@ -117,23 +117,23 @@ public class ModTiles {
     registry.register(
         build(
             TileItemInterface::new, ModBlocks.itemInterface, TileResourceLocations.itemInterface));
-    registry.register(
-        build(
-            TileItemManipulator::new,
-            ModBlocks.itemManipulator,
-            TileResourceLocations.itemManipulator));
-    registry.register(
-        build(
-            TileMatterPurifier::new,
-            ModBlocks.matterPurifier,
-            TileResourceLocations.matterPurifier));
+//    registry.register(
+//        build(
+//            TileItemManipulator::new,
+//            ModBlocks.itemManipulator,
+//            TileResourceLocations.itemManipulator));
+//    registry.register(
+//        build(
+//            TileMatterPurifier::new,
+//            ModBlocks.matterPurifier,
+//            TileResourceLocations.matterPurifier));
     registry.register(
         build(
             TilePlayerInterface::new,
             ModBlocks.playerInterface,
             TileResourceLocations.playerInterface));
-    registry.register(
-        build(TileTeamLoader::new, ModBlocks.teamLoader, TileResourceLocations.teamLoader));
+//    registry.register(
+//        build(TileTeamLoader::new, ModBlocks.teamLoader, TileResourceLocations.teamLoader));
 
     registry.register(
         build(

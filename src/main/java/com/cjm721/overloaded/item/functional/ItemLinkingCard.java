@@ -54,7 +54,7 @@ public class ItemLinkingCard extends ModItem {
     //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/linkingcard.png"),
+        new ResourceLocation(MODID, "textures/item/linking_card.png"),
         OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }

@@ -39,17 +39,14 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "inventory");
-    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
-
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_body.png"),
+        new ResourceLocation(MODID, "textures/item/multi_body.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_left_arm.png"),
+        new ResourceLocation(MODID, "textures/item/multi_left_arm.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_right_arm.png"),
+        new ResourceLocation(MODID, "textures/item/multi_right_arm.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 }

@@ -99,6 +99,10 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     for (Direction side : Direction.values()) {
       TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
+      if (te == null) {
+        continue;
+      }
+
       LazyOptional<H> cap = te.getCapability(capability, side.getOpposite());
 
       if (!cap.isPresent()) {

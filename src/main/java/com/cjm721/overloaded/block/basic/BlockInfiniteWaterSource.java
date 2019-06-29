@@ -1,9 +1,9 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,6 +12,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,7 +46,7 @@ public class BlockInfiniteWaterSource extends ModBlock {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/infinite_water_source.png"),
+        new ResourceLocation(MODID, "textures/block/infinite_water_source.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
@@ -63,19 +64,27 @@ public class BlockInfiniteWaterSource extends ModBlock {
   }
 
   @Override
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-    if (!world.isRemote && player.getActiveHand() == Hand.MAIN_HAND) {
+  public boolean onBlockActivated(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockRayTraceResult rayTraceResult) {
+    if (!world.isRemote && hand == Hand.MAIN_HAND) {
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof TileInfiniteWaterSource) {
         IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
         FluidActionResult result =
             FluidUtil.tryFillContainerAndStow(
-                player.getActiveItemStack(), handler, null, Integer.MAX_VALUE, player, true);
+                player.getHeldItem(hand), handler, null, Integer.MAX_VALUE, player, true);
 
         if (result.isSuccess()) {
           player.setHeldItem(Hand.MAIN_HAND, result.getResult());
+          return true;
         }
       }
     }
+    return false;
   }
 }

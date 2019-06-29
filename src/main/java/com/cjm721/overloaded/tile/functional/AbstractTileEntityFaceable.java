@@ -1,40 +1,22 @@
 package com.cjm721.overloaded.tile.functional;
 
+import com.cjm721.overloaded.block.basic.AbstractModBlockFacing;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractTileEntityFaceable extends TileEntity {
-  private Direction front;
+abstract class AbstractTileEntityFaceable extends TileEntity {
 
-  public AbstractTileEntityFaceable(TileEntityType<?> te) {
+  AbstractTileEntityFaceable(TileEntityType<?> te) {
     super(te);
   }
 
-  @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
-
-    this.front = Direction.byIndex(compound.getInt("Front"));
-  }
-
-  @Override
-  @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
-    compound.putInt("Front", this.front.getIndex());
-
-    return super.write(compound);
-  }
-
-  public AbstractTileEntityFaceable setFacing(Direction front) {
-    this.front = front;
-    return this;
-  }
-
   Direction getFacing() {
-    return front;
+    return this.getBlockState().get(AbstractModBlockFacing.FACING);
   }
 }

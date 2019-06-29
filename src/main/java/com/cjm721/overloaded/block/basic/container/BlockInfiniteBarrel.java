@@ -1,19 +1,17 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.LongItemStack;
+import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -39,11 +37,12 @@ public class BlockInfiniteBarrel extends AbstractBlockInfiniteContainer {
   public void registerModel() {
     ModelResourceLocation location =
         new ModelResourceLocation(new ResourceLocation(MODID, "infinite_barrel"), null);
-//            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+    //            ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0,
+    // location);
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/blocks/infinite_barrel.png"),
+            new ResourceLocation(MODID, "textures/block/infinite_barrel.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_barrel.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }

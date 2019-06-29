@@ -55,7 +55,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_helmet.png"),
+        new ResourceLocation(MODID, "textures/item/multi_helmet.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 

@@ -33,6 +33,10 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
     BlockPos me = this.getPos();
     TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
 
+    if (frontTE == null) {
+      return;
+    }
+
     LazyOptional<IHyperHandlerEnergy> optionalStorage =
         frontTE.getCapability(HYPER_ENERGY_HANDLER, getFacing().getOpposite());
 
@@ -42,9 +46,6 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
     IHyperHandlerEnergy storage = optionalStorage.orElse(null);
 
     for (Direction facing : Direction.values()) {
-      LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE), false);
-      if (energy.getAmount() == 0L) return;
-
       if (facing == getFacing()) continue;
 
       TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
@@ -52,6 +53,10 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
 
       LazyOptional<IEnergyStorage> optionalReceiver =
           te.getCapability(ENERGY, facing.getOpposite());
+
+      LongEnergyStack energy = storage.take(new LongEnergyStack(Long.MAX_VALUE), false);
+      if (energy.getAmount() == 0L) return;
+
       optionalReceiver.ifPresent(
           receiver -> {
             if (!receiver.canReceive()) return;
@@ -71,7 +76,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == ENERGY) {
-      return ENERGY.orEmpty(ENERGY, LazyOptional.of(ForgeEnergyZero::new)).cast();
+      return LazyOptional.of(ForgeEnergyZero::new).cast();
     }
     return super.getCapability(cap, side);
   }

@@ -40,7 +40,7 @@ public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
     super.registerModel();
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/hyper_item_receiver.png"),
+        new ResourceLocation(MODID, "textures/block/hyper_item_receiver.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

@@ -55,8 +55,8 @@ public class MultiToolConfig implements ConfigSectionHandler {
     assistModeSpec =
         builder
             .comment(
-                "0 - None, 1 Block Place Preview, 2 Block Break Preview, 3 Place/Break Preview. (2/3 WIP)[Default: 1]")
-            .defineInRange("assistMode", 1, 0, 3);
+                "0 - None, 1 Block Place Preview, 2 Block Break Preview, 3 Place/Break Preview. [Default: 1]")
+            .defineInRange("assistMode", 3, 0, 3);
 
     builder.pop();
   }

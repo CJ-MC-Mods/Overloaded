@@ -36,7 +36,7 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
     //   ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/item_manipulator.png"),
+        new ResourceLocation(MODID, "textures/block/item_manipulator.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 

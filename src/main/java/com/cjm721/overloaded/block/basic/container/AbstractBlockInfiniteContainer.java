@@ -46,8 +46,8 @@ abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
     @Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         if (!world.isRemote) {
-            ItemStack heldItem = player.getActiveItemStack();
-            if (heldItem.isEmpty() && player.getActiveHand() == Hand.MAIN_HAND) {
+            ItemStack heldItem = player.getHeldItem(handIn);
+            if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
                 sendPlayerStatus(world, pos, player);
                 return true;
             }

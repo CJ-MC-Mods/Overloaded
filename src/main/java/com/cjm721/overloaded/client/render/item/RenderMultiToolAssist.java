@@ -10,23 +10,22 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.color.BlockColors;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.texture.ISprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelDataManager;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.pipeline.BlockInfo;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -40,16 +39,20 @@ public class RenderMultiToolAssist {
   @SubscribeEvent
   public static void onMouseEvent(InputEvent.MouseInputEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    //        if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
-    //            ItemStack stack = player.getHeldItemMainhand();
-    //            if (player.isSneaking() && !stack.isEmpty() && stack.getItem() ==
-    // ModItems.multiTool) {
-    //                changeHelpMode(event.getDwheel());
-    //                player.sendStatusMessage(new StringTextComponent("Assist Mode: " +
-    // getAssistMode().getName()), true);
-    //                event.setCanceled(true);
+    //            if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
+    //                ItemStack stack = player.getHeldItemMainhand();
+    //                if (player.isSneaking() && !stack.isEmpty() && stack.getItem() ==
+    //     ModItems.multiTool) {
+    //                    changeHelpMode(event.getDwheel());
+    //                    player.sendStatusMessage(new StringTextComponent("Assist Mode: " +
+    //     getAssistMode().getName()), true);
+    //                    event.setCanceled(true);
+    //                }
     //            }
-    //        }
+  }
+
+  @SubscribeEvent
+  public static void onKeyEvent(InputEvent.KeyInputEvent event) {
   }
 
   private static void changeHelpMode(int dwheel) {
@@ -111,39 +114,36 @@ public class RenderMultiToolAssist {
   }
 
   private static void renderRemovePreview(
-      RenderWorldLastEvent event, PlayerEntity player, RayTraceResult result) {
-    try {
-      IModel model =
-          ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
-      //      IBakedModel bakeModel =
-      //          model.bake(
-      //              TRSRTransformation.identity(),
-      //              location ->
-      //
-      // Minecraft.getInstance().getTextureMap().getAtlasSprite(location.toString()),
-      //              null,
-      //              DefaultVertexFormats.ITEM);
-      //
-      //      BlockPos toRenderAt = result.getBlockPos();
-      //
-      //      final float partialTicks = event.getPartialTicks();
-      //      final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) *
-      // partialTicks;
-      //      final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) *
-      // partialTicks;
-      //      final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) *
-      // partialTicks;
-      //
-      //      GlStateManager.pushMatrix();
-      //      GlStateManager.translated(
-      //          toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-      //      RenderUtil.renderGhostModel(
-      //          bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(),
-      // toRenderAt);
-      //      GlStateManager.popMatrix();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+      RenderWorldLastEvent event, PlayerEntity player, BlockRayTraceResult result) {
+//    try {
+//      IModel model =
+//          ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
+//      IBakedModel bakeModel =
+//          model.bake(
+//              new ModelBakery(
+//                  Minecraft.getInstance().getResourceManager(),
+//                  Minecraft.getInstance().getTextureMap(),
+//                  Minecraft.getInstance().getProfiler()),
+//              ModelLoader.defaultTextureGetter(),
+//              new ISprite() {},
+//              DefaultVertexFormats.ITEM);
+//
+//      BlockPos toRenderAt = result.getPos();
+//
+//      final float partialTicks = event.getPartialTicks();
+//      final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+//      final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+//      final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
+//
+//      GlStateManager.pushMatrix();
+//      GlStateManager.translated(
+//          toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+//      RenderUtil.renderGhostModel(
+//          bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(), toRenderAt);
+//      GlStateManager.popMatrix();
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
   }
 
   private static void renderBlockPreview(
@@ -159,19 +159,32 @@ public class RenderMultiToolAssist {
     final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
     final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
-//    Minecraft.getInstance()
-//        .getBlockRendererDispatcher()
-//        .getBlockModelRenderer()
-//        .renderModel(
-//            player.getEntityWorld(),
-//            Minecraft.getInstance().getItemRenderer().getItemModelMesher().getItemModel(stack),
-//            state,
-//            toRenderAt,
-//            new BufferBuilder(1028),
-//            true,
-//            player.getRNG(),
-//            0,
-//            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
+    //    BufferBuilder renderBuffer = new BufferBuilder(1028);
+    //    renderBuffer.begin(7, DefaultVertexFormats.ITEM);
+    //    Minecraft.getInstance()
+    //        .getBlockRendererDispatcher()
+    //        .getBlockModelRenderer()
+    //        .renderModel(
+    //            player.getEntityWorld(),
+    //
+    // Minecraft.getInstance().getItemRenderer().getItemModelMesher().getItemModel(stack),
+    //            state,
+    //            toRenderAt,
+    //            renderBuffer,
+    //            true,
+    //            player.getRNG(),
+    //            1,
+    //            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
+
+    //        .renderBlock(
+    //            state,
+    //            toRenderAt,
+    //            player.getEntityWorld(),
+    //            renderBuffer,
+    //            player.getRNG(),
+    //            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
+    //
+    // ,)
 
     GlStateManager.pushMatrix();
     GlStateManager.translated(

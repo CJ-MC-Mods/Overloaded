@@ -26,7 +26,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -50,7 +53,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
@@ -67,107 +69,12 @@ public class ItemMultiTool extends PowerModItem {
     setRegistryName("multi_tool");
   }
 
-  @Override
-  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-    return enchantment != null && enchantment.type == EnchantmentType.DIGGER;
-  }
-
-  @Override
-  public int getItemEnchantability(ItemStack stack) {
-    return 15;
-  }
-
-  @Override
-  public boolean isEnchantable(@Nonnull ItemStack stack) {
-    return this.getItemStackLimit(stack) == 1;
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  @Override
-  public void registerModel() {
-    ModelResourceLocation location =
-        new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
-    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/ntool.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  @Override
-  public void addInformation(
-      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    //    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
-
-    super.addInformation(stack, worldIn, tooltip, flagIn);
-  }
-
-  @Override
-  public boolean onBlockDestroyed(
-      ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-    LazyOptional<IEnergyStorage> storage = stack.getCapability(ENERGY, null);
-
-    if (storage.isPresent()) {
-      int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack);
-      int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
-      float breakCost =
-          getBreakCost(
-              worldIn.getBlockState(pos).getBlockHardness(worldIn, pos),
-              efficiency,
-              unbreaking,
-              entityLiving == null ? 10 : getDistance(entityLiving, pos));
-
-      storage.orElse(null).extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
-    }
-
-    return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
-  }
-
   private static double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {
     return Math.sqrt(entityLiving.getDistanceSq(pos.getX(), pos.getY(), pos.getZ()));
   }
 
-  @Override
-  public boolean canHarvestBlock(BlockState blockIn) {
-    return false;
-  }
-
-  //  @Override
-  //  public boolean canDestroyBlockInCreative(
-  //      World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
-  //    return player == null
-  //        || super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
-  //  }
-
-  @Override
-  public float getDestroySpeed(ItemStack stack, BlockState state) {
-    return 0f;
-  }
-
-  @Override
-  @Nonnull
-  @OnlyIn(Dist.CLIENT)
-  public ActionResult<ItemStack> onItemRightClick(
-      @Nonnull World worldIn, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
-    if (worldIn.isRemote) {
-      BlockRayTraceResult result =
-          PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-              player, Minecraft.getInstance().getRenderPartialTicks());
-      if (result != null) {
-        Overloaded.proxy.networkWrapper.sendToServer(
-            new RightClickBlockMessage(
-                result.getPos(),
-                result.getFace(),
-                (float) result.getHitVec().x - result.getPos().getX(),
-                (float) result.getHitVec().y - result.getPos().getY(),
-                (float) result.getHitVec().z - result.getPos().getZ()));
-      }
-    }
-    return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
-  }
-
-  private static float getBreakCost(float hardness, int efficiency, int unbreaking, double distance) {
+  private static float getBreakCost(
+      float hardness, int efficiency, int unbreaking, double distance) {
     return (float)
         ((hardness
                 * OverloadedConfig.INSTANCE.multiToolConfig.breakCostMultiplier
@@ -227,45 +134,12 @@ public class ItemMultiTool extends PowerModItem {
     return result ? BlockBreakResult.SUCCESS : BlockBreakResult.FAIL_REMOVE;
   }
 
-  //  public void drawParticleStreamTo(
-  //      @Nonnull PlayerEntity source,
-  //      @Nonnull Vec3d endingLocation,
-  //      @Nonnull EnumParticleTypes type) {
-  //    double xOffset = 0; // 0.25;
-  //    double yOffset = -.25;
-  //    double zOffset = 0; // .25;
-  //
-  //    Vec3d startingLocation = source.getPositionEyes(1).add(xOffset, yOffset, zOffset);
-  //    startingLocation =
-  //        startingLocation.add(source.getLookVec().rotateYaw((float) (Math.PI /
-  // -2.0D)).scale(0.5D));
-  //    Vec3d direction = endingLocation.subtract(startingLocation).normalize();
-  //
-  //    startingLocation = startingLocation.add(direction);
-  //    World world = source.getEntityWorld();
-  //    double distanceToEnd = endingLocation.distanceTo(startingLocation);
-  //    // Make the reach check unnessicary * Change to for loop
-  //    while (distanceToEnd > 0.3D
-  //        && distanceToEnd < (OverloadedConfig.INSTANCE.multiToolConfig.reach * 2)) {
-  //      world.spawnParticle(
-  //          type,
-  //          startingLocation.x,
-  //          startingLocation.y,
-  //          startingLocation.z,
-  //          0,
-  //          0,
-  //          0); // direction.xCoord, direction.yCoord, direction.zCoord);
-  //      startingLocation = startingLocation.add(direction.scale(0.25D));
-  //      distanceToEnd = endingLocation.distanceTo(startingLocation);
-  //    }
-  //  }
-
   @OnlyIn(Dist.CLIENT)
   private static void leftClickOnBlockClient(BlockPos pos) {
     Overloaded.proxy.networkWrapper.sendToServer(new LeftClickBlockMessage(pos));
-//            PlayerEntitySP player = Minecraft.getMinecraft().player;
-//            drawParticleStreamTo(player, hitVec,
-//     EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
+    //            PlayerEntitySP player = Minecraft.getMinecraft().player;
+    //            drawParticleStreamTo(player, hitVec,
+    //     EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
   }
 
   public static void leftClickOnBlockServer(
@@ -318,6 +192,135 @@ public class ItemMultiTool extends PowerModItem {
           break;
       }
     }
+  }
+
+  @Override
+  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+    return enchantment != null && enchantment.type == EnchantmentType.DIGGER;
+  }
+
+  @Override
+  public int getItemEnchantability(ItemStack stack) {
+    return 15;
+  }
+
+  @Override
+  public boolean isEnchantable(@Nonnull ItemStack stack) {
+    return this.getItemStackLimit(stack) == 1;
+  }
+
+  //  @Override
+  //  public boolean canDestroyBlockInCreative(
+  //      World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
+  //    return player == null
+  //        || super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
+  //  }
+
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void registerModel() {
+    ModelResourceLocation location =
+        new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
+    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
+
+    ImageUtil.registerDynamicTexture(
+        new ResourceLocation(MODID, "textures/item/multi_tool.png"),
+        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+  }
+
+  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void addInformation(
+      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+    //    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
+
+    super.addInformation(stack, worldIn, tooltip, flagIn);
+  }
+
+  @Override
+  public boolean onBlockDestroyed(
+      ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+    LazyOptional<IEnergyStorage> storage = stack.getCapability(ENERGY, null);
+
+    if (storage.isPresent()) {
+      int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack);
+      int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+      float breakCost =
+          getBreakCost(
+              worldIn.getBlockState(pos).getBlockHardness(worldIn, pos),
+              efficiency,
+              unbreaking,
+              entityLiving == null ? 10 : getDistance(entityLiving, pos));
+
+      storage.orElse(null).extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
+    }
+
+    return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+  }
+
+  @Override
+  public boolean canHarvestBlock(BlockState blockIn) {
+    return false;
+  }
+
+  //  public void drawParticleStreamTo(
+  //      @Nonnull PlayerEntity source,
+  //      @Nonnull Vec3d endingLocation,
+  //      @Nonnull EnumParticleTypes type) {
+  //    double xOffset = 0; // 0.25;
+  //    double yOffset = -.25;
+  //    double zOffset = 0; // .25;
+  //
+  //    Vec3d startingLocation = source.getPositionEyes(1).add(xOffset, yOffset, zOffset);
+  //    startingLocation =
+  //        startingLocation.add(source.getLookVec().rotateYaw((float) (Math.PI /
+  // -2.0D)).scale(0.5D));
+  //    Vec3d direction = endingLocation.subtract(startingLocation).normalize();
+  //
+  //    startingLocation = startingLocation.add(direction);
+  //    World world = source.getEntityWorld();
+  //    double distanceToEnd = endingLocation.distanceTo(startingLocation);
+  //    // Make the reach check unnessicary * Change to for loop
+  //    while (distanceToEnd > 0.3D
+  //        && distanceToEnd < (OverloadedConfig.INSTANCE.multiToolConfig.reach * 2)) {
+  //      world.spawnParticle(
+  //          type,
+  //          startingLocation.x,
+  //          startingLocation.y,
+  //          startingLocation.z,
+  //          0,
+  //          0,
+  //          0); // direction.xCoord, direction.yCoord, direction.zCoord);
+  //      startingLocation = startingLocation.add(direction.scale(0.25D));
+  //      distanceToEnd = endingLocation.distanceTo(startingLocation);
+  //    }
+  //  }
+
+  @Override
+  public float getDestroySpeed(ItemStack stack, BlockState state) {
+    return 0f;
+  }
+
+  @Override
+  @Nonnull
+  @OnlyIn(Dist.CLIENT)
+  public ActionResult<ItemStack> onItemRightClick(
+      @Nonnull World worldIn, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    if (worldIn.isRemote) {
+      BlockRayTraceResult result =
+          PlayerInteractionUtil.getBlockPlayerLookingAtClient(
+              player, Minecraft.getInstance().getRenderPartialTicks());
+      if (result != null) {
+        Overloaded.proxy.networkWrapper.sendToServer(
+            new RightClickBlockMessage(
+                result.getPos(),
+                result.getFace(),
+                (float) result.getHitVec().x - result.getPos().getX(),
+                (float) result.getHitVec().y - result.getPos().getY(),
+                (float) result.getHitVec().z - result.getPos().getZ()));
+      }
+    }
+    return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
   }
 
   public void rightClickWithItem(
@@ -425,6 +428,11 @@ public class ItemMultiTool extends PowerModItem {
     }
   }
 
+  @Override
+  public boolean canPlayerBreakBlockWhileHolding(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+    return !p_195938_4_.isSneaking();
+  }
+
   @Nonnull
   public ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
     CompoundNBT tagCompound = multiTool.getTag();
@@ -448,13 +456,20 @@ public class ItemMultiTool extends PowerModItem {
     return super.getDisplayName(stack).applyTextStyle(TextFormatting.GOLD);
   }
 
-  @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+  @Mod.EventBusSubscriber(
+      value = Dist.CLIENT,
+      modid = MODID,
+      bus = Mod.EventBusSubscriber.Bus.FORGE)
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
       // TODO This event is not firing on client currently.
-      if (event.getSide() == LogicalSide.SERVER
-          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
+      //      if (event.getSide() == LogicalSide.SERVER
+      //          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
+      if (!event
+          .getEntityPlayer()
+          .getUniqueID()
+          .equals(Minecraft.getInstance().player.getUniqueID())) return;
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {

@@ -39,7 +39,7 @@ public class BlockHyperEnergySender extends AbstractBlockHyperSender {
   public void registerModel() {
     super.registerModel();
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/hyper_energy_sender.png"),
+        new ResourceLocation(MODID, "textures/block/hyper_energy_sender.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

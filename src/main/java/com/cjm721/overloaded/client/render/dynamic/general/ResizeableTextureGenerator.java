@@ -9,9 +9,13 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.cjm721.overloaded.client.render.dynamic.ImageUtil.getTextureInputStream;
 
 @OnlyIn(Dist.CLIENT)
 public class ResizeableTextureGenerator {
@@ -26,13 +30,11 @@ public class ResizeableTextureGenerator {
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
     for (ResizableTexture resizableTexture : toCreateTextures) {
       BufferedImage image = null;
-      //      try {
-      //        image =
-      //
-      // TextureUtil.readResource(getTextureInputStream(resizableTexture.originalTexture));
-      //      } catch (IOException e) {
-      //        e.printStackTrace();
-      //      }
+      try {
+        image = ImageIO.read(getTextureInputStream(resizableTexture.originalTexture));
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
 
       if (image == null) continue;
 
@@ -40,7 +42,7 @@ public class ResizeableTextureGenerator {
 
       BlockResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
 
-      //      event.getMap().registerSprite(cleanForSprite(resizableTexture.generatedName));
+      event.getMap().getSprite(cleanForSprite(resizableTexture.generatedName));
     }
   }
 

@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface> {
 
   @Override
-  public void func_199341_a(
+  public void render(
       TileItemInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
     GlStateManager.pushLightingAttributes();
     GlStateManager.pushMatrix();

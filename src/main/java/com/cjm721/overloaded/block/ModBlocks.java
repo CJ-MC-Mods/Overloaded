@@ -6,8 +6,6 @@ import com.cjm721.overloaded.block.basic.container.BlockInfiniteBarrel;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteCapacitor;
 import com.cjm721.overloaded.block.basic.container.BlockInfiniteTank;
 import com.cjm721.overloaded.block.basic.hyperTransfer.*;
-import com.cjm721.overloaded.block.reactor.BlockFusionCore;
-import com.cjm721.overloaded.block.reactor.BlockFusionInterface;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
@@ -60,7 +58,10 @@ public final class ModBlocks {
     String textureName = "blocks/pure_matter";
 
     pureMatter =
-        new Fluid("pure_matter", new ResourceLocation(MODID, textureName + "_still"), new ResourceLocation(MODID,textureName + "_flow"))
+        new Fluid(
+                "pure_matter",
+                new ResourceLocation(MODID, textureName + "_still"),
+                new ResourceLocation(MODID, textureName + "_flow"))
             .setDensity(3000)
             .setViscosity(6000)
             .setRarity(Rarity.EPIC);
@@ -85,16 +86,16 @@ public final class ModBlocks {
     playerInterface = registerFull(registry, new BlockPlayerInterface());
     itemInterface = registerFull(registry, new BlockItemInterface());
 
-    fusionCore = registerFull(registry, new BlockFusionCore());
-    fusionInterface = registerFull(registry, new BlockFusionInterface());
-    matterPurifier = registerFull(registry, new BlockMatterPurifier());
-    teamLoader = registerFull(registry, new BlockTeamLoader());
-    //        pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
-    itemManipulator = new BlockItemManipulator();
-    energyInjectorChest = new BlockEnergyInjectorChest();
-    for (int i = 0; i < 10; i++) {
-      registerFull(registry, new InDevBlock("in_dev_block_" + i));
-    }
+    //    fusionCore = registerFull(registry, new BlockFusionCore());
+    //    fusionInterface = registerFull(registry, new BlockFusionInterface());
+    //    matterPurifier = registerFull(registry, new BlockMatterPurifier());
+    //    teamLoader = registerFull(registry, new BlockTeamLoader());
+    //    pureMatterFluidBlock = registerBlock(new BlockPureMatterFluid());
+    //    itemManipulator = new BlockItemManipulator();
+    //    energyInjectorChest = new BlockEnergyInjectorChest();
+    //    for (int i = 0; i < 10; i++) {
+    //      registerFull(registry, new InDevBlock("in_dev_block_" + i));
+    //    }
   }
 
   private static void addToSecondaryInit(IModRegistrable block) {

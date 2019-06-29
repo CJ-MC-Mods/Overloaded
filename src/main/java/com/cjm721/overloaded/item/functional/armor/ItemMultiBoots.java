@@ -43,7 +43,7 @@ public class ItemMultiBoots extends AbstractMultiArmor {
     //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_boot.png"),
+        new ResourceLocation(MODID, "textures/item/multi_boot.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 }

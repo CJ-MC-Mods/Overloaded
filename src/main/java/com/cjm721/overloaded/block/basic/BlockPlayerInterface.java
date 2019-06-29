@@ -56,7 +56,7 @@ public class BlockPlayerInterface extends ModBlockTile {
         TilePlayerInterface.class, new PlayerInterfaceRenderer());
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/block_player.png"),
+        new ResourceLocation(MODID, "textures/block/block_player.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 

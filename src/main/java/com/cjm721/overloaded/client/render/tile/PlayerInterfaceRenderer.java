@@ -19,7 +19,7 @@ import java.util.UUID;
 public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterface> {
 
   @Override
-  public void func_199341_a(
+  public void render(
       TilePlayerInterface te, double x, double y, double z, float partialTicks, int destroyStage) {
     GlStateManager.pushLightingAttributes();
     GlStateManager.pushMatrix();

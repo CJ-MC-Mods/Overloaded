@@ -59,7 +59,7 @@ public class ItemRayGun extends PowerModItem {
     //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/ray_gun.png"),
+        new ResourceLocation(MODID, "textures/item/ray_gun.png"),
         OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 

@@ -45,7 +45,7 @@ public class BlockInfiniteCapacitor extends AbstractBlockInfiniteContainer {
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/blocks/infinite_capacitor.png"),
+            new ResourceLocation(MODID, "textures/block/infinite_capacitor.png"),
             new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_capacitor.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }

@@ -44,10 +44,10 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
     //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_leg.png"),
+        new ResourceLocation(MODID, "textures/item/multi_leg.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/armors/multi_belt.png"),
+        new ResourceLocation(MODID, "textures/item/multi_belt.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 }

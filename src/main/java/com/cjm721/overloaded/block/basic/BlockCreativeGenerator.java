@@ -37,7 +37,7 @@ public class BlockCreativeGenerator extends ModBlockTile {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/creative_generator.png"),
+        new ResourceLocation(MODID, "textures/block/creative_generator.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 

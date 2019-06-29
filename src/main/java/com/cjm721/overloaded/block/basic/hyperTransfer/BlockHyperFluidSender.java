@@ -40,7 +40,7 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
     super.registerModel();
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/hyper_fluid_sender.png"),
+        new ResourceLocation(MODID, "textures/block/hyper_fluid_sender.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

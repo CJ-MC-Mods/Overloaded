@@ -24,6 +24,10 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
         for (Direction side : Direction.values()) {
             TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
 
+            if (te == null) {
+                continue;
+            }
+
             LazyOptional<H> cap = te.getCapability(capability, side.getOpposite());
 
             if (!cap.isPresent()) {

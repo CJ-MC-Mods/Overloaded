@@ -47,7 +47,7 @@ public class BlockEnergyExtractor extends AbstractModBlockFacing {
     super.registerModel();
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/blocks/energy_extractor.png"),
+        new ResourceLocation(MODID, "textures/block/energy_extractor.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

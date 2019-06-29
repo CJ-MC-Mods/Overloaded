@@ -31,7 +31,7 @@ public class ItemEnergyCore extends ModItem {
     //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
 
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/items/energy_core.png"),
+        new ResourceLocation(MODID, "textures/item/energy_core.png"),
         OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }
