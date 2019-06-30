@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:item_interface"
+  },
+  "pattern": [
+    "NDN",
+    "NCN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "minecraft:dragon_egg"
+    },
+    "C": {
+      "tag": "forge:chests/wooden"
+    }
+  }
+}

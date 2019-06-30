@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "overloaded:railgun"
+  },
+  "pattern": [
+    "SSE",
+    " SS"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "overloaded:energy_core"
+    },
+    "S": {
+      "tag": "forge:storage_blocks/nether_star"
+    }
+  }
+}

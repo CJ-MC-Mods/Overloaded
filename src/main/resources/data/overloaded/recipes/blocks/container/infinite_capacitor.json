@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:almost_infinite_capacitor"
+  },
+  "pattern": [
+    "GDG",
+    "DCD",
+    "GDG"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "D": {
+      "tag": "forge:storage_blocks/diamond"
+    },
+    "C": {
+      "item": "overloaded:energy_core"
+    }
+  }
+}

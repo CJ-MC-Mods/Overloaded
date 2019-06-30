@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "overloaded:infinite_water_source"
+  },
+  "pattern": [
+    "WGW",
+    "GDG",
+    "GGG"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "item": "minecraft:water_bucket"
+    },
+    "G": {
+      "_comment": "TODO use tag when it is created",
+      "item": "minecraft:glass"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    }
+  }
+}

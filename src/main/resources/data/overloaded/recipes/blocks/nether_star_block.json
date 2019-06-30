@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NNN",
+    "NNN"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result": {
+    "item": "overloaded:nether_star_block"
+  }
+}

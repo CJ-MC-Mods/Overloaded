@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:player_interface"
+  },
+  "pattern": [
+    "NDN",
+    "NCN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "D": {
+      "item": "minecraft:dragon_egg"
+    },
+    "C": {
+      "tag": "forge:chests/ender"
+    }
+  }
+}

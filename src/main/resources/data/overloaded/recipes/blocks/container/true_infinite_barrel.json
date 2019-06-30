@@ -1,0 +1,16 @@
+{
+  "result": {
+    "item": "overloaded:true_infinite_barrel"
+  },
+  "pattern": [
+    "III",
+    "III",
+    "III"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "item": "overloaded:almost_infinite_barrel"
+    }
+  }
+}

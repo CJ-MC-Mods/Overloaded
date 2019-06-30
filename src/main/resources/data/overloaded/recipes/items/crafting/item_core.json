@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "overloaded:item_core"
+  },
+  "pattern": [
+    "NNN",
+    "NRN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "tag": "forge:chests"
+    },
+    "N": {
+      "tag": "forge:storage_blocks/nether_star"
+    }
+  }
+}

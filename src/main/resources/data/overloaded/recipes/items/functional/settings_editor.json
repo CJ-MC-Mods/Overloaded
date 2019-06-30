@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:settings_editor"
+  },
+  "pattern": [
+    "GNN",
+    "NRN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:nuggets/gold"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    }
+  }
+}

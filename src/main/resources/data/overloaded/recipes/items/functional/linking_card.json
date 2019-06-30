@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:linking_card"
+  },
+  "pattern": [
+    "GII",
+    "IRI",
+    "III"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": {
+      "tag": "forge:nuggets/gold"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  }
+}

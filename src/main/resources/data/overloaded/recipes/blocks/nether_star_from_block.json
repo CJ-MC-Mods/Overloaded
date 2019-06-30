@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "nether_star",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/nether_star"
+    }
+  ],
+  "result": {
+    "item": "minecraft:nether_star",
+    "count": 9
+  }
+}

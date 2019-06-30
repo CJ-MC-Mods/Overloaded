@@ -3,7 +3,7 @@
 * Initial 1.14 Port
 * Many Features are Missing
 * Textures are Missing
-* Will be reworking storage containers so do not expect them to keep contents 
+* Will be reworking storage containers so do not expect them to keep contents between updates 
 
 -------------------------------------------------------------------
 **Version: 0.0.58 (RELEASE)**

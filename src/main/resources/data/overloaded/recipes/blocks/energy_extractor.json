@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "overloaded:energy_extractor"
+  },
+  "pattern": [
+    "iri",
+    "rbr",
+    "ibi"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "r": {
+      "tag": "forge:dusts/redstone"
+    },
+    "b": {
+      "tag": "forge:storage_blocks/redstone"
+    }
+  }
+}

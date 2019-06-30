@@ -35,7 +35,9 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage implemen
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
-    energyStorage.deserializeNBT((CompoundNBT) compound.get("Energy"));
+    if(compound.contains("Energy")) {
+      energyStorage.deserializeNBT((CompoundNBT) compound.get("Energy"));
+    }
   }
 
   @Nonnull
