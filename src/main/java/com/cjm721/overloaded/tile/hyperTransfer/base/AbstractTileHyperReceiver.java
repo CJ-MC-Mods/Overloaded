@@ -35,7 +35,7 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
             }
             stack = cap.orElse(null).give(stack, true);
 
-            if (stack.getAmount() == 0L)
+            if (stack.getAmount().longValue() == 0L)
                 return stack;
         }
         return stack;

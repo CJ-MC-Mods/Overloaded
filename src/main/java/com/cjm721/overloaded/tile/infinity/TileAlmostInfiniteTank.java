@@ -14,12 +14,12 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class TileInfiniteTank extends AbstractTileInfinityStorage implements IDataUpdate {
+public class TileAlmostInfiniteTank extends AbstractTileHyperStorage implements IDataUpdate {
 
   private final LongFluidStorage fluidStorage;
 
-  public TileInfiniteTank() {
-    super(ModTiles.infiniteTank);
+  public TileAlmostInfiniteTank() {
+    super(ModTiles.almostInfiniteTank);
     fluidStorage = new LongFluidStorage(this);
   }
 
@@ -46,11 +46,11 @@ public class TileInfiniteTank extends AbstractTileInfinityStorage implements IDa
   @Override
   @Nonnull
   public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+      @Nonnull Capability<T> capability, @Nullable Direction side) {
     if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
       return LazyOptional.of(() -> fluidStorage).cast();
     }
-    return super.getCapability(capability, facing);
+    return super.getCapability(capability, side);
   }
 
   @Override

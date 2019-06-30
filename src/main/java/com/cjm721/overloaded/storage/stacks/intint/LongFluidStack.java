@@ -1,10 +1,11 @@
-package com.cjm721.overloaded.storage;
+package com.cjm721.overloaded.storage.stacks.intint;
 
+import com.cjm721.overloaded.storage.IHyperType;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
-public class LongFluidStack implements IHyperType {
+public class LongFluidStack implements IHyperType<Long> {
 
   public static final LongFluidStack EMPTY_STACK = new LongFluidStack(null, 0L);
 
@@ -17,7 +18,7 @@ public class LongFluidStack implements IHyperType {
   }
 
   @Override
-  public long getAmount() {
+  public Long getAmount() {
     return amount;
   }
 }

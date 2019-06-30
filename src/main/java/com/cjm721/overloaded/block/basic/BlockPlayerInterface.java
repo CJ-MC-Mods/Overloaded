@@ -10,9 +10,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
@@ -21,6 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
@@ -39,6 +42,13 @@ public class BlockPlayerInterface extends ModBlockTile {
     return new TilePlayerInterface();
   }
 
+  @OnlyIn(Dist.CLIENT)
+  @Nonnull
+  @Override
+  public BlockRenderLayer getRenderLayer() {
+    return BlockRenderLayer.TRANSLUCENT;
+  }
+
   @Override
   public void onBlockPlacedBy(
       World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
@@ -52,17 +62,14 @@ public class BlockPlayerInterface extends ModBlockTile {
   public void registerModel() {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
     // ModelResourceLocation(getRegistryName(), null));
-    ClientRegistry.bindTileEntitySpecialRenderer(
-        TilePlayerInterface.class, new PlayerInterfaceRenderer());
-
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/block/block_player.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
   @Override
-  public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-    if (!world.isRemote && player.getActiveHand() == Hand.MAIN_HAND) {
+  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    if (!world.isRemote && hand == Hand.MAIN_HAND) {
       TileEntity te = world.getTileEntity(pos);
 
       if (te instanceof TilePlayerInterface) {
@@ -78,8 +85,9 @@ public class BlockPlayerInterface extends ModBlockTile {
                   "Bound to player: " + (username == null ? placer.toString() : username)));
         }
       }
+      return true;
     }
 
-    super.onBlockClicked(state, world, pos, player);
+    return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
   }
 }

@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.storage.energy;
 
-import com.cjm721.overloaded.storage.LongEnergyStack;
+import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.CompoundNBT;

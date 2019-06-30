@@ -2,7 +2,7 @@ package com.cjm721.overloaded.storage.item;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.INBTConvertible;
-import com.cjm721.overloaded.storage.LongItemStack;
+import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.item.ItemStack;
@@ -54,7 +54,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     }
 
     ItemStack toReturn = stack.copy();
-    toReturn.setCount((int) result.getAmount());
+    toReturn.setCount(result.getAmount().intValue());
 
     return toReturn;
   }
@@ -69,7 +69,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
     }
 
     ItemStack toReturn = result.getItemStack().copy();
-    toReturn.setCount((int) result.getAmount());
+    toReturn.setCount(result.getAmount().intValue());
 
     return toReturn;
   }

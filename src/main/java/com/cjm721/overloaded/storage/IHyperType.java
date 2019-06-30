@@ -1,5 +1,5 @@
 package com.cjm721.overloaded.storage;
 
-public interface IHyperType {
-  long getAmount();
+public interface IHyperType<T extends Number> {
+  T getAmount();
 }

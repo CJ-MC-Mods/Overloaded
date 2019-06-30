@@ -1,11 +1,12 @@
-package com.cjm721.overloaded.storage;
+package com.cjm721.overloaded.storage.stacks.intint;
 
+import com.cjm721.overloaded.storage.IHyperType;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-public class LongItemStack implements IHyperType {
+public class LongItemStack implements IHyperType<Long> {
 
   public static final LongItemStack EMPTY_STACK = new LongItemStack(ItemStack.EMPTY, 0L);
 
@@ -18,7 +19,7 @@ public class LongItemStack implements IHyperType {
   }
 
   @Override
-  public long getAmount() {
+  public Long getAmount() {
     return amount;
   }
 

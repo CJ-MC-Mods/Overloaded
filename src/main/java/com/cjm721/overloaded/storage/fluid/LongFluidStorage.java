@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.fluid;
 
 import com.cjm721.overloaded.storage.INBTConvertible;
-import com.cjm721.overloaded.storage.LongFluidStack;
+import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.CompoundNBT;

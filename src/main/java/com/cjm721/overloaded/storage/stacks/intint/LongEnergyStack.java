@@ -1,6 +1,8 @@
-package com.cjm721.overloaded.storage;
+package com.cjm721.overloaded.storage.stacks.intint;
 
-public class LongEnergyStack implements IHyperType {
+import com.cjm721.overloaded.storage.IHyperType;
+
+public class LongEnergyStack implements IHyperType<Long> {
 
   public static final LongEnergyStack EMPTY_STACK = new LongEnergyStack(0L);
 
@@ -11,7 +13,7 @@ public class LongEnergyStack implements IHyperType {
   }
 
   @Override
-  public long getAmount() {
+  public Long getAmount() {
     return amount;
   }
 }

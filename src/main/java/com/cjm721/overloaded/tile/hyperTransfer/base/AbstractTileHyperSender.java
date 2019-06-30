@@ -123,14 +123,17 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     }
 
     T itemStack = handler.orElse(null).take(generate(Long.MAX_VALUE), false);
-    if (itemStack.getAmount() > 0) {
+    if (itemStack.getAmount().longValue() > 0) {
       T leftOvers = partner.receive(itemStack);
       if (leftOvers.getAmount() != itemStack.getAmount()) {
         T tookOut =
             handler
                 .orElse(null)
-                .take(generate(itemStack.getAmount() - leftOvers.getAmount()), true);
-        if (tookOut.getAmount() != itemStack.getAmount() - leftOvers.getAmount()) {
+                .take(
+                    generate(itemStack.getAmount().longValue() - leftOvers.getAmount().longValue()),
+                    true);
+        if (tookOut.getAmount().longValue()
+            != itemStack.getAmount().longValue() - leftOvers.getAmount().longValue()) {
           throw new RuntimeException("IHyperHandler Take was not consistent");
         }
       }

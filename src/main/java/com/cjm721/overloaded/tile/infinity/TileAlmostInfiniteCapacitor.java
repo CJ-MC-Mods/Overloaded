@@ -4,7 +4,6 @@ import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -15,12 +14,12 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class TileInfiniteCapacitor extends AbstractTileInfinityStorage implements IDataUpdate {
+public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage implements IDataUpdate {
 
   @Nonnull private final LongEnergyStorage energyStorage;
 
-  public TileInfiniteCapacitor() {
-    super(ModTiles.infiniteCapacitor);
+  public TileAlmostInfiniteCapacitor() {
+    super(ModTiles.almostInfiniteCapacitor);
     energyStorage = new LongEnergyStorage(this);
   }
 
@@ -46,11 +45,11 @@ public class TileInfiniteCapacitor extends AbstractTileInfinityStorage implement
   @Override
   @Nonnull
   public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+      @Nonnull Capability<T> capability, @Nullable Direction side) {
     if (capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
       return LazyOptional.of(() -> energyStorage).cast();
     }
-    return super.getCapability(capability, facing);
+    return super.getCapability(capability, side);
   }
 
   @Override

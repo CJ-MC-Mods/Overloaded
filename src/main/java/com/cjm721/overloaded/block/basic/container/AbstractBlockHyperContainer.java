@@ -3,8 +3,7 @@ package com.cjm721.overloaded.block.basic.container;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
-import com.cjm721.overloaded.tile.infinity.AbstractTileInfinityStorage;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
+import com.cjm721.overloaded.tile.infinity.AbstractTileHyperStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,8 +18,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
-    AbstractBlockInfiniteContainer(Properties materialIn) {
+abstract class AbstractBlockHyperContainer extends ModBlockTile {
+    AbstractBlockHyperContainer(Properties materialIn) {
         super(materialIn);
     }
 
@@ -56,19 +55,6 @@ abstract class AbstractBlockInfiniteContainer extends ModBlockTile {
     }
 
     protected abstract void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player);
-
-    @Nullable
-    protected final IHyperType getHyperStack(@Nonnull ServerWorld world, @Nonnull BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-
-        if (te instanceof AbstractTileInfinityStorage) {
-            return (IHyperType) te.getCapability(getHyperCapabilityType()).<IHyperHandler>cast().map(IHyperHandler::status).orElse(null);
-        }
-        return null;
-    }
-
-    @Nonnull
-    abstract <T extends IHyperHandler> Capability<T> getHyperCapabilityType();
 
 //    @Override
 //    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

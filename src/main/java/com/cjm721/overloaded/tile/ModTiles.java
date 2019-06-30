@@ -3,9 +3,7 @@ package com.cjm721.overloaded.tile;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.tile.functional.*;
 import com.cjm721.overloaded.tile.hyperTransfer.*;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteBarrel;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteCapacitor;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteTank;
+import com.cjm721.overloaded.tile.infinity.*;
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -30,13 +28,16 @@ public class ModTiles {
     static final String teamLoader = MODID + ":team_loader";
     static final String hyperItemReceiver = MODID + ":hyper_item_receiver";
     static final String hyperItemSender = MODID + ":hyper_item_sender";
-    static final String infiniteBarrel = MODID + ":infinite_barrel";
+    static final String almostInfiniteBarrel = MODID + ":almost_infinite_barrel";
+    static final String trueInfiniteBarrel = MODID + ":true_infinite_barrel";
     static final String hyperEnergyReceiver = MODID + ":hyper_energy_receiver";
     static final String hyperEnergySender = MODID + ":hyper_energy_sender";
-    static final String infiniteCapacitor = MODID + ":infinite_capacitor";
+    static final String almostInfiniteCapacitor = MODID + ":almost_infinite_capacitor";
+    static final String trueInfiniteCapacitor = MODID + ":true_infinite_capacitor";
     static final String hyperFluidReceiver = MODID + ":hyper_fluid_receiver";
     static final String hyperFluidSender = MODID + ":hyper_fluid_sender";
-    static final String infiniteTank = MODID + ":infinite_tank";
+    static final String almostInfiniteTank = MODID + ":almost_infinite_tank";
+    static final String trueInfiniteTank = MODID + ":true_infinite_tank";
   }
 
   @ObjectHolder(TileResourceLocations.creativeGeneratorFE)
@@ -72,8 +73,11 @@ public class ModTiles {
   @ObjectHolder(TileResourceLocations.hyperItemSender)
   public static TileEntityType<?> hyperItemSender;
 
-  @ObjectHolder(TileResourceLocations.infiniteBarrel)
-  public static TileEntityType<?> infiniteBarrel;
+  @ObjectHolder(TileResourceLocations.almostInfiniteBarrel)
+  public static TileEntityType<?> almostInfiniteBarrel;
+
+  @ObjectHolder(TileResourceLocations.trueInfiniteBarrel)
+  public static TileEntityType<?> trueInfiniteBarrel;
 
   @ObjectHolder(TileResourceLocations.hyperEnergyReceiver)
   public static TileEntityType<?> hyperEnergyReceiver;
@@ -81,8 +85,11 @@ public class ModTiles {
   @ObjectHolder(TileResourceLocations.hyperEnergySender)
   public static TileEntityType<?> hyperEnergySender;
 
-  @ObjectHolder(TileResourceLocations.infiniteCapacitor)
-  public static TileEntityType<?> infiniteCapacitor;
+  @ObjectHolder(TileResourceLocations.almostInfiniteCapacitor)
+  public static TileEntityType<?> almostInfiniteCapacitor;
+
+  @ObjectHolder(TileResourceLocations.trueInfiniteCapacitor)
+  public static TileEntityType<?> trueInfiniteCapacitor;
 
   @ObjectHolder(TileResourceLocations.hyperFluidReceiver)
   public static TileEntityType<?> hyperFluidReceiver;
@@ -90,8 +97,11 @@ public class ModTiles {
   @ObjectHolder(TileResourceLocations.hyperFluidSender)
   public static TileEntityType<?> hyperFluidSender;
 
-  @ObjectHolder(TileResourceLocations.infiniteTank)
-  public static TileEntityType<?> infiniteTank;
+  @ObjectHolder(TileResourceLocations.almostInfiniteTank)
+  public static TileEntityType<?> almostInfiniteTank;
+
+  @ObjectHolder(TileResourceLocations.trueInfiniteTank)
+  public static TileEntityType<?> trueInfiniteTank;
 
   public static void init(IForgeRegistry<TileEntityType<?>> registry) {
     registry.register(
@@ -147,9 +157,14 @@ public class ModTiles {
             TileResourceLocations.hyperItemSender));
     registry.register(
         build(
-            TileInfiniteBarrel::new,
-            ModBlocks.infiniteBarrel,
-            TileResourceLocations.infiniteBarrel));
+            TileAlmostInfiniteBarrel::new,
+            ModBlocks.almostInfiniteBarrel,
+            TileResourceLocations.almostInfiniteBarrel));
+    registry.register(
+        build(
+            TileTrueInfiniteBarrel::new,
+            ModBlocks.trueInfiniteBarrel,
+            TileResourceLocations.trueInfiniteBarrel));
     registry.register(
         build(
             TileHyperEnergyReceiver::new,
@@ -162,9 +177,14 @@ public class ModTiles {
             TileResourceLocations.hyperEnergySender));
     registry.register(
         build(
-            TileInfiniteCapacitor::new,
-            ModBlocks.infiniteCapacitor,
-            TileResourceLocations.infiniteCapacitor));
+            TileAlmostInfiniteCapacitor::new,
+            ModBlocks.almostInfiniteCapacitor,
+            TileResourceLocations.almostInfiniteCapacitor));
+    registry.register(
+        build(
+            TileTrueInfiniteCapacitor::new,
+            ModBlocks.trueInfiniteCapacitor,
+            TileResourceLocations.trueInfiniteCapacitor));
     registry.register(
         build(
             TileHyperFluidReceiver::new,
@@ -176,7 +196,12 @@ public class ModTiles {
             ModBlocks.hyperFluidSender,
             TileResourceLocations.hyperFluidSender));
     registry.register(
-        build(TileInfiniteTank::new, ModBlocks.infiniteTank, TileResourceLocations.infiniteTank));
+        build(TileAlmostInfiniteTank::new, ModBlocks.almostInfiniteTank, TileResourceLocations.almostInfiniteTank));
+    registry.register(
+        build(
+            TileTrueInfiniteTank::new,
+            ModBlocks.trueInfiniteTank,
+            TileResourceLocations.trueInfiniteTank));
   }
 
   private static TileEntityType build(Supplier<TileEntity> e, Block block, String name) {

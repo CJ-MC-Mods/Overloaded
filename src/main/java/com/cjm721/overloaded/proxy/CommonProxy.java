@@ -104,6 +104,8 @@ public class CommonProxy {
         new NoClipUpdateHandler());
 
     MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
+    MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+
 
 //    NetworkRegistry.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
   }
@@ -123,11 +125,6 @@ public class CommonProxy {
     ModItems.init();
 
     event.getRegistry().registerAll(itemToRegister.toArray(new Item[0]));
-  }
-
-  @SubscribeEvent
-  public static void registerAnything(RegistryEvent.Register<?> event) {
-    System.out.println("HIT");
   }
 
   @SubscribeEvent

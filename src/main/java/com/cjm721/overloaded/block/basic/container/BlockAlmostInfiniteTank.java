@@ -2,9 +2,8 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.storage.IHyperHandler;
-import com.cjm721.overloaded.storage.LongFluidStack;
-import com.cjm721.overloaded.tile.infinity.TileInfiniteTank;
+import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
+import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteTank;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,28 +18,26 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
+public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
 
-  public BlockInfiniteTank() {
+  public BlockAlmostInfiniteTank() {
     super(getDefaultProperties());
-    setRegistryName("infinite_tank");
+    setRegistryName("almost_infinite_tank");
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
     ModelResourceLocation location =
-        new ModelResourceLocation(new ResourceLocation(MODID, "infinite_tank"), null);
+        new ModelResourceLocation(new ResourceLocation(MODID, "almost_infinite_tank"), null);
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
 
     ResizeableTextureGenerator.addToTextureQueue(
@@ -53,7 +50,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
   @Override
   @Nonnull
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileInfiniteTank();
+    return new TileAlmostInfiniteTank();
   }
 
   @Override
@@ -71,7 +68,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
         return true;
       } else {
         TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileInfiniteTank) {
+        if (te instanceof TileAlmostInfiniteTank) {
           IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
           if (FluidUtil.interactWithFluidHandler(player, handIn, handler)) {
             return true;
@@ -85,7 +82,7 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
   @Override
   protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
     LongFluidStack storedFluid =
-        ((TileInfiniteTank) world.getTileEntity(pos)).getStorage().getFluidStack();
+        ((TileAlmostInfiniteTank) world.getTileEntity(pos)).getStorage().getFluidStack();
     if (storedFluid == null || storedFluid.fluidStack == null) {
       player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
     } else {
@@ -96,11 +93,5 @@ public class BlockInfiniteTank extends AbstractBlockInfiniteContainer {
                   storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)),
           false);
     }
-  }
-
-  @Nonnull
-  @Override
-  <T extends IHyperHandler> Capability<T> getHyperCapabilityType() {
-    return (Capability<T>) HYPER_FLUID_HANDLER;
   }
 }

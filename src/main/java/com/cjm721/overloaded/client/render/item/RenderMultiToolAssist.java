@@ -10,22 +10,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
-import net.minecraft.client.renderer.texture.ISprite;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -52,8 +44,7 @@ public class RenderMultiToolAssist {
   }
 
   @SubscribeEvent
-  public static void onKeyEvent(InputEvent.KeyInputEvent event) {
-  }
+  public static void onKeyEvent(InputEvent.KeyInputEvent event) {}
 
   private static void changeHelpMode(int dwheel) {
     AssistMode[] values = AssistMode.values();
@@ -115,35 +106,39 @@ public class RenderMultiToolAssist {
 
   private static void renderRemovePreview(
       RenderWorldLastEvent event, PlayerEntity player, BlockRayTraceResult result) {
-//    try {
-//      IModel model =
-//          ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
-//      IBakedModel bakeModel =
-//          model.bake(
-//              new ModelBakery(
-//                  Minecraft.getInstance().getResourceManager(),
-//                  Minecraft.getInstance().getTextureMap(),
-//                  Minecraft.getInstance().getProfiler()),
-//              ModelLoader.defaultTextureGetter(),
-//              new ISprite() {},
-//              DefaultVertexFormats.ITEM);
-//
-//      BlockPos toRenderAt = result.getPos();
-//
-//      final float partialTicks = event.getPartialTicks();
-//      final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-//      final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-//      final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-//
-//      GlStateManager.pushMatrix();
-//      GlStateManager.translated(
-//          toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-//      RenderUtil.renderGhostModel(
-//          bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(), toRenderAt);
-//      GlStateManager.popMatrix();
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
+    //    try {
+    //      IModel model =
+    //          ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
+    //      IBakedModel bakeModel =
+    //          model.bake(
+    //              new ModelBakery(
+    //                  Minecraft.getInstance().getResourceManager(),
+    //                  Minecraft.getInstance().getTextureMap(),
+    //                  Minecraft.getInstance().getProfiler()),
+    //              ModelLoader.defaultTextureGetter(),
+    //              new ISprite() {},
+    //              DefaultVertexFormats.ITEM);
+    //
+    //      BlockPos toRenderAt = result.getPos();
+    //
+    //      final float partialTicks = event.getPartialTicks();
+    //      final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) *
+    // partialTicks;
+    //      final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) *
+    // partialTicks;
+    //      final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) *
+    // partialTicks;
+    //
+    //      GlStateManager.pushMatrix();
+    //      GlStateManager.translated(
+    //          toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+    //      RenderUtil.renderGhostModel(
+    //          bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(),
+    // toRenderAt);
+    //      GlStateManager.popMatrix();
+    //    } catch (Exception e) {
+    //      e.printStackTrace();
+    //    }
   }
 
   private static void renderBlockPreview(
@@ -175,16 +170,13 @@ public class RenderMultiToolAssist {
     //            player.getRNG(),
     //            1,
     //            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
-
-    //        .renderBlock(
-    //            state,
-    //            toRenderAt,
-    //            player.getEntityWorld(),
-    //            renderBuffer,
-    //            player.getRNG(),
-    //            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
-    //
-    // ,)
+    //            .renderBlock(
+    //                state,
+    //                toRenderAt,
+    //                player.getEntityWorld(),
+    //                renderBuffer,
+    //                player.getRNG(),
+    //                ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
 
     GlStateManager.pushMatrix();
     GlStateManager.translated(

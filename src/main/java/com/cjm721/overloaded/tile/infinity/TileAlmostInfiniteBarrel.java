@@ -5,18 +5,20 @@ import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public class TileInfiniteBarrel extends AbstractTileInfinityStorage implements IDataUpdate {
+public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage implements IDataUpdate {
 
   @Nonnull private final LongItemStorage itemStorage;
 
-  public TileInfiniteBarrel() {
-    super(ModTiles.infiniteBarrel);
+  public TileAlmostInfiniteBarrel() {
+    super(ModTiles.almostInfiniteBarrel);
     itemStorage = new LongItemStorage(this);
   }
 
@@ -36,13 +38,13 @@ public class TileInfiniteBarrel extends AbstractTileInfinityStorage implements I
 
   @Nonnull
   @Override
-  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap) {
+  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
         || cap == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
       return LazyOptional.of(() -> itemStorage).cast();
     }
 
-    return super.getCapability(cap);
+    return super.getCapability(cap, side);
   }
 
   public LongItemStorage getStorage() {

@@ -43,9 +43,6 @@ public class BlockItemInterface extends ModBlock {
   public void registerModel() {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
     // ModelResourceLocation(getRegistryName(), null));
-    ClientRegistry.bindTileEntitySpecialRenderer(
-        TileItemInterface.class, new ItemInterfaceRenderer());
-
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/block/item_interface.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
@@ -71,8 +68,17 @@ public class BlockItemInterface extends ModBlock {
   }
 
   @Override
+  public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+    ((TileItemInterface)world.getTileEntity(pos)).breakBlock();
+
+    super.onBlockHarvested(world,pos,state,player);
+  }
+
+  @Override
   public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
     if (world.isRemote) return false;
+
+    if (hand != Hand.MAIN_HAND) return false;
 
     TileEntity te = world.getTileEntity(pos);
 
@@ -87,7 +93,7 @@ public class BlockItemInterface extends ModBlock {
       if (handStack.isEmpty()) return false;
 
       ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
-      player.setHeldItem(player.getActiveHand(), returnedItem);
+      player.setHeldItem(hand, returnedItem);
     } else {
       if (!player.getHeldItem(hand).isEmpty()) return false;
 

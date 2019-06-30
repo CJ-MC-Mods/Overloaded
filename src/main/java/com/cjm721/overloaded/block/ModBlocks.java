@@ -2,9 +2,7 @@ package com.cjm721.overloaded.block;
 
 import com.cjm721.overloaded.OverloadedItemGroups;
 import com.cjm721.overloaded.block.basic.*;
-import com.cjm721.overloaded.block.basic.container.BlockInfiniteBarrel;
-import com.cjm721.overloaded.block.basic.container.BlockInfiniteCapacitor;
-import com.cjm721.overloaded.block.basic.container.BlockInfiniteTank;
+import com.cjm721.overloaded.block.basic.container.*;
 import com.cjm721.overloaded.block.basic.hyperTransfer.*;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
@@ -26,9 +24,12 @@ public final class ModBlocks {
   public static Fluid pureMatter;
 
   public static ModBlock creativeGenerator;
-  public static ModBlock infiniteBarrel;
-  public static ModBlock infiniteTank;
-  public static ModBlock infiniteCapacitor;
+  public static ModBlock almostInfiniteBarrel;
+  public static ModBlock trueInfiniteBarrel;
+  public static ModBlock almostInfiniteTank;
+  public static ModBlock trueInfiniteTank;
+  public static ModBlock almostInfiniteCapacitor;
+  public static ModBlock trueInfiniteCapacitor;
 
   public static ModBlock hyperItemReceiver;
   public static ModBlock hyperItemSender;
@@ -54,6 +55,7 @@ public final class ModBlocks {
 
   public static final List<IModRegistrable> registerList = new LinkedList<>();
 
+
   public static void init(IForgeRegistry<Block> registry) {
     String textureName = "blocks/pure_matter";
 
@@ -67,9 +69,12 @@ public final class ModBlocks {
             .setRarity(Rarity.EPIC);
 
     creativeGenerator = registerFull(registry, new BlockCreativeGenerator());
-    infiniteBarrel = registerFull(registry, new BlockInfiniteBarrel());
-    infiniteTank = registerFull(registry, new BlockInfiniteTank());
-    infiniteCapacitor = registerFull(registry, new BlockInfiniteCapacitor());
+    almostInfiniteBarrel = registerFull(registry, new BlockAlmostInfiniteBarrel());
+    trueInfiniteBarrel = registerFull(registry, new BlockTrueInfiniteBarrel());
+    almostInfiniteTank = registerFull(registry, new BlockAlmostInfiniteTank());
+    trueInfiniteTank = registerFull(registry, new BlockTrueInfiniteTank());
+    almostInfiniteCapacitor = registerFull(registry, new BlockAlmostInfiniteCapacitor());
+    trueInfiniteCapacitor = registerFull(registry, new BlockTrueInfiniteCapacitor());
 
     hyperItemReceiver = registerFull(registry, new BlockHyperItemReceiver());
     hyperItemSender = registerFull(registry, new BlockHyperItemSender());

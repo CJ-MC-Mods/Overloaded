@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.tile.hyperTransfer;
 
-import com.cjm721.overloaded.storage.LongEnergyStack;
+import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;

@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.util;
 
-import com.cjm721.overloaded.storage.LongItemStack;
+import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.storage.item.IHyperHandlerItem;
 import com.cjm721.overloaded.storage.item.LongItemStorage;
 import net.minecraft.item.ItemStack;
