@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
-public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage<LongEnergyStorage> implements IDataUpdate {
 
   @Nonnull private final LongEnergyStorage energyStorage;
 
@@ -28,18 +28,20 @@ public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage implem
   public CompoundNBT write(@Nonnull CompoundNBT compound) {
     super.write(compound);
     CompoundNBT energy = energyStorage.serializeNBT();
-    compound.put("Energy", energy);
+    compound.put("LongEnergyStorage", energy);
     return compound;
   }
 
   @Override
   public void read(@Nonnull CompoundNBT compound) {
     super.read(compound);
-    if(compound.contains("Energy")) {
-      energyStorage.deserializeNBT((CompoundNBT) compound.get("Energy"));
+    if(compound.contains("LongEnergyStorage")) {
+      energyStorage.deserializeNBT((CompoundNBT) compound.get("LongEnergyStorage"));
     }
   }
 
+  @Override
+  @Nonnull
   public LongEnergyStorage getStorage() {
     return energyStorage;
   }

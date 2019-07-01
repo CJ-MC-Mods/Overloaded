@@ -1,11 +1,12 @@
 package com.cjm721.overloaded.block.basic.container;
 
+import com.cjm721.overloaded.storage.stacks.bigint.BigIntFluidStack;
 import com.cjm721.overloaded.tile.infinity.TileTrueInfiniteTank;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
@@ -19,12 +20,21 @@ public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
   }
 
   @Override
-  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {}
-
-  @Override
-  public MaterialColor getMaterialColor(
-      BlockState p_180659_1_, IBlockReader p_180659_2_, BlockPos p_180659_3_) {
-    return MaterialColor.WHITE_TERRACOTTA;
+  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+    BigIntFluidStack storedFluid =
+        ((TileTrueInfiniteTank) world.getTileEntity(pos)).getStorage().bigStatus();
+    if (storedFluid == null || storedFluid.fluidStack == null) {
+      player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
+    } else {
+      player.sendStatusMessage(
+          new StringTextComponent(
+              String.format(
+                  "Fluid: %s Amount: %,d Bits: %,d",
+                  storedFluid.fluidStack.getLocalizedName(),
+                  storedFluid.amount,
+                  storedFluid.amount.bitLength())),
+          false);
+    }
   }
 
   @Nullable

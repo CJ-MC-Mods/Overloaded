@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.storage.fluid;
 
-import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -16,7 +16,8 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 
-public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBTConvertible {
+public class LongFluidStorage
+    implements IFluidHandler, IHyperHandlerFluid, INBTSerializable<CompoundNBT> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private LongFluidStack storedFluid;
@@ -104,7 +105,7 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
   }
 
   @Override
-  public void read(CompoundNBT compound) {
+  public void deserializeNBT(CompoundNBT compound) {
     FluidStack fluidStack =
         compound.contains("Fluid")
             ? FluidStack.loadFluidStackFromNBT((CompoundNBT) compound.get("Fluid"))
@@ -115,7 +116,9 @@ public class LongFluidStorage implements IFluidHandler, IHyperHandlerFluid, INBT
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  @Nonnull
+  public CompoundNBT serializeNBT() {
+    CompoundNBT compound = new CompoundNBT();
     if (storedFluid.fluidStack != null) {
       CompoundNBT tag = new CompoundNBT();
       storedFluid.fluidStack.writeToNBT(tag);

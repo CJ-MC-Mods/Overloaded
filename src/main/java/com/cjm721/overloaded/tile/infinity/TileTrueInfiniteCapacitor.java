@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
-public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEnergyStorage> implements IDataUpdate {
 
   private final BigIntEnergyStorage energyStorage;
 
@@ -25,18 +25,16 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage implemen
   @Override
   @Nonnull
   public CompoundNBT write(CompoundNBT compound) {
-    CompoundNBT energy = energyStorage.serializeNBT();
-
-    super.write(compound).put("Energy", energy);
-
+    compound = super.write(compound);
+    compound.put("BigIntEnergyStorage", energyStorage.serializeNBT());
     return compound;
   }
 
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
-    if(compound.contains("Energy")) {
-      energyStorage.deserializeNBT((CompoundNBT) compound.get("Energy"));
+    if(compound.contains("BigIntEnergyStorage")) {
+      energyStorage.deserializeNBT((CompoundNBT) compound.get("BigIntEnergyStorage"));
     }
   }
 
@@ -54,6 +52,8 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage implemen
     markDirty();
   }
 
+  @Override
+  @Nonnull
   public BigIntEnergyStorage getStorage() {
     return energyStorage;
   }

@@ -14,8 +14,9 @@ import javax.annotation.Nullable;
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-public class TileAlmostInfiniteTank extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidStorage> implements IDataUpdate {
 
+  @Nonnull
   private final LongFluidStorage fluidStorage;
 
   public TileAlmostInfiniteTank() {
@@ -26,19 +27,22 @@ public class TileAlmostInfiniteTank extends AbstractTileHyperStorage implements 
   @Override
   @Nonnull
   public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    super.write(compound);
-
-    return fluidStorage.write(compound);
+    compound = super.write(compound);
+    compound.put("LongFluidStorage", fluidStorage.serializeNBT());
+    return compound;
   }
 
   @Override
   public void read(@Nonnull CompoundNBT compound) {
     super.read(compound);
 
-    fluidStorage.read(compound);
+    if(compound.contains("LongFluidStorage")) {
+      fluidStorage.deserializeNBT((CompoundNBT) compound.get("LongFluidStorage"));
+    }
   }
 
   @Nonnull
+  @Override
   public LongFluidStorage getStorage() {
     return fluidStorage;
   }

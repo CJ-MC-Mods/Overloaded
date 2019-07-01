@@ -13,8 +13,9 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 
-public class TileTrueInfiniteTank extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidStorage> implements IDataUpdate {
 
+  @Nonnull
   private final BigIntFluidStorage fluidStorage;
 
   public TileTrueInfiniteTank() {
@@ -25,14 +26,18 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage implements ID
   @Override
   @Nonnull
   public CompoundNBT write(CompoundNBT compound) {
-    return fluidStorage.write(super.write(compound));
+    compound = super.write(compound);
+    compound.put("BigIntFluidStorage", fluidStorage.serializeNBT());
+    return compound;
   }
 
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
 
-    fluidStorage.read(compound);
+    if(compound.contains("BigIntFluidStorage")) {
+      fluidStorage.deserializeNBT((CompoundNBT) compound.get("BigIntFluidStorage"));
+    }
   }
 
   @Nonnull
@@ -47,5 +52,11 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage implements ID
   @Override
   public void dataUpdated() {
     markDirty();
+  }
+
+  @Nonnull
+  @Override
+  public BigIntFluidStorage getStorage() {
+    return fluidStorage;
   }
 }

@@ -1,12 +1,12 @@
 package com.cjm721.overloaded.storage.item;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -14,7 +14,8 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 
-public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTConvertible {
+public class LongItemStorage
+    implements IItemHandler, IHyperHandlerItem, INBTSerializable<CompoundNBT> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private LongItemStack longItemStack;
@@ -85,7 +86,8 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
   }
 
   @Override
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+  public CompoundNBT serializeNBT() {
+    CompoundNBT compound = new CompoundNBT();
     if (!longItemStack.getItemStack().isEmpty()) {
       ItemStack stack = longItemStack.getItemStack();
       stack.setCount(1);
@@ -97,7 +99,7 @@ public class LongItemStorage implements IItemHandler, IHyperHandlerItem, INBTCon
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT compound) {
+  public void deserializeNBT(CompoundNBT compound) {
     ItemStack storedItem =
         compound.contains("Item") ? ItemStack.read((CompoundNBT) compound.get("Item")) : null;
     if (storedItem != null) {

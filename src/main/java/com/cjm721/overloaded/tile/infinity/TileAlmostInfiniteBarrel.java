@@ -13,7 +13,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemStorage> implements IDataUpdate {
 
   @Nonnull private final LongItemStorage itemStorage;
 
@@ -25,15 +25,18 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage implement
   @Override
   @Nonnull
   public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    super.write(compound);
-    return itemStorage.write(compound);
+    compound = super.write(compound);
+    compound.put("LongItemStorage", itemStorage.serializeNBT());
+    return compound;
   }
 
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
 
-    itemStorage.read(compound);
+    if(compound.contains("LongItemStorage")) {
+      itemStorage.deserializeNBT((CompoundNBT) compound.get("LongItemStorage"));
+    }
   }
 
   @Nonnull
@@ -47,6 +50,8 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage implement
     return super.getCapability(cap, side);
   }
 
+  @Override
+  @Nonnull
   public LongItemStorage getStorage() {
     return itemStorage;
   }

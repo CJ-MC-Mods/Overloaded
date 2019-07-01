@@ -1,17 +1,17 @@
 package com.cjm721.overloaded.storage.item;
 
-import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntItemStack;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
 
-public class BigIntItemStorage implements IHyperHandlerItem, INBTConvertible {
+public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<CompoundNBT> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private BigIntItemStack storedItem;
@@ -21,8 +21,13 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTConvertible {
     storedItem = new BigIntItemStack(ItemStack.EMPTY, BigInteger.ZERO);
   }
 
+  @Nonnull
+  public BigIntItemStack bigStatus() {
+    return storedItem;
+  }
+
   @Override
-  public void read(CompoundNBT compound) {
+  public void deserializeNBT(CompoundNBT compound) {
     ItemStack itemStack =
         compound.contains("Stack")
             ? ItemStack.read((CompoundNBT) compound.get("Stack"))
@@ -37,7 +42,8 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTConvertible {
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT serializeNBT() {
+    CompoundNBT compound = new CompoundNBT();
     if (storedItem.itemStack != ItemStack.EMPTY) {
       CompoundNBT tag = new CompoundNBT();
       storedItem.itemStack.write(tag);

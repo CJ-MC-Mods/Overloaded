@@ -13,9 +13,10 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
-public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage implements IDataUpdate {
+public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemStorage>
+    implements IDataUpdate {
 
-  private final BigIntItemStorage itemStorage;
+  @Nonnull private final BigIntItemStorage itemStorage;
 
   public TileTrueInfiniteBarrel() {
     super(ModTiles.trueInfiniteBarrel);
@@ -25,14 +26,17 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage implements 
   @Override
   @Nonnull
   public CompoundNBT write(CompoundNBT compound) {
-    return itemStorage.write(super.write(compound));
+    compound = super.write(compound);
+    compound.put("BigIntItemStorage", itemStorage.serializeNBT());
+    return compound;
   }
 
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
-
-    itemStorage.read(compound);
+    if (compound.contains("BigIntItemStorage")) {
+      itemStorage.deserializeNBT((CompoundNBT) compound.get("BigIntItemStorage"));
+    }
   }
 
   @Nonnull
@@ -47,5 +51,11 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage implements 
   @Override
   public void dataUpdated() {
     markDirty();
+  }
+
+  @Nonnull
+  @Override
+  public BigIntItemStorage getStorage() {
+    return itemStorage;
   }
 }

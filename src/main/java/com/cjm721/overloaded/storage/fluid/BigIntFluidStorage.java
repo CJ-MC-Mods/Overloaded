@@ -1,10 +1,10 @@
 package com.cjm721.overloaded.storage.fluid;
 
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntFluidStack;
-import com.cjm721.overloaded.storage.INBTConvertible;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
@@ -12,7 +12,7 @@ import java.math.BigInteger;
 
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 
-public class BigIntFluidStorage implements IHyperHandlerFluid, INBTConvertible {
+public class BigIntFluidStorage implements IHyperHandlerFluid, INBTSerializable<CompoundNBT> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private BigIntFluidStack storedFluid;
@@ -22,8 +22,13 @@ public class BigIntFluidStorage implements IHyperHandlerFluid, INBTConvertible {
     storedFluid = new BigIntFluidStack(null, BigInteger.ZERO);
   }
 
+  @Nonnull
+  public BigIntFluidStack bigStatus() {
+    return storedFluid;
+  }
+
   @Override
-  public void read(CompoundNBT compound) {
+  public void deserializeNBT(CompoundNBT compound) {
     FluidStack fluidStack =
         compound.contains("Fluid")
             ? FluidStack.loadFluidStackFromNBT((CompoundNBT) compound.get("Fluid"))
@@ -37,14 +42,14 @@ public class BigIntFluidStorage implements IHyperHandlerFluid, INBTConvertible {
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT serializeNBT() {
+    CompoundNBT compound = new CompoundNBT();
     if (storedFluid.fluidStack != null) {
       CompoundNBT tag = new CompoundNBT();
       storedFluid.fluidStack.writeToNBT(tag);
       compound.put("Fluid", tag);
       compound.putByteArray("Count", storedFluid.amount.toByteArray());
     }
-
     return compound;
   }
 
