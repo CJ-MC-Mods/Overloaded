@@ -17,10 +17,12 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage<LongEnergyStorage> implements IDataUpdate {
 
   @Nonnull private final LongEnergyStorage energyStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileAlmostInfiniteCapacitor() {
     super(ModTiles.almostInfiniteCapacitor);
     energyStorage = new LongEnergyStorage(this);
+    capability = LazyOptional.of(() -> energyStorage);
   }
 
   @Override
@@ -49,15 +51,20 @@ public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage<LongEn
   @Override
   @Nonnull
   public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction side) {
-    if (capability == ENERGY || capability == HYPER_ENERGY_HANDLER) {
-      return LazyOptional.of(() -> energyStorage).cast();
+      @Nonnull Capability<T> cap, @Nullable Direction side) {
+    if (cap == ENERGY || cap == HYPER_ENERGY_HANDLER) {
+      return capability.cast();
     }
-    return super.getCapability(capability, side);
+    return super.getCapability(cap, side);
   }
 
   @Override
   public void dataUpdated() {
     markDirty();
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }

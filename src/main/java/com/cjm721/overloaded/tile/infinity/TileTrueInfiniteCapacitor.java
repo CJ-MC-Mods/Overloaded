@@ -15,11 +15,13 @@ import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HAND
 
 public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEnergyStorage> implements IDataUpdate {
 
-  private final BigIntEnergyStorage energyStorage;
+  @Nonnull private final BigIntEnergyStorage energyStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteCapacitor() {
     super(ModTiles.trueInfiniteCapacitor);
     energyStorage = new BigIntEnergyStorage(this);
+    capability = LazyOptional.of(() -> energyStorage);
   }
 
   @Override
@@ -42,7 +44,7 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == HYPER_ENERGY_HANDLER) {
-      return LazyOptional.of(() -> energyStorage).cast();
+      return capability.cast();
     }
     return super.getCapability(cap, side);
   }
@@ -56,5 +58,10 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
   @Nonnull
   public BigIntEnergyStorage getStorage() {
     return energyStorage;
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }

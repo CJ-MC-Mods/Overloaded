@@ -16,10 +16,12 @@ import javax.annotation.Nullable;
 public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemStorage> implements IDataUpdate {
 
   @Nonnull private final LongItemStorage itemStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileAlmostInfiniteBarrel() {
     super(ModTiles.almostInfiniteBarrel);
     itemStorage = new LongItemStorage(this);
+    capability = LazyOptional.of(() -> itemStorage);
   }
 
   @Override
@@ -44,7 +46,7 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
         || cap == CapabilityHyperItem.HYPER_ITEM_HANDLER) {
-      return LazyOptional.of(() -> itemStorage).cast();
+      return capability.cast();
     }
 
     return super.getCapability(cap, side);
@@ -59,5 +61,10 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
   @Override
   public void dataUpdated() {
     markDirty();
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }

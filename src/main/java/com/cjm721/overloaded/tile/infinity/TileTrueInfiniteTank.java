@@ -15,12 +15,13 @@ import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLE
 
 public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidStorage> implements IDataUpdate {
 
-  @Nonnull
-  private final BigIntFluidStorage fluidStorage;
+  @Nonnull private final BigIntFluidStorage fluidStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteTank() {
     super(ModTiles.trueInfiniteTank);
     fluidStorage = new BigIntFluidStorage(this);
+    capability = LazyOptional.of(() -> fluidStorage);
   }
 
   @Override
@@ -44,7 +45,7 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidSt
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == HYPER_FLUID_HANDLER) {
-      return LazyOptional.of(() -> fluidStorage).cast();
+      return capability.cast();
     }
     return super.getCapability(cap, side);
   }
@@ -58,5 +59,10 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidSt
   @Override
   public BigIntFluidStorage getStorage() {
     return fluidStorage;
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }

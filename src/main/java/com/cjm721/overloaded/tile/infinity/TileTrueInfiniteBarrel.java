@@ -17,10 +17,12 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
     implements IDataUpdate {
 
   @Nonnull private final BigIntItemStorage itemStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteBarrel() {
     super(ModTiles.trueInfiniteBarrel);
     itemStorage = new BigIntItemStorage(this);
+    capability = LazyOptional.of(() -> itemStorage);
   }
 
   @Override
@@ -43,7 +45,7 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == HYPER_ITEM_HANDLER) {
-      return LazyOptional.of(() -> itemStorage).cast();
+      return capability.cast();
     }
     return this.getCapability(cap, side);
   }
@@ -57,5 +59,10 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
   @Override
   public BigIntItemStorage getStorage() {
     return itemStorage;
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }

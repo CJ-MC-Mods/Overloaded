@@ -16,12 +16,13 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 
 public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidStorage> implements IDataUpdate {
 
-  @Nonnull
-  private final LongFluidStorage fluidStorage;
+  @Nonnull private final LongFluidStorage fluidStorage;
+  @Nonnull private final LazyOptional<?> capability;
 
   public TileAlmostInfiniteTank() {
     super(ModTiles.almostInfiniteTank);
     fluidStorage = new LongFluidStorage(this);
+    capability = LazyOptional.of(() -> fluidStorage);
   }
 
   @Override
@@ -50,15 +51,20 @@ public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidSt
   @Override
   @Nonnull
   public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction side) {
-    if (capability == FLUID_HANDLER_CAPABILITY || capability == HYPER_FLUID_HANDLER) {
-      return LazyOptional.of(() -> fluidStorage).cast();
+      @Nonnull Capability<T> cap, @Nullable Direction side) {
+    if (cap == FLUID_HANDLER_CAPABILITY || cap == HYPER_FLUID_HANDLER) {
+      return capability.cast();
     }
-    return super.getCapability(capability, side);
+    return super.getCapability(cap, side);
   }
 
   @Override
   public void dataUpdated() {
     markDirty();
+  }
+
+  @Override
+  public void onChunkUnloaded() {
+    capability.invalidate();
   }
 }
