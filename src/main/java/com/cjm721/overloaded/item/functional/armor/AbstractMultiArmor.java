@@ -102,21 +102,6 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
     ModItems.addToSecondaryInit(this);
   }
 
-  //    @Override
-  //    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-  //        super.getSubItems(tab, items);
-  //
-  //        if (this.isInCreativeTab(tab)) {
-  //            ItemStack item = new ItemStack(this);
-  //            IEnergyStorage cap = item.getCapability(ENERGY, null);
-  //
-  //            if(cap != null) {
-  //                cap.receiveEnergy(Integer.MAX_VALUE,false);
-  //                items.add(item);
-  //            }
-  //        }
-  //    }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void addInformation(
@@ -168,7 +153,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
   @Nullable
   @Override
   public CompoundNBT getShareTag(ItemStack stack) {
-    return new CompoundNBT();
+    return stack.getTag();
   }
 
   @Nullable
