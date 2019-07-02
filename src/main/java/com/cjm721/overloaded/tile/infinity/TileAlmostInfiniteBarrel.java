@@ -2,7 +2,7 @@ package com.cjm721.overloaded.tile.infinity;
 
 import com.cjm721.overloaded.storage.item.LongItemStorage;
 import com.cjm721.overloaded.tile.ModTiles;
-import com.cjm721.overloaded.util.CapabilityHyperItem;
+import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;

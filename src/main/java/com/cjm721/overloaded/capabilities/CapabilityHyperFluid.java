@@ -1,4 +1,4 @@
-package com.cjm721.overloaded.util;
+package com.cjm721.overloaded.capabilities;
 
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.storage.fluid.IHyperHandlerFluid;

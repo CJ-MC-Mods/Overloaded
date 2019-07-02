@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 /** {@link TileEntity That is able to receive items from a remote source} */
 public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, IHyperHandlerItem> {

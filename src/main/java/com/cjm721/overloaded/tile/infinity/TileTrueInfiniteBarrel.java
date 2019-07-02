@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemStorage>
     implements IDataUpdate {

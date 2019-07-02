@@ -5,7 +5,7 @@ import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperReceiver;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.storage.item.IHyperHandlerItem;
 
-import static com.cjm721.overloaded.util.CapabilityHyperItem.HYPER_ITEM_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.HYPER_ITEM_HANDLER;
 
 public class TileHyperItemReceiver
     extends AbstractTileHyperReceiver<LongItemStack, IHyperHandlerItem> {

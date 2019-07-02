@@ -2,6 +2,7 @@ package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage;
 import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
@@ -13,9 +14,9 @@ import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.tile.ModTiles;
-import com.cjm721.overloaded.util.CapabilityHyperEnergy;
-import com.cjm721.overloaded.util.CapabilityHyperFluid;
-import com.cjm721.overloaded.util.CapabilityHyperItem;
+import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
+import com.cjm721.overloaded.capabilities.CapabilityHyperFluid;
+import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
@@ -27,7 +28,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
-import org.lwjgl.system.CallbackI;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +45,7 @@ public class CommonProxy {
     CapabilityHyperItem.register();
     CapabilityHyperEnergy.register();
     CapabilityHyperFluid.register();
-    GenericDataStorage.register();
+    CapabilityGenericDataStorage.register();
 
     networkWrapper =
         newSimpleChannel(

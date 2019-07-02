@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
 public class TileHyperEnergySender
     extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {

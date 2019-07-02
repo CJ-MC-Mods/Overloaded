@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
 public class ItemEnergyShield extends ModItem {
 

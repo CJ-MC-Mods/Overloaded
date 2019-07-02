@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.util.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
 
 public class TileHyperFluidSender
     extends AbstractTileHyperSender<LongFluidStack, IHyperHandlerFluid> {
