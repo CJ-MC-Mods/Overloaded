@@ -39,9 +39,9 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Default;
-import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class ArmorEventHandler {

@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.storage.itemwrapper;
 
-import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.storage.energy.LongEnergyStorage;
+import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,7 +15,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.util.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class LongEnergyWrapper

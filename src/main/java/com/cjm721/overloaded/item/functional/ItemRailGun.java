@@ -2,7 +2,6 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
@@ -27,9 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nonnull;
@@ -40,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.storage.GenericDataStorage.GENERIC_DATA_STORAGE;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 import static net.minecraftforge.versions.forge.ForgeVersion.MOD_ID;
 
@@ -207,8 +204,9 @@ public class ItemRailGun extends PowerModItem {
         true);
   }
 
-  @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-  private static class ClientSideEvents {
-
-  }
+  @Mod.EventBusSubscriber(
+      value = Dist.CLIENT,
+      modid = MOD_ID,
+      bus = Mod.EventBusSubscriber.Bus.FORGE)
+  private static class ClientSideEvents {}
 }

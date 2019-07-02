@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 
@@ -13,6 +14,10 @@ import javax.annotation.Nullable;
 import java.util.Map;
 
 public class CapabilityGenericDataStorage {
+
+  @CapabilityInject(IGenericDataStorage.class)
+  public static Capability<IGenericDataStorage> GENERIC_DATA_STORAGE = null;
+
 
   public static void register() {
     CapabilityManager.INSTANCE.register(
