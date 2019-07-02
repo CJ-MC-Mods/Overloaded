@@ -1,7 +1,9 @@
 **Version: 0.0.60 (ALPHA)**
 
 * Everything has recipes again
-* 
+* True Infinity Storage containers
+* Worked on rendering some more
+* Should not crash anything. Tested SP and MP.
 
 -------------------------------------------------------------------
 **Version: 0.0.59 (ALPHA)**
