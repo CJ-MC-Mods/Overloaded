@@ -22,7 +22,7 @@ public class KeyBindPressedMessage {
   }
 
   public static KeyBindPressedMessage fromBytes(PacketBuffer buf) {
-    return new KeyBindPressedMessage(KeyBind.valueOf(buf.readString()));
+    return new KeyBindPressedMessage(KeyBind.valueOf(buf.readString(32)));
   }
 
   public static void toBytes(KeyBindPressedMessage message, @Nonnull PacketBuffer buf) {
