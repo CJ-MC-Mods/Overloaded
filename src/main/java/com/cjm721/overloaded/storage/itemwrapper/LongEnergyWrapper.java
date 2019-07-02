@@ -120,7 +120,7 @@ public class LongEnergyWrapper
 
   @Nonnull
   private LongEnergyStorage getStorage() {
-    CompoundNBT compound = stack.getTag().getCompound("EnergyStorage");
+    CompoundNBT compound = stack.getTag().getCompound("LongEnergyStorage");
 
     LongEnergyStorage storage = new LongEnergyStorage(this);
     storage.deserializeNBT(compound);
@@ -129,8 +129,7 @@ public class LongEnergyWrapper
   }
 
   private void setStorage(@Nonnull LongEnergyStorage storage) {
-    CompoundNBT compound = storage.serializeNBT();
-    stack.getTag().put("EnergyStorage", compound);
+    stack.getTag().put("LongEnergyStorage", storage.serializeNBT());
   }
 
   @Override
