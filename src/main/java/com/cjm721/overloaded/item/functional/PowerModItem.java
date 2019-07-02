@@ -48,21 +48,6 @@ abstract class PowerModItem extends ModItem {
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }
 
-  //  @Override
-  //  public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> items) {
-  //    super.getSubItems(tab, items);
-  //
-  //    if (this.isInCreativeTab(tab)) {
-  //      ItemStack item = new ItemStack(this);
-  //      IEnergyStorage cap = item.getCapability(ENERGY, null);
-  //
-  //      if (cap != null) {
-  //        cap.receiveEnergy(Integer.MAX_VALUE, false);
-  //        items.add(item);
-  //      }
-  //    }
-  //  }
-
   @Override
   public boolean isDamageable() {
     return false;
