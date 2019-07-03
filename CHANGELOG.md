@@ -1,3 +1,8 @@
+**Version: 0.0.61 (ALPHA)**
+
+* Fix crash on reloading texture pack (#72)
+
+-------------------------------------------------------------------
 **Version: 0.0.60 (ALPHA)**
 
 * Everything has recipes again
