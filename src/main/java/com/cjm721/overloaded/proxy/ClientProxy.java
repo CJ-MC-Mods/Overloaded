@@ -80,18 +80,6 @@ public class ClientProxy extends CommonProxy {
   }
 
   @SubscribeEvent
-  public static void textureStitch(TextureStitchEvent.Pre event) {
-    //    TextureAtlasSprite result = event.getMap().getSprite(new ResourceLocation(MODID,
-    // "item/multi_helmet"));
-    //    System.out.println(result);
-
-    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet.png"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet.png"));
-  }
-
-  @SubscribeEvent
   public static void registerModels(ModelRegistryEvent event) {
     //    ModBlocks.registerModels();
     ModItems.registerModels();

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.client.render.dynamic.ImageUtil.getTextureInputStream;
 
 @OnlyIn(Dist.CLIENT)
@@ -23,26 +24,36 @@ public class ResizeableTextureGenerator {
   private static final List<ResizableTexture> toCreateTextures = new ArrayList<>();
 
   public static void addToTextureQueue(ResizableTexture location) {
-    toCreateTextures.add(location);
+    synchronized (toCreateTextures) {
+      toCreateTextures.add(location);
+    }
   }
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
-    for (ResizableTexture resizableTexture : toCreateTextures) {
-      BufferedImage image = null;
-      try {
-        image = ImageIO.read(getTextureInputStream(resizableTexture.originalTexture));
-      } catch (IOException e) {
-        e.printStackTrace();
+    System.out.println("Texture Stich Triggered: " + event);
+
+    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet"));
+    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet"));
+    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet.png"));
+    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet.png"));
+    synchronized (toCreateTextures) {
+      for (ResizableTexture resizableTexture : toCreateTextures) {
+        BufferedImage image = null;
+        try {
+          image = ImageIO.read(getTextureInputStream(resizableTexture.originalTexture));
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+        if (image == null) continue;
+
+        image = ImageUtil.scaleDownToWidth(image, resizableTexture.resizeToWidth);
+
+        BlockResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
+
+        event.getMap().getSprite(cleanForSprite(resizableTexture.generatedName));
       }
-
-      if (image == null) continue;
-
-      image = ImageUtil.scaleDownToWidth(image, resizableTexture.resizeToWidth);
-
-      BlockResourcePack.INSTANCE.addImage(resizableTexture.generatedName, image);
-
-      event.getMap().getSprite(cleanForSprite(resizableTexture.generatedName));
     }
   }
 
