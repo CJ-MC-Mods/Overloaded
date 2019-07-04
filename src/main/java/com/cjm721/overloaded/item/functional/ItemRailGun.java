@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
@@ -12,11 +13,15 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -89,6 +94,18 @@ public class ItemRailGun extends PowerModItem {
   public ActionResult<ItemStack> onItemRightClick(
       World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
     if (worldIn.isRemote) {
+      EntityRayTraceResult ray =
+          ProjectileHelper.func_221273_a(
+              playerIn,
+              playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
+              playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
+              new AxisAlignedBB(-0.5D, -0.5D, -0.5D, 0.5D, 0.5D, 0.5D)
+                  .expand(
+                      playerIn
+                          .getLook(Minecraft.getInstance().getRenderPartialTicks())
+                          .scale(OverloadedConfig.INSTANCE.railGun.maxRange)),
+              e -> e instanceof LivingEntity,
+              OverloadedConfig.INSTANCE.railGun.maxRange);
       //      RayTraceResult ray =
       //          rayTraceWithEntities(
       //              worldIn,
@@ -96,16 +113,14 @@ public class ItemRailGun extends PowerModItem {
       //              playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
       //              playerIn,
       //              OverloadedConfig.INSTANCE.railGun.maxRange);
-      //      if (ray != null && ray.entityHit != null) {
-      //        Vec3d moveVev =
-      // playerIn.getPositionEyes(1).subtract(ray.hitVec).normalize().scale(-1.0);
-      //
-      //        Overloaded.proxy.networkWrapper.sendToServer(
-      //            new RailGunFireMessage(ray.entityHit.getEntityId(), moveVev, handIn));
-      //      } else {
-      //        Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vec3d.ZERO,
-      // handIn));
-      //      }
+      if (ray != null) {
+        Vec3d moveVev =
+            playerIn.getEyePosition(1).subtract(ray.getHitVec()).normalize().scale(-1.0);
+        Overloaded.proxy.networkWrapper.sendToServer(
+            new RailGunFireMessage(ray.getEntity().getEntityId(), moveVev, handIn));
+      } else {
+        Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vec3d.ZERO, handIn));
+      }
     }
 
     return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));

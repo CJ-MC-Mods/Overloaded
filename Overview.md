@@ -2,7 +2,7 @@
 Everything in release builds that is craft-able should be safe to use. If anything breaks please report it on the Github issue system. There is a lot more coming but they will be behind a default false config setting until I believe they are stable (in crashing and changing of feature sense).
 
 ## ModPack Devs - NOTICE
-I currently only have vanilla mode recipes and for how powerful most of them items are I would suggest making them a bit more expensive.  Also in the config you can disable any item's crafting recipe and add more compressed blocks if you wish (just remember the client and server must match for compressed settings).
+I currently only have vanilla mode recipes and for how powerful most of them items are I would suggest making them a bit more expensive.
 
 ## Overview
 This mod is designed to be an endgame mod that has very expensive and powerful blocks and items but are server performance friendly.

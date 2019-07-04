@@ -63,7 +63,7 @@ public class BlockPlayerInterface extends ModBlockTile {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
     // ModelResourceLocation(getRegistryName(), null));
     ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/block_player.png"),
+        new ResourceLocation(MODID, "textures/block/player_interface.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 

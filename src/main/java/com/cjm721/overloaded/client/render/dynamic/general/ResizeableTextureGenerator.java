@@ -2,6 +2,7 @@ package com.cjm721.overloaded.client.render.dynamic.general;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,6 +15,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.client.render.dynamic.ImageUtil.getTextureInputStream;
@@ -31,12 +34,35 @@ public class ResizeableTextureGenerator {
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
-    System.out.println("Texture Stich Triggered: " + event);
+//    ExecutorService exectors = Executors.newCachedThreadPool();
+    //    Minecraft.getInstance()
+    //        .getTextureManager()
+    //        .loadTexture(
+    //            new ResourceLocation(MODID, "item/multi_helmet"),
+    //            new SimpleTexture(new ResourceLocation(MODID, "item/multi_helmet")));
 
-    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "item/multi_helmet.png"));
-    event.getMap().getSprite(new ResourceLocation(MODID, "textures/item/multi_helmet.png"));
+    //    Minecraft.getInstance()
+    //        .getTextureManager()
+    //        .loadTexture(
+    //            new ResourceLocation(MODID, "item/multi_body.png"),
+    //            new SimpleTexture(new ResourceLocation(MODID, "item/multi_body.png")));
+
+    //    Minecraft.getInstance()
+    //        .getTextureManager()
+    //        .loadTexture(
+    //            new ResourceLocation(MODID, "textures/item/multi_leg"),
+    //            new SimpleTexture(new ResourceLocation(MODID, "textures/item/multi_leg")));
+
+//    Minecraft.getInstance()
+//        .getTextureManager()
+//        .loadAsync(new ResourceLocation(MODID, "textures/item/multi_right_arm.png"), exectors).join();
+    //    Minecraft.getInstance()
+    //        .getTextureManager()
+    //        .loadTexture(
+    //            ,
+    //            new SimpleTexture(new ResourceLocation(MODID,
+    // "textures/item/multi_right_arm.png")));
+
     synchronized (toCreateTextures) {
       for (ResizableTexture resizableTexture : toCreateTextures) {
         BufferedImage image = null;

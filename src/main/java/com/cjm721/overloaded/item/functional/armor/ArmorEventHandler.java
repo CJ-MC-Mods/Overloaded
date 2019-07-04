@@ -376,7 +376,7 @@ public class ArmorEventHandler {
 
   @Nonnull
   private static IGenericDataStorage getPlayerDataStorage(PlayerEntity player) {
-    return player.getCapability(GENERIC_DATA_STORAGE).orElse(null);
+    return player.getCapability(GENERIC_DATA_STORAGE).orElse(new GenericDataStorage());
   }
 
   @Nonnull

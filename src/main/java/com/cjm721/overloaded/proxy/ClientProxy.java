@@ -9,6 +9,10 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -16,6 +20,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.client.model.BasicState;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,18 +45,12 @@ public class ClientProxy extends CommonProxy {
 
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
-    OBJLoader.INSTANCE.addDomain(MODID);
-    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
-
     //    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::textureStitch);
     FMLJavaModLoadingContext.get().getModEventBus().register(new ResizeableTextureGenerator());
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::registerModels);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::modelBakeEvent);
     //    MinecraftForge.EVENT_BUS.addListener();
     //    MinecraftForge.EVENT_BUS.addListener();
-
-    BlockResourcePack.INSTANCE.addDomain(MODID);
-    BlockResourcePack.INSTANCE.inject();
 
     //    if (OverloadedConfig.INSTANCE.specialConfig.noClipRenderFix)
     //      Minecraft.getInstance().renderGlobal = new
@@ -81,16 +82,24 @@ public class ClientProxy extends CommonProxy {
 
   @SubscribeEvent
   public static void registerModels(ModelRegistryEvent event) {
-    //    ModBlocks.registerModels();
+    OBJLoader.INSTANCE.addDomain(MODID);
+    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
+    BlockResourcePack.INSTANCE.addDomain(MODID);
+    BlockResourcePack.INSTANCE.inject();
+
     ModItems.registerModels();
   }
 
   @SubscribeEvent
   public static void modelBakeEvent(ModelBakeEvent event) {
-    //      Minecraft.getInstance().getTextureMap().loadTexture(new ResourceLocation(MODID,
-    // "item/multi_helmet"), new SimpleTexture(new ResourceLocation(MODID,
-    // "textures/item/multi_helmet.png")));
-    //    Minecraft.getInstance().getTextureMap().loadTexture();
+//    try {
+//      IUnbakedModel model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "item/multi_tool.obj"));
+//
+//      IBakedModel baked = model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(model.getDefaultState(), true), DefaultVertexFormats.ITEM);
+//      event.getModelRegistry().put(new ModelResourceLocation(MODID+":multi_tool", ""), baked);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
     ModItems.customHelmet.getArmorModel(null, null, null, null);
     ModItems.customChestplate.getArmorModel(null, null, null, null);
     ModItems.customLeggins.getArmorModel(null, null, null, null);

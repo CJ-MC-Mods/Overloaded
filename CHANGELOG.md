@@ -1,3 +1,8 @@
+**Version: 0.0.62 (ALPHA)**
+
+* Null check due to forge not coping capabilities on player death (#73)
+
+-------------------------------------------------------------------
 **Version: 0.0.61 (ALPHA)**
 
 * Fix crash on reloading texture pack (#72)
