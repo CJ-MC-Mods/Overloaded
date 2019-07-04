@@ -35,6 +35,13 @@ public class ResizeableTextureGenerator {
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
+    event.addSprite(new ResourceLocation(MODID, "item/multi_right_arm"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_left_arm"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_leg"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_helmet"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_body"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_belt"));
+    event.addSprite(new ResourceLocation(MODID, "item/multi_boot"));
 //    event.getMap().func_215256_a(Minecraft.getInstance().getResourceManager(),
 //        ImmutableSet.of(
 //            new ResourceLocation(MODID, "item/multi_helmet"),
