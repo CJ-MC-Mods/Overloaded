@@ -18,7 +18,6 @@ public class CapabilityGenericDataStorage {
   @CapabilityInject(IGenericDataStorage.class)
   public static Capability<IGenericDataStorage> GENERIC_DATA_STORAGE = null;
 
-
   public static void register() {
     CapabilityManager.INSTANCE.register(
         IGenericDataStorage.class,
@@ -86,6 +85,6 @@ public class CapabilityGenericDataStorage {
             }
           }
         },
-        () -> new GenericDataStorage());
+        GenericDataStorage::new);
   }
 }

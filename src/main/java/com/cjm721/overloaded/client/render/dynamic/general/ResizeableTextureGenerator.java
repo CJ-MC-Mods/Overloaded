@@ -2,6 +2,7 @@ package com.cjm721.overloaded.client.render.dynamic.general;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,6 +35,13 @@ public class ResizeableTextureGenerator {
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
+//    event.getMap().func_215256_a(Minecraft.getInstance().getResourceManager(),
+//        ImmutableSet.of(
+//            new ResourceLocation(MODID, "item/multi_helmet"),
+//            new ResourceLocation(MODID, "item/multi_body.png"),
+//            new ResourceLocation(MODID, "textures/item/multi_leg"),
+//            new ResourceLocation(MODID, "textures/item/multi_right_arm.png")
+//            ));
 //    ExecutorService exectors = Executors.newCachedThreadPool();
     //    Minecraft.getInstance()
     //        .getTextureManager()
