@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.block.basic;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -17,6 +18,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -74,10 +76,20 @@ public class BlockInfiniteWaterSource extends ModBlock {
     if (!world.isRemote && hand == Hand.MAIN_HAND) {
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof TileInfiniteWaterSource) {
-        IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
+        LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
+        if (!opHandler.isPresent()) {
+          Overloaded.logger.warn("Water Source has no Fluid Capability? " + pos);
+          return false;
+        }
+
         FluidActionResult result =
             FluidUtil.tryFillContainerAndStow(
-                player.getHeldItem(hand), handler, null, Integer.MAX_VALUE, player, true);
+                player.getHeldItem(hand),
+                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")),
+                null,
+                Integer.MAX_VALUE,
+                player,
+                true);
 
         if (result.isSuccess()) {
           player.setHeldItem(Hand.MAIN_HAND, result.getResult());

@@ -30,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -118,8 +119,6 @@ public class ItemRailGun extends PowerModItem {
   @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
   public void onMouseEvent(@Nonnull InputEvent.MouseInputEvent event) {
-    Minecraft.getInstance().mouseHelper.
-    ClientPlayerEntity player = Minecraft.getInstance().player;
     //    if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
     //      ItemStack stack = player.getHeldItemMainhand();
     //      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
@@ -142,10 +141,23 @@ public class ItemRailGun extends PowerModItem {
       return;
     }
 
-    IEnergyStorage energy = itemStack.getCapability(ENERGY).orElse(null);
+    LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
 
-    IGenericDataStorage settingCapability =
-        itemStack.getCapability(GENERIC_DATA_STORAGE).orElse(null);
+    if(!opEnergy.isPresent()) {
+      Overloaded.logger.warn("RailGun has no Energy Capability? NBT: " + itemStack.getTag());
+      return;
+    }
+
+    IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+
+    LazyOptional<IGenericDataStorage> opSettingCapability = itemStack.getCapability(GENERIC_DATA_STORAGE);
+    if(!opSettingCapability.isPresent()) {
+      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
+      return;
+    }
+
+    IGenericDataStorage settingCapability = opSettingCapability.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+
     settingCapability.suggestUpdate();
     int energyRequired =
         settingCapability
@@ -191,7 +203,15 @@ public class ItemRailGun extends PowerModItem {
       return;
     }
 
-    IGenericDataStorage cap = itemStack.getCapability(GENERIC_DATA_STORAGE).orElse(null);
+    LazyOptional<IGenericDataStorage> opCap = itemStack.getCapability(GENERIC_DATA_STORAGE);
+
+    if(!opCap.isPresent()) {
+      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
+      return;
+    }
+
+    IGenericDataStorage cap = opCap.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+
     Map<String, Integer> integerMap = cap.getIntegerMap();
 
     int power = integerMap.getOrDefault(RAILGUN_POWER_KEY, 0) + message.powerDelta;

@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,8 +77,12 @@ public class ItemEnergyShield extends ModItem {
   public ActionResultType onItemUse(ItemUseContext context) {
     if (!context.getWorld().isRemote) {
       System.out.println("On Item Use");
-      IHyperHandlerEnergy handler =
-          context.getItem().getCapability(HYPER_ENERGY_HANDLER).orElse(null);
+      LazyOptional<IHyperHandlerEnergy> opHandler = context.getItem().getCapability(HYPER_ENERGY_HANDLER);
+      if(!opHandler.isPresent()) {
+        Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + context.getItem().getTag());
+        return ActionResultType.FAIL;
+      }
+      IHyperHandlerEnergy handler = opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"));
       LongEnergyStack energy = handler.take(new LongEnergyStack(constantUseCost), true);
       if (energy.amount == constantUseCost) {
         System.out.println("On Item Use Success");
@@ -105,7 +111,14 @@ public class ItemEnergyShield extends ModItem {
     ItemStack itemstack = playerIn.getHeldItem(handIn);
     playerIn.setActiveHand(handIn);
 
-    IHyperHandlerEnergy handler = itemstack.getCapability(HYPER_ENERGY_HANDLER).orElse(null);
+    LazyOptional<IHyperHandlerEnergy> opHandler = itemstack.getCapability(HYPER_ENERGY_HANDLER);
+    if(!opHandler.isPresent()) {
+      Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + itemstack.getTag());
+      return new ActionResult<>(ActionResultType.FAIL, itemstack);
+    }
+
+    IHyperHandlerEnergy handler = opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+
     LongEnergyStack energy = handler.take(new LongEnergyStack(initialUseCost), true);
     if (energy.amount == initialUseCost) {
       System.out.println("Right click Success");

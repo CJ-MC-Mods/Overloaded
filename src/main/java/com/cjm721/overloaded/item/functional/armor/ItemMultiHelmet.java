@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.item.functional.armor;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.config.OverloadedConfig;
@@ -18,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -78,7 +80,13 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
   }
 
   private void updateSettings(ItemStack itemStack, MultiArmorSettingsMessage message) {
-    IGenericDataStorage settings = itemStack.getCapability(GENERIC_DATA_STORAGE).orElse(null);
+    LazyOptional<IGenericDataStorage> opSettings = itemStack.getCapability(GENERIC_DATA_STORAGE);
+    if(!opSettings.isPresent()) {
+      Overloaded.logger.warn("MultiHelmet has no GenericData Capability? NBT: " + itemStack.getTag());
+      return;
+    }
+
+    IGenericDataStorage settings = opSettings.orElseThrow(() -> new RuntimeException("Impossible Condition"));
     settings.suggestUpdate();
 
     Map<String, Float> floats = settings.getFloatMap();

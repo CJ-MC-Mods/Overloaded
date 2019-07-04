@@ -92,10 +92,16 @@ public class ItemRayGun extends PowerModItem {
       return;
     }
 
-    LazyOptional<IEnergyStorage> energy = itemStack.getCapability(ENERGY, null);
+    LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
 
-    if (!energy.isPresent()
-        || energy.orElse(null).getEnergyStored() < OverloadedConfig.INSTANCE.rayGun.energyPerShot) {
+    if (!opEnergy.isPresent()) {
+      Overloaded.logger.warn("Railgun has no Energy Capability? NBT: " + itemStack.getTag());
+      return;
+    }
+    IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+
+    if (energy.getEnergyStored() < OverloadedConfig
+        .INSTANCE.rayGun.energyPerShot) {
       player.sendStatusMessage(new StringTextComponent("Not enough power to fire."), true);
       return;
     }
@@ -120,7 +126,7 @@ public class ItemRayGun extends PowerModItem {
       return;
     }
 
-    energy.orElse(null).extractEnergy(OverloadedConfig.INSTANCE.rayGun.energyPerShot, false);
+    energy.extractEnergy(OverloadedConfig.INSTANCE.rayGun.energyPerShot, false);
     player.world.addEntity(
         new LightningBoltEntity(
             player.world, message.vector.x, message.vector.y, message.vector.z, false));

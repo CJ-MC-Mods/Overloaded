@@ -6,6 +6,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
+import com.cjm721.overloaded.storage.energy.ForgeEnergyZero;
 import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
@@ -169,7 +170,12 @@ public class ItemMultiTool extends PowerModItem {
       player.sendStatusMessage(
           new StringTextComponent("Bound tool to ").appendSibling(component), true);
     } else {
-      IEnergyStorage energy = itemStack.getCapability(ENERGY).orElse(null);
+      LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
+      if(!opEnergy.isPresent()) {
+        Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + itemStack.getTag());
+        return;
+      }
+      IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Error"));
 
       int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
       int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
@@ -252,7 +258,9 @@ public class ItemMultiTool extends PowerModItem {
               unbreaking,
               entityLiving == null ? 10 : getDistance(entityLiving, pos));
 
-      storage.orElse(null).extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
+      storage.orElseThrow(() -> new RuntimeException("Impossible Condition")).extractEnergy((int) Math.min(Integer
+              .MAX_VALUE,
+          breakCost), false);
     }
 
     return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
@@ -351,7 +359,13 @@ public class ItemMultiTool extends PowerModItem {
       return;
     }
 
-    IEnergyStorage energy = multiTool.getCapability(ENERGY, null).orElse(null);
+    LazyOptional<IEnergyStorage> opEnergy = multiTool.getCapability(ENERGY);
+    if(!opEnergy.isPresent()) {
+      Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + multiTool.getTag());
+      return;
+    }
+
+    IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     Vec3i sideVector = sideHit.getDirectionVec();
     BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));

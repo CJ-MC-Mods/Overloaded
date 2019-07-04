@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.block.basic.container;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
@@ -18,6 +19,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -69,9 +71,14 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
       } else {
         TileEntity te = world.getTileEntity(pos);
         if (te instanceof TileAlmostInfiniteTank) {
-          IFluidHandler handler = te.getCapability(FLUID_HANDLER_CAPABILITY).orElse(null);
-          if (FluidUtil.interactWithFluidHandler(player, handIn, handler)) {
-            return true;
+          LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
+          if (!opHandler.isPresent()) {
+            Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
+          } else {
+            return FluidUtil.interactWithFluidHandler(
+                player,
+                handIn,
+                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")));
           }
         }
       }

@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -340,7 +341,9 @@ public class ArmorEventHandler {
 
   private boolean hasEnergy(PlayerEntity player) {
     for (ItemStack stack : player.getArmorInventoryList()) {
-      if (stack.getCapability(ENERGY).orElse(null).getEnergyStored() > 0) return true;
+      if (stack.getCapability(ENERGY).map(e -> e.getEnergyStored() > 0).orElse(false)) {
+        return true;
+      }
     }
 
     return false;
@@ -353,10 +356,9 @@ public class ArmorEventHandler {
 
     final int originalCost = energyCost;
     for (ItemStack stack : player.getArmorInventoryList()) {
-      IEnergyStorage energyStorage = stack.getCapability(ENERGY).orElse(null);
-
-      if (energyStorage != null)
-        energyCost -= energyStorage.extractEnergy(originalCost / 4, simulated);
+      LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
+      energyCost -=
+          opEnergyStorage.map(e -> e.extractEnergy(originalCost / 4, simulated)).orElse(0);
 
       if (energyCost <= 0) {
         return true;
@@ -364,9 +366,9 @@ public class ArmorEventHandler {
     }
 
     for (ItemStack stack : player.getArmorInventoryList()) {
-      IEnergyStorage energyStorage = stack.getCapability(ENERGY).orElse(null);
-
-      if (energyStorage != null) energyCost -= energyStorage.extractEnergy(energyCost, simulated);
+      LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
+      energyCost -=
+          opEnergyStorage.map(e -> e.extractEnergy(originalCost / 4, simulated)).orElse(0);
       if (energyCost == 0) {
         return true;
       }
@@ -383,7 +385,8 @@ public class ArmorEventHandler {
   private static IGenericDataStorage getHelmetDataStorage(PlayerEntity player) {
     for (ItemStack stack : player.inventory.armorInventory) {
       if (stack.getItem() instanceof ItemMultiHelmet) {
-        IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE).orElse(null);
+        IGenericDataStorage cap =
+            stack.getCapability(GENERIC_DATA_STORAGE).orElse(new GenericDataStorage());
         cap.suggestUpdate();
         return cap;
       }

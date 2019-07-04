@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.util;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 
@@ -121,8 +123,12 @@ public class PlayerInteractionUtil {
         && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
       return BlockPlaceResult.FAIL_ENERGY;
 
-    IItemHandler inventory =
-        player.getCapability(ITEM_HANDLER_CAPABILITY, Direction.UP).orElse(null);
+    LazyOptional<IItemHandler> opInventory = player.getCapability(ITEM_HANDLER_CAPABILITY, Direction.UP);
+    if(!opInventory.isPresent()) {
+      Overloaded.logger.warn("Player has no ItemHandler Capability? NBT: " + player.serializeNBT());
+      return BlockPlaceResult.FAIL_PREREQUISITE;
+    }
+    IItemHandler inventory = opInventory.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     int foundStackSlot = findItemStackSlot(searchStack, inventory);
     if (foundStackSlot == -1) {

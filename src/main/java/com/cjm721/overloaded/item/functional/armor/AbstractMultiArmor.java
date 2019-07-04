@@ -144,8 +144,9 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 
     if (optionalStorage.isPresent()) {
       return 1D
-          - optionalStorage.orElse(null).getEnergyStored()
-              / (double) optionalStorage.orElse(null).getMaxEnergyStored();
+          - optionalStorage
+              .map(energy -> energy.getEnergyStored() / (double) energy.getMaxEnergyStored())
+              .orElseThrow(() -> new RuntimeException("Impossible Condition"));
     }
     return 1D;
   }
