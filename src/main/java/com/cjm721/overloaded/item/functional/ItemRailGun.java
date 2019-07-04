@@ -94,25 +94,14 @@ public class ItemRailGun extends PowerModItem {
   public ActionResult<ItemStack> onItemRightClick(
       World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
     if (worldIn.isRemote) {
-      EntityRayTraceResult ray =
-          ProjectileHelper.func_221273_a(
-              playerIn,
-              playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
-              playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
-              new AxisAlignedBB(-0.5D, -0.5D, -0.5D, 0.5D, 0.5D, 0.5D)
-                  .expand(
-                      playerIn
-                          .getLook(Minecraft.getInstance().getRenderPartialTicks())
-                          .scale(OverloadedConfig.INSTANCE.railGun.maxRange)),
-              e -> e instanceof LivingEntity,
-              OverloadedConfig.INSTANCE.railGun.maxRange);
-      //      RayTraceResult ray =
-      //          rayTraceWithEntities(
-      //              worldIn,
-      //              playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
-      //              playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
-      //              playerIn,
-      //              OverloadedConfig.INSTANCE.railGun.maxRange);
+      int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
+      Vec3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks());
+      Vec3d vec3d1 = playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks());
+      Vec3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
+      float f = 1.0F;
+      AxisAlignedBB axisalignedbb = playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
+      EntityRayTraceResult ray = ProjectileHelper.func_221273_a(playerIn, vec3d, vec3d2, axisalignedbb,
+          (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(), distance * distance);
       if (ray != null) {
         Vec3d moveVev =
             playerIn.getEyePosition(1).subtract(ray.getHitVec()).normalize().scale(-1.0);
@@ -129,6 +118,7 @@ public class ItemRailGun extends PowerModItem {
   @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
   public void onMouseEvent(@Nonnull InputEvent.MouseInputEvent event) {
+    Minecraft.getInstance().mouseHelper.
     ClientPlayerEntity player = Minecraft.getInstance().player;
     //    if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
     //      ItemStack stack = player.getHeldItemMainhand();
