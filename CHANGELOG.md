@@ -1,5 +1,10 @@
 **Version: 0.0.62 (ALPHA)**
 
+* Multi-Tool now renders block to place correctly for all viewpoints.
+
+-------------------------------------------------------------------
+**Version: 0.0.62 (ALPHA)**
+
 * Null check due to forge not coping capabilities on player death (#73)
 
 -------------------------------------------------------------------

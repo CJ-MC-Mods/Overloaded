@@ -4,12 +4,13 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import com.cjm721.overloaded.util.RenderUtil;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.opengl.GL14;
 
 import javax.annotation.Nonnull;
 
@@ -92,13 +94,13 @@ public class RenderMultiToolAssist {
 
     switch (getAssistMode()) {
       case PLACE_PREVIEW:
-        if (!stack.isEmpty()) renderBlockPreview(event, player, stack, result, state);
+        if (!stack.isEmpty()) renderBlockPreview(result, state);
         break;
       case REMOVE_PREVIEW:
         renderRemovePreview(event, player, result);
         break;
       case BOTH_PREVIEW:
-        if (!stack.isEmpty()) renderBlockPreview(event, player, stack, result, state);
+        if (!stack.isEmpty()) renderBlockPreview(result, state);
         renderRemovePreview(event, player, result);
         break;
     }
@@ -142,48 +144,43 @@ public class RenderMultiToolAssist {
   }
 
   private static void renderBlockPreview(
-      RenderWorldLastEvent event,
-      PlayerEntity player,
-      ItemStack stack,
-      BlockRayTraceResult result,
-      BlockState state) {
+      BlockRayTraceResult result, BlockState state) {
+    IBakedModel model =
+        Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
     BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
 
-    final float partialTicks = event.getPartialTicks();
-    final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
-    final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
-    final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
+    ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
+    if(camera == null) {
+      return;
+    }
 
-    //    BufferBuilder renderBuffer = new BufferBuilder(1028);
-    //    renderBuffer.begin(7, DefaultVertexFormats.ITEM);
-    //    Minecraft.getInstance()
-    //        .getBlockRendererDispatcher()
-    //        .getBlockModelRenderer()
-    //        .renderModel(
-    //            player.getEntityWorld(),
-    //
-    // Minecraft.getInstance().getItemRenderer().getItemModelMesher().getItemModel(stack),
-    //            state,
-    //            toRenderAt,
-    //            renderBuffer,
-    //            true,
-    //            player.getRNG(),
-    //            1,
-    //            ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
-    //            .renderBlock(
-    //                state,
-    //                toRenderAt,
-    //                player.getEntityWorld(),
-    //                renderBuffer,
-    //                player.getRNG(),
-    //                ModelDataManager.getModelData(player.getEntityWorld(), toRenderAt));
+    final double x = camera.getProjectedView().getX();
+    final double y = camera.getProjectedView().getY();
+    final double z = camera.getProjectedView().getZ() - 1;
 
     GlStateManager.pushMatrix();
-    GlStateManager.translated(
-        toRenderAt.getX() - x,
-        toRenderAt.getY() - y - player.getEyeHeight(player.getPose()),
-        toRenderAt.getZ() - z);
-    RenderUtil.renderGhostModel(stack, state, player.getEntityWorld(), toRenderAt);
+    GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+    GlStateManager.enableBlend();
+    GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);
+    GL14.glBlendColor(1f,1f,1f,0.5f);
+
+    GlStateManager.pushMatrix();
+    GlStateManager.colorMask(false,false,false,false);
+    Minecraft.getInstance()
+        .getBlockRendererDispatcher()
+        .getBlockModelRenderer()
+        .renderModelBrightness(model, state, 1.0F, false);
+    GlStateManager.popMatrix();
+
+    GlStateManager.pushMatrix();
+    GlStateManager.colorMask(true,true,true,true);
+    Minecraft.getInstance()
+        .getBlockRendererDispatcher()
+        .getBlockModelRenderer()
+        .renderModelBrightness(model, state, 1.0F, false);
+    GlStateManager.popMatrix();
+
+    GlStateManager.disableBlend();
     GlStateManager.popMatrix();
   }
 }
