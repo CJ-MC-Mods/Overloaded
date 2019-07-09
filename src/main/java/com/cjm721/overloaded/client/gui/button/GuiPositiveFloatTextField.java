@@ -21,6 +21,7 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
     this.min = min;
     this.max = max;
     this.setValidator(this::floatValidate);
+
     this.setText(Float.toString(currentValue));
   }
 

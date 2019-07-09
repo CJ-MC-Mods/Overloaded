@@ -3,6 +3,7 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
+import com.cjm721.overloaded.network.OverloadedGuiHandler;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,7 +24,6 @@ public class ItemSettingEditor extends ModItem {
   public ItemSettingEditor() {
     super(new Properties().maxStackSize(1));
     setRegistryName("settings_editor");
-    //        setTranslationKey("settings_editor");
   }
 
   @Override
@@ -31,8 +31,7 @@ public class ItemSettingEditor extends ModItem {
   public ActionResult<ItemStack> onItemRightClick(
       World worldIn, PlayerEntity playerIn, Hand handIn) {
     if (worldIn.isRemote) {
-      //            playerIn.openGui(Overloaded.instance, OverloadedGuiHandler.MULTI_ARMOR, worldIn,
-      // (int) playerIn.posX, (int) playerIn.posY, (int) playerIn.posZ);
+      OverloadedGuiHandler.openMultiArmorGUI();
     }
 
     return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));

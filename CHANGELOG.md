@@ -2,6 +2,7 @@
 
 * Remove Shadow from under Players rendered in player interface
 * MultiTool preview render looks better now
+* Working on MultiArmor GUI. Mostly works
 
 -------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**
