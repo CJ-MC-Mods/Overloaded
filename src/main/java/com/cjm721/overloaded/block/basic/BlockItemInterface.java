@@ -76,7 +76,7 @@ public class BlockItemInterface extends ModBlock {
 
   @Override
   public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-    if (world.isRemote) return false;
+    if (world.isRemote) return true;
 
     if (hand != Hand.MAIN_HAND) return false;
 
