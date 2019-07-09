@@ -5,6 +5,7 @@
 * MultiTool remove rendering now appears. Need to work on some transparency issues
 * Working on MultiArmor GUI. Mostly works
 * Prevent de-syncing issues with Item Interface
+* New textures for the Almost/True Infinite Containers
 
 -------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**
