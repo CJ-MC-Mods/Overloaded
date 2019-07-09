@@ -1,6 +1,7 @@
 **Version: 0.0.63 (ALPHA)**
 
 * Remove Shadow from under Players rendered in player interface
+* MultiTool preview render looks better now
 
 -------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**

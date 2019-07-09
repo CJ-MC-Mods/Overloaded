@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -97,60 +98,36 @@ public class RenderMultiToolAssist {
         if (!stack.isEmpty()) renderBlockPreview(result, state);
         break;
       case REMOVE_PREVIEW:
-        renderRemovePreview(event, player, result);
+        renderRemovePreview(result);
         break;
       case BOTH_PREVIEW:
         if (!stack.isEmpty()) renderBlockPreview(result, state);
-        renderRemovePreview(event, player, result);
+        renderRemovePreview(result);
         break;
     }
   }
 
-  private static void renderRemovePreview(
-      RenderWorldLastEvent event, PlayerEntity player, BlockRayTraceResult result) {
-    //    try {
-    //      IModel model =
-    //          ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "block/remove_preview"));
-    //      IBakedModel bakeModel =
-    //          model.bake(
-    //              new ModelBakery(
-    //                  Minecraft.getInstance().getResourceManager(),
-    //                  Minecraft.getInstance().getTextureMap(),
-    //                  Minecraft.getInstance().getProfiler()),
-    //              ModelLoader.defaultTextureGetter(),
-    //              new ISprite() {},
-    //              DefaultVertexFormats.ITEM);
-    //
-    //      BlockPos toRenderAt = result.getPos();
-    //
-    //      final float partialTicks = event.getPartialTicks();
-    //      final double x = player.lastTickPosX + (player.posX - player.lastTickPosX) *
-    // partialTicks;
-    //      final double y = player.lastTickPosY + (player.posY - player.lastTickPosY) *
-    // partialTicks;
-    //      final double z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) *
-    // partialTicks;
-    //
-    //      GlStateManager.pushMatrix();
-    //      GlStateManager.translated(
-    //          toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-    //      RenderUtil.renderGhostModel(
-    //          bakeModel, Blocks.COBBLESTONE.getDefaultState(), player.getEntityWorld(),
-    // toRenderAt);
-    //      GlStateManager.popMatrix();
-    //    } catch (Exception e) {
-    //      e.printStackTrace();
-    //    }
+  private static void renderRemovePreview(BlockRayTraceResult result) {
+    IBakedModel bakeModel =
+        Minecraft.getInstance()
+            .getModelManager()
+            .getModel(new ModelResourceLocation(MODID, "block/remove_preview"));
+    BlockPos toRenderAt = result.getPos();
+
+    renderBlockModel(toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
   }
 
-  private static void renderBlockPreview(
-      BlockRayTraceResult result, BlockState state) {
+  private static void renderBlockPreview(BlockRayTraceResult result, BlockState state) {
     IBakedModel model =
         Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
     BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
 
+    renderBlockModel(toRenderAt, model, state);
+  }
+
+  private static void renderBlockModel(BlockPos toRenderAt, IBakedModel model, BlockState state) {
     ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
-    if(camera == null) {
+    if (camera == null) {
       return;
     }
 
@@ -161,24 +138,25 @@ public class RenderMultiToolAssist {
     GlStateManager.pushMatrix();
     GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
     GlStateManager.enableBlend();
-    GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);
-    GL14.glBlendColor(1f,1f,1f,0.5f);
+    GlStateManager.blendFunc(
+        GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);
+    GL14.glBlendColor(1f, 1f, 1f, 0.5f);
 
     GlStateManager.pushMatrix();
-    GlStateManager.colorMask(false,false,false,false);
+    //    GlStateManager.colorMask(false,false,false,false);
     Minecraft.getInstance()
         .getBlockRendererDispatcher()
         .getBlockModelRenderer()
-        .renderModelBrightness(model, state, 1.0F, false);
+        .renderModelBrightness(model, state, 0.8F, false);
     GlStateManager.popMatrix();
 
-    GlStateManager.pushMatrix();
-    GlStateManager.colorMask(true,true,true,true);
-    Minecraft.getInstance()
-        .getBlockRendererDispatcher()
-        .getBlockModelRenderer()
-        .renderModelBrightness(model, state, 1.0F, false);
-    GlStateManager.popMatrix();
+    //    GlStateManager.pushMatrix();
+    //    GlStateManager.colorMask(true,true,true,true);
+    //    Minecraft.getInstance()
+    //        .getBlockRendererDispatcher()
+    //        .getBlockModelRenderer()
+    //        .renderModelBrightness(model, state, 1.0F, false);
+    //    GlStateManager.popMatrix();
 
     GlStateManager.disableBlend();
     GlStateManager.popMatrix();
