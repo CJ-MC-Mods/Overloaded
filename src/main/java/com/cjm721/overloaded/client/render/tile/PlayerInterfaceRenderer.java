@@ -65,7 +65,10 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
     long angle = (System.currentTimeMillis() / 10) % 360;
     GlStateManager.rotated(angle, 0, 1, 0);
 
+    boolean shadow = Minecraft.getInstance().getRenderManager().isRenderShadow();
+    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
     Minecraft.getInstance().getRenderManager().renderEntity(player, 0, 0, 0, 0, 1, false);
+    Minecraft.getInstance().getRenderManager().setRenderShadow(shadow);
 
     GlStateManager.popMatrix();
   }

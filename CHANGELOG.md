@@ -1,3 +1,8 @@
+**Version: 0.0.63 (ALPHA)**
+
+* Remove Shadow from under Players rendered in player interface
+
+-------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**
 
 * Multi-Tool now renders block to place correctly for all viewpoints.
