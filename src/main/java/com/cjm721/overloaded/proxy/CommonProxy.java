@@ -3,23 +3,20 @@ package com.cjm721.overloaded.proxy;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage;
+import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
+import com.cjm721.overloaded.capabilities.CapabilityHyperFluid;
+import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
-import com.cjm721.overloaded.network.OverloadedGuiHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
-import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.tile.ModTiles;
-import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
-import com.cjm721.overloaded.capabilities.CapabilityHyperFluid;
-import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
@@ -27,11 +24,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.LinkedList;
@@ -102,7 +96,8 @@ public class CommonProxy {
         KeyBindPressedMessage::fromBytes,
         new KeyBindPressedHandler());
 
-    networkWrapper.registerMessage(dis++,
+    networkWrapper.registerMessage(
+        dis++,
         NoClipStatusMessage.class,
         NoClipStatusMessage::toBytes,
         NoClipStatusMessage::fromBytes,
@@ -110,10 +105,6 @@ public class CommonProxy {
 
     MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
     MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
-
-
-//    ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, OverloadedGuiHandler::openGUI);
-//    networkWrapper.re.INSTANCE.registerGuiHandler(Overloaded.instance, new OverloadedGuiHandler());
   }
 
   @SubscribeEvent
