@@ -111,7 +111,7 @@ public class RenderMultiToolAssist {
     IBakedModel bakeModel =
         Minecraft.getInstance()
             .getModelManager()
-            .getModel(new ModelResourceLocation(MODID, "block/remove_preview"));
+            .getModel(new ModelResourceLocation(MODID + ":remove_preview", ""));
     BlockPos toRenderAt = result.getPos();
 
     renderBlockModel(toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());

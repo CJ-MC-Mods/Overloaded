@@ -2,6 +2,7 @@
 
 * Remove Shadow from under Players rendered in player interface
 * MultiTool preview render looks better now
+* MultiTool remove rendering now appears. Need to work on some transparency issues
 * Working on MultiArmor GUI. Mostly works
 * Prevent de-syncing issues with Item Interface
 

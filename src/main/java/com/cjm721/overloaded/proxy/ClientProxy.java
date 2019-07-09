@@ -11,7 +11,9 @@ import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
+import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
@@ -19,10 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.client.model.BasicState;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,14 +91,24 @@ public class ClientProxy extends CommonProxy {
 
   @SubscribeEvent
   public static void modelBakeEvent(ModelBakeEvent event) {
-//    try {
-//      IUnbakedModel model = ModelLoaderRegistry.getModel(new ResourceLocation(MODID, "item/multi_tool.obj"));
-//
-//      IBakedModel baked = model.bake(event.getModelLoader(), ModelLoader.defaultTextureGetter(), new BasicState(model.getDefaultState(), true), DefaultVertexFormats.ITEM);
-//      event.getModelRegistry().put(new ModelResourceLocation(MODID+":multi_tool", ""), baked);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
+    try {
+      IUnbakedModel removePreview =
+          event
+              .getModelLoader()
+              .getUnbakedModel(new ResourceLocation(MODID, "block/remove_preview"));
+
+      IBakedModel removePreviewBaked =
+          removePreview.bake(
+              event.getModelLoader(),
+              ModelLoader.defaultTextureGetter(),
+              new ISprite() {},
+              DefaultVertexFormats.BLOCK);
+
+      event.getModelRegistry().put(new ModelResourceLocation(MODID+":remove_preview", ""), removePreviewBaked);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     ModItems.customHelmet.getArmorModel(null, null, null, null);
     ModItems.customChestplate.getArmorModel(null, null, null, null);
     ModItems.customLeggins.getArmorModel(null, null, null, null);
