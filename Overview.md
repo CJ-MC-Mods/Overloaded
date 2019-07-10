@@ -20,3 +20,10 @@ Lots of plans that are detailed in the Github page. Ex: A large multiblock Fusio
 
 ### Support
 All resources are on [Github](https://github.com/CJ-MC-Mods/Overloaded). Please post issues there. 
+
+### 1.14.x Changes
+
+* Compressed Blocks have moved to their own mod -> [Overloaded Compressed Blocks](https://www.curseforge.com/minecraft/mc-mods/overloaded-compressed-blocks)
+* Alpha: are considered highly unstable. Crash bugs will be fixed quickly but gameplay ones will be slow.
+* Betas: shouldn't break worlds and will be mostly forward compatible
+* Release: any crash bugs will be fixed ASAP, Should always be forward compatible unless impossible to carry over.
