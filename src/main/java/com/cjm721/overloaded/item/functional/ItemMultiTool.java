@@ -6,7 +6,6 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.packets.LeftClickBlockMessage;
 import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
-import com.cjm721.overloaded.storage.energy.ForgeEnergyZero;
 import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
@@ -171,7 +170,7 @@ public class ItemMultiTool extends PowerModItem {
           new StringTextComponent("Bound tool to ").appendSibling(component), true);
     } else {
       LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
-      if(!opEnergy.isPresent()) {
+      if (!opEnergy.isPresent()) {
         Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + itemStack.getTag());
         return;
       }
@@ -258,9 +257,9 @@ public class ItemMultiTool extends PowerModItem {
               unbreaking,
               entityLiving == null ? 10 : getDistance(entityLiving, pos));
 
-      storage.orElseThrow(() -> new RuntimeException("Impossible Condition")).extractEnergy((int) Math.min(Integer
-              .MAX_VALUE,
-          breakCost), false);
+      storage
+          .orElseThrow(() -> new RuntimeException("Impossible Condition"))
+          .extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
     }
 
     return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
@@ -360,12 +359,13 @@ public class ItemMultiTool extends PowerModItem {
     }
 
     LazyOptional<IEnergyStorage> opEnergy = multiTool.getCapability(ENERGY);
-    if(!opEnergy.isPresent()) {
+    if (!opEnergy.isPresent()) {
       Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + multiTool.getTag());
       return;
     }
 
-    IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+    IEnergyStorage energy =
+        opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     Vec3i sideVector = sideHit.getDirectionVec();
     BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
@@ -443,7 +443,8 @@ public class ItemMultiTool extends PowerModItem {
   }
 
   @Override
-  public boolean canPlayerBreakBlockWhileHolding(BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+  public boolean canPlayerBreakBlockWhileHolding(
+      BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
     return !p_195938_4_.isSneaking();
   }
 
@@ -478,12 +479,12 @@ public class ItemMultiTool extends PowerModItem {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
       // TODO This event is not firing on client currently.
-      //      if (event.getSide() == LogicalSide.SERVER
-      //          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
-      if (!event
-          .getEntityPlayer()
-          .getUniqueID()
-          .equals(Minecraft.getInstance().player.getUniqueID())) return;
+      if (event.getSide() == LogicalSide.SERVER
+          || event.getEntityPlayer() != Minecraft.getInstance().player
+          || !event
+              .getEntityPlayer()
+              .getUniqueID()
+              .equals(Minecraft.getInstance().player.getUniqueID())) return;
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {
@@ -526,6 +527,23 @@ public class ItemMultiTool extends PowerModItem {
         }
       }
       event.getDrops().clear();
+    }
+  }
+
+  @Mod.EventBusSubscriber(
+      modid = MODID,
+      bus = Mod.EventBusSubscriber.Bus.FORGE,
+      value = Dist.DEDICATED_SERVER)
+  public static class DedicatedServerSideEvent {
+    @SubscribeEvent
+    public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
+      // TODO: Remove. Only have as a workaround until
+      ItemStack stack = event.getItemStack();
+      if (stack.getItem().equals(ModItems.multiTool)) {
+        leftClickOnBlockServer(
+            (ServerPlayerEntity) event.getEntityPlayer(),
+            new LeftClickBlockMessage(event.getPos()));
+      }
     }
   }
 }
