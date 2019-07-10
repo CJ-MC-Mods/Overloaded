@@ -6,6 +6,8 @@
 * Working on MultiArmor GUI. Mostly works
 * Prevent de-syncing issues with Item Interface
 * New textures for the Almost/True Infinite Containers
+* Adding Server Side checking for MultiTool block clicks as it isn't firing client side (forge bug #5802)
+* Disabling Remove Harmful from MultiArmor due to Forge #5920 (causes client to be kicked)
 
 -------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**
