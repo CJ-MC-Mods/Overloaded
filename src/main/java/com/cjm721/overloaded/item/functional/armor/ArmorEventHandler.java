@@ -368,9 +368,10 @@ public class ArmorEventHandler {
 
     for (ItemStack stack : player.getArmorInventoryList()) {
       LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
+      final int extractAmount = energyCost;
       energyCost -=
-          opEnergyStorage.map(e -> e.extractEnergy(originalCost / 4, simulated)).orElse(0);
-      if (energyCost == 0) {
+          opEnergyStorage.map(e -> e.extractEnergy(extractAmount, simulated)).orElse(0);
+      if (energyCost <= 0) {
         return true;
       }
     }

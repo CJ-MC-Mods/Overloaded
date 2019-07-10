@@ -8,6 +8,7 @@
 * New textures for the Almost/True Infinite Containers
 * Adding Server Side checking for MultiTool block clicks as it isn't firing client side (forge bug #5802)
 * Disabling Remove Harmful from MultiArmor due to Forge #5920 (causes client to be kicked)
+* Fix energy extraction not saying enabled when energy amount is not disable by 4, and using 4x the cost.
 
 -------------------------------------------------------------------
 **Version: 0.0.62 (ALPHA)**
