@@ -101,8 +101,8 @@ public class RenderMultiToolAssist {
         renderRemovePreview(result);
         break;
       case BOTH_PREVIEW:
-        if (!stack.isEmpty()) renderBlockPreview(result, state);
         renderRemovePreview(result);
+        if (!stack.isEmpty()) renderBlockPreview(result, state);
         break;
     }
   }

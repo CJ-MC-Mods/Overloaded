@@ -1,6 +1,7 @@
 **Version: 0.0.64 (ALPHA)**
 
-* Fire event when removing potion affects so mods that don't want their affects remove, arn't.
+* Fire event when removing potion affects so mods that don't want their affects remove, arn't
+* Change MultiTool assist rendering order so can see the full remove preview
 
 -------------------------------------------------------------------
 **Version: 0.0.63 (ALPHA)**
