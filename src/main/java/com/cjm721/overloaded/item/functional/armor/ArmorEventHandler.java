@@ -24,11 +24,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -224,11 +226,20 @@ public class ArmorEventHandler {
       Effect potion = effect.getPotion();
       if (potion.isBeneficial()) continue;
 
+      if (!extractEnergy(
+          player,
+          OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
+          true)) {
+        continue;
+      }
       if (extractEnergy(
           player,
           OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
           side == LogicalSide.CLIENT)) {
-        potionEffectIterator.remove();
+        // If not canceled
+        if(!MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(player, potion))) {
+          potionEffectIterator.remove();
+        }
       }
     }
   }
