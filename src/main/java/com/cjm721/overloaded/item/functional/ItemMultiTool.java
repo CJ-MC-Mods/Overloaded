@@ -478,13 +478,15 @@ public class ItemMultiTool extends PowerModItem {
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-      // TODO This event is not firing on client currently.
-      if (event.getSide() == LogicalSide.SERVER
-          || event.getEntityPlayer() != Minecraft.getInstance().player
-          || !event
-              .getEntityPlayer()
-              .getUniqueID()
-              .equals(Minecraft.getInstance().player.getUniqueID())) return;
+      // TODO This event is not firing on client currently. Letting run on server in single player
+      // so still kinda works
+      //      if(event.getSide() == LogicalSide.SERVER || event.getEntityPlayer() != Minecraft.getInstance().player)
+      //        return;
+
+      if (!event
+          .getEntityPlayer()
+          .getUniqueID()
+          .equals(Minecraft.getInstance().player.getUniqueID())) return;
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {

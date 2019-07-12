@@ -2,6 +2,7 @@
 
 * Fire event when removing potion affects so mods that don't want their affects remove, arn't
 * Change MultiTool assist rendering order so can see the full remove preview
+* ReAdd left clicking blocks for multi-tool in single player (temporary fix)
 
 -------------------------------------------------------------------
 **Version: 0.0.63 (ALPHA)**
