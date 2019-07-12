@@ -5,15 +5,17 @@ import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
+import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
+import com.cjm721.overloaded.util.ScrollEvent;
 import com.google.common.primitives.Ints;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -28,7 +30,6 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -100,9 +101,16 @@ public class ItemRailGun extends PowerModItem {
       Vec3d vec3d1 = playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks());
       Vec3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
-      AxisAlignedBB axisalignedbb = playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
-      EntityRayTraceResult ray = ProjectileHelper.func_221273_a(playerIn, vec3d, vec3d2, axisalignedbb,
-          (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(), distance * distance);
+      AxisAlignedBB axisalignedbb =
+          playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
+      EntityRayTraceResult ray =
+          ProjectileHelper.func_221273_a(
+              playerIn,
+              vec3d,
+              vec3d2,
+              axisalignedbb,
+              (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(),
+              distance * distance);
       if (ray != null) {
         Vec3d moveVev =
             playerIn.getEyePosition(1).subtract(ray.getHitVec()).normalize().scale(-1.0);
@@ -116,22 +124,23 @@ public class ItemRailGun extends PowerModItem {
     return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
   }
 
-  @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
-  public void onMouseEvent(@Nonnull InputEvent.MouseInputEvent event) {
-    //    if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
-    //      ItemStack stack = player.getHeldItemMainhand();
-    //      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
-    //        int powerDelta =
-    //            Integer.signum(event.getDwheel()) * OverloadedConfig.INSTANCE.railGun.stepEnergy;
-    //        if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)
-    //            || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
-    //          powerDelta *= 100;
-    //        }
-    //        Overloaded.proxy.networkWrapper.sendToServer(new RailGunSettingsMessage(powerDelta));
-    //        event.setCanceled(true);
-    //      }
-    //    }
+  public void onMouseEvent(ScrollEvent event) {
+    ClientPlayerEntity player = Minecraft.getInstance().player;
+    if (event.dy != 0 && player != null && player.isSneaking()) {
+      ItemStack stack = player.getHeldItemMainhand();
+      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
+        int powerDelta =
+            Long.signum(Math.round(event.dy)) * OverloadedConfig.INSTANCE.railGun.stepEnergy;
+        if (InputMappings.isKeyDown(
+            Minecraft.getInstance().mainWindow.getHandle(),
+            ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getKeyCode())) {
+          powerDelta *= 100;
+        }
+        Overloaded.proxy.networkWrapper.sendToServer(new RailGunSettingsMessage(powerDelta));
+        event.setCanceled(true);
+      }
+    }
   }
 
   public void handleFireMessage(
@@ -143,20 +152,23 @@ public class ItemRailGun extends PowerModItem {
 
     LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
 
-    if(!opEnergy.isPresent()) {
+    if (!opEnergy.isPresent()) {
       Overloaded.logger.warn("RailGun has no Energy Capability? NBT: " + itemStack.getTag());
       return;
     }
 
-    IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+    IEnergyStorage energy =
+        opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
-    LazyOptional<IGenericDataStorage> opSettingCapability = itemStack.getCapability(GENERIC_DATA_STORAGE);
-    if(!opSettingCapability.isPresent()) {
+    LazyOptional<IGenericDataStorage> opSettingCapability =
+        itemStack.getCapability(GENERIC_DATA_STORAGE);
+    if (!opSettingCapability.isPresent()) {
       Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
       return;
     }
 
-    IGenericDataStorage settingCapability = opSettingCapability.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+    IGenericDataStorage settingCapability =
+        opSettingCapability.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     settingCapability.suggestUpdate();
     int energyRequired =
@@ -205,7 +217,7 @@ public class ItemRailGun extends PowerModItem {
 
     LazyOptional<IGenericDataStorage> opCap = itemStack.getCapability(GENERIC_DATA_STORAGE);
 
-    if(!opCap.isPresent()) {
+    if (!opCap.isPresent()) {
       Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
       return;
     }

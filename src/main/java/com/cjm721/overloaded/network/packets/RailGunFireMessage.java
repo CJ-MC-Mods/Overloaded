@@ -20,7 +20,7 @@ public class RailGunFireMessage {
 
   public static RailGunFireMessage fromBytes(PacketBuffer buf) {
     return new RailGunFireMessage(
-        buf.readInt(), MessageUtility.vecFromBytes(buf), Hand.valueOf(buf.readString()));
+        buf.readInt(), MessageUtility.vecFromBytes(buf), Hand.valueOf(buf.readString(32)));
   }
 
   public static void toBytes(RailGunFireMessage message, PacketBuffer buf) {

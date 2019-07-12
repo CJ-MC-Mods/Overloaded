@@ -4,6 +4,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
+import com.cjm721.overloaded.util.ScrollEvent;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -17,6 +18,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -32,18 +34,19 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class RenderMultiToolAssist {
 
   @SubscribeEvent
-  public static void onMouseEvent(InputEvent.MouseInputEvent event) {
+  public static void onMouseEvent(ScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    //            if (event.getDwheel() != 0 && player != null && player.isSneaking()) {
-    //                ItemStack stack = player.getHeldItemMainhand();
-    //                if (player.isSneaking() && !stack.isEmpty() && stack.getItem() ==
-    //     ModItems.multiTool) {
-    //                    changeHelpMode(event.getDwheel());
-    //                    player.sendStatusMessage(new StringTextComponent("Assist Mode: " +
-    //     getAssistMode().getName()), true);
-    //                    event.setCanceled(true);
-    //                }
-    //            }
+
+      if (event.dy != 0 && player != null && player.isSneaking()) {
+        ItemStack stack = player.getHeldItemMainhand();
+        if (player.isSneaking() && !stack.isEmpty() && stack.getItem() ==
+      ModItems.multiTool) {
+            changeHelpMode((int) Math.round(event.dy));
+            player.sendStatusMessage(new StringTextComponent("Assist Mode: " +
+      getAssistMode().getName()), true);
+            event.setCanceled(true);
+        }
+      }
   }
 
   @SubscribeEvent

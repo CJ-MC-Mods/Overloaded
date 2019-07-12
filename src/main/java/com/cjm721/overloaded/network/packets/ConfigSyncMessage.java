@@ -13,7 +13,7 @@ public class ConfigSyncMessage {
   }
 
   public static ConfigSyncMessage fromBytes(PacketBuffer buf) {
-    return new ConfigSyncMessage(buf.readString());
+    return new ConfigSyncMessage(buf.readString(20000));
   }
 
   public static void toBytes(ConfigSyncMessage message, PacketBuffer buf) {

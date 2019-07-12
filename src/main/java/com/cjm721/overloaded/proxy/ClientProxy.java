@@ -8,10 +8,10 @@ import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
+import com.cjm721.overloaded.util.ScrollEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
-import net.minecraft.client.renderer.model.ModelBakery;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -29,43 +29,30 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWScrollCallback;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 @OnlyIn(Dist.CLIENT)
-// @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy {
 
   public KeyBinding noClipKeybind;
+  public KeyBinding railGun100x;
 
   @Override
   public void commonSetup(FMLCommonSetupEvent event) {
     super.commonSetup(event);
 
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-
-    //    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::textureStitch);
     FMLJavaModLoadingContext.get().getModEventBus().register(new ResizeableTextureGenerator());
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::registerModels);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::modelBakeEvent);
-    //    MinecraftForge.EVENT_BUS.addListener();
-    //    MinecraftForge.EVENT_BUS.addListener();
-
-    //    if (OverloadedConfig.INSTANCE.specialConfig.noClipRenderFix)
-    //      Minecraft.getInstance().renderGlobal = new
-    // RenderGlobalSpectator(Minecraft.getInstance());
-    //    Minecraft.getInstance()
-    //        .getItemColors()
-    //        .registerItemColorHandler(
-    //            (stack, tintIndex) -> java.awt.Color.CYAN.getRGB(),
-    //            ModItems.multiTool,
-    //            ModItems.customBoots,
-    //            ModItems.customLeggins,
-    //            ModItems.customChestplate,
-    //            ModItems.customHelmet);
 
     noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key.multiarmor");
+    railGun100x = new KeyBinding("overloaded.key.railgun100x", 341, "overloaded.cat.key.railgun");
     ClientRegistry.registerKeyBinding(noClipKeybind);
+    ClientRegistry.registerKeyBinding(railGun100x);
 
     MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
     MinecraftForge.EVENT_BUS.register(ModItems.railgun);
@@ -77,6 +64,29 @@ public class ClientProxy extends CommonProxy {
 
     ClientRegistry.bindTileEntitySpecialRenderer(
         TilePlayerInterface.class, new PlayerInterfaceRenderer());
+
+    GLFWScrollCallback oldScroll =
+        GLFW.glfwSetScrollCallback(
+            Minecraft.getInstance().mainWindow.getHandle(),
+            new GLFWScrollCallback() {
+              @Override
+              public void invoke(long window, double xoffset, double yoffset) {
+                // Dummy one until can figure out how to get current instance without replacing
+                // current one.
+              }
+            });
+
+    GLFW.glfwSetScrollCallback(
+        Minecraft.getInstance().mainWindow.getHandle(),
+        new GLFWScrollCallback() {
+          @Override
+          public void invoke(long window, double xoffset, double yoffset) {
+            if (!MinecraftForge.EVENT_BUS
+                .post(new ScrollEvent(xoffset, yoffset))) {
+              oldScroll.invoke(window, xoffset, yoffset);
+            }
+          }
+        });
   }
 
   @SubscribeEvent
@@ -104,7 +114,9 @@ public class ClientProxy extends CommonProxy {
               new ISprite() {},
               DefaultVertexFormats.BLOCK);
 
-      event.getModelRegistry().put(new ModelResourceLocation(MODID+":remove_preview", ""), removePreviewBaked);
+      event
+          .getModelRegistry()
+          .put(new ModelResourceLocation(MODID + ":remove_preview", ""), removePreviewBaked);
     } catch (Exception e) {
       e.printStackTrace();
     }
