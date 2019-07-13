@@ -49,8 +49,8 @@ public class ClientProxy extends CommonProxy {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::registerModels);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::modelBakeEvent);
 
-    noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key.multiarmor");
-    railGun100x = new KeyBinding("overloaded.key.railgun100x", 341, "overloaded.cat.key.railgun");
+    noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key");
+    railGun100x = new KeyBinding("overloaded.key.railgun100x", 341, "overloaded.cat.key");
     ClientRegistry.registerKeyBinding(noClipKeybind);
     ClientRegistry.registerKeyBinding(railGun100x);
 
