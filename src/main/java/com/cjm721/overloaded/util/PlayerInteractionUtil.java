@@ -22,8 +22,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -109,10 +111,10 @@ public class PlayerInteractionUtil {
       return BlockPlaceResult.FAIL_DENY;
     }
 
-    //    if (!ForgeEventFactory.onBlockPlace(
-    //        player,
-    //        new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition)),
-    //        facing)) return BlockPlaceResult.FAIL_DENY;
+    if (!ForgeEventFactory.onBlockPlace(
+        player,
+        new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition)),
+        facing)) return BlockPlaceResult.FAIL_DENY;
 
     long distance = Math.round(Math.sqrt(player.getPosition().distanceSq(newPosition)));
 
@@ -123,12 +125,14 @@ public class PlayerInteractionUtil {
         && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
       return BlockPlaceResult.FAIL_ENERGY;
 
-    LazyOptional<IItemHandler> opInventory = player.getCapability(ITEM_HANDLER_CAPABILITY, Direction.UP);
-    if(!opInventory.isPresent()) {
+    LazyOptional<IItemHandler> opInventory =
+        player.getCapability(ITEM_HANDLER_CAPABILITY, Direction.UP);
+    if (!opInventory.isPresent()) {
       Overloaded.logger.warn("Player has no ItemHandler Capability? NBT: " + player.serializeNBT());
       return BlockPlaceResult.FAIL_PREREQUISITE;
     }
-    IItemHandler inventory = opInventory.orElseThrow(() -> new RuntimeException("Impossible Condition"));
+    IItemHandler inventory =
+        opInventory.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     int foundStackSlot = findItemStackSlot(searchStack, inventory);
     if (foundStackSlot == -1) {
@@ -159,7 +163,7 @@ public class PlayerInteractionUtil {
         CriteriaTriggers.PLACED_BLOCK.trigger(player, newPosition, foundStack);
       }
 
-//      foundStack.shrink(1);
+      //      foundStack.shrink(1);
       SoundType soundtype =
           worldIn
               .getBlockState(newPosition)

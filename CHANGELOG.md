@@ -1,3 +1,8 @@
+**Version: 0.0.66 (BETA)**
+
+* Add event to MultiTool place again.
+
+-------------------------------------------------------------------
 **Version: 0.0.65 (BETA)**
 
 * Change Lang files on Keybinds
