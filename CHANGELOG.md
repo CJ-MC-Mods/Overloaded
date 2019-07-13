@@ -1,3 +1,8 @@
+**Version: 0.0.65 (BETA)**
+
+* Change Lang files on Keybinds
+
+-------------------------------------------------------------------
 **Version: 0.0.64 (BETA)**
 
 * Fire event when removing potion affects so mods that don't want their affects remove, arn't
