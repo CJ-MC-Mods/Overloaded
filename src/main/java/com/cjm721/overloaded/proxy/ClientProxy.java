@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
+import com.cjm721.overloaded.client.render.entity.ModelRenderOBJ;
 import com.cjm721.overloaded.client.render.item.RenderMultiToolAssist;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
@@ -121,9 +122,13 @@ public class ClientProxy extends CommonProxy {
       e.printStackTrace();
     }
 
+    ModelRenderOBJ.BAKERY = event.getModelLoader();
+
     ModItems.customHelmet.getArmorModel(null, null, null, null);
     ModItems.customChestplate.getArmorModel(null, null, null, null);
     ModItems.customLeggins.getArmorModel(null, null, null, null);
     ModItems.customBoots.getArmorModel(null, null, null, null);
+
+    ModelRenderOBJ.BAKERY = null;
   }
 }

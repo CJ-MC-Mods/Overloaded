@@ -1,6 +1,7 @@
 **Version: 0.0.65 (BETA)**
 
 * Change Lang files on Keybinds
+* Speed up OBJ load times
 
 -------------------------------------------------------------------
 **Version: 0.0.64 (BETA)**

@@ -25,6 +25,8 @@ public class ItemMultiBoots extends AbstractMultiArmor {
     //        setTranslationKey("multi_boots");
   }
 
+  private RenderMultiBoots armorModel;
+
   @Nullable
   @Override
   @OnlyIn(Dist.CLIENT)
@@ -33,8 +35,6 @@ public class ItemMultiBoots extends AbstractMultiArmor {
     if (armorModel == null) armorModel = new RenderMultiBoots();
     return (A) armorModel;
   }
-
-  private RenderMultiBoots armorModel;
 
   @OnlyIn(Dist.CLIENT)
   @Override

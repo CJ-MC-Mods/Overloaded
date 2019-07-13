@@ -20,8 +20,10 @@ import java.util.Random;
 
 /** Based off brandon3055's work * */
 @OnlyIn(Dist.CLIENT)
-class ModelRenderOBJ extends RendererModel {
-  //    private CCModel model;
+public class ModelRenderOBJ extends RendererModel {
+
+  public static ModelBakery BAKERY;
+
   private int displayList;
   private boolean compiled = false;
   private IBakedModel objModel;
@@ -34,6 +36,7 @@ class ModelRenderOBJ extends RendererModel {
       objModel =
           ModelLoaderRegistry.getModel(customModel)
               .bake(
+                  BAKERY != null ? BAKERY :
                   new ModelBakery(
                       Minecraft.getInstance().getResourceManager(),
                       Minecraft.getInstance().getTextureMap(),
