@@ -82,8 +82,7 @@ public class ClientProxy extends CommonProxy {
         new GLFWScrollCallback() {
           @Override
           public void invoke(long window, double xoffset, double yoffset) {
-            if (!MinecraftForge.EVENT_BUS
-                .post(new ScrollEvent(xoffset, yoffset))) {
+            if (!MinecraftForge.EVENT_BUS.post(new ScrollEvent(xoffset, yoffset))) {
               oldScroll.invoke(window, xoffset, yoffset);
             }
           }
@@ -102,25 +101,22 @@ public class ClientProxy extends CommonProxy {
 
   @SubscribeEvent
   public static void modelBakeEvent(ModelBakeEvent event) {
-    try {
-      IUnbakedModel removePreview =
-          event
-              .getModelLoader()
-              .getUnbakedModel(new ResourceLocation(MODID, "block/remove_preview"));
+    bakeModelAndPut(
+        new ResourceLocation(MODID, "block/remove_preview"),
+        new ModelResourceLocation(MODID + ":remove_preview", ""),
+        event);
 
-      IBakedModel removePreviewBaked =
-          removePreview.bake(
-              event.getModelLoader(),
-              ModelLoader.defaultTextureGetter(),
-              new ISprite() {},
-              DefaultVertexFormats.BLOCK);
-
-      event
-          .getModelRegistry()
-          .put(new ModelResourceLocation(MODID + ":remove_preview", ""), removePreviewBaked);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    bakeOBJModelAndPut(
+//        new ResourceLocation(MODID, "models/item/multi_tool.obj"),
+//        new ModelResourceLocation(MODID + ":multi_tool", "inventory"),
+//        event
+//    );
+//
+//    bakeOBJModelAndPut(
+//        new ResourceLocation(MODID, "models/block/block_player.obj"),
+//        new ModelResourceLocation(MODID + ":player_interface", ""),
+//        event
+//    );
 
     ModelRenderOBJ.BAKERY = event.getModelLoader();
 
@@ -130,5 +126,41 @@ public class ClientProxy extends CommonProxy {
     ModItems.customBoots.getArmorModel(null, null, null, null);
 
     ModelRenderOBJ.BAKERY = null;
+  }
+
+  private static void bakeModelAndPut(
+      ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
+    IUnbakedModel unbakedModel =
+        event.getModelLoader().getUnbakedModel(raw);
+
+    IBakedModel bakedModel =
+        unbakedModel.bake(
+            event.getModelLoader(),
+            ModelLoader.defaultTextureGetter(),
+            new ISprite() {},
+            DefaultVertexFormats.BLOCK);
+
+    event
+        .getModelRegistry()
+        .put(baked, bakedModel);
+  }
+
+  private static void bakeOBJModelAndPut(
+      ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
+    try {
+    IUnbakedModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw);
+    IBakedModel bakedModel =
+        unbakedModel.bake(
+            event.getModelLoader(),
+            ModelLoader.defaultTextureGetter(),
+            new ISprite() {},
+            DefaultVertexFormats.BLOCK);
+
+    event
+        .getModelRegistry()
+        .put(baked, bakedModel);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 }
