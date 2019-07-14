@@ -22,10 +22,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -111,10 +113,14 @@ public class PlayerInteractionUtil {
       return BlockPlaceResult.FAIL_DENY;
     }
 
-    if (!ForgeEventFactory.onBlockPlace(
-        player,
-        new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition)),
-        facing)) return BlockPlaceResult.FAIL_DENY;
+    BlockSnapshot blockSnapshot = new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition));
+    BlockState placedAgainst = blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().offset(facing.getOpposite()));
+    BlockEvent.EntityPlaceEvent event = new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
+    MinecraftForge.EVENT_BUS.post(event);
+
+    if (event.isCanceled()) {
+      return BlockPlaceResult.FAIL_DENY;
+    }
 
     long distance = Math.round(Math.sqrt(player.getPosition().distanceSq(newPosition)));
 
