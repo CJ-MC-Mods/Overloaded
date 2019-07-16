@@ -1,8 +1,10 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.network.container.InstantFurnaceContainer;
+import com.cjm721.overloaded.storage.energy.ForgeEnergyDataUpdateWrapper;
 import com.cjm721.overloaded.storage.item.ProcessingItemStorage;
 import com.cjm721.overloaded.tile.ModTiles;
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -19,15 +21,22 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TileInstanceFurnace extends LockableTileEntity {
+import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+
+public class TileInstantFurnace extends LockableTileEntity implements IDataUpdate {
 
   @Nonnull private final ProcessingItemStorage itemStorage;
-  @Nonnull private final LazyOptional<?> capability;
+  @Nonnull private final ForgeEnergyDataUpdateWrapper energyStorage;
+  @Nonnull private final LazyOptional<?> itemCapability;
+  @Nonnull private final LazyOptional<?> energyCapability;
 
-  public TileInstanceFurnace() {
+  public TileInstantFurnace() {
     super(ModTiles.instantFurnace);
     itemStorage = new ProcessingItemStorage(9,9);
-    capability = LazyOptional.of(() -> itemStorage);
+    itemCapability = LazyOptional.of(() -> itemStorage);
+
+    energyStorage = new ForgeEnergyDataUpdateWrapper(2000000000, 2000000000, 0, 0, this);
+    energyCapability = LazyOptional.of(() -> energyStorage);
   }
 
   @Override
@@ -46,8 +55,11 @@ public class TileInstanceFurnace extends LockableTileEntity {
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
     if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-      markDirty();
-      return capability.cast();
+      return itemCapability.cast();
+    }
+
+    if (cap == ENERGY) {
+      return energyCapability.cast();
     }
 
     return super.getCapability(cap, side);
@@ -87,11 +99,6 @@ public class TileInstanceFurnace extends LockableTileEntity {
     itemStorage.insertItem(index, stack, false);
   }
 
-  /**
-   * Don't rename this method to canInteractWith due to conflicts with Container
-   *
-   * @param player
-   */
   @Override
   public boolean isUsableByPlayer(PlayerEntity player) {
     // TODO Do I want to make sure the player is nearby?
@@ -106,15 +113,22 @@ public class TileInstanceFurnace extends LockableTileEntity {
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
-    if(compound.contains("Storage")) {
-      itemStorage.deserializeNBT((CompoundNBT) compound.get("Storage"));
+    if(compound.contains("ItemStorage")) {
+      itemStorage.deserializeNBT((CompoundNBT) compound.get("ItemStorage"));
     }
+
+    energyStorage.setEnergy(compound.getInt("EnergyStored"));
   }
 
   @Override
   public CompoundNBT write(CompoundNBT compound) {
-    CompoundNBT storage = itemStorage.serializeNBT();
-    compound.put("Storage", storage);
+    compound.put("ItemStorage", itemStorage.serializeNBT());
+    compound.putInt("EnergyStored", energyStorage.getEnergyStored());
     return super.write(compound);
+  }
+
+  @Override
+  public void dataUpdated() {
+    markDirty();
   }
 }

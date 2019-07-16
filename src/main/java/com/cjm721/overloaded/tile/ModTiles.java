@@ -151,7 +151,7 @@ public class ModTiles {
 
     registry.register(
         build(
-            TileInstanceFurnace::new,
+            TileInstantFurnace::new,
             ModBlocks.instantFurnace,
             TileResourceLocations.instantFurnace));
     registry.register(
