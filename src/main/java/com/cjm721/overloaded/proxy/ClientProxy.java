@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.client.gui.InstantFurnaceScreen;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.ModelRenderOBJ;
 import com.cjm721.overloaded.client.render.item.RenderMultiToolAssist;
@@ -7,10 +8,12 @@ import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.network.container.ModContainers;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.cjm721.overloaded.util.ScrollEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -66,6 +69,8 @@ public class ClientProxy extends CommonProxy {
     ClientRegistry.bindTileEntitySpecialRenderer(
         TilePlayerInterface.class, new PlayerInterfaceRenderer());
 
+    ScreenManager.registerFactory(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
+
     GLFWScrollCallback oldScroll =
         GLFW.glfwSetScrollCallback(
             Minecraft.getInstance().mainWindow.getHandle(),
@@ -111,10 +116,16 @@ public class ClientProxy extends CommonProxy {
 //        new ModelResourceLocation(MODID + ":multi_tool", "inventory"),
 //        event
 //    );
-//
+
 //    bakeOBJModelAndPut(
 //        new ResourceLocation(MODID, "models/block/block_player.obj"),
 //        new ModelResourceLocation(MODID + ":player_interface", ""),
+//        event
+//    );
+
+//    bakeOBJModelAndPut(
+//        new ResourceLocation(MODID, "models/block/energy_extractor.obj"),
+//        new ModelResourceLocation(MODID + ":energy_extractor", ""),
 //        event
 //    );
 

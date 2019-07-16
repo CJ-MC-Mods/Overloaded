@@ -26,6 +26,7 @@ public class ModTiles {
     static final String matterPurifier = MODID + ":matter_purifier";
     static final String playerInterface = MODID + ":player_interface";
     static final String teamLoader = MODID + ":team_loader";
+    static final String instantFurnace = MODID + ":instant_furnace";
     static final String hyperItemReceiver = MODID + ":hyper_item_receiver";
     static final String hyperItemSender = MODID + ":hyper_item_sender";
     static final String almostInfiniteBarrel = MODID + ":almost_infinite_barrel";
@@ -66,6 +67,9 @@ public class ModTiles {
 
   @ObjectHolder(TileResourceLocations.teamLoader)
   public static TileEntityType<?> teamLoader;
+
+  @ObjectHolder(TileResourceLocations.instantFurnace)
+  public static TileEntityType<?> instantFurnace;
 
   @ObjectHolder(TileResourceLocations.hyperItemReceiver)
   public static TileEntityType<?> hyperItemReceiver;
@@ -145,6 +149,11 @@ public class ModTiles {
 //    registry.register(
 //        build(TileTeamLoader::new, ModBlocks.teamLoader, TileResourceLocations.teamLoader));
 
+    registry.register(
+        build(
+            TileInstanceFurnace::new,
+            ModBlocks.instantFurnace,
+            TileResourceLocations.instantFurnace));
     registry.register(
         build(
             TileHyperItemReceiver::new,

@@ -50,11 +50,11 @@ public final class ModBlocks {
   public static ModBlock fusionCore;
   public static ModBlock energyInjectorChest;
   public static ModBlock teamLoader;
+  public static ModBlockContainer instantFurnace;
   public static ModBlock itemManipulator;
   public static ModBlock fusionInterface;
 
   public static final List<IModRegistrable> registerList = new LinkedList<>();
-
 
   public static void init(IForgeRegistry<Block> registry) {
     String textureName = "blocks/pure_matter";
@@ -90,6 +90,7 @@ public final class ModBlocks {
     netherStarBlock = registerFull(registry, new BlockNetherStar());
     playerInterface = registerFull(registry, new BlockPlayerInterface());
     itemInterface = registerFull(registry, new BlockItemInterface());
+    instantFurnace = registerFull(registry, new BlockInstantFurnace());
 
     //    fusionCore = registerFull(registry, new BlockFusionCore());
     //    fusionInterface = registerFull(registry, new BlockFusionInterface());
@@ -107,7 +108,7 @@ public final class ModBlocks {
     registerList.add(block);
   }
 
-  private static <T extends ModBlock> T registerFull(IForgeRegistry<Block> registry, T block) {
+  private static <T extends Block> T registerFull(IForgeRegistry<Block> registry, T block) {
     registerBlock(registry, block);
 
     CommonProxy.itemToRegister.add(

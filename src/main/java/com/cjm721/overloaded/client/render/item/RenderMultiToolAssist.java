@@ -92,6 +92,7 @@ public class RenderMultiToolAssist {
     BlockState state;
     if (stack.getItem() instanceof BlockItem) {
       state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
+      state = state.getExtendedState(player.getEntityWorld(), result.getPos());
     } else {
       state = Blocks.COBBLESTONE.getDefaultState();
     }

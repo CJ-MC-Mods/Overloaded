@@ -11,6 +11,7 @@ import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
+import com.cjm721.overloaded.network.container.ModContainers;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
@@ -18,6 +19,7 @@ import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
@@ -127,5 +129,10 @@ public class CommonProxy {
   @SubscribeEvent
   public static void registerTileEntity(RegistryEvent.Register<TileEntityType<?>> event) {
     ModTiles.init(event.getRegistry());
+  }
+
+  @SubscribeEvent
+  public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+    ModContainers.init(event.getRegistry());
   }
 }
