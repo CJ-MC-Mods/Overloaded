@@ -19,6 +19,6 @@ issueTrackerURL="https://github.com/CJ-MC-Mods/Overloaded/issues"
     [[dependencies.overloaded]] #optional
         modId="forge" #mandatory
         mandatory=true #mandatory
-        versionRange="[26,)" #mandatory
+        versionRange="[26.0.23,)" #mandatory
         ordering="NONE"
         side="BOTH"
