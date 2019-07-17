@@ -66,7 +66,8 @@ public final class ContainerUtil {
         final Slot slot = container.inventorySlots.get(i);
         final ItemStack itemstack = slot.getStack();
 
-        if (!itemstack.isEmpty()
+        if (slot.isItemValid(stack)
+            && !itemstack.isEmpty()
             && (itemstack.getItem() == stack.getItem())
             && ItemStack.areItemStackTagsEqual(stack, itemstack)) {
           final int j = itemstack.getCount() + stack.getCount();

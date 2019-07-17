@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.network.container;
 
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
 import com.cjm721.overloaded.storage.energy.ForgeEnergyDataUpdateWrapper;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.util.ContainerUtil;
@@ -45,7 +46,7 @@ public class InstantFurnaceContainer extends Container {
           public void set(int amount) {
             InstantFurnaceContainer.this.instanceFurnace
                 .getCapability(ENERGY)
-                .ifPresent(e -> ((ForgeEnergyDataUpdateWrapper) e).setEnergy(amount));
+                .ifPresent(e -> ((EnergyInventoryBasedRecipeProcessor) e).setCurrentEnergy(amount));
           }
         };
     maxPower = IntReferenceHolder.single();

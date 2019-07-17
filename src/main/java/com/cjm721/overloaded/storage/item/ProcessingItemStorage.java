@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.storage.item;
 
+import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -12,14 +13,16 @@ import javax.annotation.Nonnull;
 public class ProcessingItemStorage implements IItemHandler, INBTSerializable<CompoundNBT> {
 
   private final int inputSlots, outputSlots;
-  @Nonnull NonNullList<ItemStack> input;
-  @Nonnull NonNullList<ItemStack> output;
+  @Nonnull private final IDataUpdate dataUpdate;
+  @Nonnull private NonNullList<ItemStack> input;
+  @Nonnull private NonNullList<ItemStack> output;
 
-  public ProcessingItemStorage(int inputSlots, int outputSlots) {
+  public ProcessingItemStorage(int inputSlots, int outputSlots, IDataUpdate dataUpdate) {
     this.inputSlots = inputSlots;
     input = NonNullList.withSize(inputSlots, ItemStack.EMPTY);
     this.outputSlots = outputSlots;
     output = NonNullList.withSize(outputSlots, ItemStack.EMPTY);
+    this.dataUpdate = dataUpdate;
   }
 
   @Override
@@ -36,9 +39,15 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   @Nonnull
   @Override
   public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-    return slot < inputSlots
-        ? insertItem(input, slot, stack, simulate)
-        : insertItem(output, slot - inputSlots, stack, simulate);
+    ItemStack returnStack =
+        slot < inputSlots
+            ? insertItem(input, slot, stack, simulate)
+            : insertItem(output, slot - inputSlots, stack, simulate);
+
+    if (!simulate && stack.getCount() != returnStack.getCount()) {
+      dataUpdate.dataUpdated();
+    }
+    return returnStack;
   }
 
   @Nonnull
@@ -62,6 +71,10 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
         (slot < inputSlots ? input.get(slot) : output.get(slot - inputSlots)).copy();
 
     toReturn.setCount(Math.min(toReturn.getCount(), amount));
+
+    if (!simulate && toReturn.getCount() != 0) {
+      dataUpdate.dataUpdated();
+    }
     return toReturn;
   }
 
@@ -91,11 +104,11 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
 
   @Override
   public void deserializeNBT(CompoundNBT nbt) {
-    if(nbt.contains("Input")) {
+    if (nbt.contains("Input")) {
       ItemStackHelper.loadAllItems(nbt.getCompound("Input"), input);
     }
 
-    if(nbt.contains("Output")) {
+    if (nbt.contains("Output")) {
       ItemStackHelper.loadAllItems(nbt.getCompound("Output"), output);
     }
   }
