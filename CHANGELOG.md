@@ -1,3 +1,9 @@
+**Version: 0.0.67 (BETA)**
+
+* Re-enable Remove Harmful from MultiArmor
+* Requires Forge 59+ due to sided issues with Potions that are fixed in that version
+
+-------------------------------------------------------------------
 **Version: 0.0.66 (BETA)**
 
 * Add event to MultiTool place again.
