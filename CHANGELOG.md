@@ -1,3 +1,8 @@
+**Version: 0.0.68 (BETA)**
+
+* Updated to 1.14.4
+
+-------------------------------------------------------------------
 **Version: 0.0.67 (BETA)**
 
 * Re-enable Remove Harmful from MultiArmor
