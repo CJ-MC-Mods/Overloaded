@@ -2,16 +2,16 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.network.container.InstantFurnaceContainer;
 import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
-import com.cjm721.overloaded.storage.energy.ForgeEnergyDataUpdateWrapper;
-import com.cjm721.overloaded.storage.item.ProcessingItemStorage;
+import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
@@ -33,7 +33,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   public TileInstantFurnace() {
     super(ModTiles.instantFurnace);
 
-    processingStorage = new EnergyInventoryBasedRecipeProcessor(IRecipeType.SMELTING, this, Integer.MAX_VALUE, 9,9,this);
+    processingStorage = new FurnaceProcessor(this::getWorld, Integer.MAX_VALUE, 9, this);
     capability = LazyOptional.of(() -> processingStorage);
   }
 
@@ -106,7 +106,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   @Override
   public void read(CompoundNBT compound) {
     super.read(compound);
-    if(compound.contains("Processor")) {
+    if (compound.contains("Processor")) {
       processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
     }
   }
@@ -118,23 +118,8 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
     return super.write(compound);
   }
 
-  private boolean smelting = false;
-
   @Override
   public void dataUpdated() {
-    if(!smelting) {
-      markDirty();
-
-      attemptSmelting();
-    }
-  }
-
-  private void attemptSmelting() {
-    if(this.getWorld().isRemote) {
-      return;
-    }
-    smelting = true;
-
-    smelting = false;
+    markDirty();
   }
 }

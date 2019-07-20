@@ -1,55 +1,52 @@
 package com.cjm721.overloaded.storage.crafting;
 
-import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.util.IDataUpdate;
+import com.cjm721.overloaded.util.NBTHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Supplier;
 
-public class EnergyInventoryBasedRecipeProcessor<
+public abstract class EnergyInventoryBasedRecipeProcessor<
         T extends net.minecraft.item.crafting.IRecipe<IInventory>>
-    implements IItemHandler, IEnergyStorage, INBTSerializable<CompoundNBT> {
+    implements IItemHandlerModifiable, IEnergyStorage, INBTSerializable<CompoundNBT> {
 
   private final IRecipeType<T> recipeType;
-  private final TileEntity tileEntity;
+  private final Supplier<World> worldSupplier;
   private final int maxEnergy;
-  private final int inputSlots, outputSlots;
+  private final int slots;
   @Nonnull private final IDataUpdate dataUpdate;
 
-  @Nonnull NonNullList<ItemStack> input;
-  @Nonnull NonNullList<ItemStack> output;
+  @Nonnull private List<ItemStack> input;
+  @Nonnull private List<ItemStack> output;
   private int currentEnergy;
 
-  public EnergyInventoryBasedRecipeProcessor(
+  EnergyInventoryBasedRecipeProcessor(
       IRecipeType recipeType,
-      TileInstantFurnace tileEntity,
+      Supplier<World> worldSupplier,
       int maxEnergy,
-      int inputSlots,
-      int outputSlots,
+      int slots,
       @Nonnull IDataUpdate dataUpdate) {
     this.recipeType = recipeType;
-    this.tileEntity = tileEntity;
+    this.worldSupplier = worldSupplier;
     this.maxEnergy = maxEnergy;
-    this.inputSlots = inputSlots;
-    this.outputSlots = outputSlots;
+    this.slots = slots;
     this.dataUpdate = dataUpdate;
 
-    input = NonNullList.withSize(inputSlots, ItemStack.EMPTY);
-    output = NonNullList.withSize(outputSlots, ItemStack.EMPTY);
+    input = new ArrayList<>();
+    output = new ArrayList<>();
     currentEnergy = 0;
   }
 
@@ -65,7 +62,9 @@ public class EnergyInventoryBasedRecipeProcessor<
 
   @Override
   public int extractEnergy(int maxExtract, boolean simulate) {
-    return 0;
+    int energyExtracted = Math.min(currentEnergy, maxExtract);
+    if (!simulate) currentEnergy -= energyExtracted;
+    return energyExtracted;
   }
 
   @Override
@@ -90,52 +89,65 @@ public class EnergyInventoryBasedRecipeProcessor<
 
   @Override
   public int getSlots() {
-    return inputSlots + outputSlots;
+    return slots + slots;
   }
 
   @Nonnull
   @Override
   public ItemStack getStackInSlot(int slot) {
-    return slot < inputSlots ? input.get(slot) : output.get(slot - inputSlots);
+    if (slot < slots && slot < input.size()) {
+      return input.get(slot);
+    } else if (slot >= slots && slot - slots < output.size()) {
+      return output.get(slot - slots);
+    }
+    return ItemStack.EMPTY;
+  }
+
+  @Override
+  public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+    this.setItem(slot, stack);
   }
 
   public ItemStack setItem(int slot, ItemStack stack) {
-    if (tileEntity != null && tileEntity.getWorld() != null && !tileEntity.getWorld().isRemote) {
-      Inventory tempInv = new Inventory(stack);
-      stack = processRecipeAndStoreOutput(getRecipe(tempInv), tempInv, false);
+    ItemStack toReturn;
+
+    if (slot < this.slots) {
+      if (slot >= input.size()) {
+        input.add(stack);
+        toReturn = ItemStack.EMPTY;
+      } else {
+        toReturn = input.set(slot, stack);
+      }
+    } else {
+      slot -= slots;
+      if (slot >= output.size()) {
+        output.add(stack);
+        toReturn = ItemStack.EMPTY;
+      } else {
+        toReturn = output.set(slot, stack);
+      }
     }
 
-    ItemStack toReturn =
-        slot < this.inputSlots ? input.set(slot, stack) : output.set(slot - inputSlots, stack);
-
+    tryProcessRecipes();
     return toReturn;
   }
 
   @Nonnull
   @Override
   public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-    if (slot >= inputSlots) {
+    if (slot >= slots) {
       return stack;
     }
-
-    Inventory tempInventory = new Inventory(stack);
-
-    List<T> recipesForInput = getRecipe(tempInventory);
-    if (recipesForInput.isEmpty()) {
-      return stack;
-    }
-
-    processRecipeAndStoreOutput(recipesForInput, tempInventory, simulate);
 
     ItemStack returnStack = insertItem(input, slot, stack, simulate);
 
-    if (!simulate && slot < inputSlots && stack.getCount() != returnStack.getCount()) {
+    if (!simulate && slot < slots && stack.getCount() != returnStack.getCount()) {
       tryProcessRecipes();
     }
     return returnStack;
   }
 
-  public ItemStack insertItem(NonNullList<ItemStack> container, ItemStack stack, boolean simulate) {
+  private ItemStack insertItem(List<ItemStack> container, ItemStack stack, boolean simulate) {
     ItemStack inFlightStack = stack.copy();
 
     for (int i = 0; i < container.size(); i++) {
@@ -151,69 +163,53 @@ public class EnergyInventoryBasedRecipeProcessor<
         }
         inFlightStack = ItemStack.EMPTY;
       } else if (ItemHandlerHelper.canItemStacksStack(storedStack, inFlightStack)) {
-        int origionalCount = storedStack.getCount();
-        int newCount = Math.min(storedStack.getMaxStackSize(), origionalCount + inFlightStack.getCount());
+        int originalCount = storedStack.getCount();
+        int newCount =
+            Math.min(storedStack.getMaxStackSize(), originalCount + inFlightStack.getCount());
         if (!simulate) {
           storedStack.setCount(newCount);
           container.set(i, storedStack.copy());
         }
-        inFlightStack.setCount(inFlightStack.getCount() + origionalCount - newCount);
+        inFlightStack.setCount(inFlightStack.getCount() + originalCount - newCount);
       }
+    }
+
+    if (!inFlightStack.isEmpty() && container.size() < slots) {
+      if (!simulate) {
+        container.add(inFlightStack.copy());
+      }
+
+      return ItemStack.EMPTY;
     }
     return inFlightStack;
   }
 
-  private ItemStack processRecipeAndStoreOutput(
-      List<T> recipesForInput, Inventory inventory, boolean simulated) {
-    if(recipesForInput.isEmpty()) {
-      return inventory.getStackInSlot(0);
-    }
-
-    T recipe = recipesForInput.get(0);
-
-    ItemStack result;
-    while(!inventory.getStackInSlot(0).isEmpty() && !(result = recipe.getCraftingResult(inventory)).isEmpty()) {
-      ItemStack outputLeftOvers = insertItem(output, result, true);
-      // TODO incorporate: recipe.getRemainingItems(inventory)
-
-      if(!outputLeftOvers.isEmpty()) {
-        break;
-      }
-      insertItem(output, result, false);
-      int deduct = recipe.getIngredients().get(0).getMatchingStacks()[0].getCount();
-      inventory.getStackInSlot(0).shrink(deduct);
-    }
-
-
-    NonNullList<ItemStack> leftOvers = recipe.getRemainingItems(inventory);
-
-    if (leftOvers.isEmpty() || leftOvers.stream().allMatch(ItemStack::isEmpty)) {
-      return ItemStack.EMPTY;
-    }
-    if (leftOvers.size() > 1) {
-      Overloaded.logger.warn(
-          "Deleting Item due to to many recipe leftovers. Items: "
-              + leftOvers.subList(1, leftOvers.size() - 1).stream()
-                  .map(ItemStack::toString)
-                  .collect(Collectors.joining(",")));
-    }
-    return leftOvers.get(0);
-  }
-
-  private List<T> getRecipe(Inventory inventory) {
-    return this.tileEntity
-        .getWorld()
-        .getRecipeManager()
-        .getRecipes(recipeType, inventory, this.tileEntity.getWorld());
-  }
-
   @Nonnull
   private ItemStack insertItem(
-      NonNullList<ItemStack> inventory, int slot, @Nonnull ItemStack stack, boolean simulate) {
-    if (simulate) {
-      return inventory.get(slot);
+      List<ItemStack> inventory, int slot, @Nonnull ItemStack stack, boolean simulate) {
+    if (slot >= slots) {
+      return stack;
+    }
+
+    if (slot >= inventory.size()) {
+      if (!simulate) {
+        inventory.add(stack);
+      }
+      return ItemStack.EMPTY;
     } else {
-      return inventory.set(slot, stack);
+      ItemStack currentItem = inventory.get(slot);
+      ItemStack returnStack = stack.copy();
+
+      if (ItemHandlerHelper.canItemStacksStack(currentItem, returnStack)) {
+        int originalCount = currentItem.getCount();
+        int newCount =
+            Math.min(currentItem.getMaxStackSize(), originalCount + returnStack.getCount());
+        if (!simulate) {
+          currentItem.setCount(newCount);
+        }
+        returnStack.setCount(returnStack.getCount() + originalCount - newCount);
+      }
+      return returnStack;
     }
   }
 
@@ -222,15 +218,14 @@ public class EnergyInventoryBasedRecipeProcessor<
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
       return ItemStackHelper.getAndSplit(
-          slot < inputSlots ? input : output, slot < inputSlots ? slot : slot - inputSlots, amount);
+          slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
-    ItemStack toReturn =
-        (slot < inputSlots ? input.get(slot) : output.get(slot - inputSlots)).copy();
+    ItemStack toReturn = (slot < slots ? input.get(slot) : output.get(slot - slots)).copy();
 
     toReturn.setCount(Math.min(toReturn.getCount(), amount));
 
     if (!simulate && toReturn.getCount() != 0) {
-      if (slot >= inputSlots) {
+      if (slot >= slots) {
         // Output was modified, may be able to process more items now
         tryProcessRecipes();
       }
@@ -241,25 +236,24 @@ public class EnergyInventoryBasedRecipeProcessor<
 
   @Override
   public int getSlotLimit(int slot) {
-    return slot < inputSlots
-        ? input.get(slot).getMaxStackSize()
-        : output.get(slot - inputSlots).getMaxStackSize();
+    if(slot < slots && slot < input.size()) {
+      return input.get(slot).getMaxStackSize();
+    } else if (slot >= slots && slot - slots < output.size()) {
+      return output.get(slot).getMaxStackSize();
+    }
+    return ItemStack.EMPTY.getMaxStackSize();
   }
 
   @Override
   public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-    return slot < inputSlots;
+    return slot < slots;
   }
 
   @Override
   public CompoundNBT serializeNBT() {
     CompoundNBT storage = new CompoundNBT();
-    CompoundNBT inputNBT = new CompoundNBT();
-    CompoundNBT outputNBT = new CompoundNBT();
-    ItemStackHelper.saveAllItems(inputNBT, input);
-    ItemStackHelper.saveAllItems(outputNBT, output);
-    storage.put("Input", inputNBT);
-    storage.put("Output", outputNBT);
+    storage.put("Input", NBTHelper.serializeItems(input));
+    storage.put("Output", NBTHelper.serializeItems(output));
     storage.putInt("Energy", currentEnergy);
     return storage;
   }
@@ -267,11 +261,11 @@ public class EnergyInventoryBasedRecipeProcessor<
   @Override
   public void deserializeNBT(CompoundNBT nbt) {
     if (nbt.contains("Input")) {
-      ItemStackHelper.loadAllItems(nbt.getCompound("Input"), input);
+      input = NBTHelper.deseralizeItems(nbt.getList("Input", 10));
     }
 
     if (nbt.contains("Output")) {
-      ItemStackHelper.loadAllItems(nbt.getCompound("Output"), output);
+      output = NBTHelper.deseralizeItems(nbt.getList("Output", 10));
     }
 
     currentEnergy = nbt.getInt("Energy");
@@ -282,6 +276,73 @@ public class EnergyInventoryBasedRecipeProcessor<
   }
 
   private void tryProcessRecipes() {
+    if (worldSupplier != null && worldSupplier.get() != null && !worldSupplier.get().isRemote) {
+      for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
+        ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i));
+
+        if (leftOvers.isEmpty()) {
+          input.remove(i);
+        }
+      }
+    }
+
     this.dataUpdate.dataUpdated();
   }
+
+  private List<T> getRecipe(Inventory inventory) {
+    return this.worldSupplier
+        .get()
+        .getRecipeManager()
+        .getRecipes(recipeType, inventory, this.worldSupplier.get());
+  }
+
+  private ItemStack processRecipeAndStoreOutput(ItemStack stack) {
+    Inventory inventory = new Inventory(stack);
+
+    List<T> recipesForInput = getRecipe(inventory);
+
+    if (recipesForInput.isEmpty()) {
+      return inventory.getStackInSlot(0);
+    }
+
+    T recipe = recipesForInput.get(0);
+
+    ItemStack result;
+    while (!inventory.getStackInSlot(0).isEmpty()
+        && !(result = recipe.getCraftingResult(inventory)).isEmpty()) {
+      int energyCost = energyCostPerRecipeOperation(recipe);
+      if (energyCost != this.extractEnergy(energyCost, true)) {
+        break;
+      }
+
+      ItemStack outputLeftOvers = insertItem(output, result, true);
+
+      // TODO incorporate: recipe.getRemainingItems(inventory)
+
+      if (!outputLeftOvers.isEmpty()) {
+        break;
+      }
+      insertItem(output, result, false);
+      this.extractEnergy(energyCost, false);
+      int deduct = recipe.getIngredients().get(0).getMatchingStacks()[0].getCount();
+      inventory.getStackInSlot(0).shrink(deduct);
+    }
+
+    return inventory.getStackInSlot(0);
+    //    NonNullList<ItemStack> leftOvers = recipe.getRemainingItems(inventory);
+    //
+    //    if (leftOvers.isEmpty() || leftOvers.stream().allMatch(ItemStack::isEmpty)) {
+    //      return ItemStack.EMPTY;
+    //    }
+    //    if (leftOvers.size() > 1) {
+    //      Overloaded.logger.warn(
+    //          "Deleting Item due to to many recipe leftovers. Items: "
+    //              + leftOvers.subList(1, leftOvers.size() - 1).stream()
+    //              .map(ItemStack::toString)
+    //              .collect(Collectors.joining(",")));
+    //    }
+    //    return leftOvers.get(0);
+  }
+
+  abstract int energyCostPerRecipeOperation(T recipe);
 }

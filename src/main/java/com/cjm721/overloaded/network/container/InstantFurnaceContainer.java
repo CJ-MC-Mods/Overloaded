@@ -2,7 +2,6 @@ package com.cjm721.overloaded.network.container;
 
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
-import com.cjm721.overloaded.storage.energy.ForgeEnergyDataUpdateWrapper;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.util.ContainerUtil;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,7 +43,8 @@ public class InstantFurnaceContainer extends Container {
 
           @Override
           public void set(int amount) {
-            InstantFurnaceContainer.this.instanceFurnace
+            InstantFurnaceContainer.this
+                .instanceFurnace
                 .getCapability(ENERGY)
                 .ifPresent(e -> ((EnergyInventoryBasedRecipeProcessor) e).setCurrentEnergy(amount));
           }
@@ -109,4 +109,12 @@ public class InstantFurnaceContainer extends Container {
   private int getMaxPowerFromTE() {
     return instanceFurnace.getCapability(ENERGY).map(e -> e.getMaxEnergyStored()).orElse(1);
   }
+//
+//  @Override
+//  public void detectAndSendChanges() {
+//    for(int i = 0; i < inventoryItemStacks.size(); i++) {
+//      inventoryItemStacks.set(i, ItemStack.EMPTY);
+//    }
+//    super.detectAndSendChanges();
+//  }
 }
