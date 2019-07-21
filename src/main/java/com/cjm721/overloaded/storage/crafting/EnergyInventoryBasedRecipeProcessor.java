@@ -113,18 +113,32 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
 
     if (slot < this.slots) {
       if (slot >= input.size()) {
-        input.add(stack);
+        if(!stack.isEmpty()) {
+          input.add(stack);
+        }
         toReturn = ItemStack.EMPTY;
       } else {
-        toReturn = input.set(slot, stack);
+        if(stack.isEmpty()) {
+          toReturn = input.get(slot);
+          input.remove(slot);
+        } else {
+          toReturn = input.set(slot, stack);
+        }
       }
     } else {
       slot -= slots;
       if (slot >= output.size()) {
-        output.add(stack);
+        if(!stack.isEmpty()) {
+          output.add(stack);
+        }
         toReturn = ItemStack.EMPTY;
       } else {
-        toReturn = output.set(slot, stack);
+        if(stack.isEmpty()) {
+          toReturn = output.get(slot);
+          output.remove(slot);
+        } else {
+          toReturn = output.set(slot, stack);
+        }
       }
     }
 
@@ -145,6 +159,35 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
       tryProcessRecipes();
     }
     return returnStack;
+  }
+
+  @Nonnull
+  private ItemStack insertItem(
+      List<ItemStack> inventory, int slot, @Nonnull ItemStack stack, boolean simulate) {
+    if (slot >= slots) {
+      return stack;
+    }
+
+    if (slot >= inventory.size()) {
+      if (!simulate) {
+        inventory.add(stack);
+      }
+      return ItemStack.EMPTY;
+    } else {
+      ItemStack currentItem = inventory.get(slot);
+      ItemStack returnStack = stack.copy();
+
+      if (ItemHandlerHelper.canItemStacksStack(currentItem, returnStack)) {
+        int originalCount = currentItem.getCount();
+        int newCount =
+            Math.min(currentItem.getMaxStackSize(), originalCount + returnStack.getCount());
+        if (!simulate) {
+          currentItem.setCount(newCount);
+        }
+        returnStack.setCount(returnStack.getCount() + originalCount - newCount);
+      }
+      return returnStack;
+    }
   }
 
   private ItemStack insertItem(List<ItemStack> container, ItemStack stack, boolean simulate) {
@@ -185,42 +228,25 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   }
 
   @Nonnull
-  private ItemStack insertItem(
-      List<ItemStack> inventory, int slot, @Nonnull ItemStack stack, boolean simulate) {
-    if (slot >= slots) {
-      return stack;
-    }
-
-    if (slot >= inventory.size()) {
-      if (!simulate) {
-        inventory.add(stack);
-      }
-      return ItemStack.EMPTY;
-    } else {
-      ItemStack currentItem = inventory.get(slot);
-      ItemStack returnStack = stack.copy();
-
-      if (ItemHandlerHelper.canItemStacksStack(currentItem, returnStack)) {
-        int originalCount = currentItem.getCount();
-        int newCount =
-            Math.min(currentItem.getMaxStackSize(), originalCount + returnStack.getCount());
-        if (!simulate) {
-          currentItem.setCount(newCount);
-        }
-        returnStack.setCount(returnStack.getCount() + originalCount - newCount);
-      }
-      return returnStack;
-    }
-  }
-
-  @Nonnull
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
       return ItemStackHelper.getAndSplit(
           slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
-    ItemStack toReturn = (slot < slots ? input.get(slot) : output.get(slot - slots)).copy();
+    ItemStack toReturn;
+    if(slot < slots) {
+      if(input.size() > slot) {
+        toReturn = input.get(slot);
+      } else {
+        toReturn = ItemStack.EMPTY;
+      }
+    } else if (slot - slots < output.size()) {
+      toReturn = output.get(slot - slots);
+    } else {
+      toReturn = ItemStack.EMPTY;
+    }
+    toReturn = toReturn.copy();
 
     toReturn.setCount(Math.min(toReturn.getCount(), amount));
 

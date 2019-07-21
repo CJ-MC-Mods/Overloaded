@@ -5,10 +5,13 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 /**
  * Methods copied from 1.14.3 \o/ on MMD discord
  */
 public final class ContainerUtil {
+  @Nonnull
   public static ItemStack transferStackInSlot(
       final PlayerEntity player, final int index, final Container container) {
     ItemStack itemstack = ItemStack.EMPTY;
@@ -40,7 +43,7 @@ public final class ContainerUtil {
     return itemstack;
   }
 
-  public static boolean mergeItemStack(
+  private static boolean mergeItemStack(
       final ItemStack stack,
       final int startIndex,
       final int endIndex,

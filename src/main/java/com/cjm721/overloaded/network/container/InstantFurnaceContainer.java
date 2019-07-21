@@ -8,14 +8,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.FurnaceResultSlot;
+import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class InstantFurnaceContainer extends Container {
 
@@ -26,6 +30,7 @@ public class InstantFurnaceContainer extends Container {
 
   public InstantFurnaceContainer(int id, PlayerInventory playerInventory) {
     this(id, playerInventory, new TileInstantFurnace());
+    this.instanceFurnace.setWorld(playerInventory.player.world);
   }
 
   public InstantFurnaceContainer(
@@ -51,10 +56,12 @@ public class InstantFurnaceContainer extends Container {
         };
     maxPower = IntReferenceHolder.single();
 
+    IItemHandler handler = instanceFurnace.getCapability(ITEM_HANDLER_CAPABILITY).orElseThrow(() -> new IllegalStateException("No Item Handler Capability found"));
+
     int slotCount = 0;
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
-        this.addSlot(new Slot(instanceFurnace, slotCount++, 8 + j * 18, 8 + i * 18));
+        this.addSlot(new SlotItemHandler(handler, slotCount++, 8 + j * 18, 8 + i * 18));
       }
     }
 
@@ -109,12 +116,14 @@ public class InstantFurnaceContainer extends Container {
   private int getMaxPowerFromTE() {
     return instanceFurnace.getCapability(ENERGY).map(e -> e.getMaxEnergyStored()).orElse(1);
   }
-//
-//  @Override
-//  public void detectAndSendChanges() {
-//    for(int i = 0; i < inventoryItemStacks.size(); i++) {
-//      inventoryItemStacks.set(i, ItemStack.EMPTY);
-//    }
-//    super.detectAndSendChanges();
-//  }
+
+  @Override
+  public void detectAndSendChanges() {
+    super.detectAndSendChanges();
+  }
+
+  @Override
+  public void addListener(IContainerListener p_75132_1_) {
+    super.addListener(p_75132_1_);
+  }
 }
