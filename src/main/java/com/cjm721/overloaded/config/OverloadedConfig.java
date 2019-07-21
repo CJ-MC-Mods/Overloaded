@@ -33,6 +33,8 @@ public class OverloadedConfig {
 
   @SyncToClient public RailGunConfig railGun;
 
+  public ProductionConfig productionConfig;
+
   private final ImmutableList<ConfigSectionHandler> configsSections;
 
   private OverloadedConfig() {
@@ -44,6 +46,7 @@ public class OverloadedConfig {
     specialConfig = new SpecialConfig();
     rayGun = new RayGunConfig();
     railGun = new RailGunConfig();
+    productionConfig = new ProductionConfig();
 
     configsSections =
         ImmutableList.of(
@@ -54,7 +57,8 @@ public class OverloadedConfig {
             purifierConfig,
             specialConfig,
             rayGun,
-            railGun);
+            railGun,
+            productionConfig);
   }
 
   public ForgeConfigSpec load(Path path) {

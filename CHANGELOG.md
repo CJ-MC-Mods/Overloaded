@@ -1,3 +1,8 @@
+**Version: 0.0.69 (BETA)**
+
+* Added new block. Instant Furnace. Instantly smelts using RF.
+
+-------------------------------------------------------------------
 **Version: 0.0.68 (BETA)**
 
 * Updated to 1.14.4

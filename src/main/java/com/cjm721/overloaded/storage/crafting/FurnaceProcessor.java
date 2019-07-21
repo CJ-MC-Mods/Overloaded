@@ -1,8 +1,10 @@
 package com.cjm721.overloaded.storage.crafting;
 
+import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -17,6 +19,8 @@ public class FurnaceProcessor extends EnergyInventoryBasedRecipeProcessor<Furnac
 
   @Override
   int energyCostPerRecipeOperation(FurnaceRecipe recipe) {
-    return recipe.getCookTime();
+    long energy = recipe.getCookTime() * (long) OverloadedConfig.INSTANCE.productionConfig.energyPerCookTime;
+
+    return (int) Math.min(energy, Integer.MAX_VALUE);
   }
 }
