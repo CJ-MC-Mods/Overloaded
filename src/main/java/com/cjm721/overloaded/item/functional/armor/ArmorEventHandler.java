@@ -86,10 +86,9 @@ public class ArmorEventHandler {
       if (armorBooleans.getOrDefault(DataKeys.HEAL, Default.HEAL)) {
         tryHealPlayer(player, event.side);
       }
-      // TODO Re-enable after Forge #5920
-//      if (armorBooleans.getOrDefault(DataKeys.REMOVE_HARMFUL, Default.REMOVE_HARMFUL)) {
-//        tryRemoveHarmful(player, event.side);
-//      }
+      if (armorBooleans.getOrDefault(DataKeys.REMOVE_HARMFUL, Default.REMOVE_HARMFUL)) {
+        tryRemoveHarmful(player, event.side);
+      }
       if (armorBooleans.getOrDefault(DataKeys.EXTINGUISH, Default.EXTINGUISH)) {
         tryExtinguish(player, event.side);
       }

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.client.render.entity;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.Model;
@@ -40,6 +41,7 @@ public class ModelRenderOBJ extends RendererModel {
                   new ModelBakery(
                       Minecraft.getInstance().getResourceManager(),
                       Minecraft.getInstance().getTextureMap(),
+                      Minecraft.getInstance().getBlockColors(),
                       Minecraft.getInstance().getProfiler()),
                   ModelLoader.defaultTextureGetter(),
                   new ISprite() {},
