@@ -2,7 +2,7 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -118,10 +118,9 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
   public void breakBlock() {
     ItemStack storedItem = itemStack.getStackInSlot(0);
-    if (!storedItem.isEmpty())
-      this.getWorld()
-          .addEntity(
-              new ItemEntity(
-                  this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem));
+    if (!storedItem.isEmpty()) {
+      InventoryHelper.spawnItemStack(
+          this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem);
+    }
   }
 }

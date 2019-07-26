@@ -6,6 +6,7 @@ import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -45,5 +46,18 @@ public class BlockInstantFurnace extends ModBlockContainer {
   @Override
   public TileEntity createNewTileEntity(IBlockReader worldIn) {
     return new TileInstantFurnace();
+  }
+
+  @Override
+  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    if(oldState.getBlock() != newState.getBlock()) {
+      TileEntity te = world.getTileEntity(pos);
+
+      if (te instanceof TileInstantFurnace) {
+        InventoryHelper.dropInventoryItems(world, pos, ((TileInstantFurnace) te));
+      }
+    }
+
+    super.onReplaced(oldState, world, pos, newState, isMoving);
   }
 }

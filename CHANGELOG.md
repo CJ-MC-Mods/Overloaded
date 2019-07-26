@@ -1,7 +1,8 @@
 **Version: 0.0.70 (BETA)**
 
-* Fixed some GUI bugs with the Instant Furnace. 
-* Instant Furnace now has recipe.
+* Fixed some GUI bugs with the Instant Furnace 
+* Instant Furnace now has recipe
+* ItemInterface now drops its item again on break
 
 -------------------------------------------------------------------
 **Version: 0.0.69 (BETA)**

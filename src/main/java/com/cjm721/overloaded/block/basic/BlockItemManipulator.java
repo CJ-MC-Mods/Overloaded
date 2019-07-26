@@ -1,16 +1,18 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.tile.functional.TileItemManipulator;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.tile.functional.TileItemManipulator;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -76,10 +78,17 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
     return Direction.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
   }
 
-  //    @Override
-  //    public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull BlockState
-  // state) {
-  //        ((TileItemManipulator) worldIn.getTileEntity(pos)).breakBlock();
-  //        super.breakBlock(worldIn, pos, state);
-  //    }
+  @Override
+  public void onReplaced(
+      BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+    if (oldState.getBlock() != newState.getBlock()) {
+      TileEntity te = world.getTileEntity(pos);
+
+      if (te instanceof TileItemManipulator) {
+        ((TileItemManipulator) te).breakBlock();
+      }
+    }
+
+    super.onReplaced(oldState, world, pos, newState, isMoving);
+  }
 }
