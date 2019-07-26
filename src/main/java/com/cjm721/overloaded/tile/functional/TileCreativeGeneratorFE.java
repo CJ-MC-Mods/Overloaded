@@ -32,8 +32,8 @@ public class TileCreativeGeneratorFE extends TileEntity
       if (te == null) continue;
 
       te.getCapability(ENERGY, facing.getOpposite())
-          .ifPresent(s -> s.receiveEnergy(Integer.MAX_VALUE, false));
-//          .ifPresent(s -> s.receiveEnergy(1000000, false));
+//          .ifPresent(s -> s.receiveEnergy(Integer.MAX_VALUE, false));
+          .ifPresent(s -> s.receiveEnergy(1000000, false));
     }
   }
 

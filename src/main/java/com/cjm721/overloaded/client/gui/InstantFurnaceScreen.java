@@ -33,7 +33,7 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
     int j = this.guiTop;
     this.blit(i, j, 0, 0, this.xSize, this.ySize);
 
-    double percent = this.container.getPower() / (double) this.container.getMaxPower();
+    double percent = this.container.getPowerFromTE() / (double) this.container.getMaxPowerFromTE();
 
     this.blit(this.guiLeft + 8, this.guiTop + 67, 0, 170, (int) Math.round(percent * 160), 10);
 

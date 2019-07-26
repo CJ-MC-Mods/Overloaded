@@ -55,7 +55,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     int energyReceived = Math.min(maxEnergy - currentEnergy, maxReceive);
     if (!simulate) {
       currentEnergy += energyReceived;
-      tryProcessRecipes();
+      tryProcessRecipes(!isOnServer());
     }
     return energyReceived;
   }
@@ -142,7 +142,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
       }
     }
 
-    tryProcessRecipes();
+    tryProcessRecipes(!isOnServer());
     return toReturn;
   }
 
@@ -156,7 +156,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     ItemStack returnStack = insertItem(input, slot, stack, simulate);
 
     if (!simulate && slot < slots && stack.getCount() != returnStack.getCount()) {
-      tryProcessRecipes();
+      tryProcessRecipes(!isOnServer());
     }
     return returnStack;
   }
@@ -253,7 +253,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     if (!simulate && toReturn.getCount() != 0) {
       if (slot >= slots) {
         // Output was modified, may be able to process more items now
-        tryProcessRecipes();
+        tryProcessRecipes(!isOnServer());
       }
       dataUpdate.dataUpdated();
     }
@@ -301,14 +301,16 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     this.currentEnergy = energy;
   }
 
-  private void tryProcessRecipes() {
-    if (worldSupplier != null && worldSupplier.get() != null && !worldSupplier.get().isRemote) {
-      for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
-        ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i));
+  private boolean isOnServer() {
+    return worldSupplier != null && worldSupplier.get() != null && !worldSupplier.get().isRemote;
+  }
 
-        if (leftOvers.isEmpty()) {
-          input.remove(i);
-        }
+  private void tryProcessRecipes(boolean simulate) {
+    for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
+      ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i), simulate);
+
+      if (!simulate && leftOvers.isEmpty()) {
+        input.remove(i);
       }
     }
 
@@ -322,8 +324,8 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
         .getRecipes(recipeType, inventory, this.worldSupplier.get());
   }
 
-  private ItemStack processRecipeAndStoreOutput(ItemStack stack) {
-    Inventory inventory = new Inventory(stack);
+  private ItemStack processRecipeAndStoreOutput(ItemStack stack, boolean simulate) {
+    Inventory inventory = new Inventory(stack.copy());
 
     List<T> recipesForInput = getRecipe(inventory);
 
@@ -348,8 +350,8 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
       if (!outputLeftOvers.isEmpty()) {
         break;
       }
-      insertItem(output, result, false);
-      this.extractEnergy(energyCost, false);
+      insertItem(output, result, simulate);
+      this.extractEnergy(energyCost, simulate);
       int deduct = recipe.getIngredients().get(0).getMatchingStacks()[0].getCount();
       inventory.getStackInSlot(0).shrink(deduct);
     }

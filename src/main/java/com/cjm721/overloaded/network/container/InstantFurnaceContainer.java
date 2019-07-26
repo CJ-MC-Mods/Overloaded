@@ -1,18 +1,21 @@
 package com.cjm721.overloaded.network.container;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.network.packets.ContainerDataMessage;
 import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.util.ContainerUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.FurnaceResultSlot;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -21,7 +24,7 @@ import javax.annotation.Nonnull;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
-public class InstantFurnaceContainer extends Container {
+public class InstantFurnaceContainer extends ModContainer {
 
   private final PlayerInventory playerInventory;
   private final TileInstantFurnace instanceFurnace;
@@ -56,7 +59,10 @@ public class InstantFurnaceContainer extends Container {
         };
     maxPower = IntReferenceHolder.single();
 
-    IItemHandler handler = instanceFurnace.getCapability(ITEM_HANDLER_CAPABILITY).orElseThrow(() -> new IllegalStateException("No Item Handler Capability found"));
+    IItemHandler handler =
+        instanceFurnace
+            .getCapability(ITEM_HANDLER_CAPABILITY)
+            .orElseThrow(() -> new IllegalStateException("No Item Handler Capability found"));
 
     int slotCount = 0;
     for (int i = 0; i < 3; ++i) {
@@ -83,7 +89,7 @@ public class InstantFurnaceContainer extends Container {
       this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
     }
 
-    this.trackInt(power);
+    this.trackInt(power).set(getPowerFromTE());
     this.trackInt(maxPower).set(getMaxPowerFromTE());
   }
 
@@ -101,29 +107,42 @@ public class InstantFurnaceContainer extends Container {
         ModBlocks.instantFurnace);
   }
 
-  public int getPower() {
-    return power.get();
-  }
-
-  public int getMaxPower() {
-    return maxPower.get();
-  }
-
-  private int getPowerFromTE() {
+  public int getPowerFromTE() {
     return instanceFurnace.getCapability(ENERGY).map(e -> e.getEnergyStored()).orElse(0);
   }
 
-  private int getMaxPowerFromTE() {
+  public int getMaxPowerFromTE() {
     return instanceFurnace.getCapability(ENERGY).map(e -> e.getMaxEnergyStored()).orElse(1);
   }
 
   @Override
   public void detectAndSendChanges() {
-    super.detectAndSendChanges();
-  }
+    int j;
+    for (j = 0; j < this.inventorySlots.size(); ++j) {
+      ItemStack itemstack = this.inventorySlots.get(j).getStack();
+      itemstack = itemstack.isEmpty() ? ItemStack.EMPTY : itemstack.copy();
+      this.inventoryItemStacks.set(j, itemstack);
 
-  @Override
-  public void addListener(IContainerListener p_75132_1_) {
-    super.addListener(p_75132_1_);
+      for (IContainerListener icontainerlistener : this.listeners) {
+        icontainerlistener.sendSlotContents(this, j, itemstack);
+      }
+    }
+
+    ContainerDataMessage message = new ContainerDataMessage(this.windowId);
+    for (j = 0; j < this.trackedIntReferences.size(); ++j) {
+      IntReferenceHolder intreferenceholder = this.trackedIntReferences.get(j);
+      if (intreferenceholder.isDirty()) {
+        message.addData(j, intreferenceholder.get());
+      }
+    }
+
+    if (!message.getData().isEmpty()) {
+      for (IContainerListener listener : this.listeners) {
+        if (listener instanceof ServerPlayerEntity) {
+          Overloaded.proxy.networkWrapper.send(
+              PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) listener), message);
+        }
+      }
+    }
   }
 }

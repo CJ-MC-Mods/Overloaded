@@ -12,6 +12,7 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.container.ModContainers;
+import com.cjm721.overloaded.network.handler.ContainerDataHandler;
 import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
@@ -104,6 +105,13 @@ public class CommonProxy {
         NoClipStatusMessage::toBytes,
         NoClipStatusMessage::fromBytes,
         new NoClipUpdateHandler());
+
+    networkWrapper.registerMessage(
+        dis++,
+        ContainerDataMessage.class,
+        ContainerDataMessage::toBytes,
+        ContainerDataMessage::fromBytes,
+        new ContainerDataHandler());
 
     MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
     MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
