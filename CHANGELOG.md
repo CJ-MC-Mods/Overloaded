@@ -1,3 +1,8 @@
+**Version: 0.0.71 (BETA)**
+
+* Forge Version Bump to >= 45
+
+-------------------------------------------------------------------
 **Version: 0.0.70 (BETA)**
 
 * Fixed some GUI bugs with the Instant Furnace 

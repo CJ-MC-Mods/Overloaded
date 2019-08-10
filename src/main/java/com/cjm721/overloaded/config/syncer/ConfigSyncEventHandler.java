@@ -2,8 +2,8 @@ package com.cjm721.overloaded.config.syncer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import javax.annotation.Nonnull;
 
