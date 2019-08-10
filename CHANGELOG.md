@@ -1,3 +1,8 @@
+**Version: 0.0.72 (BETA)**
+
+* Add translation for Instant Furnace
+
+-------------------------------------------------------------------
 **Version: 0.0.71 (BETA)**
 
 * Forge Version Bump to >= 45
