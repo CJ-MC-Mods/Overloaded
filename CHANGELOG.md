@@ -1,3 +1,9 @@
+**Version: 0.0.73 (BETA)**
+
+* Fix True Infinity Barrel Stack Overflow Crash.
+* Remove un-needed extra event listener now that forge fires the event properly.
+
+-------------------------------------------------------------------
 **Version: 0.0.72 (BETA)**
 
 * Add translation for Instant Furnace

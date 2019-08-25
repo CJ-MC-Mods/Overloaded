@@ -50,6 +50,6 @@ public class Overloaded {
     logger.warn(
         "Invalid fingerprint detected! The file "
             + event.getSource().getName()
-            + " may have been tampered with. This version will NOT be supported by the cjm721!");
+            + " may have been tampered with. This version will NOT be supported by cjm721!");
   }
 }

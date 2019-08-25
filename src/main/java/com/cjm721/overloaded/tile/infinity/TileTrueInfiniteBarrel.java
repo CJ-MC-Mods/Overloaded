@@ -47,7 +47,7 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
     if (cap == HYPER_ITEM_HANDLER) {
       return capability.cast();
     }
-    return this.getCapability(cap, side);
+    return super.getCapability(cap, side);
   }
 
   @Override
