@@ -1,3 +1,8 @@
+**Version: 0.0.74 (BETA)**
+
+* Updated to new Forge Fluid API
+
+-------------------------------------------------------------------
 **Version: 0.0.73 (BETA)**
 
 * Fix True Infinity Barrel Stack Overflow Crash.
