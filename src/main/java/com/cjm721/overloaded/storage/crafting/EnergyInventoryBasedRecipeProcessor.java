@@ -113,12 +113,12 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
 
     if (slot < this.slots) {
       if (slot >= input.size()) {
-        if(!stack.isEmpty()) {
+        if (!stack.isEmpty()) {
           input.add(stack);
         }
         toReturn = ItemStack.EMPTY;
       } else {
-        if(stack.isEmpty()) {
+        if (stack.isEmpty()) {
           toReturn = input.get(slot);
           input.remove(slot);
         } else {
@@ -128,12 +128,12 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     } else {
       slot -= slots;
       if (slot >= output.size()) {
-        if(!stack.isEmpty()) {
+        if (!stack.isEmpty()) {
           output.add(stack);
         }
         toReturn = ItemStack.EMPTY;
       } else {
-        if(stack.isEmpty()) {
+        if (stack.isEmpty()) {
           toReturn = output.get(slot);
           output.remove(slot);
         } else {
@@ -235,8 +235,8 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
           slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
     ItemStack toReturn;
-    if(slot < slots) {
-      if(input.size() > slot) {
+    if (slot < slots) {
+      if (input.size() > slot) {
         toReturn = input.get(slot);
       } else {
         toReturn = ItemStack.EMPTY;
@@ -262,7 +262,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
 
   @Override
   public int getSlotLimit(int slot) {
-    if(slot < slots && slot < input.size()) {
+    if (slot < slots && slot < input.size()) {
       return input.get(slot).getMaxStackSize();
     } else if (slot >= slots && slot - slots < output.size()) {
       return output.get(slot).getMaxStackSize();
@@ -309,8 +309,12 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
       ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i), simulate);
 
-      if (!simulate && leftOvers.isEmpty()) {
-        input.remove(i);
+      if (!simulate) {
+        if (leftOvers.isEmpty()) {
+          input.remove(i);
+        } else {
+          input.set(i, leftOvers);
+        }
       }
     }
 

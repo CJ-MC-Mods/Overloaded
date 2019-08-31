@@ -2,6 +2,7 @@
 
 * Updated to new Forge Fluid API
 * Add real texture for Instant Furnace
+* Fix Instant Furnace Dupe
 
 -------------------------------------------------------------------
 **Version: 0.0.73 (BETA)**
