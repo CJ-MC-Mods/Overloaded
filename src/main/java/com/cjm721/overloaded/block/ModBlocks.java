@@ -9,19 +9,14 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
-
 public final class ModBlocks {
 
-  public static Fluid pureMatter;
+//  public static Fluid pureMatter;
 
   public static ModBlock creativeGenerator;
   public static ModBlock almostInfiniteBarrel;
@@ -59,14 +54,14 @@ public final class ModBlocks {
   public static void init(IForgeRegistry<Block> registry) {
     String textureName = "blocks/pure_matter";
 
-    pureMatter =
-        new Fluid(
-                "pure_matter",
-                new ResourceLocation(MODID, textureName + "_still"),
-                new ResourceLocation(MODID, textureName + "_flow"))
-            .setDensity(3000)
-            .setViscosity(6000)
-            .setRarity(Rarity.EPIC);
+//    pureMatter =
+//        new Fluid(
+//                "pure_matter",
+//                new ResourceLocation(MODID, textureName + "_still"),
+//                new ResourceLocation(MODID, textureName + "_flow"))
+//            .setDensity(3000)
+//            .setViscosity(6000)
+//            .setRarity(Rarity.EPIC);
 
     creativeGenerator = registerFull(registry, new BlockCreativeGenerator());
     almostInfiniteBarrel = registerFull(registry, new BlockAlmostInfiniteBarrel());

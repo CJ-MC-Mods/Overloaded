@@ -6,12 +6,9 @@ import com.cjm721.overloaded.util.NumberUtil;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
@@ -27,79 +24,39 @@ public class LongFluidStorage
     storedFluid = new LongFluidStack(null, 0);
   }
 
-  /**
-   * Returns an array of objects which represent the internal tanks. These objects cannot be used to
-   * manipulate the internal tanks.
-   *
-   * @return Properties for the relevant internal tanks.
-   */
   @Override
-  public IFluidTankProperties[] getTankProperties() {
-    if (storedFluid.fluidStack != null)
-      storedFluid.fluidStack.amount = (int) Math.min(Integer.MAX_VALUE, storedFluid.amount);
-    return new FluidTankProperties[] {
-      new FluidTankProperties(storedFluid.fluidStack, Integer.MAX_VALUE, true, true)
-    };
+  public int fill(FluidStack resource, FluidAction fluidAction) {
+    LongFluidStack fluidStack = give(new LongFluidStack(resource, resource.getAmount()), fluidAction.execute());
+
+    return (int) (resource.getAmount() - fluidStack.amount);
   }
 
-  /**
-   * Fills fluid into internal tanks, distribution is left entirely to the IFluidHandler.
-   *
-   * @param resource FluidStack representing the Fluid and maximum amount of fluid to be filled.
-   * @param doFill If false, fill will only be simulated.
-   * @return Amount of resource that was (or would have been, if simulated) filled.
-   */
   @Override
-  public int fill(FluidStack resource, boolean doFill) {
-    LongFluidStack fluidStack = give(new LongFluidStack(resource, resource.amount), doFill);
-
-    return (int) (resource.amount - fluidStack.amount);
-  }
-
-  /**
-   * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
-   *
-   * @param resource FluidStack representing the Fluid and maximum amount of fluid to be drained.
-   * @param doDrain If false, drain will only be simulated.
-   * @return FluidStack representing the Fluid and amount that was (or would have been, if
-   *     simulated) drained.
-   */
-  @Nullable
-  @Override
-  public FluidStack drain(@Nonnull FluidStack resource, boolean doDrain) {
-    LongFluidStack result = take(new LongFluidStack(resource, resource.amount), doDrain);
+  @Nonnull
+  public FluidStack drain(@Nonnull FluidStack resource, FluidAction fluidAction) {
+    LongFluidStack result = take(new LongFluidStack(resource, resource.getAmount()), fluidAction.execute());
 
     if (result.amount == 0L) {
-      return null;
+      return FluidStack.EMPTY;
     }
 
     FluidStack toReturn = resource.copy();
-    toReturn.amount = (int) result.amount;
+    toReturn.setAmount((int) result.amount);
 
     return toReturn;
   }
 
-  /**
-   * Drains fluid out of internal tanks, distribution is left entirely to the IFluidHandler.
-   *
-   * <p>This method is not Fluid-sensitive.
-   *
-   * @param maxDrain Maximum amount of fluid to drain.
-   * @param doDrain If false, drain will only be simulated.
-   * @return FluidStack representing the Fluid and amount that was (or would have been, if
-   *     simulated) drained.
-   */
-  @Nullable
   @Override
-  public FluidStack drain(int maxDrain, boolean doDrain) {
-    LongFluidStack result = take(new LongFluidStack(null, maxDrain), doDrain);
+  @Nonnull
+  public FluidStack drain(int maxDrain, FluidAction fluidAction) {
+    LongFluidStack result = take(new LongFluidStack(null, maxDrain), fluidAction.execute());
 
     if (result.amount == 0L) {
-      return null;
+      return FluidStack.EMPTY;
     }
 
     FluidStack toReturn = result.fluidStack.copy();
-    toReturn.amount = (int) result.amount;
+    toReturn.setAmount((int) result.amount);
 
     return toReturn;
   }
@@ -182,5 +139,26 @@ public class LongFluidStorage
     }
 
     return fluidStack;
+  }
+
+  @Override
+  public int getTanks() {
+    return 1;
+  }
+
+  @Nonnull
+  @Override
+  public FluidStack getFluidInTank(int i) {
+    return storedFluid.fluidStack;
+  }
+
+  @Override
+  public int getTankCapacity(int i) {
+    return Integer.MAX_VALUE;
+  }
+
+  @Override
+  public boolean isFluidValid(int i, @Nonnull FluidStack fluidStack) {
+    return storedFluid.fluidStack.isFluidEqual(fluidStack);
   }
 }

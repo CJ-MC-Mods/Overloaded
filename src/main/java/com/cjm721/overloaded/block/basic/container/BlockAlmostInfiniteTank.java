@@ -63,23 +63,26 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
       PlayerEntity player,
       Hand handIn,
       BlockRayTraceResult hit) {
-    if (!world.isRemote) {
-      ItemStack heldItem = player.getHeldItem(handIn);
-      if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
+    ItemStack heldItem = player.getHeldItem(handIn);
+    if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
+      if (!world.isRemote) {
         sendPlayerStatus(world, pos, player);
-        return true;
-      } else {
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof TileAlmostInfiniteTank) {
-          LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
-          if (!opHandler.isPresent()) {
-            Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
-          } else {
+      }
+      return true;
+    } else {
+      TileEntity te = world.getTileEntity(pos);
+      if (te instanceof TileAlmostInfiniteTank) {
+        LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
+        if (!opHandler.isPresent()) {
+          Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
+        } else {
+          if (!world.isRemote) {
             return FluidUtil.interactWithFluidHandler(
                 player,
                 handIn,
                 opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")));
           }
+          return true;
         }
       }
     }
@@ -94,10 +97,9 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
       player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
     } else {
       player.sendStatusMessage(
-          new StringTextComponent(
-              String.format(
-                  "Fluid: %s Amount %,d",
-                  storedFluid.fluidStack.getLocalizedName(), storedFluid.amount)),
+          new StringTextComponent("Fluid: ")
+              .appendSibling(storedFluid.fluidStack.getDisplayName())
+              .appendText(String.format(" Amount: %,d", storedFluid.amount)),
           false);
     }
   }

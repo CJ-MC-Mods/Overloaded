@@ -14,8 +14,8 @@ public final class FluidUtil {
 
         if (!a.isFluidEqual(b))
             return false;
-        CompoundNBT compoundAlpha = a.tag;
-        CompoundNBT compoundBeta = b.tag;
+        CompoundNBT compoundAlpha = a.getTag();
+        CompoundNBT compoundBeta = b.getTag();
         if (compoundAlpha == null)
             return compoundBeta == null;
         return compoundAlpha.equals(compoundBeta);

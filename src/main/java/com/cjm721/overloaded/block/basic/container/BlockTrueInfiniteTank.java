@@ -27,12 +27,12 @@ public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
       player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
     } else {
       player.sendStatusMessage(
-          new StringTextComponent(
-              String.format(
-                  "Fluid: %s Amount: %,d Bits: %,d",
-                  storedFluid.fluidStack.getLocalizedName(),
-                  storedFluid.amount,
-                  storedFluid.amount.bitLength())),
+          new StringTextComponent("Fluid: ")
+              .appendSibling(storedFluid.fluidStack.getDisplayName())
+              .appendText(
+                  String.format(
+                      " Amount: %,d Bits: %,d",
+                      storedFluid.amount, storedFluid.amount.bitLength())),
           false);
     }
   }

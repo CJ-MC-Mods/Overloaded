@@ -5,9 +5,11 @@ import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
+import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteTank;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.Hand;
@@ -71,28 +73,22 @@ public class BlockInfiniteWaterSource extends ModBlock {
       World world,
       BlockPos pos,
       PlayerEntity player,
-      Hand hand,
-      BlockRayTraceResult rayTraceResult) {
-    if (!world.isRemote && hand == Hand.MAIN_HAND) {
+      Hand handIn,
+      BlockRayTraceResult hit) {
+    ItemStack heldItem = player.getHeldItem(handIn);
+    if (!heldItem.isEmpty()){
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof TileInfiniteWaterSource) {
         LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
         if (!opHandler.isPresent()) {
-          Overloaded.logger.warn("Water Source has no Fluid Capability? " + pos);
-          return false;
-        }
-
-        FluidActionResult result =
-            FluidUtil.tryFillContainerAndStow(
-                player.getHeldItem(hand),
-                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")),
-                null,
-                Integer.MAX_VALUE,
+          Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
+        } else {
+          if (!world.isRemote) {
+            return FluidUtil.interactWithFluidHandler(
                 player,
-                true);
-
-        if (result.isSuccess()) {
-          player.setHeldItem(Hand.MAIN_HAND, result.getResult());
+                handIn,
+                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")));
+          }
           return true;
         }
       }
