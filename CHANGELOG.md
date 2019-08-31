@@ -1,6 +1,7 @@
 **Version: 0.0.74 (BETA)**
 
 * Updated to new Forge Fluid API
+* Add real texture for Instant Furnace
 
 -------------------------------------------------------------------
 **Version: 0.0.73 (BETA)**
