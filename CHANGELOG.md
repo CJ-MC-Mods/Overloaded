@@ -1,3 +1,8 @@
+**Version: 0.0.75 (BETA)**
+
+* Updated to Forge 28.0.100
+
+-------------------------------------------------------------------
 **Version: 0.0.74 (BETA)**
 
 * Updated to new Forge Fluid API
