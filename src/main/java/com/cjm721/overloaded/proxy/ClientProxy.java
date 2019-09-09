@@ -12,13 +12,16 @@ import com.cjm721.overloaded.network.container.ModContainers;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.cjm721.overloaded.util.ScrollEvent;
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,6 +30,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
+import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -36,6 +40,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWScrollCallback;
 
+import javax.annotation.Nonnull;
+
+import java.util.Map;
+
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 @OnlyIn(Dist.CLIENT)
@@ -43,6 +51,30 @@ public class ClientProxy extends CommonProxy {
 
   public KeyBinding noClipKeybind;
   public KeyBinding railGun100x;
+
+  private static final ImmutableMap<String,String> itemModels = ImmutableMap.<String,String>builder()
+      .put("models/item/multi_tool.obj", "multi_tool")
+      .put("models/item/railgun.obj", "railgun")
+      .put("models/item/ray_gun.obj", "ray_gun")
+      .put("models/item/linkingcard.obj", "linking_card")
+      .put("models/item/settings_editor.obj", "settings_editor")
+      .put("models/item/energy_core.obj", "energy_core")
+      .put("models/item/fluid_core.obj", "fluid_core")
+      .put("models/item/item_core.obj", "item_core")
+      .build();
+  private static final ImmutableMap<String,String> objBlockModels = ImmutableMap.<String,String>builder()
+      .put("models/block/block_player.obj", "player_interface")
+      .put("models/block/block.obj", "item_interface")
+      .put("models/block/hyper_energy_receiver.obj", "hyper_energy_receiver")
+      .put("models/block/hyper_energy_sender.obj", "hyper_energy_sender")
+      .put("models/block/hyper_fluid_sender.obj", "hyper_fluid_sender")
+      .put("models/block/hyper_fluid_receiver.obj", "hyper_fluid_receiver")
+      .put("models/block/hyper_item_sender.obj", "hyper_item_sender")
+      .put("models/block/hyper_item_receiver.obj", "hyper_item_receiver")
+      .put("models/block/infinite_water_source.obj", "infinite_water_source")
+      .put("models/block/creative_generator.obj", "creative_generator")
+      .put("models/block/energy_extractor.obj", "energy_extractor")
+      .build();
 
   @Override
   public void commonSetup(FMLCommonSetupEvent event) {
@@ -111,23 +143,22 @@ public class ClientProxy extends CommonProxy {
         new ModelResourceLocation(MODID + ":remove_preview", ""),
         event);
 
-//    bakeOBJModelAndPut(
-//        new ResourceLocation(MODID, "models/item/multi_tool.obj"),
-//        new ModelResourceLocation(MODID + ":multi_tool", "inventory"),
-//        event
-//    );
+    for(Map.Entry<String,String> entry : itemModels.entrySet()){
+      bakeOBJModelAndPut(
+          new ResourceLocation(MODID, entry.getKey()),
+          new ModelResourceLocation(MODID + ":" + entry.getValue(), "inventory"),
+          event,
+          DefaultVertexFormats.ITEM
+      );
+    }
 
-//    bakeOBJModelAndPut(
-//        new ResourceLocation(MODID, "models/block/block_player.obj"),
-//        new ModelResourceLocation(MODID + ":player_interface", ""),
-//        event
-//    );
-
-//    bakeOBJModelAndPut(
-//        new ResourceLocation(MODID, "models/block/energy_extractor.obj"),
-//        new ModelResourceLocation(MODID + ":energy_extractor", ""),
-//        event
-//    );
+    for(Map.Entry<String,String> entry : objBlockModels.entrySet()){
+      bakeOBJModelAndPutBlock(
+          new ResourceLocation(MODID, entry.getKey()),
+          entry.getValue(),
+          event
+      );
+    }
 
     ModelRenderOBJ.BAKERY = event.getModelLoader();
 
@@ -157,7 +188,7 @@ public class ClientProxy extends CommonProxy {
   }
 
   private static void bakeOBJModelAndPut(
-      ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
+      ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event, VertexFormat format) {
     try {
     IUnbakedModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw);
     IBakedModel bakedModel =
@@ -165,11 +196,46 @@ public class ClientProxy extends CommonProxy {
             event.getModelLoader(),
             ModelLoader.defaultTextureGetter(),
             new ISprite() {},
-            DefaultVertexFormats.BLOCK);
+            format);
 
     event
         .getModelRegistry()
         .put(baked, bakedModel);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static void bakeOBJModelAndPutBlock(
+      ResourceLocation raw, String resource, ModelBakeEvent event) {
+    try {
+      IUnbakedModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw);
+      IBakedModel bakedModel =
+          unbakedModel.bake(
+              event.getModelLoader(),
+              ModelLoader.defaultTextureGetter(),
+              new ISprite() {},
+              DefaultVertexFormats.ITEM);
+
+      event
+          .getModelRegistry()
+          .put(new ModelResourceLocation(MODID + ":" + resource, ""), bakedModel);
+
+      OBJModel.OBJBakedModel handModel =
+          (OBJModel.OBJBakedModel) unbakedModel.bake(
+              event.getModelLoader(),
+              ModelLoader.defaultTextureGetter(),
+              new ISprite() {
+                @Override
+                public boolean isUvLock() {
+                  return true;
+                }
+              },
+              DefaultVertexFormats.ITEM);
+
+      event
+          .getModelRegistry()
+          .put(new ModelResourceLocation(MODID + ":" + resource, "inventory"), handModel);
     } catch (Exception e) {
       e.printStackTrace();
     }
