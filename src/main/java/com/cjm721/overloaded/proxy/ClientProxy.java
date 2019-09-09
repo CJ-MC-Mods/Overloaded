@@ -73,7 +73,6 @@ public class ClientProxy extends CommonProxy {
       .put("models/block/hyper_item_receiver.obj", "hyper_item_receiver")
       .put("models/block/infinite_water_source.obj", "infinite_water_source")
       .put("models/block/creative_generator.obj", "creative_generator")
-      .put("models/block/energy_extractor.obj", "energy_extractor")
       .build();
 
   @Override
