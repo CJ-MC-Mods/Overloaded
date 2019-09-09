@@ -2,6 +2,7 @@
 
 * Updated to Forge 28.0.100
 * Loading models now. Look correct in world but in inventory / as item
+* Nether Star Block is now Animated
 
 -------------------------------------------------------------------
 **Version: 0.0.74 (BETA)**
