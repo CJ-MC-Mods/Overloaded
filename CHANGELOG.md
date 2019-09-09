@@ -1,6 +1,7 @@
 **Version: 0.0.75 (BETA)**
 
 * Updated to Forge 28.0.100
+* Loading models now. Look correct in world but in inventory / as item
 
 -------------------------------------------------------------------
 **Version: 0.0.74 (BETA)**
