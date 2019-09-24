@@ -1,3 +1,8 @@
+**Version: 0.0.76 (BETA)**
+
+* Mark Container packet handled so it does not cause a print statement.
+
+-------------------------------------------------------------------
 **Version: 0.0.75 (BETA)**
 
 * Updated to Forge 28.0.100

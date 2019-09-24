@@ -20,7 +20,7 @@ public class ContainerDataHandler
         || Minecraft.getInstance().player.openContainer.windowId != message.container || !(Minecraft.getInstance().player.openContainer instanceof ModContainer)) {
       return;
     }
-    
+
     ((ModContainer)Minecraft.getInstance().player.openContainer).accept(message);
   }
 
@@ -28,6 +28,7 @@ public class ContainerDataHandler
   public void accept(ContainerDataMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
     if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
       clientSide(message, contextSupplier);
+      contextSupplier.get().setPacketHandled(true);
     }
   }
 }
