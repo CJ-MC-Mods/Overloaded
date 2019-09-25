@@ -3,6 +3,7 @@ package com.cjm721.overloaded.client.render.item;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
+import com.cjm721.overloaded.util.BlockItemUseContextPublic;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import com.cjm721.overloaded.util.ScrollEvent;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -15,7 +16,9 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
@@ -93,6 +96,7 @@ public class RenderMultiToolAssist {
     if (stack.getItem() instanceof BlockItem) {
       state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
       state = state.getExtendedState(player.getEntityWorld(), result.getPos());
+      state = state.getBlock().getStateForPlacement(new BlockItemUseContextPublic(player.getEntityWorld(), player, Hand.MAIN_HAND, stack, result));
     } else {
       state = Blocks.COBBLESTONE.getDefaultState();
     }
@@ -103,9 +107,8 @@ public class RenderMultiToolAssist {
         break;
       case REMOVE_PREVIEW:
         renderRemovePreview(result);
-        break;
+        // fall through
       case BOTH_PREVIEW:
-        renderRemovePreview(result);
         if (!stack.isEmpty()) renderBlockPreview(result, state);
         break;
     }
@@ -137,10 +140,11 @@ public class RenderMultiToolAssist {
 
     final double x = camera.getProjectedView().getX();
     final double y = camera.getProjectedView().getY();
-    final double z = camera.getProjectedView().getZ() - 1;
+    final double z = camera.getProjectedView().getZ();
 
     GlStateManager.pushMatrix();
     GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+    GlStateManager.rotatef(-90,0,1,0);
     GlStateManager.enableBlend();
     GlStateManager.blendFunc(
         GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);

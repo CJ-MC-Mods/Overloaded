@@ -28,6 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.client.model.obj.OBJModel;
@@ -63,8 +64,6 @@ public class ClientProxy extends CommonProxy {
       .put("models/item/item_core.obj", "item_core")
       .build();
   private static final ImmutableMap<String,String> objBlockModels = ImmutableMap.<String,String>builder()
-      .put("models/block/block_player.obj", "player_interface")
-      .put("models/block/block.obj", "item_interface")
       .put("models/block/hyper_energy_receiver.obj", "hyper_energy_receiver")
       .put("models/block/hyper_energy_sender.obj", "hyper_energy_sender")
       .put("models/block/hyper_fluid_sender.obj", "hyper_fluid_sender")
@@ -73,6 +72,11 @@ public class ClientProxy extends CommonProxy {
       .put("models/block/hyper_item_receiver.obj", "hyper_item_receiver")
       .put("models/block/infinite_water_source.obj", "infinite_water_source")
       .put("models/block/creative_generator.obj", "creative_generator")
+      .build();
+
+  private static final ImmutableMap<String,String> objModelBlockOnly = ImmutableMap.<String,String>builder()
+      .put("models/block/player_interface.obj", "player_interface")
+      .put("models/block/item_interface.obj", "item_interface")
       .build();
 
   @Override
@@ -158,6 +162,16 @@ public class ClientProxy extends CommonProxy {
           event
       );
     }
+
+    for(Map.Entry<String,String> entry : objModelBlockOnly.entrySet()){
+      bakeOBJModelAndPut(
+          new ResourceLocation(MODID, entry.getKey()),
+          new ModelResourceLocation(MODID + ":" + entry.getValue(), ""),
+          event,
+          DefaultVertexFormats.ITEM
+      );
+    }
+
 
     ModelRenderOBJ.BAKERY = event.getModelLoader();
 
