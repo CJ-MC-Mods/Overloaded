@@ -108,13 +108,13 @@ public class RenderMultiToolAssist {
 
     switch (getAssistMode()) {
       case PLACE_PREVIEW:
-        if (!stack.isEmpty()) renderBlockPreview(result, state);
+        if (!stack.isEmpty() && state != null) renderBlockPreview(result, state);
         break;
       case REMOVE_PREVIEW:
         renderRemovePreview(result);
         // fall through
       case BOTH_PREVIEW:
-        if (!stack.isEmpty()) renderBlockPreview(result, state);
+        if (!stack.isEmpty() && state != null) renderBlockPreview(result, state);
         break;
     }
   }
@@ -129,7 +129,7 @@ public class RenderMultiToolAssist {
     renderBlockModel(toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
   }
 
-  private static void renderBlockPreview(BlockRayTraceResult result, BlockState state) {
+  private static void renderBlockPreview(BlockRayTraceResult result,@Nonnull BlockState state) {
     IBakedModel model =
         Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
     BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
@@ -137,7 +137,7 @@ public class RenderMultiToolAssist {
     renderBlockModel(toRenderAt, model, state);
   }
 
-  private static void renderBlockModel(BlockPos toRenderAt, IBakedModel model, BlockState state) {
+  private static void renderBlockModel(BlockPos toRenderAt,@Nonnull IBakedModel model,@Nonnull BlockState state) {
     ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
     if (camera == null) {
       return;
