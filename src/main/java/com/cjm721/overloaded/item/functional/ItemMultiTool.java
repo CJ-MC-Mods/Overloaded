@@ -214,13 +214,6 @@ public class ItemMultiTool extends PowerModItem {
     return this.getItemStackLimit(stack) == 1;
   }
 
-  //  @Override
-  //  public boolean canDestroyBlockInCreative(
-  //      World world, BlockPos pos, ItemStack stack, PlayerEntity player) {
-  //    return player == null
-  //        || super.canDestroyBlockInCreative(world, pos, stack, player) && !player.isSneaking();
-  //  }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {

@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -40,16 +39,15 @@ public class RenderMultiToolAssist {
   public static void onMouseEvent(ScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
 
-      if (event.dy != 0 && player != null && player.isSneaking()) {
-        ItemStack stack = player.getHeldItemMainhand();
-        if (player.isSneaking() && !stack.isEmpty() && stack.getItem() ==
-      ModItems.multiTool) {
-            changeHelpMode((int) Math.round(event.dy));
-            player.sendStatusMessage(new StringTextComponent("Assist Mode: " +
-      getAssistMode().getName()), true);
-            event.setCanceled(true);
-        }
+    if (event.dy != 0 && player != null && player.isSneaking()) {
+      ItemStack stack = player.getHeldItemMainhand();
+      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
+        changeHelpMode((int) Math.round(event.dy));
+        player.sendStatusMessage(
+            new StringTextComponent("Assist Mode: " + getAssistMode().getName()), true);
+        event.setCanceled(true);
       }
+    }
   }
 
   @SubscribeEvent
@@ -88,7 +86,9 @@ public class RenderMultiToolAssist {
 
     BlockRayTraceResult result =
         PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
-    if (result == null) return;
+    if (result == null) {
+      return;
+    }
 
     ItemStack stack = ModItems.multiTool.getSelectedBlockItemStack(player.getHeldItemMainhand());
 
@@ -96,7 +96,12 @@ public class RenderMultiToolAssist {
     if (stack.getItem() instanceof BlockItem) {
       state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
       state = state.getExtendedState(player.getEntityWorld(), result.getPos());
-      state = state.getBlock().getStateForPlacement(new BlockItemUseContextPublic(player.getEntityWorld(), player, Hand.MAIN_HAND, stack, result));
+      state =
+          state
+              .getBlock()
+              .getStateForPlacement(
+                  new BlockItemUseContextPublic(
+                      player.getEntityWorld(), player, Hand.MAIN_HAND, stack, result));
     } else {
       state = Blocks.COBBLESTONE.getDefaultState();
     }
@@ -144,7 +149,7 @@ public class RenderMultiToolAssist {
 
     GlStateManager.pushMatrix();
     GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-    GlStateManager.rotatef(-90,0,1,0);
+    GlStateManager.rotatef(-90, 0, 1, 0);
     GlStateManager.enableBlend();
     GlStateManager.blendFunc(
         GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);

@@ -2,16 +2,15 @@ package com.cjm721.overloaded.util;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
 import net.minecraft.network.play.server.SChangeBlockPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -22,11 +21,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.items.IItemHandler;
 
@@ -113,9 +112,12 @@ public class PlayerInteractionUtil {
       return BlockPlaceResult.FAIL_DENY;
     }
 
-    BlockSnapshot blockSnapshot = new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition));
-    BlockState placedAgainst = blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().offset(facing.getOpposite()));
-    BlockEvent.EntityPlaceEvent event = new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
+    BlockSnapshot blockSnapshot =
+        new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition));
+    BlockState placedAgainst =
+        blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().offset(facing.getOpposite()));
+    BlockEvent.EntityPlaceEvent event =
+        new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
     MinecraftForge.EVENT_BUS.post(event);
 
     if (event.isCanceled()) {
@@ -148,43 +150,45 @@ public class PlayerInteractionUtil {
         inventory.extractItem(foundStackSlot, 1, player.abilities.isCreativeMode);
 
     BlockItemUseContext context =
-        new BlockItemUseContext(
-            new ItemUseContext(
-                player,
-                Hand.MAIN_HAND,
-                new BlockRayTraceResult(new Vec3d(hitX, hitY, hitZ), facing, newPosition, false)));
+        new BlockItemUseContextPublic(
+            worldIn,
+            player,
+            Hand.MAIN_HAND,
+            foundStack,
+            new BlockRayTraceResult(
+                new Vec3d(
+                    hitX + newPosition.getX(),
+                    hitY + newPosition.getY(),
+                    hitZ + newPosition.getZ()),
+                facing,
+                newPosition,
+                false));
 
-    BlockState blockstate = itemBlock.getBlock().getStateForPlacement(context);
-    if (blockstate == null || !context.getWorld().setBlockState(context.getPos(), blockstate, 11)) {
-      inventory.insertItem(foundStackSlot, foundStack, player.abilities.isCreativeMode);
-      return BlockPlaceResult.FAIL_DENY;
-    } else {
-      BlockState blockstate1 = worldIn.getBlockState(newPosition);
-      Block block = blockstate1.getBlock();
-      if (block == blockstate.getBlock()) {
-        //        blockstate1 = itemBlock.func_219985_a(newPosition, worldIn, searchStack,
-        // blockstate1);
-        itemBlock.setTileEntityNBT(worldIn, player, newPosition, foundStack);
-        block.onBlockPlacedBy(worldIn, newPosition, blockstate1, player, foundStack);
-        CriteriaTriggers.PLACED_BLOCK.trigger(player, newPosition, foundStack);
-      }
+    ActionResultType result = ForgeHooks.onPlaceItemIntoWorld(context);
 
-      //      foundStack.shrink(1);
-      SoundType soundtype =
-          worldIn
-              .getBlockState(newPosition)
-              .getBlock()
-              .getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
-      worldIn.playSound(
-          null,
-          newPosition,
-          soundtype.getPlaceSound(),
-          SoundCategory.BLOCKS,
-          (soundtype.getVolume() + 1.0F) / 2.0F,
-          soundtype.getPitch() * 0.8F);
-
-      if (!player.abilities.isCreativeMode) energy.extractEnergy((int) cost, false);
-      return BlockPlaceResult.SUCCESS;
+    switch (result) {
+      case SUCCESS:
+        SoundType soundtype =
+            worldIn
+                .getBlockState(newPosition)
+                .getBlock()
+                .getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
+        worldIn.playSound(
+            null,
+            newPosition,
+            soundtype.getPlaceSound(),
+            SoundCategory.BLOCKS,
+            (soundtype.getVolume() + 1.0F) / 2.0F,
+            soundtype.getPitch() * 0.8F);
+        if (!player.abilities.isCreativeMode) {
+          energy.extractEnergy((int) cost, false);
+        }
+        return BlockPlaceResult.SUCCESS;
+      case PASS:
+      case FAIL:
+      default:
+        inventory.insertItem(foundStackSlot, foundStack, player.abilities.isCreativeMode);
+        return BlockPlaceResult.FAIL_DENY;
     }
   }
 
