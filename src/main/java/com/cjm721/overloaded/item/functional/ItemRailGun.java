@@ -8,7 +8,6 @@ import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
-import com.cjm721.overloaded.util.ScrollEvent;
 import com.google.common.primitives.Ints;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -30,6 +29,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -125,13 +125,14 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @SubscribeEvent
-  public void onMouseEvent(ScrollEvent event) {
+  public void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    if (event.dy != 0 && player != null && player.isSneaking()) {
+    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
       ItemStack stack = player.getHeldItemMainhand();
       if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
         int powerDelta =
-            Long.signum(Math.round(event.dy)) * OverloadedConfig.INSTANCE.railGun.stepEnergy;
+            Long.signum(Math.round(event.getScrollDelta()))
+                * OverloadedConfig.INSTANCE.railGun.stepEnergy;
         if (InputMappings.isKeyDown(
             Minecraft.getInstance().mainWindow.getHandle(),
             ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getKeyCode())) {

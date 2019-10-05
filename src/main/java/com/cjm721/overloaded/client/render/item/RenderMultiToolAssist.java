@@ -5,7 +5,6 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockItemUseContextPublic;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import com.cjm721.overloaded.util.ScrollEvent;
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -36,13 +35,13 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class RenderMultiToolAssist {
 
   @SubscribeEvent
-  public static void onMouseEvent(ScrollEvent event) {
+  public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
 
-    if (event.dy != 0 && player != null && player.isSneaking()) {
+    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
       ItemStack stack = player.getHeldItemMainhand();
       if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
-        changeHelpMode((int) Math.round(event.dy));
+        changeHelpMode((int) Math.round(event.getScrollDelta()));
         player.sendStatusMessage(
             new StringTextComponent("Assist Mode: " + getAssistMode().getName()), true);
         event.setCanceled(true);
@@ -129,7 +128,7 @@ public class RenderMultiToolAssist {
     renderBlockModel(toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
   }
 
-  private static void renderBlockPreview(BlockRayTraceResult result,@Nonnull BlockState state) {
+  private static void renderBlockPreview(BlockRayTraceResult result, @Nonnull BlockState state) {
     IBakedModel model =
         Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
     BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
@@ -137,7 +136,8 @@ public class RenderMultiToolAssist {
     renderBlockModel(toRenderAt, model, state);
   }
 
-  private static void renderBlockModel(BlockPos toRenderAt,@Nonnull IBakedModel model,@Nonnull BlockState state) {
+  private static void renderBlockModel(
+      BlockPos toRenderAt, @Nonnull IBakedModel model, @Nonnull BlockState state) {
     ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
     if (camera == null) {
       return;

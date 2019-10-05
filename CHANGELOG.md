@@ -1,5 +1,10 @@
 **Version: 0.0.76 (BETA)**
 
+* Forge now has Mouse Scroll events so removing my direct LWJGL injection
+
+-------------------------------------------------------------------
+**Version: 0.0.76 (BETA)**
+
 * Mark Container packet handled so it does not cause a print statement.
 * New Models for some blocks
 * Multi-Tool Assist render now shows the placed state of block, and actually places that block
