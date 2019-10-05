@@ -56,7 +56,7 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
 
   @Override
   @Nonnull
-  public InputStream getRootResourceStream(String fileName) throws IOException {
+  public InputStream getRootResourceStream(String fileName) {
     return null;
   }
 
@@ -98,7 +98,7 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
 
   @Nullable
   @Override
-  public <T> T getMetadata(IMetadataSectionSerializer<T> deserializer) throws IOException {
+  public <T> T getMetadata(IMetadataSectionSerializer<T> deserializer) {
     return null;
   }
 
@@ -109,5 +109,5 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
   }
 
   @Override
-  public void close() throws IOException {}
+  public void close() {}
 }
