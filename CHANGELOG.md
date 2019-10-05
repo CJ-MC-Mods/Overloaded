@@ -1,6 +1,7 @@
 **Version: 0.0.76 (BETA)**
 
 * Forge now has Mouse Scroll events so removing my direct LWJGL injection
+* Remove fluid code now that is breaking since forge changed signatures.
 
 -------------------------------------------------------------------
 **Version: 0.0.76 (BETA)**

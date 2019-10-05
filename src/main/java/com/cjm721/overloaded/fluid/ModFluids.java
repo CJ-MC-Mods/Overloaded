@@ -9,9 +9,6 @@ public class ModFluids {
   public static FlowingFluid pureMatterFlowing;
 
   public static void init(IForgeRegistry<Fluid> registry) {
-    pureMatterSource = new FluidPureMatter.Source();
-    pureMatterFlowing = new FluidPureMatter.Flowing();
-
 //    registry.registerAll(pureMatterSource, pureMatterFlowing);
   }
 }
