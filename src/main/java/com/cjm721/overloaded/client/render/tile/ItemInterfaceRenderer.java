@@ -38,7 +38,7 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
     GlStateManager.pushMatrix();
 
     GlStateManager.translated(.5, .5, .5);
-    GlStateManager.scalef(.5f, .5f, .5f);
+    GlStateManager.scalef(0.25f, 0.25f, 0.25f);
     long angle = (System.currentTimeMillis() / 10) % 360;
     GlStateManager.rotated(angle, 0, 1, 0);
 
