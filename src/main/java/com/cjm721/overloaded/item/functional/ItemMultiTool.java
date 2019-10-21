@@ -310,7 +310,7 @@ public class ItemMultiTool extends PowerModItem {
       BlockRayTraceResult result =
           PlayerInteractionUtil.getBlockPlayerLookingAtClient(
               player, Minecraft.getInstance().getRenderPartialTicks());
-      if (result != null) {
+      if (result.getType() == RayTraceResult.Type.BLOCK) {
         Overloaded.proxy.networkWrapper.sendToServer(
             new RightClickBlockMessage(
                 result.getPos(),

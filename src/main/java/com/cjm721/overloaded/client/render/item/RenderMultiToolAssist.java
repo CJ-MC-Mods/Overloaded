@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
@@ -85,7 +86,7 @@ public class RenderMultiToolAssist {
 
     BlockRayTraceResult result =
         PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
-    if (result == null) {
+    if (result.getType() == RayTraceResult.Type.MISS) {
       return;
     }
 
