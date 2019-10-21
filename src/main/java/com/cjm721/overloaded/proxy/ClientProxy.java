@@ -12,6 +12,7 @@ import com.cjm721.overloaded.network.container.ModContainers;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -28,7 +29,6 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
-import net.minecraftforge.client.model.obj.OBJModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -57,22 +57,24 @@ public class ClientProxy extends CommonProxy {
           .put("models/item/fluid_core.obj", "fluid_core")
           .put("models/item/item_core.obj", "item_core")
           .build();
-  private static final ImmutableMap<String, String> objBlockModels =
-      ImmutableMap.<String, String>builder()
-          .put("models/block/hyper_energy_receiver.obj", "hyper_energy_receiver")
-          .put("models/block/hyper_energy_sender.obj", "hyper_energy_sender")
-          .put("models/block/hyper_fluid_sender.obj", "hyper_fluid_sender")
-          .put("models/block/hyper_fluid_receiver.obj", "hyper_fluid_receiver")
-          .put("models/block/hyper_item_sender.obj", "hyper_item_sender")
-          .put("models/block/hyper_item_receiver.obj", "hyper_item_receiver")
-          .put("models/block/infinite_water_source.obj", "infinite_water_source")
-          .put("models/block/creative_generator.obj", "creative_generator")
-          .build();
-
-  private static final ImmutableMap<String, String> objModelBlockOnly =
-      ImmutableMap.<String, String>builder()
-          .put("models/block/player_interface.obj", "player_interface")
-          .put("models/block/item_interface.obj", "item_interface")
+  private static final ImmutableSet<String> objBlockModels =
+      ImmutableSet.<String>builder()
+          .add("almost_infinite_barrel")
+          .add("almost_infinite_tank")
+          .add("almost_infinite_capacitor")
+          .add("true_infinite_barrel")
+          .add("true_infinite_tank")
+          .add("true_infinite_capacitor")
+          .add("hyper_energy_receiver")
+          .add("hyper_energy_sender")
+          .add("hyper_fluid_sender")
+          .add("hyper_fluid_receiver")
+          .add("hyper_item_sender")
+          .add("hyper_item_receiver")
+          .add("infinite_water_source")
+          .add("creative_generator")
+          .add("player_interface")
+          .add("item_interface")
           .build();
 
   @Override
@@ -128,16 +130,8 @@ public class ClientProxy extends CommonProxy {
           DefaultVertexFormats.ITEM);
     }
 
-    for (Map.Entry<String, String> entry : objBlockModels.entrySet()) {
-      bakeOBJModelAndPutBlock(new ResourceLocation(MODID, entry.getKey()), entry.getValue(), event);
-    }
-
-    for (Map.Entry<String, String> entry : objModelBlockOnly.entrySet()) {
-      bakeOBJModelAndPut(
-          new ResourceLocation(MODID, entry.getKey()),
-          new ModelResourceLocation(MODID + ":" + entry.getValue(), ""),
-          event,
-          DefaultVertexFormats.ITEM);
+    for (String entry : objBlockModels){
+      setItemModelToBlock(entry, event);
     }
 
     ModelRenderOBJ.BAKERY = event.getModelLoader();
@@ -178,37 +172,17 @@ public class ClientProxy extends CommonProxy {
     }
   }
 
-  private static void bakeOBJModelAndPutBlock(
-      ResourceLocation raw, String resource, ModelBakeEvent event) {
+  private static void setItemModelToBlock(
+      String resource, ModelBakeEvent event) {
     try {
-      IUnbakedModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw);
-      IBakedModel bakedModel =
-          unbakedModel.bake(
-              event.getModelLoader(),
-              ModelLoader.defaultTextureGetter(),
-              new ISprite() {},
-              DefaultVertexFormats.ITEM);
+      String location = MODID + ":" + resource;
+      IBakedModel blockModel = event
+          .getModelRegistry()
+          .get(new ModelResourceLocation(location, ""));
 
       event
           .getModelRegistry()
-          .put(new ModelResourceLocation(MODID + ":" + resource, ""), bakedModel);
-
-      OBJModel.OBJBakedModel handModel =
-          (OBJModel.OBJBakedModel)
-              unbakedModel.bake(
-                  event.getModelLoader(),
-                  ModelLoader.defaultTextureGetter(),
-                  new ISprite() {
-                    @Override
-                    public boolean isUvLock() {
-                      return true;
-                    }
-                  },
-                  DefaultVertexFormats.ITEM);
-
-      event
-          .getModelRegistry()
-          .put(new ModelResourceLocation(MODID + ":" + resource, "inventory"), handModel);
+          .put(new ModelResourceLocation(location, "inventory"), blockModel);
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -1,6 +1,7 @@
 **Version: 0.0.77 (BETA)**
 
 * Only attempt to load armor textures for Atlas it is needed in
+* OBJ Block and Item Models
 
 -------------------------------------------------------------------
 **Version: 0.0.76 (BETA)**
