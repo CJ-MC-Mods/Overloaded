@@ -1,3 +1,8 @@
+**Version: 0.0.77 (BETA)**
+
+* Only attempt to load armor textures for Atlas it is needed in
+
+-------------------------------------------------------------------
 **Version: 0.0.76 (BETA)**
 
 * Forge now has Mouse Scroll events so removing my direct LWJGL injection

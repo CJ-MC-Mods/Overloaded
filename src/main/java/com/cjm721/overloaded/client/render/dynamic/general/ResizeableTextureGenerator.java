@@ -35,6 +35,10 @@ public class ResizeableTextureGenerator {
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
+    if (!event.getMap().getBasePath().equals("textures")) {
+      return;
+    }
+
     event.addSprite(new ResourceLocation(MODID, "item/multi_right_arm"));
     event.addSprite(new ResourceLocation(MODID, "item/multi_left_arm"));
     event.addSprite(new ResourceLocation(MODID, "item/multi_leg"));
