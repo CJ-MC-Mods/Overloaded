@@ -3,6 +3,7 @@
 * Only attempt to load armor textures for Atlas it is needed in
 * OBJ Block and Item Models
 * Multi Tool no longer can place in thin air
+* Cleaned up Assets folder
 
 -------------------------------------------------------------------
 **Version: 0.0.76 (BETA)**
