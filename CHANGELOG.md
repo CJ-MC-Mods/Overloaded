@@ -2,6 +2,7 @@
 
 * Fix #44 for at least zombies (Render MultiArmor on non-players).
 * Changed up armor rendering in a lot of ways, should be faster now as well.
+* Fix Linking Card / Multi Armor Settings Editor textures.
 
 -------------------------------------------------------------------
 **Version: 0.0.77 (BETA)**
