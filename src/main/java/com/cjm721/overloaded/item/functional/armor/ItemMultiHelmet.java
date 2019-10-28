@@ -32,8 +32,6 @@ import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Da
 
 public class ItemMultiHelmet extends AbstractMultiArmor {
 
-  private RenderMultiHelmet armorModel;
-
   public ItemMultiHelmet() {
     super(EquipmentSlotType.HEAD);
 
@@ -46,8 +44,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
   @OnlyIn(Dist.CLIENT)
   public <A extends BipedModel<?>> A getArmorModel(
       LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    if (armorModel == null) armorModel = new RenderMultiHelmet();
-    return (A) armorModel;
+    return (A) new RenderMultiHelmet(_default);
   }
 
   @OnlyIn(Dist.CLIENT)

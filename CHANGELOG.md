@@ -1,3 +1,9 @@
+**Version: 0.0.78 (BETA)**
+
+* Fix #44 for at least zombies (Render MultiArmor on non-players).
+* Changed up armor rendering in a lot of ways, should be faster now as well.
+
+-------------------------------------------------------------------
 **Version: 0.0.77 (BETA)**
 
 * Only attempt to load armor textures for Atlas it is needed in

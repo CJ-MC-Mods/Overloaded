@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,14 +12,15 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiBoots extends AbstractRenderMultiArmor {
 
-  public RenderMultiBoots() {
+  public RenderMultiBoots(BipedModel baseModel) {
+    super(baseModel);
     this.bipedRightLeg.cubeList.clear();
     this.bipedLeftLeg.cubeList.clear();
 
     ModelRenderOBJ rightBoot =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_right_boot.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation(MODID + ":multi_right_boot", "armor"));
     ModelRenderOBJ leftBoot =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_left_boot.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation(MODID + ":multi_left_boot", "armor"));
 
     rightBoot.offsetY = 0.76F;
     rightBoot.offsetX = -0.03F;

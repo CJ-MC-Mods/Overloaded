@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,17 +12,18 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiLeggings extends AbstractRenderMultiArmor {
 
-  public RenderMultiLeggings() {
+  public RenderMultiLeggings(BipedModel baseModel) {
+    super(baseModel);
     this.bipedBody.cubeList.clear();
     this.bipedRightLeg.cubeList.clear();
     this.bipedLeftLeg.cubeList.clear();
 
     ModelRenderOBJ belt =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_belt.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_belt","armor"));
     ModelRenderOBJ rightLeg =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_right_leg.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_right_leg","armor"));
     ModelRenderOBJ leftLeg =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_left_leg.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_left_leg","armor"));
 
     belt.offsetY = 0.756F;
     belt.offsetZ = -0.04F;

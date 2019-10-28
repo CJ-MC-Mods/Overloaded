@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
 import net.minecraft.util.ResourceLocation;
@@ -11,12 +13,13 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
-  public RenderMultiHelmet() {
+  public RenderMultiHelmet(BipedModel baseModel) {
+    super(baseModel);
     this.bipedHead.cubeList.clear();
     this.bipedHeadwear.cubeList.clear();
 
     ModelRenderOBJ head =
-        new ModelRenderOBJ(this, new ResourceLocation(MODID, "item/armor/multi_helmet.obj"));
+        new ModelRenderOBJ(this, new ModelResourceLocation(MODID + ":multi_helmet", "armor"));
     head.offsetY = -0.1F;
     head.offsetX = -0.033F;
     head.offsetZ = 0.1F;

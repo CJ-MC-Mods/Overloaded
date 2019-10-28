@@ -18,8 +18,6 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ItemMultiLeggings extends AbstractMultiArmor {
 
-  private RenderMultiLeggings armorModel;
-
   public ItemMultiLeggings() {
     super(EquipmentSlotType.LEGS);
 
@@ -32,9 +30,7 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
   @OnlyIn(Dist.CLIENT)
   public <A extends BipedModel<?>> A getArmorModel(
       LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    if (armorModel == null) armorModel = new RenderMultiLeggings();
-
-    return (A) armorModel;
+    return (A) new RenderMultiLeggings(_default);
   }
 
   @OnlyIn(Dist.CLIENT)

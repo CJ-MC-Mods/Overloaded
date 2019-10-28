@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.model.RendererModel;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.Model;
 import net.minecraft.client.renderer.model.ModelBakery;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -30,25 +31,9 @@ public class ModelRenderOBJ extends RendererModel {
   private IBakedModel objModel;
   public float scale = 0;
 
-  public ModelRenderOBJ(Model baseModel, ResourceLocation customModel) {
+  public ModelRenderOBJ(Model baseModel, ModelResourceLocation modelResourceLocation) {
     super(baseModel);
-
-    try {
-      objModel =
-          ModelLoaderRegistry.getModel(customModel)
-              .bake(
-                  BAKERY != null ? BAKERY :
-                  new ModelBakery(
-                      Minecraft.getInstance().getResourceManager(),
-                      Minecraft.getInstance().getTextureMap(),
-                      Minecraft.getInstance().getBlockColors(),
-                      Minecraft.getInstance().getProfiler()),
-                  ModelLoader.defaultTextureGetter(),
-                  new ISprite() {},
-                  DefaultVertexFormats.ITEM);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    objModel = Minecraft.getInstance().getModelManager().getModel(modelResourceLocation);
   }
 
   @Override

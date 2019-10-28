@@ -57,6 +57,20 @@ public class ClientProxy extends CommonProxy {
           .put("models/item/fluid_core.obj", "fluid_core")
           .put("models/item/item_core.obj", "item_core")
           .build();
+
+  private static final ImmutableMap<String, String> armorItemModels =
+      ImmutableMap.<String, String>builder()
+          .put("models/item/armor/multi_belt.obj", "multi_belt")
+          .put("models/item/armor/multi_body.obj", "multi_body")
+          .put("models/item/armor/multi_helmet.obj", "multi_helmet")
+          .put("models/item/armor/multi_left_arm.obj", "multi_left_arm")
+          .put("models/item/armor/multi_left_boot.obj", "multi_left_boot")
+          .put("models/item/armor/multi_left_leg.obj", "multi_left_leg")
+          .put("models/item/armor/multi_right_arm.obj", "multi_right_arm")
+          .put("models/item/armor/multi_right_boot.obj", "multi_right_boot")
+          .put("models/item/armor/multi_right_leg.obj", "multi_right_leg")
+          .build();
+
   private static final ImmutableSet<String> objBlockModels =
       ImmutableSet.<String>builder()
           .add("almost_infinite_barrel")
@@ -130,14 +144,21 @@ public class ClientProxy extends CommonProxy {
           DefaultVertexFormats.ITEM);
     }
 
-    for (String entry : objBlockModels){
+    for (Map.Entry<String, String> entry : armorItemModels.entrySet()) {
+      bakeOBJModelAndPut(
+          new ResourceLocation(MODID, entry.getKey()),
+          new ModelResourceLocation(MODID + ":" + entry.getValue(), "armor"),
+          event,
+          DefaultVertexFormats.ITEM);
+    }
+
+    for (String entry : objBlockModels) {
       setItemModelToBlock(entry, event);
     }
 
     ModelRenderOBJ.BAKERY = event.getModelLoader();
 
     ModItems.customHelmet.getArmorModel(null, null, null, null);
-    ModItems.customChestplate.getArmorModel(null, null, null, null);
     ModItems.customLeggins.getArmorModel(null, null, null, null);
     ModItems.customBoots.getArmorModel(null, null, null, null);
 
@@ -172,17 +193,13 @@ public class ClientProxy extends CommonProxy {
     }
   }
 
-  private static void setItemModelToBlock(
-      String resource, ModelBakeEvent event) {
+  private static void setItemModelToBlock(String resource, ModelBakeEvent event) {
     try {
       String location = MODID + ":" + resource;
-      IBakedModel blockModel = event
-          .getModelRegistry()
-          .get(new ModelResourceLocation(location, ""));
+      IBakedModel blockModel =
+          event.getModelRegistry().get(new ModelResourceLocation(location, ""));
 
-      event
-          .getModelRegistry()
-          .put(new ModelResourceLocation(location, "inventory"), blockModel);
+      event.getModelRegistry().put(new ModelResourceLocation(location, "inventory"), blockModel);
     } catch (Exception e) {
       e.printStackTrace();
     }

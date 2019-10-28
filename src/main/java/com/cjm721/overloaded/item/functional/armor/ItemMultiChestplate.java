@@ -18,8 +18,6 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ItemMultiChestplate extends AbstractMultiArmor {
 
-  private RenderMultiChestplate armorModel;
-
   public ItemMultiChestplate() {
     super(EquipmentSlotType.CHEST);
 
@@ -31,9 +29,8 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
   @Override
   @OnlyIn(Dist.CLIENT)
   public <A extends BipedModel<?>> A getArmorModel(
-      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    if (armorModel == null) armorModel = new RenderMultiChestplate();
-    return (A) armorModel;
+      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
+    return (A) new RenderMultiChestplate(baseModel);
   }
 
   @OnlyIn(Dist.CLIENT)
