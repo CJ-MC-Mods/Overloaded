@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 
 /**
- * Methods copied from 1.14.3 \o/ on MMD discord
+ * Methods copied from "1.14.3 \o/" on MMD discord
  */
 public final class ContainerUtil {
   @Nonnull

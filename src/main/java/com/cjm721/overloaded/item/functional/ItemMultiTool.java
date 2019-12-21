@@ -55,6 +55,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
+import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -93,7 +94,6 @@ public class ItemMultiTool extends PowerModItem {
       int efficiency,
       int unbreaking) {
     BlockState state = worldIn.getBlockState(blockPos);
-    // state = state.getBlock().getExtendedState(state, worldIn,blockPos);
 
     if (!player.abilities.isCreativeMode) {
       float hardness = state.getBlockHardness(worldIn, blockPos);
@@ -230,8 +230,7 @@ public class ItemMultiTool extends PowerModItem {
   @Override
   public void addInformation(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    //    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
-
+    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }
 
