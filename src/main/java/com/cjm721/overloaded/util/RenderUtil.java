@@ -48,6 +48,9 @@ public class RenderUtil {
             final IBlockState state,
             final World worldObj,
             final BlockPos blockPos) {
+        if (quads == null) {
+            return;
+        }
         for (BakedQuad bakedquad : quads) {
             final int color = bakedquad.getTintIndex() == -1 ? alpha | 0xffffff : getTint(alpha, bakedquad.getTintIndex(), state, worldObj, blockPos);
             net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(renderer, bakedquad, color);

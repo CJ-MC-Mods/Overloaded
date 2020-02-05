@@ -1,3 +1,8 @@
+**Version: 0.0.59 (RELEASE)**
+
+* Fix Null Pointer Exception (Issue #90)
+
+-------------------------------------------------------------------
 **Version: 0.0.58 (RELEASE)**
 
 * Fixes fluid storage not allowing un-filtered extraction (Fixes #71)
