@@ -1,3 +1,8 @@
+**Version: 0.0.80 (BETA)**
+
+* Fix #91. Completely disabled rendering code.
+
+-------------------------------------------------------------------
 **Version: 0.0.79 (BETA)**
 
 * Initial 1.15.2 Port. All rendering is basicly disabled. Items all appear to function correctly.

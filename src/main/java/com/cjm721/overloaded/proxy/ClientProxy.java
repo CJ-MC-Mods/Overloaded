@@ -117,7 +117,7 @@ public class ClientProxy extends CommonProxy {
     //    OBJLoader.INSTANCE.addDomain(MODID);
     //    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
     BlockResourcePack.INSTANCE.addDomain(MODID);
-    BlockResourcePack.INSTANCE.inject();
+//    BlockResourcePack.INSTANCE.inject();
 
     ModItems.registerModels();
   }
