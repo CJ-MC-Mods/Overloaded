@@ -1,3 +1,8 @@
+**Version: 0.0.79 (BETA)**
+
+* Initial 1.15.2 Port. All rendering is basicly disabled. Items all appear to function correctly.
+
+-------------------------------------------------------------------
 **Version: 0.0.78 (BETA)**
 
 * Fix #44 for at least zombies (Render MultiArmor on non-players).

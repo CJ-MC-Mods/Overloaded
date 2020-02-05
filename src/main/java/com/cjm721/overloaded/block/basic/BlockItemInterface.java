@@ -1,15 +1,14 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +17,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -60,29 +58,29 @@ public class BlockItemInterface extends ModBlock {
     return new TileItemInterface();
   }
 
-  @OnlyIn(Dist.CLIENT)
+  @Override
+  public void onBlockHarvested(World world,@Nonnull BlockPos pos, BlockState state, PlayerEntity player) {
+    ((TileItemInterface) world.getTileEntity(pos)).breakBlock();
+
+    super.onBlockHarvested(world, pos, state, player);
+  }
+
+  @Override
   @Nonnull
-  @Override
-  public BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.TRANSLUCENT;
-  }
+  public ActionResultType onBlockActivated(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockRayTraceResult rayTraceResult) {
+    if (world.isRemote) return ActionResultType.PASS;
 
-  @Override
-  public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-    ((TileItemInterface)world.getTileEntity(pos)).breakBlock();
-
-    super.onBlockHarvested(world,pos,state,player);
-  }
-
-  @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-    if (world.isRemote) return true;
-
-    if (hand != Hand.MAIN_HAND) return false;
+    if (hand != Hand.MAIN_HAND) return ActionResultType.PASS;
 
     TileEntity te = world.getTileEntity(pos);
 
-    if (!(te instanceof TileItemInterface)) return false;
+    if (!(te instanceof TileItemInterface)) return ActionResultType.PASS;
 
     TileItemInterface anInterface = (TileItemInterface) te;
 
@@ -90,18 +88,18 @@ public class BlockItemInterface extends ModBlock {
     if (stack.isEmpty()) {
       ItemStack handStack = player.getHeldItem(hand);
 
-      if (handStack.isEmpty()) return false;
+      if (handStack.isEmpty()) return ActionResultType.FAIL;
 
       ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
       player.setHeldItem(hand, returnedItem);
     } else {
-      if (!player.getHeldItem(hand).isEmpty()) return false;
+      if (!player.getHeldItem(hand).isEmpty()) return ActionResultType.FAIL;
 
       ItemStack toSpawn = anInterface.extractItem(0, 1, false);
-      if (toSpawn.isEmpty()) return false;
+      if (toSpawn.isEmpty()) return ActionResultType.FAIL;
 
       ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.inventory.currentItem);
     }
-    return true;
+    return ActionResultType.CONSUME;
   }
 }

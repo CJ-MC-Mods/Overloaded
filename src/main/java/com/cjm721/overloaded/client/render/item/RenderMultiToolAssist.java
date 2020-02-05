@@ -39,9 +39,9 @@ public class RenderMultiToolAssist {
   public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
 
-    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
+    if (event.getScrollDelta() != 0 && player != null && player.func_226296_dJ_()) {
       ItemStack stack = player.getHeldItemMainhand();
-      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
+      if (player.func_226296_dJ_() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
         changeHelpMode((int) Math.round(event.getScrollDelta()));
         player.sendStatusMessage(
             new StringTextComponent("Assist Mode: " + getAssistMode().getName()), true);
@@ -95,7 +95,7 @@ public class RenderMultiToolAssist {
     BlockState state;
     if (stack.getItem() instanceof BlockItem) {
       state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
-      state = state.getExtendedState(player.getEntityWorld(), result.getPos());
+      state = state.getStateAtViewpoint(player.getEntityWorld(), result.getPos(), player.getEyePosition(event.getPartialTicks()));
       state =
           state
               .getBlock()
@@ -153,15 +153,15 @@ public class RenderMultiToolAssist {
     GlStateManager.rotatef(-90, 0, 1, 0);
     GlStateManager.enableBlend();
     GlStateManager.blendFunc(
-        GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.CONSTANT_COLOR);
+        GlStateManager.SourceFactor.SRC_COLOR.ordinal(), GlStateManager.DestFactor.CONSTANT_COLOR.ordinal());
     GL14.glBlendColor(1f, 1f, 1f, 0.5f);
 
     GlStateManager.pushMatrix();
     //    GlStateManager.colorMask(false,false,false,false);
-    Minecraft.getInstance()
-        .getBlockRendererDispatcher()
-        .getBlockModelRenderer()
-        .renderModelBrightness(model, state, 0.8F, false);
+//    Minecraft.getInstance()
+//        .getBlockRendererDispatcher()
+//        .getBlockModelRenderer()
+//        .renderModelBrightness(model, state, 0.8F, false);
     GlStateManager.popMatrix();
 
     //    GlStateManager.pushMatrix();

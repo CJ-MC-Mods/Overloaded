@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -20,7 +22,8 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+  @Nonnull
+  public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
     ItemStack heldItem = player.getHeldItem(hand);
     if (heldItem.getItem().equals(ModItems.linkingCard)) {
       CompoundNBT tag = heldItem.getTag();
@@ -39,7 +42,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
             false);
       }
 
-      return true;
+      return ActionResultType.CONSUME;
     } else {
       return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
     }

@@ -54,7 +54,7 @@ public class ModTiles {
   public static TileEntityType<?> infiniteWaterSource;
 
   @ObjectHolder(TileResourceLocations.itemInterface)
-  public static TileEntityType<?> itemInterface;
+  public static TileEntityType<TileItemInterface> itemInterface;
 
   @ObjectHolder(TileResourceLocations.itemManipulator)
   public static TileEntityType<?> itemManipulator;
@@ -63,7 +63,7 @@ public class ModTiles {
   public static TileEntityType<?> matterPurifier;
 
   @ObjectHolder(TileResourceLocations.playerInterface)
-  public static TileEntityType<?> playerInterface;
+  public static TileEntityType<TilePlayerInterface> playerInterface;
 
   @ObjectHolder(TileResourceLocations.teamLoader)
   public static TileEntityType<?> teamLoader;

@@ -5,13 +5,12 @@ import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
-import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteTank;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
@@ -54,13 +52,6 @@ public class BlockInfiniteWaterSource extends ModBlock {
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
-  @OnlyIn(Dist.CLIENT)
-  @Override
-  @Nonnull
-  public BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.CUTOUT;
-  }
-
   @Override
   @Nonnull
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
@@ -68,7 +59,8 @@ public class BlockInfiniteWaterSource extends ModBlock {
   }
 
   @Override
-  public boolean onBlockActivated(
+  @Nonnull
+  public ActionResultType onBlockActivated(
       BlockState state,
       World world,
       BlockPos pos,
@@ -76,7 +68,7 @@ public class BlockInfiniteWaterSource extends ModBlock {
       Hand handIn,
       BlockRayTraceResult hit) {
     ItemStack heldItem = player.getHeldItem(handIn);
-    if (!heldItem.isEmpty()){
+    if (!heldItem.isEmpty()) {
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof TileInfiniteWaterSource) {
         LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
@@ -85,14 +77,16 @@ public class BlockInfiniteWaterSource extends ModBlock {
         } else {
           if (!world.isRemote) {
             return FluidUtil.interactWithFluidHandler(
-                player,
-                handIn,
-                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")));
+                    player,
+                    handIn,
+                    opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")))
+                ? ActionResultType.CONSUME
+                : ActionResultType.FAIL;
           }
-          return true;
+          return ActionResultType.CONSUME;
         }
       }
     }
-    return false;
+    return ActionResultType.PASS;
   }
 }

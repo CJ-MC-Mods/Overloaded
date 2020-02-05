@@ -104,7 +104,7 @@ public class ItemRailGun extends PowerModItem {
       AxisAlignedBB axisalignedbb =
           playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
       EntityRayTraceResult ray =
-          ProjectileHelper.func_221273_a(
+          ProjectileHelper.rayTraceEntities(
               playerIn,
               vec3d,
               vec3d2,
@@ -127,14 +127,14 @@ public class ItemRailGun extends PowerModItem {
   @SubscribeEvent
   public void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
+    if (event.getScrollDelta() != 0 && player != null && player.func_226296_dJ_()) {
       ItemStack stack = player.getHeldItemMainhand();
-      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
+      if (player.func_226296_dJ_() && !stack.isEmpty() && stack.getItem() == this) {
         int powerDelta =
             Long.signum(Math.round(event.getScrollDelta()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
         if (InputMappings.isKeyDown(
-            Minecraft.getInstance().mainWindow.getHandle(),
+            Minecraft.getInstance().getMainWindow().getHandle(),
             ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getKeyCode())) {
           powerDelta *= 100;
         }

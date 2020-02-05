@@ -25,7 +25,10 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -34,8 +37,8 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IWorld;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
@@ -153,7 +156,7 @@ public class ItemMultiTool extends PowerModItem {
 
     player.setActiveHand(Hand.MAIN_HAND);
 
-    if (player.isSneaking()) {
+    if (player.func_226296_dJ_()) {
       CompoundNBT tag = itemStack.getTag();
       if (tag == null) {
         tag = new CompoundNBT();
@@ -319,7 +322,7 @@ public class ItemMultiTool extends PowerModItem {
                 (float) result.getHitVec().z - result.getPos().getZ()));
       }
     }
-    return ActionResult.newResult(ActionResultType.SUCCESS, player.getHeldItem(hand));
+    return ActionResult.func_226248_a_(player.getHeldItem(hand));
   }
 
   public void rightClickWithItem(
@@ -360,7 +363,7 @@ public class ItemMultiTool extends PowerModItem {
         opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     Vec3i sideVector = sideHit.getDirectionVec();
-    BlockPos.MutableBlockPos newPosition = new BlockPos.MutableBlockPos(pos.add(sideVector));
+    BlockPos.Mutable newPosition = new BlockPos.Mutable(pos.add(sideVector));
 
     switch (placeBlock(
         blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
@@ -379,7 +382,7 @@ public class ItemMultiTool extends PowerModItem {
       case SUCCESS:
         // Ok Continue
     }
-    if (player.isSneaking()) {
+    if (player.func_226296_dJ_()) {
       BlockPos playerPos = player.getPosition();
       switch (sideHit) {
         case UP:
@@ -437,7 +440,7 @@ public class ItemMultiTool extends PowerModItem {
   @Override
   public boolean canPlayerBreakBlockWhileHolding(
       BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
-    return !p_195938_4_.isSneaking();
+    return !p_195938_4_.func_226296_dJ_();
   }
 
   @Nonnull
@@ -470,10 +473,8 @@ public class ItemMultiTool extends PowerModItem {
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-      if (!event
-          .getEntityPlayer()
-          .getUniqueID()
-          .equals(Minecraft.getInstance().player.getUniqueID())) return;
+      if (!event.getEntity().getUniqueID().equals(Minecraft.getInstance().player.getUniqueID()))
+        return;
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {
@@ -484,12 +485,12 @@ public class ItemMultiTool extends PowerModItem {
     @SubscribeEvent
     public static void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
       if (event.getSide() == LogicalSide.SERVER
-          || event.getEntityPlayer() != Minecraft.getInstance().player) return;
+          || event.getEntity() != Minecraft.getInstance().player) return;
 
       ItemStack stack = event.getItemStack();
 
       if (stack.getItem().equals(ModItems.multiTool)) {
-        PlayerEntity entityLiving = event.getEntityPlayer();
+        PlayerEntity entityLiving = (PlayerEntity) event.getEntity();
         BlockRayTraceResult result =
             PlayerInteractionUtil.getBlockPlayerLookingAtClient(
                 entityLiving, Minecraft.getInstance().getRenderPartialTicks());

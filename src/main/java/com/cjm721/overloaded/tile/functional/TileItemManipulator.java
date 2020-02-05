@@ -73,7 +73,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
     FakePlayer player = getPlayer();
 
-    BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(this.getPos());
+    BlockPos.Mutable blockPos = new BlockPos.Mutable(this.getPos());
     //        for (int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
     //            if (!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
     //                EnumActionResult result = currentItem.getItem().onItemUse(player, getWorld(),

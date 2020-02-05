@@ -15,6 +15,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -33,7 +34,7 @@ public class InstantFurnaceContainer extends ModContainer {
 
   public InstantFurnaceContainer(int id, PlayerInventory playerInventory) {
     this(id, playerInventory, new TileInstantFurnace());
-    this.instanceFurnace.setWorld(playerInventory.player.world);
+    this.instanceFurnace.setWorldAndPos(playerInventory.player.world, playerInventory.player.getPosition());
   }
 
   public InstantFurnaceContainer(
@@ -100,7 +101,7 @@ public class InstantFurnaceContainer extends ModContainer {
   }
 
   @Override
-  public boolean canInteractWith(PlayerEntity playerIn) {
+  public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
     return isWithinUsableDistance(
         IWorldPosCallable.of(instanceFurnace.getWorld(), instanceFurnace.getPos()),
         playerIn,

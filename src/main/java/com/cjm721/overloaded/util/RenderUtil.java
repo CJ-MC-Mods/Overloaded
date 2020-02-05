@@ -55,8 +55,8 @@ public class RenderUtil {
           bakedquad.getTintIndex() == -1
               ? alpha | 0xffffff
               : getTint(alpha, bakedquad.getTintIndex(), state, worldObj, blockPos);
-      net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(
-          renderer, bakedquad, color);
+//      net.minecraftforge.client.model.pipeline.LightUtil.renderQuadColor(
+//          renderer, bakedquad, color);
     }
   }
 
@@ -90,7 +90,7 @@ public class RenderUtil {
       final World worldObj,
       final BlockPos blockPos) {
     final int alpha = 0xaa000000;
-    GlStateManager.bindTexture(Minecraft.getInstance().getTextureMap().getGlTextureId());
+//    GlStateManager.bindTexture(Minecraft.getInstance().getTextureMap().getGlTextureId());
     GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     GlStateManager.enableBlend();

@@ -108,9 +108,9 @@ public class PlayerInteractionUtil {
 
     // Can we place a block at this Pos
     BlockItem itemBlock = ((BlockItem) searchStack.getItem());
-    if (worldIn.func_217400_a(newPosition, player)) {
-      return BlockPlaceResult.FAIL_DENY;
-    }
+//    if (worldIn.func_217400_a(newPosition, player)) {
+//      return BlockPlaceResult.FAIL_DENY;
+//    }
 
     BlockSnapshot blockSnapshot =
         new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition));

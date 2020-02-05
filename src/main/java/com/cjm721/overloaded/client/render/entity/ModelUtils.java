@@ -11,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 /**
@@ -26,12 +27,12 @@ class ModelUtils implements IResourceManagerReloadListener {
     for (int j = listQuads.size(); i < j; ++i) {
       BakedQuad bakedquad = listQuads.get(i);
 
-      vertexbuffer.addVertexData(bakedquad.getVertexData());
+//      vertexbuffer.putBulkData(bakedquad);
 
-      vertexbuffer.putColorRGB_F4(1, 1, 1);
+      vertexbuffer.color(1,1,1,1);
 
       Vec3i vec3i = bakedquad.getFace().getDirectionVec();
-      vertexbuffer.putNormal((float) vec3i.getX(), (float) vec3i.getY(), (float) vec3i.getZ());
+      vertexbuffer.normal((float) vec3i.getX(), (float) vec3i.getY(), (float) vec3i.getZ());
     }
     tessellator.draw();
   }

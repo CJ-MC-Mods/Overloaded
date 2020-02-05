@@ -6,27 +6,25 @@ import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.SimpleReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
 public abstract class AbstractInjectableResoucePack implements IResourcePack {
-  public final void inject() {
-    Minecraft.getInstance().getResourceManager().addResourcePack(this);
+    public final void inject() {
 
-//        List<IResourcePack> defaultResourcePacks =
-//            ReflectionHelper.getPrivateValue(
-//                Minecraft.class, Minecraft.getInstance(), "field_110449_ao",
-//     "defaultResourcePacks");
-//        defaultResourcePacks.add(this);
-//
-//        Map<String, FallbackResourceManager> domainResourceManagers =
-//            ReflectionHelper.getPrivateValue(
-//                SimpleReloadableResourceManager.class,
-//                (SimpleReloadableResourceManager) Minecraft.getInstance().getResourceManager(),
-//                "field_110548_a",
-//                "domainResourceManagers");
-//        domainResourceManagers.get("overloaded").addResourcePack(this);
-  }
+        List<IResourcePack> defaultResourcePacks =
+                ObfuscationReflectionHelper.getPrivateValue(
+                        Minecraft.class, Minecraft.getInstance(), "field_110449_ao");
+        defaultResourcePacks.add(this);
+
+        Map<String, FallbackResourceManager> domainResourceManagers =
+                ObfuscationReflectionHelper.getPrivateValue(
+                        SimpleReloadableResourceManager.class,
+                        (SimpleReloadableResourceManager) Minecraft.getInstance().getResourceManager(),
+                        "field_110548_a");
+        domainResourceManagers.get("overloaded").addResourcePack(this);
+    }
 }

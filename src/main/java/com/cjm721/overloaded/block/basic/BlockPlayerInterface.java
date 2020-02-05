@@ -1,16 +1,15 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -21,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,13 +38,6 @@ public class BlockPlayerInterface extends ModBlockTile {
   @Override
   public TileEntity createTileEntity(BlockState state, IBlockReader world) {
     return new TilePlayerInterface();
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  @Nonnull
-  @Override
-  public BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.TRANSLUCENT;
   }
 
   @Override
@@ -68,7 +59,14 @@ public class BlockPlayerInterface extends ModBlockTile {
   }
 
   @Override
-  public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+  @Nonnull
+  public ActionResultType onBlockActivated(
+      BlockState state,
+      World world,
+      BlockPos pos,
+      PlayerEntity player,
+      Hand hand,
+      BlockRayTraceResult rayTraceResult) {
     if (!world.isRemote && hand == Hand.MAIN_HAND) {
       TileEntity te = world.getTileEntity(pos);
 
@@ -85,7 +83,7 @@ public class BlockPlayerInterface extends ModBlockTile {
                   "Bound to player: " + (username == null ? placer.toString() : username)));
         }
       }
-      return true;
+      return ActionResultType.SUCCESS;
     }
 
     return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);

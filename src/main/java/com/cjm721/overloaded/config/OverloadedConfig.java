@@ -84,7 +84,7 @@ public class OverloadedConfig {
   }
 
   @SubscribeEvent
-  public static void onConfigRelaoding(ModConfig.ConfigReloading configReloading) {
+  public static void onConfigRelaoding(ModConfig.Reloading configReloading) {
     INSTANCE.updateConfigs();
   }
 

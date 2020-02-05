@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +57,8 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
   }
 
   @Override
-  public boolean onBlockActivated(
+  @Nonnull
+  public ActionResultType onBlockActivated(
       BlockState state,
       World world,
       BlockPos pos,
@@ -68,7 +70,7 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
       if (!world.isRemote) {
         sendPlayerStatus(world, pos, player);
       }
-      return true;
+      return ActionResultType.SUCCESS;
     } else {
       TileEntity te = world.getTileEntity(pos);
       if (te instanceof TileAlmostInfiniteTank) {
@@ -80,13 +82,13 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
             return FluidUtil.interactWithFluidHandler(
                 player,
                 handIn,
-                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition")));
+                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"))) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
           }
-          return true;
+          return ActionResultType.SUCCESS;
         }
       }
     }
-    return false;
+    return ActionResultType.PASS;
   }
 
   @Override

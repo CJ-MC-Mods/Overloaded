@@ -25,7 +25,7 @@ public class CapabilityHyperEnergy {
               Capability<IHyperHandlerEnergy> capability,
               @Nonnull IHyperHandlerEnergy instance,
               Direction side) {
-            return new LongNBT(instance.status().amount);
+            return LongNBT.valueOf(instance.status().amount);
           }
 
           @Override

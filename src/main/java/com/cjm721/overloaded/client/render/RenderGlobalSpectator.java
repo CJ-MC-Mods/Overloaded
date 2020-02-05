@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.WorldRenderer;
 public class RenderGlobalSpectator extends WorldRenderer {
 
   public RenderGlobalSpectator(Minecraft mcIn) {
-    super(mcIn);
+    super(mcIn, mcIn.getRenderTypeBuffers());
   }
 
   //  @Override

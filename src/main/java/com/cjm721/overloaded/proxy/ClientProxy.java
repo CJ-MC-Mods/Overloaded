@@ -9,16 +9,13 @@ import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.container.ModContainers;
-import com.cjm721.overloaded.tile.functional.TileItemInterface;
-import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.ISprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.settings.KeyBinding;
@@ -27,8 +24,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -110,19 +105,17 @@ public class ClientProxy extends CommonProxy {
   }
 
   public void clientSetup(FMLClientSetupEvent event) {
-    ClientRegistry.bindTileEntitySpecialRenderer(
-        TileItemInterface.class, new ItemInterfaceRenderer());
+    ClientRegistry.bindTileEntityRenderer(ModTiles.itemInterface, ItemInterfaceRenderer::new);
 
-    ClientRegistry.bindTileEntitySpecialRenderer(
-        TilePlayerInterface.class, new PlayerInterfaceRenderer());
+    ClientRegistry.bindTileEntityRenderer(ModTiles.playerInterface, PlayerInterfaceRenderer::new);
 
     ScreenManager.registerFactory(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
   }
 
   @SubscribeEvent
   public static void registerModels(ModelRegistryEvent event) {
-    OBJLoader.INSTANCE.addDomain(MODID);
-    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
+    //    OBJLoader.INSTANCE.addDomain(MODID);
+    //    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
     BlockResourcePack.INSTANCE.addDomain(MODID);
     BlockResourcePack.INSTANCE.inject();
 
@@ -141,7 +134,7 @@ public class ClientProxy extends CommonProxy {
           new ResourceLocation(MODID, entry.getKey()),
           new ModelResourceLocation(MODID + ":" + entry.getValue(), "inventory"),
           event,
-          DefaultVertexFormats.ITEM);
+          DefaultVertexFormats.POSITION);
     }
 
     for (Map.Entry<String, String> entry : armorItemModels.entrySet()) {
@@ -149,7 +142,7 @@ public class ClientProxy extends CommonProxy {
           new ResourceLocation(MODID, entry.getKey()),
           new ModelResourceLocation(MODID + ":" + entry.getValue(), "armor"),
           event,
-          DefaultVertexFormats.ITEM);
+          DefaultVertexFormats.POSITION);
     }
 
     for (String entry : objBlockModels) {
@@ -169,25 +162,28 @@ public class ClientProxy extends CommonProxy {
       ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
     IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(raw);
 
-    IBakedModel bakedModel =
-        unbakedModel.bake(
-            event.getModelLoader(),
-            ModelLoader.defaultTextureGetter(),
-            new ISprite() {},
-            DefaultVertexFormats.BLOCK);
-
-    event.getModelRegistry().put(baked, bakedModel);
+    //    IBakedModel bakedModel =
+    //        unbakedModel.bake(
+    //            event.getModelLoader(),
+    //            ModelLoader.defaultTextureGetter(),
+    //            ModelRotation.X0_Y0,
+    //            baked);
+    //
+    //    event.getModelRegistry().put(baked, bakedModel);
   }
 
   private static void bakeOBJModelAndPut(
       ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event, VertexFormat format) {
     try {
-      IUnbakedModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw);
-      IBakedModel bakedModel =
-          unbakedModel.bake(
-              event.getModelLoader(), ModelLoader.defaultTextureGetter(), new ISprite() {}, format);
+      //      OBJModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw, true, false, false, false);
+      //      IBakedModel bakedModel =
+      //          unbakedModel.bake(
+      //              event.getModelLoader(),
+      //              ModelLoader.defaultTextureGetter(),
+      //              ModelRotation.X0_Y0,
+      //              baked);
 
-      event.getModelRegistry().put(baked, bakedModel);
+      //      event.getModelRegistry().put(baked, bakedModel);
     } catch (Exception e) {
       e.printStackTrace();
     }

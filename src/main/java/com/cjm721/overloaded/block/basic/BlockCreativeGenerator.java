@@ -1,13 +1,12 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.tile.functional.TileCreativeGeneratorFE;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.tile.functional.TileCreativeGeneratorFE;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,12 +38,5 @@ public class BlockCreativeGenerator extends ModBlockTile {
     ImageUtil.registerDynamicTexture(
         new ResourceLocation(MODID, "textures/block/creative_generator.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
-  }
-
-  @OnlyIn(Dist.CLIENT)
-  @Override
-  @Nonnull
-  public BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.CUTOUT;
   }
 }

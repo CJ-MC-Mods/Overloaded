@@ -77,9 +77,9 @@ public class BlockResourcePack extends AbstractInjectableResoucePack {
     throw new FileNotFoundException(location.toString());
   }
 
+
   @Override
-  public Collection<ResourceLocation> getAllResourceLocations(
-      ResourcePackType type, String pathIn, int maxDepth, Predicate<String> filter) {
+  public Collection<ResourceLocation> getAllResourceLocations(ResourcePackType type, String namespaceIn, String pathIn, int maxDepthIn, Predicate<String> filterIn) {
     return ImmutableList.<ResourceLocation>builder()
         .addAll(images.keySet())
         .addAll(blockStates.keySet())
