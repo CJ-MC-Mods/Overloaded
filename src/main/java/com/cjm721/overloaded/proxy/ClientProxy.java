@@ -16,6 +16,7 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.settings.KeyBinding;
@@ -24,6 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -40,51 +42,6 @@ public class ClientProxy extends CommonProxy {
 
   public KeyBinding noClipKeybind;
   public KeyBinding railGun100x;
-
-  private static final ImmutableMap<String, String> itemModels =
-      ImmutableMap.<String, String>builder()
-          .put("models/item/multi_tool.obj", "multi_tool")
-          .put("models/item/railgun.obj", "railgun")
-          .put("models/item/ray_gun.obj", "ray_gun")
-          .put("models/item/linkingcard.obj", "linking_card")
-          .put("models/item/settings_editor.obj", "settings_editor")
-          .put("models/item/energy_core.obj", "energy_core")
-          .put("models/item/fluid_core.obj", "fluid_core")
-          .put("models/item/item_core.obj", "item_core")
-          .build();
-
-  private static final ImmutableMap<String, String> armorItemModels =
-      ImmutableMap.<String, String>builder()
-          .put("models/item/armor/multi_belt.obj", "multi_belt")
-          .put("models/item/armor/multi_body.obj", "multi_body")
-          .put("models/item/armor/multi_helmet.obj", "multi_helmet")
-          .put("models/item/armor/multi_left_arm.obj", "multi_left_arm")
-          .put("models/item/armor/multi_left_boot.obj", "multi_left_boot")
-          .put("models/item/armor/multi_left_leg.obj", "multi_left_leg")
-          .put("models/item/armor/multi_right_arm.obj", "multi_right_arm")
-          .put("models/item/armor/multi_right_boot.obj", "multi_right_boot")
-          .put("models/item/armor/multi_right_leg.obj", "multi_right_leg")
-          .build();
-
-  private static final ImmutableSet<String> objBlockModels =
-      ImmutableSet.<String>builder()
-          .add("almost_infinite_barrel")
-          .add("almost_infinite_tank")
-          .add("almost_infinite_capacitor")
-          .add("true_infinite_barrel")
-          .add("true_infinite_tank")
-          .add("true_infinite_capacitor")
-          .add("hyper_energy_receiver")
-          .add("hyper_energy_sender")
-          .add("hyper_fluid_sender")
-          .add("hyper_fluid_receiver")
-          .add("hyper_item_sender")
-          .add("hyper_item_receiver")
-          .add("infinite_water_source")
-          .add("creative_generator")
-          .add("player_interface")
-          .add("item_interface")
-          .build();
 
   @Override
   public void commonSetup(FMLCommonSetupEvent event) {
@@ -128,76 +85,19 @@ public class ClientProxy extends CommonProxy {
         new ResourceLocation(MODID, "block/remove_preview"),
         new ModelResourceLocation(MODID + ":remove_preview", ""),
         event);
-
-    for (Map.Entry<String, String> entry : itemModels.entrySet()) {
-      bakeOBJModelAndPut(
-          new ResourceLocation(MODID, entry.getKey()),
-          new ModelResourceLocation(MODID + ":" + entry.getValue(), "inventory"),
-          event,
-          DefaultVertexFormats.POSITION);
-    }
-
-    for (Map.Entry<String, String> entry : armorItemModels.entrySet()) {
-      bakeOBJModelAndPut(
-          new ResourceLocation(MODID, entry.getKey()),
-          new ModelResourceLocation(MODID + ":" + entry.getValue(), "armor"),
-          event,
-          DefaultVertexFormats.POSITION);
-    }
-
-    for (String entry : objBlockModels) {
-      setItemModelToBlock(entry, event);
-    }
-
-    ModelRenderOBJ.BAKERY = event.getModelLoader();
-
-    ModItems.customHelmet.getArmorModel(null, null, null, null);
-    ModItems.customLeggins.getArmorModel(null, null, null, null);
-    ModItems.customBoots.getArmorModel(null, null, null, null);
-
-    ModelRenderOBJ.BAKERY = null;
   }
 
   private static void bakeModelAndPut(
       ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
     IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(raw);
 
-    //    IBakedModel bakedModel =
-    //        unbakedModel.bake(
-    //            event.getModelLoader(),
-    //            ModelLoader.defaultTextureGetter(),
-    //            ModelRotation.X0_Y0,
-    //            baked);
-    //
-    //    event.getModelRegistry().put(baked, bakedModel);
-  }
+        IBakedModel bakedModel =
+            unbakedModel.bakeModel(
+                event.getModelLoader(),
+                ModelLoader.defaultTextureGetter(),
+                ModelRotation.X0_Y0,
+                baked);
 
-  private static void bakeOBJModelAndPut(
-      ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event, VertexFormat format) {
-    try {
-      //      OBJModel unbakedModel = OBJLoader.INSTANCE.loadModel(raw, true, false, false, false);
-      //      IBakedModel bakedModel =
-      //          unbakedModel.bake(
-      //              event.getModelLoader(),
-      //              ModelLoader.defaultTextureGetter(),
-      //              ModelRotation.X0_Y0,
-      //              baked);
-
-      //      event.getModelRegistry().put(baked, bakedModel);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private static void setItemModelToBlock(String resource, ModelBakeEvent event) {
-    try {
-      String location = MODID + ":" + resource;
-      IBakedModel blockModel =
-          event.getModelRegistry().get(new ModelResourceLocation(location, ""));
-
-      event.getModelRegistry().put(new ModelResourceLocation(location, "inventory"), blockModel);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+        event.getModelRegistry().put(baked, bakedModel);
   }
 }

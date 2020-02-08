@@ -5,14 +5,21 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockItemUseContextPublic;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.sun.javafx.sg.prism.NodeEffectInput;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -21,11 +28,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.ILightReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
 import javax.annotation.Nonnull;
@@ -51,7 +62,8 @@ public class RenderMultiToolAssist {
   }
 
   @SubscribeEvent
-  public static void onKeyEvent(InputEvent.KeyInputEvent event) {}
+  public static void onKeyEvent(InputEvent.KeyInputEvent event) {
+  }
 
   private static void changeHelpMode(int dwheel) {
     AssistMode[] values = AssistMode.values();
@@ -61,7 +73,6 @@ public class RenderMultiToolAssist {
     if (mode < 0) mode += values.length;
 
     OverloadedConfig.INSTANCE.multiToolConfig.assistMode = mode;
-    //        ConfigManager.sync(MODID, Config.Type.INSTANCE);
   }
 
   @Nonnull
@@ -108,37 +119,36 @@ public class RenderMultiToolAssist {
 
     switch (getAssistMode()) {
       case PLACE_PREVIEW:
-        if (!stack.isEmpty() && state != null) renderBlockPreview(result, state);
+        if (!stack.isEmpty() && state != null) renderBlockPreview(event, result, state);
         break;
-      case REMOVE_PREVIEW:
-        renderRemovePreview(result);
-        // fall through
       case BOTH_PREVIEW:
-        if (!stack.isEmpty() && state != null) renderBlockPreview(result, state);
-        break;
+        if (!stack.isEmpty() && state != null) renderBlockPreview(event, result, state);
+        // fall through
+      case REMOVE_PREVIEW:
+        renderRemovePreview(event, result);
     }
   }
 
-  private static void renderRemovePreview(BlockRayTraceResult result) {
+  private static void renderRemovePreview(RenderWorldLastEvent event, BlockRayTraceResult result) {
     IBakedModel bakeModel =
         Minecraft.getInstance()
             .getModelManager()
             .getModel(new ModelResourceLocation(MODID + ":remove_preview", ""));
     BlockPos toRenderAt = result.getPos();
 
-    renderBlockModel(toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
+    renderBlockModel(event, toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
   }
 
-  private static void renderBlockPreview(BlockRayTraceResult result, @Nonnull BlockState state) {
+  private static void renderBlockPreview(RenderWorldLastEvent event, BlockRayTraceResult result, @Nonnull BlockState state) {
     IBakedModel model =
         Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
     BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
 
-    renderBlockModel(toRenderAt, model, state);
+    renderBlockModel(event, toRenderAt, model, state);
   }
 
-  private static void renderBlockModel(
-      BlockPos toRenderAt, @Nonnull IBakedModel model, @Nonnull BlockState state) {
+  private static void renderBlockModel(RenderWorldLastEvent event,
+                                       BlockPos toRenderAt, @Nonnull IBakedModel model, @Nonnull BlockState state) {
     ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
     if (camera == null) {
       return;
@@ -148,31 +158,62 @@ public class RenderMultiToolAssist {
     final double y = camera.getProjectedView().getY();
     final double z = camera.getProjectedView().getZ();
 
-    GlStateManager.pushMatrix();
-    GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-    GlStateManager.rotatef(-90, 0, 1, 0);
+    event.getMatrixStack().push();
+    event.getMatrixStack().translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+
+    IVertexBuilder buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(RenderType.translucent());
+//    Minecraft.getInstance().getBlockRendererDispatcher().renderModel(
+//            state,
+//            toRenderAt,
+//            Minecraft.getInstance().world,
+//            event.getMatrixStack(),
+//            buffer,
+//            EmptyModelData.INSTANCE);
     GlStateManager.enableBlend();
     GlStateManager.blendFunc(
         GlStateManager.SourceFactor.SRC_COLOR.ordinal(), GlStateManager.DestFactor.CONSTANT_COLOR.ordinal());
     GL14.glBlendColor(1f, 1f, 1f, 0.5f);
 
-    GlStateManager.pushMatrix();
-    //    GlStateManager.colorMask(false,false,false,false);
-//    Minecraft.getInstance()
-//        .getBlockRendererDispatcher()
-//        .getBlockModelRenderer()
-//        .renderModelBrightness(model, state, 0.8F, false);
-    GlStateManager.popMatrix();
-
-    //    GlStateManager.pushMatrix();
-    //    GlStateManager.colorMask(true,true,true,true);
-    //    Minecraft.getInstance()
-    //        .getBlockRendererDispatcher()
-    //        .getBlockModelRenderer()
-    //        .renderModelBrightness(model, state, 1.0F, false);
-    //    GlStateManager.popMatrix();
-
+    Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
+        Minecraft.getInstance().world,
+        model,
+        state,
+        toRenderAt,
+        event.getMatrixStack(),
+        buffer,
+        true,
+        Minecraft.getInstance().world.rand,
+        0, 0
+    );
     GlStateManager.disableBlend();
-    GlStateManager.popMatrix();
+    event.getMatrixStack().pop();
+//
+//
+//    GlStateManager.pushMatrix();
+//    GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
+//    GlStateManager.rotatef(-90, 0, 1, 0);
+//    GlStateManager.enableBlend();
+//    GlStateManager.blendFunc(
+//        GlStateManager.SourceFactor.SRC_COLOR.ordinal(), GlStateManager.DestFactor.CONSTANT_COLOR.ordinal());
+//    GL14.glBlendColor(1f, 1f, 1f, 0.5f);
+//
+//    GlStateManager.pushMatrix();
+//    //    GlStateManager.colorMask(false,false,false,false);
+////    Minecraft.getInstance()
+////        .getBlockRendererDispatcher()
+////        .getBlockModelRenderer()
+////        .renderModelBrightness(model, state, 0.8F, false);
+//    GlStateManager.popMatrix();
+//
+//    //    GlStateManager.pushMatrix();
+//    //    GlStateManager.colorMask(true,true,true,true);
+//    //    Minecraft.getInstance()
+//    //        .getBlockRendererDispatcher()
+//    //        .getBlockModelRenderer()
+//    //        .renderModelBrightness(model, state, 1.0F, false);
+//    //    GlStateManager.popMatrix();
+//
+//    GlStateManager.disableBlend();
+//    GlStateManager.popMatrix();
   }
 }

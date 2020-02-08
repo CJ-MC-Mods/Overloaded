@@ -31,7 +31,7 @@ apply plugin: 'maven'
 apply plugin: 'idea'
 apply plugin: 'com.matthewprenger.cursegradle'
 
-
+import net.minecraftforge.gradle.common.task.SignJar
 
 idea{
     module{
@@ -159,25 +159,25 @@ artifacts {
     archives sourcesJar
 }
 
-//task signJar(type: SignJar, dependsOn: reobfJar) {
-//
-//    // Skips if the keyStore property is missing.
-//    onlyIf {
-//        project.hasProperty('keyStore')
-//    }
-//
-//    // findProperty allows us to reference the property without it existing.
-//    // Using project.propName would cause the script to fail validation if
-//    // the property did not exist.
-//    keyStore = project.findProperty('keyStore')
-//    alias = project.findProperty('keyStoreAlias')
-//    storePass = project.findProperty('keyStorePass')
-//    keyPass = project.findProperty('keyStoreKeyPass')
-//    inputFile = jar.archivePath
-//    outputFile = jar.archivePath
-//}
-//
-//reobfJar.finalizedBy(signJar)
+task signJar(type: SignJar, dependsOn: jar) {
+
+    // Skips if the keyStore property is missing.
+    onlyIf {
+        project.hasProperty('keyStore')
+    }
+
+    // findProperty allows us to reference the property without it existing.
+    // Using project.propName would cause the script to fail validation if
+    // the property did not exist.
+    keyStore = project.findProperty('keyStore')
+    alias = project.findProperty('keyStoreAlias')
+    storePass = project.findProperty('keyStorePass')
+    keyPass = project.findProperty('keyStoreKeyPass')
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+jar.finalizedBy(signJar)
 
 curseforge {
     if (project.hasProperty('curseForgeAPIKey')) {
