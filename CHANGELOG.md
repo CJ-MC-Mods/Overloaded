@@ -1,3 +1,8 @@
+**Version: 0.0.81 (BETA)**
+
+* Go back to vanilla rendering so at least blocks have some texture (even though they look wacky).
+
+-------------------------------------------------------------------
 **Version: 0.0.80 (BETA)**
 
 * Fix #91. Completely disabled rendering code.

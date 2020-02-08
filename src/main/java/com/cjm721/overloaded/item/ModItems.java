@@ -3,7 +3,6 @@ package com.cjm721.overloaded.item;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.basic.InDevItem;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
-import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
 import com.cjm721.overloaded.item.functional.*;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
@@ -15,7 +14,6 @@ import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +28,6 @@ public class ModItems {
   public static ItemRailGun railgun;
 
   private static ModItem energyCore;
-  private static ModItem fluidCore;
   private static ModItem itemCore;
 
   public static ItemMultiHelmet customHelmet;
@@ -51,7 +48,6 @@ public class ModItems {
     multiTool = registerItem(new ItemMultiTool());
 
     energyCore = registerItem(new ItemEnergyCore());
-    fluidCore = registerItem(new ItemFluidCore());
     itemCore = registerItem(new ItemItemCore());
 
     customHelmet = registerItem(new ItemMultiHelmet());
