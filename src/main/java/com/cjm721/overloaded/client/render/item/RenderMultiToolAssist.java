@@ -5,8 +5,10 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockItemUseContextPublic;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
+import com.cjm721.overloaded.util.RenderUtil;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.sun.javafx.sg.prism.NodeEffectInput;
 import net.minecraft.block.BlockState;
@@ -15,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -30,6 +33,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.ILightReader;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -38,6 +42,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL46;
 
 import javax.annotation.Nonnull;
 
@@ -92,21 +97,24 @@ public class RenderMultiToolAssist {
 
   @SubscribeEvent
   public static void renderWorldLastEvent(RenderWorldLastEvent event) {
+    float partialTick = Minecraft.getInstance().getRenderPartialTicks();
     PlayerEntity player = Minecraft.getInstance().player;
     if (player.getHeldItemMainhand().getItem() != ModItems.multiTool) return;
 
-    BlockRayTraceResult result =
-        PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
-    if (result.getType() == RayTraceResult.Type.MISS) {
+    RayTraceResult resultPick =
+//        PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
+        player.pick(128, partialTick, false);
+    if (resultPick.getType() == RayTraceResult.Type.MISS || !(resultPick instanceof BlockRayTraceResult)) {
       return;
     }
 
+    BlockRayTraceResult result = ((BlockRayTraceResult) resultPick);
     ItemStack stack = ModItems.multiTool.getSelectedBlockItemStack(player.getHeldItemMainhand());
 
     BlockState state;
     if (stack.getItem() instanceof BlockItem) {
       state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
-      state = state.getStateAtViewpoint(player.getEntityWorld(), result.getPos(), player.getEyePosition(event.getPartialTicks()));
+      state = state.getStateAtViewpoint(player.getEntityWorld(), result.getPos(), player.getEyePosition(partialTick));
       state =
           state
               .getBlock()
@@ -121,11 +129,12 @@ public class RenderMultiToolAssist {
       case PLACE_PREVIEW:
         if (!stack.isEmpty() && state != null) renderBlockPreview(event, result, state);
         break;
-      case BOTH_PREVIEW:
-        if (!stack.isEmpty() && state != null) renderBlockPreview(event, result, state);
-        // fall through
       case REMOVE_PREVIEW:
         renderRemovePreview(event, result);
+        break;
+      case BOTH_PREVIEW:
+        renderRemovePreview(event, result);
+        if (!stack.isEmpty() && state != null) renderBlockPreview(event, result, state);
     }
   }
 
@@ -149,10 +158,7 @@ public class RenderMultiToolAssist {
 
   private static void renderBlockModel(RenderWorldLastEvent event,
                                        BlockPos toRenderAt, @Nonnull IBakedModel model, @Nonnull BlockState state) {
-    ActiveRenderInfo camera = Minecraft.getInstance().getRenderManager().info;
-    if (camera == null) {
-      return;
-    }
+    ActiveRenderInfo camera = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
 
     final double x = camera.getProjectedView().getX();
     final double y = camera.getProjectedView().getY();
@@ -160,20 +166,7 @@ public class RenderMultiToolAssist {
 
     event.getMatrixStack().push();
     event.getMatrixStack().translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-
-    IVertexBuilder buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(RenderType.translucent());
-//    Minecraft.getInstance().getBlockRendererDispatcher().renderModel(
-//            state,
-//            toRenderAt,
-//            Minecraft.getInstance().world,
-//            event.getMatrixStack(),
-//            buffer,
-//            EmptyModelData.INSTANCE);
-    GlStateManager.enableBlend();
-    GlStateManager.blendFunc(
-        GlStateManager.SourceFactor.SRC_COLOR.ordinal(), GlStateManager.DestFactor.CONSTANT_COLOR.ordinal());
-    GL14.glBlendColor(1f, 1f, 1f, 0.5f);
-
+    IVertexBuilder buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(GhostRenderType.getInstance());
     Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
         Minecraft.getInstance().world,
         model,
@@ -181,39 +174,36 @@ public class RenderMultiToolAssist {
         toRenderAt,
         event.getMatrixStack(),
         buffer,
-        true,
+        false,
         Minecraft.getInstance().world.rand,
         0, 0
     );
-    GlStateManager.disableBlend();
     event.getMatrixStack().pop();
-//
-//
-//    GlStateManager.pushMatrix();
-//    GlStateManager.translated(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-//    GlStateManager.rotatef(-90, 0, 1, 0);
-//    GlStateManager.enableBlend();
-//    GlStateManager.blendFunc(
-//        GlStateManager.SourceFactor.SRC_COLOR.ordinal(), GlStateManager.DestFactor.CONSTANT_COLOR.ordinal());
-//    GL14.glBlendColor(1f, 1f, 1f, 0.5f);
-//
-//    GlStateManager.pushMatrix();
-//    //    GlStateManager.colorMask(false,false,false,false);
-////    Minecraft.getInstance()
-////        .getBlockRendererDispatcher()
-////        .getBlockModelRenderer()
-////        .renderModelBrightness(model, state, 0.8F, false);
-//    GlStateManager.popMatrix();
-//
-//    //    GlStateManager.pushMatrix();
-//    //    GlStateManager.colorMask(true,true,true,true);
-//    //    Minecraft.getInstance()
-//    //        .getBlockRendererDispatcher()
-//    //        .getBlockModelRenderer()
-//    //        .renderModelBrightness(model, state, 1.0F, false);
-//    //    GlStateManager.popMatrix();
-//
-//    GlStateManager.disableBlend();
-//    GlStateManager.popMatrix();
+
+    Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(GhostRenderType.getInstance());
+  }
+
+  private static class GhostRenderType extends RenderType {
+
+    public GhostRenderType(String p_i225992_1_, VertexFormat p_i225992_2_, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable p_i225992_7_, Runnable p_i225992_8_) {
+      super(p_i225992_1_, p_i225992_2_, p_i225992_3_, p_i225992_4_, p_i225992_5_, p_i225992_6_, p_i225992_7_, p_i225992_8_);
+    }
+
+    public static RenderType getInstance() {
+      return get("ghost_model",
+          DefaultVertexFormats.BLOCK,
+          7,
+          262144,
+          true,
+          true,
+          State.builder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_ENABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);;
+            RenderSystem.blendColor(0.5f,0.5f,0.5f,0.5f);
+            RenderSystem.color4f(0.5f,0.5f,0.5f,0.5f);
+          }, () -> {
+            RenderSystem.disableBlend();
+          })).build(true));
+    }
   }
 }
