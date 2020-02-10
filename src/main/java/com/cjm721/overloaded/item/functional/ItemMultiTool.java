@@ -9,7 +9,9 @@ import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
+import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Table;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -19,6 +21,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -38,6 +41,7 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.WorldGenRegion;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -45,8 +49,10 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
@@ -55,7 +61,9 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
@@ -177,8 +185,15 @@ public class ItemMultiTool extends PowerModItem {
         Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + itemStack.getTag());
         return;
       }
-      IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Error"));
 
+      // Used to catch item spawn to teleport
+      int worldId = world.getDimension().getType().getId();
+      CommonSideEvents.enabled = true;
+      CommonSideEvents.world = worldId;
+      CommonSideEvents.pos = pos;
+      CommonSideEvents.uuid = player.getUniqueID();
+
+      IEnergyStorage energy = opEnergy.orElseThrow(() -> new RuntimeException("Impossible Error"));
       int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, itemStack);
       int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, itemStack);
       switch (breakAndUseEnergy(world, pos, energy, player, efficiency, unbreaking)) {
@@ -199,6 +214,7 @@ public class ItemMultiTool extends PowerModItem {
         case SUCCESS:
           break;
       }
+      CommonSideEvents.enabled = false;
     }
   }
 
@@ -264,39 +280,6 @@ public class ItemMultiTool extends PowerModItem {
   public boolean canHarvestBlock(BlockState blockIn) {
     return false;
   }
-
-  //  public void drawParticleStreamTo(
-  //      @Nonnull PlayerEntity source,
-  //      @Nonnull Vec3d endingLocation,
-  //      @Nonnull EnumParticleTypes type) {
-  //    double xOffset = 0; // 0.25;
-  //    double yOffset = -.25;
-  //    double zOffset = 0; // .25;
-  //
-  //    Vec3d startingLocation = source.getPositionEyes(1).add(xOffset, yOffset, zOffset);
-  //    startingLocation =
-  //        startingLocation.add(source.getLookVec().rotateYaw((float) (Math.PI /
-  // -2.0D)).scale(0.5D));
-  //    Vec3d direction = endingLocation.subtract(startingLocation).normalize();
-  //
-  //    startingLocation = startingLocation.add(direction);
-  //    World world = source.getEntityWorld();
-  //    double distanceToEnd = endingLocation.distanceTo(startingLocation);
-  //    // Make the reach check unnessicary * Change to for loop
-  //    while (distanceToEnd > 0.3D
-  //        && distanceToEnd < (OverloadedConfig.INSTANCE.multiToolConfig.reach * 2)) {
-  //      world.spawnParticle(
-  //          type,
-  //          startingLocation.x,
-  //          startingLocation.y,
-  //          startingLocation.z,
-  //          0,
-  //          0,
-  //          0); // direction.xCoord, direction.yCoord, direction.zCoord);
-  //      startingLocation = startingLocation.add(direction.scale(0.25D));
-  //      distanceToEnd = endingLocation.distanceTo(startingLocation);
-  //    }
-  //  }
 
   @Override
   public float getDestroySpeed(ItemStack stack, BlockState state) {
@@ -502,21 +485,35 @@ public class ItemMultiTool extends PowerModItem {
 
   @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
   public static class CommonSideEvents {
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void teleportDrops(@Nonnull BlockEvent.HarvestDropsEvent event) {
-      PlayerEntity player = event.getHarvester();
-      if (player == null
-          || event.getHarvester().getHeldItemMainhand().getItem() != ModItems.multiTool
-          || event.getDrops() instanceof ImmutableList) return;
 
-      IWorld world = event.getWorld();
-      float chance = event.getDropChance();
-      for (ItemStack stack : event.getDrops()) {
-        if (world.getRandom().nextFloat() <= chance) {
-          ItemHandlerHelper.giveItemToPlayer(player, stack);
-        }
+    static boolean enabled = false;
+    static int world = 0;
+    static BlockPos pos;
+    static UUID uuid;
+
+    @SubscribeEvent(priority = EventPriority.LOW)
+    public static void teleportDrops(@Nonnull EntityJoinWorldEvent event) {
+      if (!enabled ||
+          event.getWorld().isRemote() ||
+          !event.getEntity().getPosition().equals(pos) ||
+          !(event.getEntity() instanceof ItemEntity) ||
+          uuid == null) {
+        return;
       }
-      event.getDrops().clear();
+
+      PlayerEntity player = event.getWorld().getPlayerByUuid(uuid);
+      if (player == null) {
+        return;
+      }
+
+      ItemEntity itemEntity = ((ItemEntity) event.getEntity());
+      itemEntity.setPickupDelay(0);
+      itemEntity.onCollideWithPlayer(player);
+
+      if (!itemEntity.isAlive()) {
+        event.setCanceled(true);
+        event.setResult(Event.Result.ALLOW);
+      }
     }
   }
 }

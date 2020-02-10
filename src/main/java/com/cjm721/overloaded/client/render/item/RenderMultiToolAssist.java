@@ -4,19 +4,14 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.AssistMode;
 import com.cjm721.overloaded.util.BlockItemUseContextPublic;
-import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import com.cjm721.overloaded.util.RenderUtil;
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import com.sun.javafx.sg.prism.NodeEffectInput;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.RenderState;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.IBakedModel;
@@ -31,18 +26,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.ILightReader;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL46;
 
 import javax.annotation.Nonnull;
 
@@ -102,7 +90,6 @@ public class RenderMultiToolAssist {
     if (player.getHeldItemMainhand().getItem() != ModItems.multiTool) return;
 
     RayTraceResult resultPick =
-//        PlayerInteractionUtil.getBlockPlayerLookingAtClient(player, event.getPartialTicks());
         player.pick(128, partialTick, false);
     if (resultPick.getType() == RayTraceResult.Type.MISS || !(resultPick instanceof BlockRayTraceResult)) {
       return;
@@ -196,11 +183,10 @@ public class RenderMultiToolAssist {
           262144,
           true,
           true,
-          State.builder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_ENABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
+          State.builder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_DISABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
             RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);;
-            RenderSystem.blendColor(0.5f,0.5f,0.5f,0.5f);
-            RenderSystem.color4f(0.5f,0.5f,0.5f,0.5f);
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+            RenderSystem.colorMask(true, true, true, true);
           }, () -> {
             RenderSystem.disableBlend();
           })).build(true));

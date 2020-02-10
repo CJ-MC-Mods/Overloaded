@@ -1,10 +1,16 @@
+**Version: 0.0.82 (BETA)**
+
+* MultiTool preview rendering is working correctly.
+* MultiTool teleportation works again (could use some heavy dupe testing)
+
+------------------------------------------------------------------
 **Version: 0.0.81 (BETA)**
 
 * Go back to vanilla rendering so at least blocks have some texture (even though they look wacky).
 * Working on MultiTool Rendering. Its not on correct layer but placing/remove block is not visible.
 * Jar should be signed properly again.
 
--------------------------------------------------------------------
+------------------------------------------------------------------
 **Version: 0.0.80 (BETA)**
 
 * Fix #91. Completely disabled rendering code.
