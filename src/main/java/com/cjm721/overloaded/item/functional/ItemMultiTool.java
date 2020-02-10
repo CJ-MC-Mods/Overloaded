@@ -230,7 +230,7 @@ public class ItemMultiTool extends PowerModItem {
 
   @Override
   public boolean isEnchantable(@Nonnull ItemStack stack) {
-    return this.getItemStackLimit(stack) == 1;
+    return stack.getCount() == 1;
   }
 
   @OnlyIn(Dist.CLIENT)
