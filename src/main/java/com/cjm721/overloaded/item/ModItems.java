@@ -3,6 +3,7 @@ package com.cjm721.overloaded.item;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.basic.InDevItem;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
+import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
 import com.cjm721.overloaded.item.functional.*;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
@@ -29,6 +30,7 @@ public class ModItems {
 
   private static ModItem energyCore;
   private static ModItem itemCore;
+  private static ModItem fluidCore;
 
   public static ItemMultiHelmet customHelmet;
   public static ItemMultiChestplate customChestplate;
@@ -49,6 +51,7 @@ public class ModItems {
 
     energyCore = registerItem(new ItemEnergyCore());
     itemCore = registerItem(new ItemItemCore());
+    fluidCore = registerItem(new ItemFluidCore());
 
     customHelmet = registerItem(new ItemMultiHelmet());
     customChestplate = registerItem(new ItemMultiChestplate());
