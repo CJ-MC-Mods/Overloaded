@@ -45,8 +45,8 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/block/infinite_tank.png"),
-            new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_tank.png"),
+            new ResourceLocation(MODID, "textures/block/almost_infinite_tank.png"),
+            new ResourceLocation(MODID, "textures/dynamic/blocks/almost_infinite_tank.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }
 

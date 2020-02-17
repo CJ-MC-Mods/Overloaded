@@ -38,8 +38,8 @@ public class BlockAlmostInfiniteBarrel extends AbstractBlockHyperContainer {
 
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/block/infinite_barrel.png"),
-            new ResourceLocation(MODID, "textures/dynamic/blocks/infinite_barrel.png"),
+            new ResourceLocation(MODID, "textures/block/almost_infinite_barrel.png"),
+            new ResourceLocation(MODID, "textures/dynamic/blocks/almost_infinite_barrel.png"),
             OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }
 

@@ -25,28 +25,15 @@ import java.util.UUID;
 @OnlyIn(Dist.CLIENT)
 public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterface> {
 
+  private UUID uuidCache;
+  private ItemStack stackCache;
+
   public PlayerInterfaceRenderer(TileEntityRendererDispatcher p_i226006_1_) {
     super(p_i226006_1_);
   }
 
   @Override
   public void render(@Nonnull TilePlayerInterface te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
-    GlStateManager.pushLightingAttributes();
-    GlStateManager.pushMatrix();
-
-    GlStateManager.translated(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
-    GlStateManager.disableRescaleNormal();
-
-    renderPlayer(te, matrixStack, iRenderTypeBuffer);
-
-    GlStateManager.popMatrix();
-    GlStateManager.popAttributes();
-  }
-
-  private UUID uuidCache;
-  private ItemStack stackCache;
-
-  private void renderPlayer(TilePlayerInterface te, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
     UUID uuid = te.getPlacer();
 
     if (uuid == null) return;
@@ -66,7 +53,10 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
       return;
     }
 
+    renderPlayer(te, player, matrixStack, iRenderTypeBuffer);
+  }
 
+  private void renderPlayer(TilePlayerInterface te, PlayerEntity player, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
     matrixStack.push();
 
     matrixStack.translate(0.5, 0.32, 0.5);
@@ -74,9 +64,7 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
 
     matrixStack.push();
     long angle = (System.currentTimeMillis() / 10) % 360;
-//    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
-//    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
-//    Minecraft.getInstance().getRenderManager().getRenderer(player).render(player,20,Minecraft.getInstance().getRenderPartialTicks(),matrixStack,iRenderTypeBuffer,255);
+    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
     Minecraft.getInstance().getRenderManager().renderEntityStatic(player, 0, 0, 0, 0, Minecraft.getInstance().getRenderPartialTicks(),
         matrixStack,
         iRenderTypeBuffer,

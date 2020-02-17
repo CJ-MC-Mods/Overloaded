@@ -29,19 +29,6 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
 
   @Override
   public void render(@Nonnull TileItemInterface te, float v,@Nonnull  MatrixStack matrixStack,@Nonnull  IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
-    GlStateManager.pushLightingAttributes();
-    GlStateManager.pushMatrix();
-
-    GlStateManager.translated(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
-    GlStateManager.disableRescaleNormal();
-
-    renderItem(te, matrixStack, iRenderTypeBuffer);
-
-    GlStateManager.popMatrix();
-    GlStateManager.popAttributes();
-  }
-
-  private void renderItem(TileItemInterface te, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
     ItemStack stack = te.getStoredItem();
 
     if (stack.isEmpty()) return;
@@ -54,10 +41,9 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
     matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
 
     RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, te.getWorld().getLightFor(LightType.BLOCK,te.getPos()) * 16,0, matrixStack, iRenderTypeBuffer);
+    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, te.getWorld().getLight(te.getPos()) * 16,0, matrixStack, iRenderTypeBuffer);
     RenderSystem.disableLighting();
     matrixStack.pop();
-
     matrixStack.pop();
   }
 }

@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.client.render.entity;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.*;
@@ -26,11 +27,14 @@ public class ModelRenderOBJ extends ModelRenderer {
 
     public ModelRenderOBJ(Model baseModel, ModelResourceLocation modelResourceLocation) {
         super(baseModel);
-        objModel = Minecraft.getInstance().getModelManager().getModel(modelResourceLocation);
+
+//        new ModelRenderer(objModel);
+//        objModel = Minecraft.getInstance().getModelManager().getModel(modelResourceLocation);
     }
 
     @Override
-    public void render(MatrixStack matrix, IVertexBuilder vertex, int p_228309_3_, int p_228309_4_, float p_228309_5_, float p_228309_6_, float p_228309_7_, float sale) {}
+    public void render(MatrixStack matrix, IVertexBuilder vertex, int p_228309_3_, int p_228309_4_, float p_228309_5_, float p_228309_6_, float p_228309_7_, float sale) {
+    }
 
     public void render(float scale) {
 //    if (this.showModel) {
