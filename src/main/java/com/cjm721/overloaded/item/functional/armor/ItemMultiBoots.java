@@ -25,14 +25,6 @@ public class ItemMultiBoots extends AbstractMultiArmor {
     //        setTranslationKey("multi_boots");
   }
 
-  @Nullable
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public <A extends BipedModel<?>> A getArmorModel(
-      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    return (A) new RenderMultiBoots(_default);
-  }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {

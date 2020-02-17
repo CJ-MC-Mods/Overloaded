@@ -6,6 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
+import net.minecraftforge.client.model.data.IModelData;
+
+import java.util.Random;
 
 /**
  * Based off brandon3055's work *
@@ -26,9 +30,7 @@ public class ModelRenderOBJ extends ModelRenderer {
     }
 
     @Override
-    public void render(MatrixStack p_228309_1_, IVertexBuilder p_228309_2_, int p_228309_3_, int p_228309_4_, float p_228309_5_, float p_228309_6_, float p_228309_7_, float sale) {
-        render(scale);
-    }
+    public void render(MatrixStack matrix, IVertexBuilder vertex, int p_228309_3_, int p_228309_4_, float p_228309_5_, float p_228309_6_, float p_228309_7_, float sale) {}
 
     public void render(float scale) {
 //    if (this.showModel) {

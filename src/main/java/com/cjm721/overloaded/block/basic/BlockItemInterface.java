@@ -4,7 +4,10 @@ import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +30,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class BlockItemInterface extends ModBlock {
 
   public BlockItemInterface() {
-    super(getDefaultProperties());
+    super(Properties.create(Material.GLASS).hardnessAndResistance(3).variableOpacity().notSolid());
     setRegistryName("item_interface");
   }
 
@@ -45,12 +48,6 @@ public class BlockItemInterface extends ModBlock {
         new ResourceLocation(MODID, "textures/block/item_interface.png"),
         OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
-
-  //  @Override
-  //  public void breakBlock(World worldIn, BlockPos pos, BlockState state) {
-  //    ((TileItemInterface) worldIn.getTileEntity(pos)).breakBlock();
-  //    super.breakBlock(worldIn, pos, state);
-  //  }
 
   @Nullable
   @Override
@@ -74,13 +71,13 @@ public class BlockItemInterface extends ModBlock {
       PlayerEntity player,
       Hand hand,
       BlockRayTraceResult rayTraceResult) {
-    if (world.isRemote) return ActionResultType.PASS;
+    if (world.isRemote) return ActionResultType.CONSUME;
 
-    if (hand != Hand.MAIN_HAND) return ActionResultType.PASS;
+    if (hand != Hand.MAIN_HAND) return ActionResultType.CONSUME;
 
     TileEntity te = world.getTileEntity(pos);
 
-    if (!(te instanceof TileItemInterface)) return ActionResultType.PASS;
+    if (!(te instanceof TileItemInterface)) return ActionResultType.CONSUME;
 
     TileItemInterface anInterface = (TileItemInterface) te;
 
@@ -102,4 +99,10 @@ public class BlockItemInterface extends ModBlock {
     }
     return ActionResultType.CONSUME;
   }
+
+  @Override
+  public boolean isTransparent(BlockState state) {
+    return true;
+  }
+
 }

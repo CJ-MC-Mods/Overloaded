@@ -39,14 +39,6 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     //        setTranslationKey("multi_helmet");
   }
 
-  @Nullable
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public <A extends BipedModel<?>> A getArmorModel(
-      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    return (A) new RenderMultiHelmet(_default);
-  }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {

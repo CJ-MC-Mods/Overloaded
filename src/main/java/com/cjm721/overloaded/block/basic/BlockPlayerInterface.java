@@ -5,6 +5,7 @@ import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class BlockPlayerInterface extends ModBlockTile {
 
   public BlockPlayerInterface() {
-    super(getDefaultProperties());
+    super(Properties.create(Material.GLASS).hardnessAndResistance(3).variableOpacity().notSolid());
     setRegistryName("player_interface");
   }
 
@@ -87,5 +88,10 @@ public class BlockPlayerInterface extends ModBlockTile {
     }
 
     return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+  }
+
+  @Override
+  public boolean isTransparent(BlockState state) {
+    return true;
   }
 }

@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.gui.InstantFurnaceScreen;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import com.cjm721.overloaded.client.render.entity.ModelRenderOBJ;
@@ -13,6 +14,8 @@ import com.cjm721.overloaded.tile.ModTiles;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
@@ -51,6 +54,7 @@ public class ClientProxy extends CommonProxy {
     FMLJavaModLoadingContext.get().getModEventBus().register(new ResizeableTextureGenerator());
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::registerModels);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::modelBakeEvent);
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::clientSetupEvent);
 
     noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key");
     railGun100x = new KeyBinding("overloaded.key.railgun100x", 341, "overloaded.cat.key");
@@ -85,6 +89,12 @@ public class ClientProxy extends CommonProxy {
         new ResourceLocation(MODID, "block/remove_preview"),
         new ModelResourceLocation(MODID + ":remove_preview", ""),
         event);
+  }
+
+  @SubscribeEvent
+  public static void clientSetupEvent(FMLClientSetupEvent event) {
+    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.translucent());
   }
 
   private static void bakeModelAndPut(

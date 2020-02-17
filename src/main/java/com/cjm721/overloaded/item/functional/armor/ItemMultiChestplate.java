@@ -25,14 +25,6 @@ public class ItemMultiChestplate extends AbstractMultiArmor {
     //        setTranslationKey("multi_chestplate");
   }
 
-  @Nullable
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public <A extends BipedModel<?>> A getArmorModel(
-      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
-    return (A) new RenderMultiChestplate(baseModel);
-  }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {

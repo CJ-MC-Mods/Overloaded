@@ -1,11 +1,13 @@
 package com.cjm721.overloaded.client.render.tile;
 
+import com.cjm721.overloaded.client.render.item.RenderMultiToolAssist;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -13,6 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.LightType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -27,14 +30,14 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
   }
 
   @Override
-  public void render(@Nonnull TilePlayerInterface te, float v,@Nonnull  MatrixStack matrixStack, @Nonnull IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+  public void render(@Nonnull TilePlayerInterface te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
     GlStateManager.pushLightingAttributes();
     GlStateManager.pushMatrix();
 
     GlStateManager.translated(te.getPos().getX(), te.getPos().getY(), te.getPos().getZ());
     GlStateManager.disableRescaleNormal();
 
-    renderPlayer(te);
+    renderPlayer(te, matrixStack, iRenderTypeBuffer);
 
     GlStateManager.popMatrix();
     GlStateManager.popAttributes();
@@ -43,7 +46,7 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
   private UUID uuidCache;
   private ItemStack stackCache;
 
-  private void renderPlayer(TilePlayerInterface te) {
+  private void renderPlayer(TilePlayerInterface te, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
     UUID uuid = te.getPlacer();
 
     if (uuid == null) return;
@@ -52,46 +55,50 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
 
     if (player == null) {
       if (uuid.equals(uuidCache)) {
-        renderItem(stackCache);
+        renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
       } else {
         uuidCache = uuid;
         CompoundNBT tag = new CompoundNBT();
         tag.putString("SkullOwner", uuid.toString());
         stackCache = new ItemStack(Items.PLAYER_HEAD, 1, tag);
-        renderItem(stackCache);
+        renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
       }
       return;
     }
 
-    RenderHelper.enableStandardItemLighting();
-    GlStateManager.enableLighting();
-    GlStateManager.pushMatrix();
 
-    GlStateManager.translated(.5, .3, .5);
-    GlStateManager.scaled(.2f, .2f, .2f);
+    matrixStack.push();
+
+    matrixStack.translate(0.5, 0.32, 0.5);
+    matrixStack.scale(.2f, .2f, .2f);
+
+    matrixStack.push();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    GlStateManager.rotatef(angle, 0, 1, 0);
+//    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
+//    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
+//    Minecraft.getInstance().getRenderManager().getRenderer(player).render(player,20,Minecraft.getInstance().getRenderPartialTicks(),matrixStack,iRenderTypeBuffer,255);
+    Minecraft.getInstance().getRenderManager().renderEntityStatic(player, 0, 0, 0, 0, Minecraft.getInstance().getRenderPartialTicks(),
+        matrixStack,
+        iRenderTypeBuffer,
+        te.getWorld().getLightFor(LightType.BLOCK, te.getPos()) * 16);
+    matrixStack.pop();
 
-    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
-//    Minecraft.getInstance().getRenderManager().renderEntityStatic( player, 0, 0, 0, 0, 1, false);
-
-    GlStateManager.popMatrix();
+    matrixStack.pop();
   }
 
-  private void renderItem(ItemStack stack) {
-    RenderHelper.enableStandardItemLighting();
-    GlStateManager.enableLighting();
-    GlStateManager.pushMatrix();
+  private void renderItem(TilePlayerInterface te, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
+    matrixStack.push();
+    matrixStack.translate(0.5, 0.32, 0.5);
 
-    GlStateManager.translated(.5, .65, .5);
-    GlStateManager.scalef(.5f, .5f, .5f);
+    matrixStack.push();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    GlStateManager.rotatef(angle, 0, 1, 0);
+    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
 
-//    Minecraft.getInstance()
-//        .getItemRenderer()
-//        .renderItem(stack, ItemCameraTransforms.TransformType.NONE);
+    RenderSystem.enableLighting();
+    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, te.getWorld().getLightFor(LightType.BLOCK, te.getPos()) * 16, 0, matrixStack, iRenderTypeBuffer);
+    RenderSystem.disableLighting();
+    matrixStack.pop();
 
-    GlStateManager.popMatrix();
+    matrixStack.pop();
   }
 }

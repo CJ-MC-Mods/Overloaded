@@ -25,14 +25,6 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
     //    setTranslationKey("multi_leggings");
   }
 
-  @Nullable
-  @Override
-  @OnlyIn(Dist.CLIENT)
-  public <A extends BipedModel<?>> A getArmorModel(
-      LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
-    return (A) new RenderMultiLeggings(_default);
-  }
-
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
