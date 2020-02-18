@@ -15,4 +15,13 @@ public abstract class AbstractRenderMultiArmor extends BipedModel {
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
     this.baseModel = baseModel;
   }
+
+  public AbstractRenderMultiArmor(BipedModel baseModel, float yOffSet) {
+    super(
+        0,
+        yOffSet,
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution,
+        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
+    this.baseModel = baseModel;
+  }
 }

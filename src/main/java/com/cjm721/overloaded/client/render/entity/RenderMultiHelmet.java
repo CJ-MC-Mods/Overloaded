@@ -1,7 +1,12 @@
 package com.cjm721.overloaded.client.render.entity;
 
+import com.cjm721.overloaded.Overloaded;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ArmorStandEntity;
@@ -13,44 +18,13 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
+  public static RenderMultiHelmet INSTANCE;
+
   public RenderMultiHelmet(BipedModel baseModel) {
     super(baseModel);
-//    this.bipedHead.cubeList.clear();
-//    this.bipedHeadwear.cubeList.clear();
-//
-//    ModelRenderOBJ head =
-//        new ModelRenderOBJ(this, new ModelResourceLocation(MODID + ":multi_helmet", "armor"));
-//    head.offsetY = -0.1F;
-//    head.offsetX = -0.033F;
-//    head.offsetZ = 0.1F;
-//    head.scale = 1F / 13F;
-//
-//    this.bipedHead.addChild(head);
-  }
 
-//  @Override
-//  public void render(
-//      @Nullable LivingEntity entity,
-//      float limbSwing,
-//      float limbSwingAmount,
-//      float ageInTicks,
-//      float netHeadYaw,
-//      float headPitch,
-//      float scale) {
-//    if (entity instanceof ArmorStandEntity) {
-//      netHeadYaw = ((ArmorStandEntity) entity).rotationYawHead;
-//    }
-//    super.setRotationAngles(
-//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-//
-//    GlStateManager.pushMatrix();
-//    if (this.isSneak) {
-//      GlStateManager.translatef(0.0F, 0.2F, 0.0F);
-//    }
-//
-//    this.bipedHead.render(scale);
-//    this.bipedHeadwear.cubeList.clear();
-//
-//    GlStateManager.popMatrix();
-//  }
+    IBakedModel helmet = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_helmet"));
+
+    this.bipedHead.addChild(new ModelRenderOBJ(this, helmet));
+  }
 }

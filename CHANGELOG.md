@@ -4,7 +4,7 @@
 * MultiTool teleportation works again (could use some heavy dupe testing)
 * Interface Rendering now kinda works
 * OBJ Block/Item Rendering Works again (Thanks abused_master)
-* Working on Multi-Armor Rendering Still
+* Working on Multi-Armor Rendering Still, using 2D model.
 
 ------------------------------------------------------------------
 **Version: 0.0.81 (BETA)**

@@ -80,9 +80,15 @@ public class ClientProxy extends CommonProxy {
     BlockResourcePack.INSTANCE.addDomain(MODID);
 //    BlockResourcePack.INSTANCE.inject();
 
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_helmet"));
     ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_chestplate_body"));
     ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_chestplate_leftarm"));
     ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_chestplate_rightarm"));
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_belt"));
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_left_leg"));
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_right_leg"));
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_left_boot"));
+    ModelLoader.addSpecialModel(new ResourceLocation(MODID, "item/armor/multi_right_boot"));
     ModItems.registerModels();
   }
 

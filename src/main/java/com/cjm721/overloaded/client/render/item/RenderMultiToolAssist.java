@@ -170,7 +170,7 @@ public class RenderMultiToolAssist {
     Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(GhostRenderType.getInstance());
   }
 
-  private static class GhostRenderType extends RenderType {
+  public static class GhostRenderType extends RenderType {
 
     public GhostRenderType(String p_i225992_1_, VertexFormat p_i225992_2_, int p_i225992_3_, int p_i225992_4_, boolean p_i225992_5_, boolean p_i225992_6_, Runnable p_i225992_7_, Runnable p_i225992_8_) {
       super(p_i225992_1_, p_i225992_2_, p_i225992_3_, p_i225992_4_, p_i225992_5_, p_i225992_6_, p_i225992_7_, p_i225992_8_);

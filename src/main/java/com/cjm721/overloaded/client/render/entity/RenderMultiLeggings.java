@@ -1,7 +1,12 @@
 package com.cjm721.overloaded.client.render.entity;
 
+import com.cjm721.overloaded.Overloaded;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
@@ -12,52 +17,14 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class RenderMultiLeggings extends AbstractRenderMultiArmor {
 
+  public static RenderMultiLeggings INSTANCE;
+
   public RenderMultiLeggings(BipedModel baseModel) {
-    super(baseModel);
+    super(baseModel, 10f);
+    IBakedModel leftLeg = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_left_leg"));
+    IBakedModel rightLeg = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_right_leg"));
 
-//    ModelRenderOBJ belt =
-//        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_belt","armor"));
-//    ModelRenderOBJ rightLeg =
-//        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_right_leg","armor"));
-//    ModelRenderOBJ leftLeg =
-//        new ModelRenderOBJ(this, new ModelResourceLocation("overloaded:multi_left_leg","armor"));
-//
-//    belt.offsetY = 0.756F;
-//    belt.offsetZ = -0.04F;
-//    rightLeg.offsetY = 0.6F;
-//    rightLeg.offsetX = -0.085F; // rightLeg.offsetX = -0.06F;
-//    leftLeg.offsetY = 0.6F;
-//    leftLeg.offsetX = 0.085F; // leftLeg.offsetX = 0.06F;
-//
-//    leftLeg.scale = 1F / 14F;
-//    rightLeg.scale = 1F / 14F;
-//
-//    this.bipedBody.addChild(belt);
-//    this.bipedRightLeg.addChild(rightLeg);
-//    this.bipedLeftLeg.addChild(leftLeg);
+//    this.bipedLeftLeg.addChild(new ModelRenderOBJ(this, leftLeg));
+    this.bipedRightLeg.addChild(new ModelRenderOBJ(this, rightLeg));
   }
-
-//  @Override
-//  public void render(
-//      @Nullable LivingEntity entity,
-//      float limbSwing,
-//      float limbSwingAmount,
-//      float ageInTicks,
-//      float netHeadYaw,
-//      float headPitch,
-//      float scale) {
-//    super.setRotationAngles(
-//        entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-//
-//    GlStateManager.pushMatrix();
-//    if (this.isSneak) {
-//      GlStateManager.translatef(0.0F, 0.2F, 0.0F);
-//    }
-//
-//    this.bipedBody.render(scale);
-//    this.bipedRightLeg.render(scale);
-//    this.bipedLeftLeg.render(scale);
-//
-//    GlStateManager.popMatrix();
-//  }
 }

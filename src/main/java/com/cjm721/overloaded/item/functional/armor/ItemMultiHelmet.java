@@ -2,6 +2,7 @@ package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
+import com.cjm721.overloaded.client.render.entity.RenderMultiChestplate;
 import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
@@ -36,8 +37,17 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     super(EquipmentSlotType.HEAD);
 
     setRegistryName("multi_helmet");
-    //        setTranslationKey("multi_helmet");
   }
+
+//  @Nullable
+//  @Override
+//  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
+//    if(RenderMultiHelmet.INSTANCE == null) {
+//      RenderMultiHelmet.INSTANCE = new RenderMultiHelmet(baseModel);
+//    }
+//
+//    return (A) RenderMultiHelmet.INSTANCE;
+//  }
 
   @OnlyIn(Dist.CLIENT)
   @Override
