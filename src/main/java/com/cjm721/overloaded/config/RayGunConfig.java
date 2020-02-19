@@ -2,6 +2,7 @@ package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class RayGunConfig implements ConfigSectionHandler {
   public int energyPerShot;
@@ -11,7 +12,11 @@ public class RayGunConfig implements ConfigSectionHandler {
   private ForgeConfigSpec.IntValue maxRangeSpec;
 
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
+
     builder.push("ray-gun");
 
     energyPerShotSpec =

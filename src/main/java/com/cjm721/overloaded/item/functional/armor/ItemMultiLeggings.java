@@ -40,14 +40,18 @@ public class ItemMultiLeggings extends AbstractMultiArmor {
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 
-//  @Nullable
-//  @Override
-//  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
-//    if(RenderMultiLeggings.INSTANCE == null) {
-//      RenderMultiLeggings.INSTANCE = new RenderMultiLeggings(baseModel);
-//    }
-//
-//    return (A) RenderMultiLeggings.INSTANCE;
-//  }
+  @Nullable
+  @Override
+  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
+    if (!OverloadedConfig.INSTANCE.textureResolutions.multiArmorFancyModel) {
+      return super.getArmorModel(entityLiving, itemStack, armorSlot, baseModel);
+    }
+
+    if (RenderMultiLeggings.INSTANCE == null) {
+      RenderMultiLeggings.INSTANCE = new RenderMultiLeggings(baseModel);
+    }
+
+    return (A) RenderMultiLeggings.INSTANCE;
+  }
 
 }

@@ -36,14 +36,18 @@ public class ItemMultiBoots extends AbstractMultiArmor {
         new ResourceLocation(MODID, "textures/item/multi_boot.png"),
         OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
-//
-//  @Nullable
-//  @Override
-//  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
-//    if(RenderMultiBoots.INSTANCE == null) {
-//      RenderMultiBoots.INSTANCE = new RenderMultiBoots(baseModel);
-//    }
-//
-//    return (A) RenderMultiBoots.INSTANCE;
-//  }
+
+  @Nullable
+  @Override
+  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
+    if (!OverloadedConfig.INSTANCE.textureResolutions.multiArmorFancyModel) {
+      return super.getArmorModel(entityLiving, itemStack, armorSlot, baseModel);
+    }
+
+    if (RenderMultiBoots.INSTANCE == null) {
+      RenderMultiBoots.INSTANCE = new RenderMultiBoots(baseModel);
+    }
+
+    return (A) RenderMultiBoots.INSTANCE;
+  }
 }

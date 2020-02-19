@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class PurifierConfig implements ConfigSectionHandler {
 
@@ -11,7 +12,11 @@ public class PurifierConfig implements ConfigSectionHandler {
   private ForgeConfigSpec.IntValue energyPerHardnessSpec;
 
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
+
     builder.push("purifier");
 
     energyPerOperationSpec =

@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class ResolutionConfig implements ConfigSectionHandler {
   public int blockResolution;
@@ -12,8 +13,15 @@ public class ResolutionConfig implements ConfigSectionHandler {
   public int multiArmorResolution;
   private ForgeConfigSpec.IntValue multiArmorResolutionSpec;
 
+  public boolean multiArmorFancyModel;
+  private ForgeConfigSpec.BooleanValue multiArmorFancyModelSpec;
+
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.CLIENT) {
+      return;
+    }
+
     builder.push("resolution");
 
     blockResolutionSpec =
@@ -31,6 +39,9 @@ public class ResolutionConfig implements ConfigSectionHandler {
             .comment("Resolution for Multi-Armor. [Default: 256]")
             .defineInRange("multiArmorResolution", 256, 1, Integer.MAX_VALUE);
 
+    multiArmorFancyModelSpec =
+        builder.comment("To use the fancy armor model or not. [Default: false]")
+        .define("multiArmorFancyModel", false);
     builder.pop();
   }
 
@@ -39,5 +50,6 @@ public class ResolutionConfig implements ConfigSectionHandler {
     blockResolution = blockResolutionSpec.get();
     itemResolution = itemResolutionSpec.get();
     multiArmorResolution = multiArmorResolutionSpec.get();
+    multiArmorFancyModel = multiArmorFancyModelSpec.get();
   }
 }

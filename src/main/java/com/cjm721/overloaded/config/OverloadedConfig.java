@@ -61,22 +61,6 @@ public class OverloadedConfig {
             productionConfig);
   }
 
-  public ForgeConfigSpec load(Path path) {
-    CommentedFileConfig configData =
-        CommentedFileConfig.builder(path)
-            .sync()
-            .autosave()
-            .writingMode(WritingMode.REPLACE)
-            .build();
-
-    configData.load();
-
-    ForgeConfigSpec configSpec = getConfig();
-    configSpec.setConfig(configData);
-    // Update Cache
-    this.updateConfigs();
-    return configSpec;
-  }
 
   @SubscribeEvent
   public static void onLoading(ModConfig.Loading loading) {
@@ -88,10 +72,10 @@ public class OverloadedConfig {
     INSTANCE.updateConfigs();
   }
 
-  private ForgeConfigSpec getConfig() {
+  public ForgeConfigSpec getConfig(ModConfig.Type type) {
     ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-    configsSections.stream().forEach(c -> c.appendToBuilder(builder));
+    configsSections.stream().forEach(c -> c.appendToBuilder(type, builder));
 
     return builder.build();
   }

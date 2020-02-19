@@ -2,6 +2,7 @@ package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class RailGunConfig implements ConfigSectionHandler {
 
@@ -24,7 +25,11 @@ public class RailGunConfig implements ConfigSectionHandler {
   private ForgeConfigSpec.DoubleValue knockbackPerRFSpec;
 
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
+
     builder.push("rail-gun");
 
     minEngerySpec =

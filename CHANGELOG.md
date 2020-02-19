@@ -1,3 +1,8 @@
+**Version: 0.0.83 (BETA)**
+
+* Configs now work and are split into three sections.
+
+------------------------------------------------------------------
 **Version: 0.0.82 (BETA)**
 
 * MultiTool preview rendering is working correctly.

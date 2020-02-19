@@ -4,8 +4,10 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.proxy.ServerProxy;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -33,13 +35,24 @@ public class Overloaded {
     instance = this;
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFingerprintException);
-
-    ModLoadingContext.get()
-        .registerConfig(
-            ModConfig.Type.SERVER,
-            OverloadedConfig.INSTANCE.load(FMLPaths.CONFIGDIR.get().resolve(MODID + ".toml")));
-
     MinecraftForge.EVENT_BUS.register(OverloadedConfig.INSTANCE);
+
+    ModContainer activeContainer = ModLoadingContext.get().getActiveContainer();
+    ModConfig commonConfig = new ModConfig(
+        ModConfig.Type.COMMON,
+        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.COMMON),
+        activeContainer);
+    activeContainer.addConfig(commonConfig);
+    ModConfig serverConfig = new ModConfig(
+        ModConfig.Type.SERVER,
+        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.SERVER),
+        activeContainer);
+    activeContainer.addConfig(serverConfig);
+    ModConfig clientConfig = new ModConfig(
+        ModConfig.Type.CLIENT,
+        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.CLIENT),
+        activeContainer);
+    activeContainer.addConfig(clientConfig);
   }
 
   private void preInit(final FMLCommonSetupEvent event) {

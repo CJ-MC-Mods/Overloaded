@@ -39,15 +39,19 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
     setRegistryName("multi_helmet");
   }
 
-//  @Nullable
-//  @Override
-//  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
-//    if(RenderMultiHelmet.INSTANCE == null) {
-//      RenderMultiHelmet.INSTANCE = new RenderMultiHelmet(baseModel);
-//    }
-//
-//    return (A) RenderMultiHelmet.INSTANCE;
-//  }
+  @Nullable
+  @Override
+  public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
+    if (!OverloadedConfig.INSTANCE.textureResolutions.multiArmorFancyModel) {
+      return super.getArmorModel(entityLiving, itemStack, armorSlot, baseModel);
+    }
+
+    if (RenderMultiHelmet.INSTANCE == null) {
+      RenderMultiHelmet.INSTANCE = new RenderMultiHelmet(baseModel);
+    }
+
+    return (A) RenderMultiHelmet.INSTANCE;
+  }
 
   @OnlyIn(Dist.CLIENT)
   @Override
@@ -80,7 +84,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 
   private void updateSettings(ItemStack itemStack, MultiArmorSettingsMessage message) {
     LazyOptional<IGenericDataStorage> opSettings = itemStack.getCapability(GENERIC_DATA_STORAGE);
-    if(!opSettings.isPresent()) {
+    if (!opSettings.isPresent()) {
       Overloaded.logger.warn("MultiHelmet has no GenericData Capability? NBT: " + itemStack.getTag());
       return;
     }

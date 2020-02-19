@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class ProductionConfig implements ConfigSectionHandler {
 
@@ -8,7 +9,11 @@ public class ProductionConfig implements ConfigSectionHandler {
   private ForgeConfigSpec.IntValue energyPerCookTimeSpec;
 
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
+
     builder.push("production");
 
     energyPerCookTimeSpec =

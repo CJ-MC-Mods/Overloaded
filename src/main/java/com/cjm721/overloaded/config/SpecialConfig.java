@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class SpecialConfig implements ConfigSectionHandler {
   public boolean noClipRenderFix;
@@ -10,7 +11,11 @@ public class SpecialConfig implements ConfigSectionHandler {
   private ForgeConfigSpec.BooleanValue infinityBarrelAdditionalSlotSpec;
 
   @Override
-  public void appendToBuilder(ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+    if (type != ModConfig.Type.COMMON) {
+      return;
+    }
+
     builder.push("special");
 
     noClipRenderFixSpec =
