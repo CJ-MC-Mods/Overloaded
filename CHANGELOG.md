@@ -1,3 +1,8 @@
+**Version: 0.0.84 (BETA)**
+
+* Fix server loading
+
+------------------------------------------------------------------
 **Version: 0.0.83 (BETA)**
 
 * Configs now work and are split into three sections.

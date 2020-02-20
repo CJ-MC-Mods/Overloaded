@@ -41,6 +41,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 
   @Nullable
   @Override
+  @OnlyIn(Dist.CLIENT)
   public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A baseModel) {
     if (!OverloadedConfig.INSTANCE.textureResolutions.multiArmorFancyModel) {
       return super.getArmorModel(entityLiving, itemStack, armorSlot, baseModel);
