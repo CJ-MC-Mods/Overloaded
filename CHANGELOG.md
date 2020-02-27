@@ -1,6 +1,7 @@
 **Version: 0.0.85 (BETA)**
 
 * Fix configs not syncing from servers and using their values.
+* General Cleanup (dead code + simplifying)
 
 ------------------------------------------------------------------
 **Version: 0.0.84 (BETA)**

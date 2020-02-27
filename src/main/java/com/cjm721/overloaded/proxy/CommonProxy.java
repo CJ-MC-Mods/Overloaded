@@ -6,7 +6,6 @@ import com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage;
 import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
 import com.cjm721.overloaded.capabilities.CapabilityHyperFluid;
 import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
-import com.cjm721.overloaded.config.syncer.ConfigSyncEventHandler;
 import com.cjm721.overloaded.fluid.ModFluids;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.ItemMultiTool;
@@ -113,7 +112,6 @@ public class CommonProxy {
         ContainerDataMessage::fromBytes,
         new ContainerDataHandler());
 
-    MinecraftForge.EVENT_BUS.register(new ConfigSyncEventHandler());
     MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
   }
 

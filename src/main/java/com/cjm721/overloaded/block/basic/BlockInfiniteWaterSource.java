@@ -31,7 +31,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 public class BlockInfiniteWaterSource extends ModBlock {
 
   public BlockInfiniteWaterSource() {
-    super(getDefaultProperties());
+    super(getDefaultProperties().notSolid());
     setRegistryName("infinite_water_source");
   }
 

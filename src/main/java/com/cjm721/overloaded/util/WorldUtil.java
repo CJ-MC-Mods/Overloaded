@@ -16,7 +16,7 @@ public class WorldUtil {
       @Nonnull Entity excludedEntity,
       double maxDistance) {
     Vec3d endingLocation = startingLocation.add(direction.scale(maxDistance));
-    BlockRayTraceResult raytraceresult =
+    BlockRayTraceResult rayTraceResult =
         world.rayTraceBlocks(
             new RayTraceContext(
                 startingLocation,
@@ -25,12 +25,12 @@ public class WorldUtil {
                 RayTraceContext.FluidMode.NONE,
                 excludedEntity));
 
-    if (raytraceresult.getType() != RayTraceResult.Type.MISS) {
+    if (rayTraceResult.getType() != RayTraceResult.Type.MISS) {
       endingLocation =
           new Vec3d(
-              raytraceresult.getHitVec().x,
-              raytraceresult.getHitVec().y,
-              raytraceresult.getHitVec().z);
+              rayTraceResult.getHitVec().x,
+              rayTraceResult.getHitVec().y,
+              rayTraceResult.getHitVec().z);
     }
 
     Entity entity = null;
@@ -92,6 +92,6 @@ public class WorldUtil {
         //        }
       }
     }
-    return raytraceresult;
+    return rayTraceResult;
   }
 }

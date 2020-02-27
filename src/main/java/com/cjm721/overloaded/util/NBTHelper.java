@@ -23,7 +23,7 @@ public class NBTHelper {
   }
 
   @Nonnull
-  public static List<ItemStack> deseralizeItems(ListNBT tags) {
+  public static List<ItemStack> deserializeItems(ListNBT tags) {
     List<ItemStack> toReturn = new ArrayList<>();
     for (INBT tag : tags) {
       toReturn.add(ItemStack.read(((CompoundNBT) tag)));

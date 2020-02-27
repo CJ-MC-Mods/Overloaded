@@ -9,7 +9,7 @@ import java.util.List;
 public class ContainerDataMessage {
 
   public final int container;
-  private List<ContainerData> data;
+  private final List<ContainerData> data;
 
   public ContainerDataMessage(int container) {
     this.container = container;

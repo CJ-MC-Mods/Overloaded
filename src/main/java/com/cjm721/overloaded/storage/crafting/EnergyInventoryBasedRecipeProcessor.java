@@ -34,7 +34,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   private int currentEnergy;
 
   EnergyInventoryBasedRecipeProcessor(
-      IRecipeType recipeType,
+      IRecipeType<T> recipeType,
       Supplier<World> worldSupplier,
       int maxEnergy,
       int slots,
@@ -287,11 +287,11 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   @Override
   public void deserializeNBT(CompoundNBT nbt) {
     if (nbt.contains("Input")) {
-      input = NBTHelper.deseralizeItems(nbt.getList("Input", 10));
+      input = NBTHelper.deserializeItems(nbt.getList("Input", 10));
     }
 
     if (nbt.contains("Output")) {
-      output = NBTHelper.deseralizeItems(nbt.getList("Output", 10));
+      output = NBTHelper.deserializeItems(nbt.getList("Output", 10));
     }
 
     currentEnergy = nbt.getInt("Energy");

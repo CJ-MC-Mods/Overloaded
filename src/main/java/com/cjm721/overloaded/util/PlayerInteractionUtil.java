@@ -208,20 +208,17 @@ public class PlayerInteractionUtil {
   @OnlyIn(Dist.CLIENT)
   public static BlockRayTraceResult getBlockPlayerLookingAtClient(
       PlayerEntity player, float partialTicks) {
-    BlockRayTraceResult result =
-        player
-            .getEntityWorld()
-            .rayTraceBlocks(
-                new RayTraceContext(
-                    player.getEyePosition(partialTicks),
-                    player
-                        .getLook(partialTicks)
-                        .scale(OverloadedConfig.INSTANCE.multiToolConfig.reach)
-                        .add(player.getEyePosition(partialTicks)),
-                    RayTraceContext.BlockMode.COLLIDER,
-                    RayTraceContext.FluidMode.NONE,
-                    player));
-
-    return result;
+    return player
+        .getEntityWorld()
+        .rayTraceBlocks(
+            new RayTraceContext(
+                player.getEyePosition(partialTicks),
+                player
+                    .getLook(partialTicks)
+                    .scale(OverloadedConfig.INSTANCE.multiToolConfig.reach)
+                    .add(player.getEyePosition(partialTicks)),
+                RayTraceContext.BlockMode.COLLIDER,
+                RayTraceContext.FluidMode.NONE,
+                player));
   }
 }

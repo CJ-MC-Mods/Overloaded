@@ -9,7 +9,7 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
   private final float max;
 
   public GuiPositiveFloatTextField(
-      FontRenderer fontrendererObj,
+      FontRenderer fontRendererObj,
       int x,
       int y,
       int width,
@@ -17,7 +17,7 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
       float currentValue,
       float min,
       float max) {
-    super(fontrendererObj, x, y, width, height, "");
+    super(fontRendererObj, x, y, width, height, "");
     this.min = min;
     this.max = max;
     this.setValidator(this::floatValidate);

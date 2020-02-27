@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.config.syncer.SyncToClient;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -9,32 +8,26 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class OverloadedConfig {
 
-  public static OverloadedConfig INSTANCE = new OverloadedConfig();
+  @Nonnull
+  public static final OverloadedConfig INSTANCE = new OverloadedConfig();
 
   private final Map<ModConfig.Type, ForgeConfigSpec> configSpecs = Maps.newConcurrentMap();
 
-  @SyncToClient public MultiToolConfig multiToolConfig;
-
-  @SyncToClient public MultiArmorConfig multiArmorConfig;
-
-  @SyncToClient public DevelopmentConfig developmentConfig;
-
-  public ResolutionConfig textureResolutions;
-
-  @SyncToClient public PurifierConfig purifierConfig;
-
-  public SpecialConfig specialConfig;
-
-  @SyncToClient public RayGunConfig rayGun;
-
-  @SyncToClient public RailGunConfig railGun;
-
-  public ProductionConfig productionConfig;
+  public final MultiToolConfig multiToolConfig;
+  public final MultiArmorConfig multiArmorConfig;
+  public final DevelopmentConfig developmentConfig;
+  public final ResolutionConfig textureResolutions;
+  public final PurifierConfig purifierConfig;
+  public final SpecialConfig specialConfig;
+  public final RayGunConfig rayGun;
+  public final RailGunConfig railGun;
+  public final ProductionConfig productionConfig;
 
   private final ImmutableList<ConfigSectionHandler> configsSections;
 
@@ -69,14 +62,14 @@ public class OverloadedConfig {
   }
 
   @SubscribeEvent
-  public static void onConfigRelaoding(ModConfig.Reloading configReloading) {
+  public static void onConfigReloading(ModConfig.Reloading configReloading) {
     INSTANCE.updateConfigs();
   }
 
   public ForgeConfigSpec getConfig(ModConfig.Type type) {
     ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
-    configsSections.stream().forEach(c -> c.appendToBuilder(type, builder));
+    configsSections.forEach(c -> c.appendToBuilder(type, builder));
 
     ForgeConfigSpec spec = builder.build();
     configSpecs.put(type, spec);
@@ -84,6 +77,6 @@ public class OverloadedConfig {
   }
 
   private void updateConfigs() {
-    configsSections.stream().forEach(handler -> handler.update());
+    configsSections.forEach(ConfigSectionHandler::update);
   }
 }

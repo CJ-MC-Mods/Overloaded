@@ -4,7 +4,6 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.proxy.ServerProxy;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModContainer;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +24,7 @@ public class Overloaded {
   public static final String MODID = "overloaded";
   static final String VERSION = "${mod_version}";
 
-  public static CommonProxy proxy =
+  public static final CommonProxy proxy =
       DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
   public static final Logger logger = LogManager.getLogger();

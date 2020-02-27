@@ -4,7 +4,6 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;

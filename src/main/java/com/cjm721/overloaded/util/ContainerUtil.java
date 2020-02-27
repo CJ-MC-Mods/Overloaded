@@ -17,28 +17,28 @@ public final class ContainerUtil {
     ItemStack itemstack = ItemStack.EMPTY;
     final Slot slot = container.inventorySlots.get(index);
     if ((slot != null) && slot.getHasStack()) {
-      final ItemStack itemstack1 = slot.getStack();
-      itemstack = itemstack1.copy();
+      final ItemStack itemStack1 = slot.getStack();
+      itemstack = itemStack1.copy();
 
       final int containerSlots =
           container.inventorySlots.size() - player.inventory.mainInventory.size();
       if (index < containerSlots) {
         if (!mergeItemStack(
-            itemstack1, containerSlots, container.inventorySlots.size(), true, container)) {
+            itemStack1, containerSlots, container.inventorySlots.size(), true, container)) {
           return ItemStack.EMPTY;
         }
-      } else if (!mergeItemStack(itemstack1, 0, containerSlots, false, container)) {
+      } else if (!mergeItemStack(itemStack1, 0, containerSlots, false, container)) {
         return ItemStack.EMPTY;
       }
-      if (itemstack1.getCount() == 0) {
+      if (itemStack1.getCount() == 0) {
         slot.putStack(ItemStack.EMPTY);
       } else {
         slot.onSlotChanged();
       }
-      if (itemstack1.getCount() == itemstack.getCount()) {
+      if (itemStack1.getCount() == itemstack.getCount()) {
         return ItemStack.EMPTY;
       }
-      slot.onTake(player, itemstack1);
+      slot.onTake(player, itemStack1);
     }
     return itemstack;
   }

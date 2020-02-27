@@ -19,7 +19,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 public class BlockCreativeGenerator extends ModBlockTile {
 
   public BlockCreativeGenerator() {
-    super(getDefaultProperties());
+    super(getDefaultProperties().notSolid());
     setRegistryName("creative_generator");
   }
 

@@ -20,7 +20,7 @@ public class OverloadedItemGroups {
         public void fill(NonNullList<ItemStack> items) {
           super.fill(items);
 
-          items.sort(Comparator.<ItemStack, String>comparing(is -> is.getDisplayName().toString()));
+          items.sort(Comparator.comparing(is -> is.getDisplayName().toString()));
         }
       };
 }

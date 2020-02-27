@@ -4,7 +4,6 @@ import com.cjm721.overloaded.block.ModBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
@@ -13,7 +12,6 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -55,10 +53,5 @@ public abstract class AbstractModBlockFacing extends ModBlock {
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-    //    FacingStateMapper stateMapper = new FacingStateMapper(getRegistryName());
-    //        ModelLoader.setCustomStateMapper(this, stateMapper);
   }
 }

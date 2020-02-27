@@ -127,7 +127,7 @@ public class ArmorEventHandler {
           new AttributeModifier(
               groundSpeedAttribute,
               "Ground Speed modifier",
-              (double) groundSpeed,
+              groundSpeed,
               AttributeModifier.Operation.ADDITION));
 
       player.getAttributes().applyAttributeModifiers(multimap);
@@ -143,7 +143,7 @@ public class ArmorEventHandler {
         new AttributeModifier(
             groundSpeedAttribute,
             "Ground Speed modifier",
-            (double) 0.2F,
+            0.2F,
             AttributeModifier.Operation.ADDITION));
 
     player.getAttributes().removeAttributeModifiers(multimap);
@@ -247,8 +247,8 @@ public class ArmorEventHandler {
     FoodStats foodStats = player.getFoodStats();
     int foodLevel = foodStats.getFoodLevel();
     int toFeed = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - foodLevel;
-    float staturationLevel = foodStats.getSaturationLevel();
-    float toAdd = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - staturationLevel;
+    float saturationLevel = foodStats.getSaturationLevel();
+    float toAdd = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - saturationLevel;
 
     if (toFeed > 0
         && extractEnergy(
@@ -290,7 +290,7 @@ public class ArmorEventHandler {
             Math.round(
                 OverloadedConfig.INSTANCE.multiArmorConfig.energyPerTickFlying
                     * flightSpeed
-                    * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplerPerFlightSpeed);
+                    * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerFlightSpeed);
 
     if (player.abilities.isFlying
         && !extractEnergy(player, energyCost, side == LogicalSide.CLIENT)) {
@@ -309,7 +309,7 @@ public class ArmorEventHandler {
   @SubscribeEvent(priority = EventPriority.LOWEST)
   public void onLivingAttackedEvent(LivingAttackEvent event) {
     Entity entity = event.getEntity();
-    if (entity == null || !(entity instanceof PlayerEntity)) return;
+    if (!(entity instanceof PlayerEntity)) return;
 
     PlayerEntity player = ((PlayerEntity) entity);
     boolean setEquipped = isMultiArmorSetEquipped(player);

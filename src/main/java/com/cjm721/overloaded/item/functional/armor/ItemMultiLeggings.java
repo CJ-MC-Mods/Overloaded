@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.item.functional.armor;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.entity.RenderMultiHelmet;
 import com.cjm721.overloaded.client.render.entity.RenderMultiLeggings;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.client.renderer.entity.model.BipedModel;

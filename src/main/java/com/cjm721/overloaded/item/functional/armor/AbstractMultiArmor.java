@@ -192,21 +192,21 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Armor modifier",
-                (double) this.damageReduceAmount,
+                this.damageReduceAmount,
                 AttributeModifier.Operation.ADDITION));
         multimap.put(
             SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(),
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Armor toughness",
-                (double) this.toughness,
+                this.toughness,
                 AttributeModifier.Operation.ADDITION));
         multimap.put(
             SharedMonsterAttributes.MAX_HEALTH.getName(),
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Max Health",
-                this.damageReduceAmount / 2,
+                this.damageReduceAmount / 2.0,
                 AttributeModifier.Operation.ADDITION));
       }
 

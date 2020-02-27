@@ -1,11 +1,8 @@
 package com.cjm721.overloaded.client.render.tile;
 
-import com.cjm721.overloaded.client.render.item.RenderMultiToolAssist;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -41,15 +38,13 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
     PlayerEntity player = te.getWorld().getPlayerByUuid(uuid);
 
     if (player == null) {
-      if (uuid.equals(uuidCache)) {
-        renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
-      } else {
+      if (!uuid.equals(uuidCache)) {
         uuidCache = uuid;
         CompoundNBT tag = new CompoundNBT();
         tag.putString("SkullOwner", uuid.toString());
         stackCache = new ItemStack(Items.PLAYER_HEAD, 1, tag);
-        renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
       }
+      renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
       return;
     }
 

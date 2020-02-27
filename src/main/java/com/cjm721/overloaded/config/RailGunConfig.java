@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.config;
 
-import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -15,7 +14,7 @@ public class RailGunConfig implements ConfigSectionHandler {
   public int stepEnergy;
   private ForgeConfigSpec.IntValue stepEnergySpec;
 
-  @SyncToClient public int maxRange;
+  public int maxRange;
   private ForgeConfigSpec.IntValue maxRangeSpec;
 
   public double damagePerRF;

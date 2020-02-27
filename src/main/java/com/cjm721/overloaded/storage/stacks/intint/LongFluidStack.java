@@ -10,7 +10,7 @@ public class LongFluidStack implements IHyperType<Long> {
   public static final LongFluidStack EMPTY_STACK = new LongFluidStack(null, 0L);
 
   public long amount;
-  public FluidStack fluidStack;
+  public final FluidStack fluidStack;
 
   public LongFluidStack(@Nullable FluidStack fluidStack, long amount) {
     this.fluidStack = fluidStack;

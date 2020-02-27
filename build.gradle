@@ -130,7 +130,7 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
-    compile fg.deobf(project.dependencies.create("curse.maven:mekanism:2873222") {
+    runtime fg.deobf(project.dependencies.create("curse.maven:mekanism:2873222") {
                 transitive = false
             })
 }

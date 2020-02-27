@@ -41,7 +41,7 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
 
     this.font.drawString(
         text,
-        this.guiLeft + this.xSize / 2 - this.font.getStringWidth(text) / 2,
+        this.guiLeft + this.xSize / 2.0f - this.font.getStringWidth(text) / 2.0f,
         this.guiTop + 68,
         0);
   }

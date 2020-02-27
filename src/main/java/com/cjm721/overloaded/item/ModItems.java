@@ -37,7 +37,7 @@ public class ModItems {
   public static ItemMultiLeggings customLeggins;
   public static ItemMultiBoots customBoots;
 
-  private static List<IModRegistrable> registerList = new LinkedList<>();
+  private static final List<IModRegistrable> registerList = new LinkedList<>();
 
   private static ItemSettingEditor settingsEditor;
 

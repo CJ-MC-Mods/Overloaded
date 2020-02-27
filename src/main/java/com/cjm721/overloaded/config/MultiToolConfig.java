@@ -1,12 +1,11 @@
 package com.cjm721.overloaded.config;
 
-import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class MultiToolConfig implements ConfigSectionHandler {
 
-  @SyncToClient public int reach;
+  public int reach;
   public ForgeConfigSpec.IntValue reachSpec;
 
   public int placeBaseCost;

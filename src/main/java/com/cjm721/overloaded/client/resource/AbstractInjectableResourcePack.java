@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class AbstractInjectableResoucePack implements IResourcePack {
+public abstract class AbstractInjectableResourcePack implements IResourcePack {
     public final void inject() {
 
         List<IResourcePack> defaultResourcePacks =

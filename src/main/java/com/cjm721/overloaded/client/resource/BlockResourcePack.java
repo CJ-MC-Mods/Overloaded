@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 @OnlyIn(Dist.CLIENT)
-public class BlockResourcePack extends AbstractInjectableResoucePack {
+public class BlockResourcePack extends AbstractInjectableResourcePack {
 
   public static final BlockResourcePack INSTANCE = new BlockResourcePack();
 

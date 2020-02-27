@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.config;
 
-import com.cjm721.overloaded.config.syncer.SyncToClient;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -45,16 +44,16 @@ public class MultiArmorConfig implements ConfigSectionHandler {
   public int noClipEnergyPerTick;
   private ForgeConfigSpec.IntValue noClipEnergyPerTickSpec;
 
-  @SyncToClient public double maxFlightSpeed;
+  public double maxFlightSpeed;
   private ForgeConfigSpec.DoubleValue maxFlightSpeedSpec;
 
   public int energyPerTickFlying;
   private ForgeConfigSpec.IntValue energyPerTickFlyingSpec;
 
-  public double energyMultiplerPerFlightSpeed;
-  private ForgeConfigSpec.DoubleValue energyMultiplerPerFlightSpeedSpec;
+  public double energyMultiplierPerFlightSpeed;
+  private ForgeConfigSpec.DoubleValue energyMultiplierPerFlightSpeedSpec;
 
-  @SyncToClient public double maxGroundSpeed;
+  public double maxGroundSpeed;
   private ForgeConfigSpec.DoubleValue maxGroundSpeedSpec;
 
   public double energyPerBlockWalked;
@@ -150,10 +149,10 @@ public class MultiArmorConfig implements ConfigSectionHandler {
             .comment("Energy used per tick while flying. [Default:10]")
             .defineInRange("energyPerTickFlying", 10, 0, Integer.MAX_VALUE);
 
-    energyMultiplerPerFlightSpeedSpec =
+    energyMultiplierPerFlightSpeedSpec =
         builder
             .comment("Energy use multiple per flight speed. [Default: 10]")
-            .defineInRange("energyMultiplerPerFlightSpeed", 10, 0, Float.MAX_VALUE);
+            .defineInRange("energyMultiplierPerFlightSpeed", 10, 0, Float.MAX_VALUE);
 
     maxGroundSpeedSpec =
         builder
@@ -190,7 +189,7 @@ public class MultiArmorConfig implements ConfigSectionHandler {
     noClipEnergyPerTick = noClipEnergyPerTickSpec.get();
     maxFlightSpeed = maxFlightSpeedSpec.get();
     energyPerTickFlying = energyPerTickFlyingSpec.get();
-    energyMultiplerPerFlightSpeed = energyMultiplerPerFlightSpeedSpec.get();
+    energyMultiplierPerFlightSpeed = energyMultiplierPerFlightSpeedSpec.get();
     maxGroundSpeed = maxGroundSpeedSpec.get();
     energyPerBlockWalked = energyPerBlockWalkedSpec.get();
     energyMultiplierPerGroundSpeed = energyMultiplierPerGroundSpeedSpec.get();

@@ -54,10 +54,6 @@ public class RenderMultiToolAssist {
     }
   }
 
-  @SubscribeEvent
-  public static void onKeyEvent(InputEvent.KeyInputEvent event) {
-  }
-
   private static void changeHelpMode(int dwheel) {
     AssistMode[] values = AssistMode.values();
     int mode =
@@ -187,9 +183,7 @@ public class RenderMultiToolAssist {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             RenderSystem.colorMask(true, true, true, true);
-          }, () -> {
-            RenderSystem.disableBlend();
-          })).build(true));
+          }, RenderSystem::disableBlend)).build(true));
     }
   }
 }

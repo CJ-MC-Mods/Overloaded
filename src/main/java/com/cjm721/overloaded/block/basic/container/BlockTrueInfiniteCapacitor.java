@@ -1,8 +1,6 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntEnergyStack;
-import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
-import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteCapacitor;
 import com.cjm721.overloaded.tile.infinity.TileTrueInfiniteCapacitor;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;

@@ -14,8 +14,8 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
 
   private final int inputSlots, outputSlots;
   @Nonnull private final IDataUpdate dataUpdate;
-  @Nonnull private NonNullList<ItemStack> input;
-  @Nonnull private NonNullList<ItemStack> output;
+  @Nonnull private final NonNullList<ItemStack> input;
+  @Nonnull private final NonNullList<ItemStack> output;
 
   public ProcessingItemStorage(int inputSlots, int outputSlots, IDataUpdate dataUpdate) {
     this.inputSlots = inputSlots;
