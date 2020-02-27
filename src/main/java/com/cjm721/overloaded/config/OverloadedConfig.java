@@ -2,20 +2,21 @@ package com.cjm721.overloaded.config;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.syncer.SyncToClient;
-import com.electronwill.nightconfig.core.file.CommentedFileConfig;
-import com.electronwill.nightconfig.core.io.WritingMode;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
-import java.nio.file.Path;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class OverloadedConfig {
 
   public static OverloadedConfig INSTANCE = new OverloadedConfig();
+
+  private final Map<ModConfig.Type, ForgeConfigSpec> configSpecs = Maps.newConcurrentMap();
 
   @SyncToClient public MultiToolConfig multiToolConfig;
 
@@ -77,10 +78,12 @@ public class OverloadedConfig {
 
     configsSections.stream().forEach(c -> c.appendToBuilder(type, builder));
 
-    return builder.build();
+    ForgeConfigSpec spec = builder.build();
+    configSpecs.put(type, spec);
+    return spec;
   }
 
   private void updateConfigs() {
-    configsSections.stream().forEach(ConfigSectionHandler::update);
+    configsSections.stream().forEach(handler -> handler.update());
   }
 }

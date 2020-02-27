@@ -77,7 +77,7 @@ public class ItemRayGun extends PowerModItem {
             playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
             playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
             playerIn,
-            128);
+            OverloadedConfig.INSTANCE.railGun.maxRange);
 
     if (ray != null) {
       Overloaded.proxy.networkWrapper.sendToServer(new RayGunMessage(ray.getHitVec()));

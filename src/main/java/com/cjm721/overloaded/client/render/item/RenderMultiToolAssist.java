@@ -90,7 +90,7 @@ public class RenderMultiToolAssist {
     if (player.getHeldItemMainhand().getItem() != ModItems.multiTool) return;
 
     RayTraceResult resultPick =
-        player.pick(128, partialTick, false);
+        player.pick(OverloadedConfig.INSTANCE.multiToolConfig.reach, partialTick, false);
     if (resultPick.getType() == RayTraceResult.Type.MISS || !(resultPick instanceof BlockRayTraceResult)) {
       return;
     }
