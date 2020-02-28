@@ -1,3 +1,8 @@
+**Version: 0.0.86 (BETA)**
+
+* Fix right click report on almost infinity capacitor reporting ratio instead of actually percent.
+
+------------------------------------------------------------------
 **Version: 0.0.85 (BETA)**
 
 * Fix configs not syncing from servers and using their values.
