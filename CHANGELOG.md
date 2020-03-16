@@ -1,3 +1,8 @@
+**Version: 0.0.87 (BETA)**
+
+* Player Interface no longer render's shadow
+
+------------------------------------------------------------------
 **Version: 0.0.86 (BETA)**
 
 * Fix right click report on almost infinity capacitor reporting ratio instead of actually percent.

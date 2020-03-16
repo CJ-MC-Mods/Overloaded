@@ -60,10 +60,12 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
     matrixStack.push();
     long angle = (System.currentTimeMillis() / 10) % 360;
     matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
+    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
     Minecraft.getInstance().getRenderManager().renderEntityStatic(player, 0, 0, 0, 0, Minecraft.getInstance().getRenderPartialTicks(),
         matrixStack,
         iRenderTypeBuffer,
         te.getWorld().getLightFor(LightType.BLOCK, te.getPos()) * 16);
+      Minecraft.getInstance().getRenderManager().setRenderShadow(false);
     matrixStack.pop();
 
     matrixStack.pop();
