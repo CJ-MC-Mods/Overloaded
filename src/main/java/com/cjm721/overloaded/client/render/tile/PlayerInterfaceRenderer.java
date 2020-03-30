@@ -30,7 +30,7 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
   }
 
   @Override
-  public void render(@Nonnull TilePlayerInterface te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+  public void render(@Nonnull TilePlayerInterface te, float v, @Nonnull MatrixStack matrixStack, @Nonnull IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
     UUID uuid = te.getPlacer();
 
     if (uuid == null) return;
@@ -48,10 +48,11 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
       return;
     }
 
-    renderPlayer(te, player, matrixStack, iRenderTypeBuffer);
+    System.out.printf("\r%d %d",combinedLightIn,combinedOverlayIn);
+    renderPlayer(te, player, matrixStack, iRenderTypeBuffer, combinedLightIn);
   }
 
-  private void renderPlayer(TilePlayerInterface te, PlayerEntity player, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
+  private void renderPlayer(TilePlayerInterface te, PlayerEntity player, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int lightLevel) {
     matrixStack.push();
 
     matrixStack.translate(0.5, 0.32, 0.5);
@@ -64,7 +65,7 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
     Minecraft.getInstance().getRenderManager().renderEntityStatic(player, 0, 0, 0, 0, Minecraft.getInstance().getRenderPartialTicks(),
         matrixStack,
         iRenderTypeBuffer,
-        te.getWorld().getLightFor(LightType.BLOCK, te.getPos()) * 16);
+            lightLevel);
       Minecraft.getInstance().getRenderManager().setRenderShadow(false);
     matrixStack.pop();
 

@@ -24,7 +24,7 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
   }
 
   @Override
-  public void render(@Nonnull TileItemInterface te, float v,@Nonnull  MatrixStack matrixStack,@Nonnull  IRenderTypeBuffer iRenderTypeBuffer, int i, int i1) {
+  public void render(@Nonnull TileItemInterface te, float v,@Nonnull  MatrixStack matrixStack,@Nonnull  IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
     ItemStack stack = te.getStoredItem();
 
     if (stack.isEmpty()) return;
@@ -37,7 +37,7 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
     matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
 
     RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, te.getWorld().getLight(te.getPos()) * 16,0, matrixStack, iRenderTypeBuffer);
+    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn,0, matrixStack, iRenderTypeBuffer);
     RenderSystem.disableLighting();
     matrixStack.pop();
     matrixStack.pop();

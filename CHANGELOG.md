@@ -1,6 +1,7 @@
 **Version: 0.0.87 (BETA)**
 
 * Player Interface no longer render's shadow
+* Fix lighting for Item / Player Interface
 
 ------------------------------------------------------------------
 **Version: 0.0.86 (BETA)**
