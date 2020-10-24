@@ -5,6 +5,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -85,7 +86,7 @@ public class PlayerInteractionUtil {
       World world, BlockPos pos, PlayerEntity player, boolean canHarvest) {
     BlockState iblockstate = world.getBlockState(pos);
     boolean flag =
-        iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest, null);
+        iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest, iblockstate.getFluidState());
 
     if (flag) {
       iblockstate.getBlock().onPlayerDestroy(world, pos, iblockstate);

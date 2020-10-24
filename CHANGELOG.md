@@ -2,6 +2,7 @@
 
 * Player Interface no longer render's shadow
 * Fix lighting for Item / Player Interface
+* Fix waterlogged breaking not working. (Fixes #97)
 
 ------------------------------------------------------------------
 **Version: 0.0.86 (BETA)**
