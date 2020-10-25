@@ -130,9 +130,9 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
-    runtime fg.deobf(project.dependencies.create("curse.maven:mekanism:2873222") {
-                transitive = false
-            })
+//    runtime fg.deobf(project.dependencies.create("curse.maven:mekanism:2873222") {
+//                transitive = false
+//            })
 }
 
 version = "${minecraft_version}-${mod_version}"

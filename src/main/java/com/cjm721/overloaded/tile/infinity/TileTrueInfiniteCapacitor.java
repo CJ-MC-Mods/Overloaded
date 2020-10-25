@@ -3,6 +3,7 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.energy.BigIntEnergyStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -26,15 +27,15 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
 
   @Override
   @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
     compound = super.write(compound);
     compound.put("BigIntEnergyStorage", energyStorage.serializeNBT());
     return compound;
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
     if(compound.contains("BigIntEnergyStorage")) {
       energyStorage.deserializeNBT((CompoundNBT) compound.get("BigIntEnergyStorage"));
     }

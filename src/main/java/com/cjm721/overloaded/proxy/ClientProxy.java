@@ -95,8 +95,8 @@ public class ClientProxy extends CommonProxy {
 
   @SubscribeEvent
   public static void clientSetupEvent(FMLClientSetupEvent event) {
-    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.translucent());
-    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.getTranslucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.getTranslucent());
   }
 
   private static void bakeModelAndPut(

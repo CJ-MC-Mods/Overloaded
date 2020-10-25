@@ -2,6 +2,7 @@ package com.cjm721.overloaded.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -11,11 +12,11 @@ public class WorldUtil {
 
   public static RayTraceResult rayTraceWithEntities(
       @Nonnull World world,
-      @Nonnull Vec3d startingLocation,
-      @Nonnull Vec3d direction,
+      @Nonnull Vector3d startingLocation,
+      @Nonnull Vector3d direction,
       @Nonnull Entity excludedEntity,
       double maxDistance) {
-    Vec3d endingLocation = startingLocation.add(direction.scale(maxDistance));
+    Vector3d endingLocation = startingLocation.add(direction.scale(maxDistance));
     BlockRayTraceResult rayTraceResult =
         world.rayTraceBlocks(
             new RayTraceContext(
@@ -27,7 +28,7 @@ public class WorldUtil {
 
     if (rayTraceResult.getType() != RayTraceResult.Type.MISS) {
       endingLocation =
-          new Vec3d(
+          new Vector3d(
               rayTraceResult.getHitVec().x,
               rayTraceResult.getHitVec().y,
               rayTraceResult.getHitVec().z);

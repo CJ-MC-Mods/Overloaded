@@ -2,6 +2,8 @@ package com.cjm721.overloaded.client.gui.button;
 
 import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -15,7 +17,7 @@ public class GenericSlider extends AbstractSlider {
 
   public GenericSlider(
       int x, int y, float minValue, float maxValue, float currentValue, String baseText) {
-    super(x, y, 150, 20, scaleDown(currentValue, minValue, maxValue));
+    super(x, y, 150, 20,new StringTextComponent(baseText), scaleDown(currentValue, minValue, maxValue));
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.baseText = baseText;
@@ -74,11 +76,11 @@ public class GenericSlider extends AbstractSlider {
   ////    }
   //
   private void resetDisplayString() {
-    this.setMessage(String.format("%s %.2f", baseText, getEffectiveValue()));
+    this.setMessage(new StringTextComponent(String.format("%s %.2f", baseText, getEffectiveValue())));
   }
   //
   public double getEffectiveValue() {
-    return scaleUp(this.value, this.minValue, this.maxValue);
+    return scaleUp(this.sliderValue, this.minValue, this.maxValue);
   }
 
   private static double scaleUp(double unScaled, double min, double max) {
@@ -91,15 +93,18 @@ public class GenericSlider extends AbstractSlider {
   }
 
   public void setBasedOnEffectiveValue(float effectiveValue) {
-    this.value = scaleDown(effectiveValue, this.minValue, this.maxValue);
+    this.sliderValue = scaleDown(effectiveValue, this.minValue, this.maxValue);
     resetDisplayString();
   }
 
   @Override
-  protected void updateMessage() {
+  protected void func_230979_b_() {
+    // updateMessage?
     resetDisplayString();
   }
 
   @Override
-  protected void applyValue() {}
+  protected void func_230972_a_() {
+    // applyValue?
+  }
 }

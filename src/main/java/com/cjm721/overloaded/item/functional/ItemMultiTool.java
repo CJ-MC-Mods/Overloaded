@@ -25,14 +25,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -91,7 +88,7 @@ public class ItemMultiTool extends PowerModItem {
   /** @return True if the break was successful, false otherwise */
   @Nonnull
   private static BlockBreakResult breakAndUseEnergy(
-      @Nonnull World worldIn,
+      @Nonnull ServerWorld worldIn,
       @Nonnull BlockPos blockPos,
       @Nonnull IEnergyStorage energy,
       @Nonnull ServerPlayerEntity player,
@@ -157,7 +154,7 @@ public class ItemMultiTool extends PowerModItem {
 
     player.setActiveHand(Hand.MAIN_HAND);
 
-    if (player.func_226296_dJ_()) {
+    if (player.isSneaking()) {
       CompoundNBT tag = itemStack.getTag();
       if (tag == null) {
         tag = new CompoundNBT();
@@ -171,7 +168,7 @@ public class ItemMultiTool extends PowerModItem {
       itemStack.setTag(tag);
       ITextComponent component = stackToPlace.getTextComponent();
       player.sendStatusMessage(
-          new StringTextComponent("Bound tool to ").appendSibling(component), true);
+          new StringTextComponent("Bound tool to ").append(component), true);
     } else {
       LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
       if (!opEnergy.isPresent()) {
@@ -180,7 +177,7 @@ public class ItemMultiTool extends PowerModItem {
       }
 
       // Used to catch item spawn to teleport
-      int worldId = world.getDimension().getType().getId();
+      RegistryKey<World> worldId = world.getDimensionKey();
       CommonSideEvents.enabled = true;
       CommonSideEvents.world = worldId;
       CommonSideEvents.pos = pos;
@@ -248,7 +245,7 @@ public class ItemMultiTool extends PowerModItem {
 
   @Override
   public boolean onBlockDestroyed(
-      ItemStack stack, World worldIn, BlockState state, BlockPos pos, LivingEntity entityLiving) {
+      ItemStack stack, @Nonnull World worldIn, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull LivingEntity entityLiving) {
     LazyOptional<IEnergyStorage> storage = stack.getCapability(ENERGY, null);
 
     if (storage.isPresent()) {
@@ -270,12 +267,12 @@ public class ItemMultiTool extends PowerModItem {
   }
 
   @Override
-  public boolean canHarvestBlock(BlockState blockIn) {
+  public boolean canHarvestBlock(@Nonnull BlockState blockIn) {
     return false;
   }
 
   @Override
-  public float getDestroySpeed(ItemStack stack, BlockState state) {
+  public float getDestroySpeed(@Nonnull ItemStack stack, @Nonnull BlockState state) {
     return 0f;
   }
 
@@ -298,7 +295,7 @@ public class ItemMultiTool extends PowerModItem {
                 (float) result.getHitVec().z - result.getPos().getZ()));
       }
     }
-    return ActionResult.func_226248_a_(player.getHeldItem(hand));
+    return ActionResult.func_233538_a_(player.getHeldItem(hand), true);
   }
 
   public void rightClickWithItem(
@@ -338,8 +335,8 @@ public class ItemMultiTool extends PowerModItem {
     IEnergyStorage energy =
         opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
-    Vec3i sideVector = sideHit.getDirectionVec();
-    BlockPos.Mutable newPosition = new BlockPos.Mutable(pos.add(sideVector));
+    Vector3i sideVector = sideHit.getDirectionVec();
+    BlockPos.Mutable newPosition = pos.add(sideVector).toMutable();
 
     switch (placeBlock(
         blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
@@ -358,7 +355,7 @@ public class ItemMultiTool extends PowerModItem {
       case SUCCESS:
         // Ok Continue
     }
-    if (player.func_226296_dJ_()) {
+    if (player.isSneaking()) {
       BlockPos playerPos = player.getPosition();
       switch (sideHit) {
         case UP:
@@ -415,8 +412,8 @@ public class ItemMultiTool extends PowerModItem {
 
   @Override
   public boolean canPlayerBreakBlockWhileHolding(
-      BlockState p_195938_1_, World p_195938_2_, BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
-    return !p_195938_4_.func_226296_dJ_();
+      @Nonnull BlockState p_195938_1_, @Nonnull World p_195938_2_, @Nonnull BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
+    return !p_195938_4_.isSneaking();
   }
 
   @Nonnull
@@ -439,7 +436,9 @@ public class ItemMultiTool extends PowerModItem {
   @Override
   @Nonnull
   public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-    return super.getDisplayName(stack).applyTextStyle(TextFormatting.GOLD);
+    ITextComponent text = super.getDisplayName(stack);
+    text.getStyle().applyFormatting(TextFormatting.GOLD);
+    return text;
   }
 
   @Mod.EventBusSubscriber(
@@ -480,7 +479,7 @@ public class ItemMultiTool extends PowerModItem {
   public static class CommonSideEvents {
 
     static boolean enabled = false;
-    static int world = 0;
+    static RegistryKey<World> world;
     static BlockPos pos;
     static UUID uuid;
 

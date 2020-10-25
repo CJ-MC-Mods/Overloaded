@@ -2,15 +2,17 @@ package com.cjm721.overloaded.tile.hyperTransfer.base;
 
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 
@@ -23,7 +25,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
   private int delayTicks;
 
   private BlockPos partnerBlockPos;
-  private int partnerWorldID;
+  private RegistryKey<World> partnerWorldID;
 
   private final Capability<H> capability;
 
@@ -41,15 +43,15 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       compound.putInt("X", partnerBlockPos.getX());
       compound.putInt("Y", partnerBlockPos.getY());
       compound.putInt("Z", partnerBlockPos.getZ());
-      compound.putInt("WORLD", partnerWorldID);
+      compound.putString("WORLD", partnerWorldID.getLocation().toString());
     }
 
     return compound;
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
 
     if (compound.contains("X")) {
       int x = compound.getInt("X");
@@ -57,7 +59,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       int z = compound.getInt("Z");
 
       partnerBlockPos = new BlockPos(x, y, z);
-      partnerWorldID = compound.getInt("WORLD");
+      partnerWorldID = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, ResourceLocation.tryCreate(compound.getString("WORLD")));
     }
   }
 
@@ -79,9 +81,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   @Nullable
   private AbstractTileHyperReceiver<T, H> findPartner() {
-    World world =
-        DimensionManager.getWorld(
-            this.getWorld().getServer(), DimensionType.getById(partnerWorldID), false, false);
+    World world = this.getWorld().getServer().getWorld(partnerWorldID);
     if (world != null && world.isBlockLoaded(partnerBlockPos)) {
       TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
 
@@ -145,8 +145,8 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   protected abstract boolean isCorrectPartnerType(TileEntity te);
 
-  public void setPartnerInfo(int partnerWorldId, BlockPos partnerPos) {
-    this.partnerWorldID = partnerWorldId;
+  public void setPartnerInfo(String registryLocation, BlockPos partnerPos) {
+    this.partnerWorldID = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, ResourceLocation.tryCreate(registryLocation));
     this.partnerBlockPos = partnerPos;
   }
 

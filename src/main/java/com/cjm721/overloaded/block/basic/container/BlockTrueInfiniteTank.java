@@ -28,8 +28,8 @@ public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
     } else {
       player.sendStatusMessage(
           new StringTextComponent("Fluid: ")
-              .appendSibling(storedFluid.fluidStack.getDisplayName())
-              .appendText(
+              .append(storedFluid.fluidStack.getDisplayName())
+              .appendString(
                   String.format(
                       " Amount: %,d Bits: %,d",
                       storedFluid.amount, storedFluid.amount.bitLength())),

@@ -23,7 +23,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -94,12 +94,12 @@ public class ItemRailGun extends PowerModItem {
   @Nonnull
   @OnlyIn(Dist.CLIENT)
   public ActionResult<ItemStack> onItemRightClick(
-      World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
+      World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
     if (worldIn.isRemote) {
       int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
-      Vec3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks());
-      Vec3d vec3d1 = playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks());
-      Vec3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
+      Vector3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks());
+      Vector3d vec3d1 = playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks());
+      Vector3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
       AxisAlignedBB axisalignedbb =
           playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
@@ -112,12 +112,12 @@ public class ItemRailGun extends PowerModItem {
               (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(),
               distance * distance);
       if (ray != null) {
-        Vec3d moveVev =
+        Vector3d moveVev =
             playerIn.getEyePosition(1).subtract(ray.getHitVec()).normalize().scale(-1.0);
         Overloaded.proxy.networkWrapper.sendToServer(
             new RailGunFireMessage(ray.getEntity().getEntityId(), moveVev, handIn));
       } else {
-        Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vec3d.ZERO, handIn));
+        Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vector3d.ZERO, handIn));
       }
     }
 
@@ -127,9 +127,9 @@ public class ItemRailGun extends PowerModItem {
   @SubscribeEvent
   public void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    if (event.getScrollDelta() != 0 && player != null && player.func_226296_dJ_()) {
+    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
       ItemStack stack = player.getHeldItemMainhand();
-      if (player.func_226296_dJ_() && !stack.isEmpty() && stack.getItem() == this) {
+      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
         int powerDelta =
             Long.signum(Math.round(event.getScrollDelta()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
@@ -192,7 +192,7 @@ public class ItemRailGun extends PowerModItem {
     } else if (entity.attackEntityFrom(
         DamageSource.causePlayerDamage(player),
         (float) (OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted))) {
-      Vec3d knockback =
+      Vector3d knockback =
           message.moveVector.scale(
               energyExtracted * OverloadedConfig.INSTANCE.railGun.knockbackPerRF);
       entity.addVelocity(knockback.x, knockback.y, knockback.z);

@@ -3,6 +3,7 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -34,8 +35,8 @@ public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidSt
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
 
     if(compound.contains("LongFluidStorage")) {
       fluidStorage.deserializeNBT((CompoundNBT) compound.get("LongFluidStorage"));

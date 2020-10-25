@@ -5,7 +5,6 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
@@ -18,8 +17,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
@@ -36,7 +36,7 @@ import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABI
 
 public class PlayerInteractionUtil {
 
-  public static boolean tryHarvestBlock(ServerPlayerEntity player, World world, BlockPos pos) {
+  public static boolean tryHarvestBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
     int exp =
         net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(
             world, player.interactionManager.getGameType(), player, pos);
@@ -114,7 +114,7 @@ public class PlayerInteractionUtil {
 //    }
 
     BlockSnapshot blockSnapshot =
-        new BlockSnapshot(worldIn, newPosition, worldIn.getBlockState(newPosition));
+        BlockSnapshot.create(worldIn.getDimensionKey(), worldIn, newPosition);
     BlockState placedAgainst =
         blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().offset(facing.getOpposite()));
     BlockEvent.EntityPlaceEvent event =
@@ -157,7 +157,7 @@ public class PlayerInteractionUtil {
             Hand.MAIN_HAND,
             foundStack,
             new BlockRayTraceResult(
-                new Vec3d(
+                new Vector3d(
                     hitX + newPosition.getX(),
                     hitY + newPosition.getY(),
                     hitZ + newPosition.getZ()),

@@ -1,15 +1,15 @@
 package com.cjm721.overloaded.network.packets;
 
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class RayGunMessage {
 
-  public Vec3d vector;
+  public Vector3d vector;
 
   public RayGunMessage() {}
 
-  public RayGunMessage(Vec3d vector) {
+  public RayGunMessage(Vector3d vector) {
     this.vector = vector;
   }
 

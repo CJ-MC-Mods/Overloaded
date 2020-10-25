@@ -43,7 +43,7 @@ public class BlockPlayerInterface extends ModBlockTile {
 
   @Override
   public void onBlockPlacedBy(
-      World world, BlockPos pos, BlockState state, @Nullable LivingEntity entity, ItemStack stack) {
+      World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity entity, @Nonnull ItemStack stack) {
     ((TilePlayerInterface) world.getTileEntity(pos)).setPlacer(entity);
 
     super.onBlockPlacedBy(world, pos, state, entity, stack);
@@ -62,12 +62,12 @@ public class BlockPlayerInterface extends ModBlockTile {
   @Override
   @Nonnull
   public ActionResultType onBlockActivated(
-      BlockState state,
+      @Nonnull BlockState state,
       World world,
-      BlockPos pos,
-      PlayerEntity player,
-      Hand hand,
-      BlockRayTraceResult rayTraceResult) {
+      @Nonnull BlockPos pos,
+      @Nonnull PlayerEntity player,
+      @Nonnull Hand hand,
+      @Nonnull BlockRayTraceResult rayTraceResult) {
     if (!world.isRemote && hand == Hand.MAIN_HAND) {
       TileEntity te = world.getTileEntity(pos);
 
@@ -76,12 +76,12 @@ public class BlockPlayerInterface extends ModBlockTile {
 
         if (placer == null) {
           player.sendMessage(
-              new StringTextComponent("Not bound to anyone..... ghosts placed this."));
+              new StringTextComponent("Not bound to anyone..... ghosts placed this."), player.getUniqueID());
         } else {
           String username = UsernameCache.getLastKnownUsername(placer);
           player.sendMessage(
               new StringTextComponent(
-                  "Bound to player: " + (username == null ? placer.toString() : username)));
+                  "Bound to player: " + (username == null ? placer.toString() : username)), player.getUniqueID());
         }
       }
       return ActionResultType.SUCCESS;
@@ -91,7 +91,7 @@ public class BlockPlayerInterface extends ModBlockTile {
   }
 
   @Override
-  public boolean isTransparent(BlockState state) {
+  public boolean isTransparent(@Nonnull BlockState state) {
     return true;
   }
 }

@@ -5,6 +5,7 @@ import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcesso
 import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -86,12 +87,12 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   }
 
   @Override
-  public void setInventorySlotContents(int index, ItemStack stack) {
+  public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
     processingStorage.setItem(index, stack);
   }
 
   @Override
-  public boolean isUsableByPlayer(PlayerEntity player) {
+  public boolean isUsableByPlayer(@Nonnull PlayerEntity player) {
     // TODO Do I want to make sure the player is nearby?
     return true;
   }
@@ -102,8 +103,8 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
     if (compound.contains("Processor")) {
       processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
     }

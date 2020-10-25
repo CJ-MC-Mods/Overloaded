@@ -7,12 +7,10 @@ import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -60,7 +58,7 @@ public class ArmorEventHandler {
   private static final String set = "set";
   private static final String noClip = "noClip";
   private static final UUID groundSpeedAttribute =
-      UUID.fromString("3248a207-cc70-4fc5-ad06-89cebfbb274e");
+      UUID.fromString("241a8bbe-1660-11eb-adc1-0242ac120002");
 
   @SubscribeEvent
   public void onPlayerTickEvent(@Nonnull TickEvent.PlayerTickEvent event) {
@@ -121,32 +119,21 @@ public class ArmorEventHandler {
                 * (groundSpeed - Default.GROUND_SPEED));
 
     if (extractEnergy(player, Math.round(powerRequired), side == LogicalSide.CLIENT)) {
-      Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-      multimap.put(
-          SharedMonsterAttributes.MOVEMENT_SPEED.getName(),
-          new AttributeModifier(
-              groundSpeedAttribute,
-              "Ground Speed modifier",
-              groundSpeed,
-              AttributeModifier.Operation.ADDITION));
-
-      player.getAttributes().applyAttributeModifiers(multimap);
+      AttributeModifier modifier = new AttributeModifier(
+          groundSpeedAttribute,
+          "Ground Speed modifier",
+          groundSpeed,
+          AttributeModifier.Operation.ADDITION);
+      if(!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(modifier)) {
+        player.getAttribute(Attributes.MOVEMENT_SPEED).applyNonPersistentModifier(modifier);
+      }
     } else {
       disableGroundSpeed(player, side);
     }
   }
 
   private void disableGroundSpeed(PlayerEntity player, LogicalSide side) {
-    Multimap<String, AttributeModifier> multimap = HashMultimap.create();
-    multimap.put(
-        SharedMonsterAttributes.MOVEMENT_SPEED.getName(),
-        new AttributeModifier(
-            groundSpeedAttribute,
-            "Ground Speed modifier",
-            0.2F,
-            AttributeModifier.Operation.ADDITION));
-
-    player.getAttributes().removeAttributeModifiers(multimap);
+    player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(groundSpeedAttribute);
   }
 
   private void disableNoClip(PlayerEntity player, IGenericDataStorage dataStorage) {
@@ -335,7 +322,9 @@ public class ArmorEventHandler {
       // Overflow
       if (energyCost < 0) return;
 
-      if (extractEnergy(player, energyCost, false)) event.setCanceled(true);
+      if (extractEnergy(player, energyCost, false)) {
+        event.setCanceled(true);
+      }
     }
   }
 

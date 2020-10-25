@@ -1,3 +1,8 @@
+**Version: 0.0.88 (BETA)**
+
+* Update to 1.16.3 Shouldn't be any crashes but still some rendering weirdness
+
+------------------------------------------------------------------
 **Version: 0.0.87 (BETA)**
 
 * Player Interface no longer render's shadow

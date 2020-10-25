@@ -51,8 +51,8 @@ public class BlockAlmostInfiniteBarrel extends AbstractBlockHyperContainer {
     } else {
       player.sendStatusMessage(
           new StringTextComponent("Item: ")
-              .appendSibling(stack.getItemStack().getTextComponent())
-              .appendText(String.format(" Amount %,d", stack.getAmount())),
+              .append(stack.getItemStack().getTextComponent())
+              .appendString(String.format(" Amount %,d", stack.getAmount())),
           false);
     }
   }

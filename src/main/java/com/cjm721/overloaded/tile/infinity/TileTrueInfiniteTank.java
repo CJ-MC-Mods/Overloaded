@@ -3,6 +3,7 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.fluid.BigIntFluidStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -26,15 +27,15 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidSt
 
   @Override
   @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT write(@Nonnull CompoundNBT compound) {
     compound = super.write(compound);
     compound.put("BigIntFluidStorage", fluidStorage.serializeNBT());
     return compound;
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
 
     if(compound.contains("BigIntFluidStorage")) {
       fluidStorage.deserializeNBT((CompoundNBT) compound.get("BigIntFluidStorage"));

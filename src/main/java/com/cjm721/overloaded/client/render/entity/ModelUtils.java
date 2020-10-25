@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -22,7 +22,7 @@ class ModelUtils implements IResourceManagerReloadListener {
     Tessellator tessellator = Tessellator.getInstance();
     BufferBuilder vertexbuffer = tessellator.getBuffer();
     int i = 0;
-    vertexbuffer.begin(7, DefaultVertexFormats.ITEM);
+    vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
     for (int j = listQuads.size(); i < j; ++i) {
       BakedQuad bakedquad = listQuads.get(i);
 
@@ -30,7 +30,7 @@ class ModelUtils implements IResourceManagerReloadListener {
 
       vertexbuffer.color(1,1,1,1);
 
-      Vec3i vec3i = bakedquad.getFace().getDirectionVec();
+      Vector3i vec3i = bakedquad.getFace().getDirectionVec();
       vertexbuffer.normal((float) vec3i.getX(), (float) vec3i.getY(), (float) vec3i.getZ());
     }
     tessellator.draw();

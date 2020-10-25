@@ -100,8 +100,8 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
     } else {
       player.sendStatusMessage(
           new StringTextComponent("Fluid: ")
-              .appendSibling(storedFluid.fluidStack.getDisplayName())
-              .appendText(String.format(" Amount: %,d", storedFluid.amount)),
+              .append(storedFluid.fluidStack.getDisplayName())
+              .appendString(String.format(" Amount: %,d", storedFluid.amount)),
           false);
     }
   }

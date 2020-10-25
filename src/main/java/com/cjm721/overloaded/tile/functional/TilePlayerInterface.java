@@ -1,6 +1,7 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -40,14 +41,14 @@ public class TilePlayerInterface extends TileEntity {
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.read(pkt.getNbtCompound());
+    this.read(this.getBlockState(), pkt.getNbtCompound());
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT compound) {
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
     if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
 
-    super.read(compound);
+    super.read(state, compound);
   }
 
   @Override

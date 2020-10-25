@@ -6,11 +6,13 @@ import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import com.cjm721.overloaded.util.IModRegistrable;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.IArmorMaterial;
@@ -86,6 +88,11 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
         public float getToughness() {
           return 100;
         }
+
+        @Override
+        public float getKnockbackResistance() {
+          return 100;
+        }
       };
 
   AbstractMultiArmor(EquipmentSlotType equipmentSlot) {
@@ -105,7 +112,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
   @OnlyIn(Dist.CLIENT)
   @Override
   public void addInformation(
-      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+      ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
     stack
         .getCapability(ENERGY)
         .ifPresent(
@@ -175,38 +182,38 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 
   @Override
   @Nonnull
-  public Multimap<String, AttributeModifier> getAttributeModifiers(
+  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
       @Nullable EquipmentSlotType equipmentSlot) {
     return HashMultimap.create();
   }
 
   @Override
-  public Multimap<String, AttributeModifier> getAttributeModifiers(
+  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
       EquipmentSlotType slot, ItemStack stack) {
     if (hasPower(stack)) {
-      Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot);
+      Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create(super.getAttributeModifiers(slot));
 
       if (slot == this.getEquipmentSlot()) {
         multimap.put(
-            SharedMonsterAttributes.ARMOR.getName(),
+            Attributes.ARMOR,
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Armor modifier",
-                this.damageReduceAmount,
+                this.getDamageReduceAmount(),
                 AttributeModifier.Operation.ADDITION));
         multimap.put(
-            SharedMonsterAttributes.ARMOR_TOUGHNESS.getName(),
+            Attributes.ARMOR_TOUGHNESS,
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Armor toughness",
-                this.toughness,
+                this.getDamageReduceAmount(),
                 AttributeModifier.Operation.ADDITION));
         multimap.put(
-            SharedMonsterAttributes.MAX_HEALTH.getName(),
+            Attributes.MAX_HEALTH,
             new AttributeModifier(
                 ARMOR_MODIFIERS[slot.getIndex()],
                 "Max Health",
-                this.damageReduceAmount / 2.0,
+                this.getDamageReduceAmount() / 2.0,
                 AttributeModifier.Operation.ADDITION));
       }
 
@@ -223,11 +230,13 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
   @Override
   @Nonnull
   public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-    return super.getDisplayName(stack).applyTextStyle(TextFormatting.GOLD);
+    ITextComponent name = super.getDisplayName(stack);
+    name.getStyle().applyFormatting(TextFormatting.GOLD);
+    return name;
   }
 
   @Override
-  public boolean hasEffect(ItemStack stack) {
+  public boolean hasEffect(@Nonnull ItemStack stack) {
     return false;
   }
 }

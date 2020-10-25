@@ -2,6 +2,7 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -43,7 +44,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
   }
 
   @Override
-  public void read(CompoundNBT compound) {
+  public void read(@Nonnull BlockState state, CompoundNBT compound) {
     if (compound.contains("Item")) {
       itemStack.deserializeNBT((CompoundNBT) compound.get("Item"));
     }
@@ -73,7 +74,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
     FakePlayer player = getPlayer();
 
-    BlockPos.Mutable blockPos = new BlockPos.Mutable(this.getPos());
+    BlockPos.Mutable blockPos = this.getPos().toMutable();
     //        for (int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
     //            if (!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
     //                EnumActionResult result = currentItem.getItem().onItemUse(player, getWorld(),

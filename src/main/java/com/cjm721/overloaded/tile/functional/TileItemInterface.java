@@ -36,10 +36,10 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
   }
 
   @Override
-  public void read(@Nonnull CompoundNBT compound) {
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
     storedItem = ItemStack.read((CompoundNBT) compound.get("StoredItem"));
 
-    super.read(compound);
+    super.read(state, compound);
   }
 
   @Override
@@ -59,7 +59,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.read(pkt.getNbtCompound());
+    this.read(this.getBlockState(), pkt.getNbtCompound());
   }
 
   @Override

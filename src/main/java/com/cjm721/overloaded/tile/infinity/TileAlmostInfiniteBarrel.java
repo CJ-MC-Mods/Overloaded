@@ -4,6 +4,7 @@ import com.cjm721.overloaded.storage.item.LongItemStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
@@ -33,8 +34,8 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
 
     if(compound.contains("LongItemStorage")) {
       itemStorage.deserializeNBT((CompoundNBT) compound.get("LongItemStorage"));

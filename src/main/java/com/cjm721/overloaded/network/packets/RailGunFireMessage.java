@@ -2,17 +2,17 @@ package com.cjm721.overloaded.network.packets;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class RailGunFireMessage {
 
   public int id;
-  public Vec3d moveVector;
+  public Vector3d moveVector;
   public Hand hand;
 
   public RailGunFireMessage() {}
 
-  public RailGunFireMessage(int id, Vec3d vector, Hand hand) {
+  public RailGunFireMessage(int id, Vector3d vector, Hand hand) {
     this.id = id;
     this.moveVector = vector;
     this.hand = hand;

@@ -16,7 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(value = Overloaded.MODID)
+@Mod(Overloaded.MODID)
 public class Overloaded {
 
   public static Overloaded instance;

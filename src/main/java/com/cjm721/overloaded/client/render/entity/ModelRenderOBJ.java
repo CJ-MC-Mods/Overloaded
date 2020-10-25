@@ -10,6 +10,7 @@ import net.minecraft.util.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
@@ -23,13 +24,13 @@ public class ModelRenderOBJ extends ModelRenderer {
     }
 
     @Override
-    public void render(MatrixStack matrix, IVertexBuilder vertex, int light, int overlay, float r, float g, float b, float a) {
+    public void render(@Nonnull MatrixStack matrix, @Nonnull IVertexBuilder vertex, int light, int overlay, float r, float g, float b, float a) {
         if(this.showModel) {
             matrix.push();
-            vertex = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(RenderType.cutout());
+            vertex = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(RenderType.getCutout());
             this.renderModel(objModel, ItemStack.EMPTY, light, overlay, matrix, vertex);
             matrix.pop();
-            Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(RenderType.cutout());
+            Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(RenderType.getCutout());
         }
     }
 

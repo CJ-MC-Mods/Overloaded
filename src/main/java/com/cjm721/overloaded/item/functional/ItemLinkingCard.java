@@ -37,11 +37,11 @@ public class ItemLinkingCard extends ModItem {
       int x = tag.getInt("X");
       int y = tag.getInt("Y");
       int z = tag.getInt("Z");
-      int worldID = tag.getInt("WORLD");
+      String worldID = tag.getString("WORLD");
 
       tooltip.add(
           new StringTextComponent(
-              String.format("Bound to %s at %d:%d,%d,%d", type, worldID, x, y, z)));
+              String.format("Bound to %s at %s: %d,%d,%d", type, worldID, x, y, z)));
     }
     super.addInformation(stack, worldIn, tooltip, flagIn);
   }

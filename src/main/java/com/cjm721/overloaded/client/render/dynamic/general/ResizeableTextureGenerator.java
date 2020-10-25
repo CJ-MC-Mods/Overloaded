@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
@@ -28,9 +29,9 @@ public class ResizeableTextureGenerator {
     }
   }
 
-//  @SubscribeEvent
+  @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
-    if (!event.getMap().getBasePath().equals("textures")) {
+    if (!event.getMap().getTextureLocation().getPath().equals("textures")) {
       return;
     }
 

@@ -29,8 +29,8 @@ public class BlockTrueInfiniteBarrel extends AbstractBlockHyperContainer {
     } else {
       player.sendStatusMessage(
           new StringTextComponent("Item: ")
-              .appendSibling(stack.itemStack.getTextComponent())
-              .appendText(
+              .append(stack.itemStack.getTextComponent())
+              .appendString(
                   String.format(
                       " Amount %,d Bits: %,d", stack.getAmount(), stack.getAmount().bitLength())),
           false);

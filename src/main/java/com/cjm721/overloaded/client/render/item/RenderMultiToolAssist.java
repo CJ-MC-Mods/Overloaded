@@ -43,9 +43,9 @@ public class RenderMultiToolAssist {
   public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
 
-    if (event.getScrollDelta() != 0 && player != null && player.func_226296_dJ_()) {
+    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
       ItemStack stack = player.getHeldItemMainhand();
-      if (player.func_226296_dJ_() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
+      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
         changeHelpMode((int) Math.round(event.getScrollDelta()));
         player.sendStatusMessage(
             new StringTextComponent("Assist Mode: " + getAssistMode().getName()), true);
@@ -173,13 +173,13 @@ public class RenderMultiToolAssist {
     }
 
     public static RenderType getInstance() {
-      return get("ghost_model",
+      return makeType("ghost_model",
           DefaultVertexFormats.BLOCK,
           7,
           262144,
           true,
           true,
-          State.builder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_DISABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
+          State.getBuilder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_DISABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             RenderSystem.colorMask(true, true, true, true);

@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -74,7 +74,7 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
   //    }
 
   private Direction getFront(LivingEntity placer) {
-    Vec3d lookVec = placer.getLookVec();
+    Vector3d lookVec = placer.getLookVec();
     return Direction.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
   }
 

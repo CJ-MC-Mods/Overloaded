@@ -2,6 +2,7 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.ModTiles;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -41,7 +42,7 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
 
     if (stack.isEmpty()) return;
 
-    float hardness = ((BlockItem) stack.getItem()).getBlock().getBlockHardness(null, null, null);
+    float hardness = ((BlockItem) stack.getItem()).getBlock().getDefaultState().getBlockHardness(null, null);
     if (hardness <= 0) return;
 
     float ecFloat =
@@ -70,8 +71,8 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
   }
 
   @Override
-  public void read(CompoundNBT compound) {
-    super.read(compound);
+  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.read(state, compound);
 //    fluidStorage.readFromNBT((CompoundNBT) compound.get("Fluid"));
     energyStorage =
         new EnergyStorage(compound.getInt("Energy"), Integer.MAX_VALUE, Integer.MAX_VALUE);

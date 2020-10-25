@@ -2,6 +2,7 @@ package com.cjm721.overloaded.client.gui.button;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.util.text.StringTextComponent;
 
 public class GuiPositiveFloatTextField extends TextFieldWidget {
 
@@ -17,7 +18,7 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
       float currentValue,
       float min,
       float max) {
-    super(fontRendererObj, x, y, width, height, "");
+    super(fontRendererObj, x, y, width, height, new StringTextComponent(""));
     this.min = min;
     this.max = max;
     this.setValidator(this::floatValidate);

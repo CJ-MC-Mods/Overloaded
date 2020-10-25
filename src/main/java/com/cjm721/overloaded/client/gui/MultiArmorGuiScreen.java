@@ -10,6 +10,7 @@ import com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
 import com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Default;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
@@ -20,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.LazyOptional;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
@@ -45,9 +47,9 @@ public class MultiArmorGuiScreen extends Screen {
   }
 
   @Override
-  public void render(int mouseX, int mouseY, float partialTicks) {
-    this.renderBackground();
-    super.render(mouseX, mouseY, partialTicks);
+  public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+    this.renderBackground(matrixStack);
+    super.render(matrixStack, mouseX, mouseY, partialTicks);
   }
 
   @Override
@@ -79,7 +81,7 @@ public class MultiArmorGuiScreen extends Screen {
                 this.height / 4 + 100,
                 150,
                 20,
-                "Save",
+                new StringTextComponent("Save"),
                 b -> {
                   MultiArmorSettingsMessage message =
                       new MultiArmorSettingsMessage(
@@ -101,7 +103,7 @@ public class MultiArmorGuiScreen extends Screen {
                 this.height / 4 + 100,
                 150,
                 20,
-                "Cancel",
+                new StringTextComponent("Cancel"),
                 b -> this.minecraft.displayGuiScreen(null)));
 
     float flightSpeedValue = floats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
@@ -120,7 +122,7 @@ public class MultiArmorGuiScreen extends Screen {
             this.flightSpeed.x,
             this.flightSpeed.y,
             this.flightSpeed.getWidth(),
-            this.flightSpeed.getHeight(),
+            this.flightSpeed.getHeightRealms(),
             flightSpeedValue,
             0,
             (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxFlightSpeed));
@@ -149,7 +151,7 @@ public class MultiArmorGuiScreen extends Screen {
             this.groundSpeed.x,
             this.groundSpeed.y,
             this.groundSpeed.getWidth(),
-            this.groundSpeed.getHeight(),
+            this.groundSpeed.getHeightRealms(),
             groundSpeedValue,
             0,
             (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxGroundSpeed));
