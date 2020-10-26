@@ -25,7 +25,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
     @Override
     @Nonnull
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (player.getActiveHand() == Hand.MAIN_HAND) {
+        if (hand == Hand.MAIN_HAND) {
             ItemStack heldItem = player.getHeldItem(hand);
             if (heldItem.isEmpty()) {
                 // SubIf so that Else block does not also need to check for heldItem == null
@@ -34,6 +34,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                     String message = ((AbstractTileHyperSender) world.getTileEntity(pos)).getRightClickMessage();
                     player.sendStatusMessage(new StringTextComponent(message), false);
                 }
+              return ActionResultType.SUCCESS;
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 CompoundNBT tag = heldItem.getTag();
                 if (tag != null) {
@@ -53,8 +54,8 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                         }
                     }
                 }
+              return ActionResultType.SUCCESS;
             }
-            return ActionResultType.CONSUME;
         }
 
         return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);

@@ -3,6 +3,7 @@
 * Expand Instant Furance GUI to not cutoff text
 * Cleanup Hyper Sender text output
 * Fix MultiTool always saying unable to place
+* Fix Hyper Sender consuming any item touched on it
 
 ------------------------------------------------------------------
 **Version: 0.0.89 (BETA)**
