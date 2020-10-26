@@ -1,5 +1,10 @@
 **Version: 0.0.88 (BETA)**
 
+* Fancy Armor models now load (still don't look right)
+
+------------------------------------------------------------------
+**Version: 0.0.88 (BETA)**
+
 * Update to 1.16.3 Shouldn't be any crashes but still some rendering weirdness
 
 ------------------------------------------------------------------

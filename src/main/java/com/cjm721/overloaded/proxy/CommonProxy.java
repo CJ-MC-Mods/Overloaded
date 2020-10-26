@@ -1,6 +1,5 @@
 package com.cjm721.overloaded.proxy;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage;
 import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
@@ -25,9 +24,8 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 import java.util.LinkedList;
@@ -35,7 +33,6 @@ import java.util.List;
 
 import static net.minecraftforge.fml.network.NetworkRegistry.newSimpleChannel;
 
-@Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
   public SimpleChannel networkWrapper;
 
@@ -115,30 +112,35 @@ public class CommonProxy {
     MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
   }
 
-  @SubscribeEvent
-  public static void registerFluids(RegistryEvent.Register<Fluid> event) {
+  public void registerEvents() {
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Fluid.class, this::registerFluids);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::registerBlocks);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::registerTileEntity);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
+  }
+
+  private void registerFluids(RegistryEvent.Register<Fluid> event) {
     ModFluids.init(event.getRegistry());
   }
 
-  @SubscribeEvent
-  public static void registerBlocks(RegistryEvent.Register<Block> event) {
+  private void registerBlocks(RegistryEvent.Register<Block> event) {
     ModBlocks.init(event.getRegistry());
   }
 
-  @SubscribeEvent
-  public static void registerItems(RegistryEvent.Register<Item> event) {
+  private void registerItems(RegistryEvent.Register<Item> event) {
     ModItems.init();
 
     event.getRegistry().registerAll(itemToRegister.toArray(new Item[0]));
   }
 
-  @SubscribeEvent
-  public static void registerTileEntity(RegistryEvent.Register<TileEntityType<?>> event) {
+  private void registerTileEntity(RegistryEvent.Register<TileEntityType<?>> event) {
     ModTiles.init(event.getRegistry());
   }
 
-  @SubscribeEvent
-  public static void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
+  private void registerContainers(RegistryEvent.Register<ContainerType<?>> event) {
     ModContainers.init(event.getRegistry());
   }
+
+
 }

@@ -1,5 +1,6 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.gui.InstantFurnaceScreen;
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
@@ -27,6 +28,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -40,14 +42,19 @@ public class ClientProxy extends CommonProxy {
   public KeyBinding railGun100x;
 
   @Override
-  public void commonSetup(FMLCommonSetupEvent event) {
-    super.commonSetup(event);
+  public void registerEvents() {
+    super.registerEvents();
+
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerModels);
+    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modelBakeEvent);
 
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
     FMLJavaModLoadingContext.get().getModEventBus().register(new ResizeableTextureGenerator());
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::registerModels);
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::modelBakeEvent);
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientProxy::clientSetupEvent);
+  }
+
+  @Override
+  public void commonSetup(FMLCommonSetupEvent event) {
+    super.commonSetup(event);
 
     noClipKeybind = new KeyBinding("overloaded.key.noclip", 'v', "overloaded.cat.key");
     railGun100x = new KeyBinding("overloaded.key.railgun100x", 341, "overloaded.cat.key");
@@ -64,10 +71,12 @@ public class ClientProxy extends CommonProxy {
     ClientRegistry.bindTileEntityRenderer(ModTiles.playerInterface, PlayerInterfaceRenderer::new);
 
     ScreenManager.registerFactory(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
+
+    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.getTranslucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.getTranslucent());
   }
 
-  @SubscribeEvent
-  public static void registerModels(ModelRegistryEvent event) {
+  private void registerModels(ModelRegistryEvent event) {
     //    OBJLoader.INSTANCE.addDomain(MODID);
     //    OBJLoader.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
     BlockResourcePack.INSTANCE.addDomain(MODID);
@@ -85,18 +94,11 @@ public class ClientProxy extends CommonProxy {
     ModItems.registerModels();
   }
 
-  @SubscribeEvent
-  public static void modelBakeEvent(ModelBakeEvent event) {
+  private void modelBakeEvent(ModelBakeEvent event) {
     bakeModelAndPut(
         new ResourceLocation(MODID, "block/remove_preview"),
         new ModelResourceLocation(MODID + ":remove_preview", ""),
         event);
-  }
-
-  @SubscribeEvent
-  public static void clientSetupEvent(FMLClientSetupEvent event) {
-    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.getTranslucent());
-    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.getTranslucent());
   }
 
   private static void bakeModelAndPut(
