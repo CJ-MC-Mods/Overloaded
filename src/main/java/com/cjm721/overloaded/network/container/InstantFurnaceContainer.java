@@ -68,7 +68,7 @@ public class InstantFurnaceContainer extends ModContainer {
     int slotCount = 0;
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
-        this.addSlot(new SlotItemHandler(handler, slotCount++, 8 + j * 18, 8 + i * 18));
+        this.addSlot(new SlotItemHandler(handler, slotCount++, 8 + j * 18, 20 + i * 18));
       }
     }
 
@@ -76,18 +76,18 @@ public class InstantFurnaceContainer extends ModContainer {
       for (int j = 0; j < 3; ++j) {
         this.addSlot(
             new FurnaceResultSlot(
-                playerInventory.player, instanceFurnace, slotCount++, 116 + j * 18, 8 + i * 18));
+                playerInventory.player, instanceFurnace, slotCount++, 116 + j * 18, 20 + i * 18));
       }
     }
 
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 9; ++j) {
-        this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+        this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 108 + i * 18));
       }
     }
 
     for (int k = 0; k < 9; ++k) {
-      this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 142));
+      this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 166));
     }
 
     this.trackInt(power).set(getPowerFromTE());

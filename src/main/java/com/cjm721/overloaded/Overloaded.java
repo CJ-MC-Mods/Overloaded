@@ -1,9 +1,5 @@
 package com.cjm721.overloaded;
 
-import com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage;
-import com.cjm721.overloaded.capabilities.CapabilityHyperEnergy;
-import com.cjm721.overloaded.capabilities.CapabilityHyperFluid;
-import com.cjm721.overloaded.capabilities.CapabilityHyperItem;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.proxy.CommonProxy;

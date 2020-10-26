@@ -21,6 +21,8 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
   public InstantFurnaceScreen(
       InstantFurnaceContainer container, PlayerInventory playerInventory, ITextComponent name) {
     super(container, playerInventory, name);
+    this.ySize += 24;
+    this.playerInventoryTitleY += 24;
   }
 
   @Override
@@ -38,14 +40,14 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
 
     double percent = this.container.getPowerFromTE() / (double) this.container.getMaxPowerFromTE();
 
-    this.blit(matrixStack, this.guiLeft + 8, this.guiTop + 67, 0, 170, (int) Math.round(percent * 160), 10);
+    this.blit(matrixStack, this.guiLeft + 8, this.guiTop + 79, 0, 194, (int) Math.round(percent * 160), 10);
 
     String text = String.format("%,.2f%%", percent * 100);
 
     this.font.drawString(matrixStack,
         text,
         this.guiLeft + this.xSize / 2.0f - this.font.getStringWidth(text) / 2.0f,
-        this.guiTop + 68,
+        this.guiTop + 80,
         0);
   }
 }

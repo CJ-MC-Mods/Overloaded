@@ -1,3 +1,8 @@
+**Version: 0.0.90 (BETA)**
+
+* Expand Instant Furance GUI to not cutoff text
+
+------------------------------------------------------------------
 **Version: 0.0.89 (BETA)**
 
 * Fancy Armor models now load (still don't look right)
