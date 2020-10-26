@@ -5,6 +5,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
+import javax.annotation.Nonnull;
 import java.util.Comparator;
 
 public class OverloadedItemGroups {
@@ -17,7 +18,7 @@ public class OverloadedItemGroups {
         }
 
         @Override
-        public void fill(NonNullList<ItemStack> items) {
+        public void fill(@Nonnull NonNullList<ItemStack> items) {
           super.fill(items);
 
           items.sort(Comparator.comparing(is -> is.getDisplayName().toString()));

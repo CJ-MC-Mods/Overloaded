@@ -28,7 +28,7 @@ import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABI
 
 public class TileItemManipulator extends TileEntity implements ITickableTileEntity {
 
-  private static GameProfile FAKEPLAYER =
+  private static final GameProfile FAKEPLAYER =
       new GameProfile(
           UUID.fromString("85824917-23F6-4B28-8B12-FAED16A3F66B"), "[Overloaded:Item_Manipulator]");
 
