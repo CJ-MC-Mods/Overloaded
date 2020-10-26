@@ -1,6 +1,7 @@
 **Version: 0.0.88 (BETA)**
 
 * Fancy Armor models now load (still don't look right)
+* Fix an error on right clicking transfer nodes.
 
 ------------------------------------------------------------------
 **Version: 0.0.88 (BETA)**

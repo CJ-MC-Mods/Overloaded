@@ -154,7 +154,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
   public String getRightClickMessage() {
     if (partnerBlockPos != null) {
       return String.format(
-          "Bound to Receiver at %d:%d,%d,%d",
+          "Bound to Receiver at %s %d,%d,%d",
           partnerWorldID, partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
     }
     return "Not bound to anything";
