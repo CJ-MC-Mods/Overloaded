@@ -1,6 +1,7 @@
 **Version: 0.0.90 (BETA)**
 
 * Expand Instant Furance GUI to not cutoff text
+* Cleanup Hyper Sender text output
 
 ------------------------------------------------------------------
 **Version: 0.0.89 (BETA)**

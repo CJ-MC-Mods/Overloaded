@@ -155,7 +155,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     if (partnerBlockPos != null) {
       return String.format(
           "Bound to Receiver at %s %d,%d,%d",
-          partnerWorldID, partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
+          partnerWorldID.getLocation(), partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
     }
     return "Not bound to anything";
   }
