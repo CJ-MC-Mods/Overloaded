@@ -168,6 +168,7 @@ public class PlayerInteractionUtil {
     ActionResultType result = ForgeHooks.onPlaceItemIntoWorld(context);
 
     switch (result) {
+      case CONSUME:
       case SUCCESS:
         SoundType soundtype =
             worldIn
