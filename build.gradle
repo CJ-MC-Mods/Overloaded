@@ -44,15 +44,8 @@ idea{
 
 repositories  {
     maven {
-        name 'tterrag maven'
-        url "http://maven.tterrag.com/"
-    }
-    maven {
         name = "CoFH Maven"
         url = "http://maven.covers1624.net"
-    }
-    maven {
-        url "http://tehnut.info/maven"
     }
 }
 
@@ -133,6 +126,9 @@ dependencies {
     runtime fg.deobf(project.dependencies.create("curse.maven:jei:3078092") {
         transitive = false
     })
+    runtime fg.deobf(project.dependencies.create("curse.maven:simple-storage-network:3117600") {
+        transitive = false
+    })
 }
 
 version = "${minecraft_version}-${mod_version}"
@@ -188,6 +184,6 @@ curseforge {
         changelog = file('CHANGELOG.md') // A file can also be set using: changelog = file('changelog.txt')
         changelogType = 'markdown'
         releaseType = 'beta'
-        gameVersionStrings = ['1.16.3','1.16.4']
+        gameVersionStrings = ['1.16.3','1.16.4','1.16.5']
     }
 }
