@@ -63,7 +63,7 @@ public class ArmorEventHandler {
   @SubscribeEvent
   public void onPlayerTickEvent(@Nonnull TickEvent.PlayerTickEvent event) {
     PlayerEntity player = event.player;
-    if (player == null) return;
+    if (player == null || player.dead) return;
 
     IGenericDataStorage playerDataStorage = getPlayerDataStorage(player);
 

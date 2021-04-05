@@ -1,3 +1,15 @@
+**Version: 0.0.92 (BETA)**
+
+* Make Armor Event Handler more defensive in its state checks (ticking while dead #105)
+* Add 1.16.5 to curse acceptable version list
+
+
+------------------------------------------------------------------
+**Version: 0.0.91 (BETA)**
+
+* Player interface still had some debug print statements enabled
+
+------------------------------------------------------------------
 **Version: 0.0.90 (BETA)**
 
 * Expand Instant Furance GUI to not cutoff text
