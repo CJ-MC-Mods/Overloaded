@@ -49,8 +49,6 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
       renderItem(te, stackCache, matrixStack, iRenderTypeBuffer);
       return;
     }
-
-    System.out.printf("\r%d %d",combinedLightIn,combinedOverlayIn);
     renderPlayer(te, player, matrixStack, iRenderTypeBuffer, combinedLightIn);
   }
 
