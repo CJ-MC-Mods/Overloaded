@@ -265,9 +265,9 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     if (slot < slots && slot < input.size()) {
       return input.get(slot).getMaxStackSize();
     } else if (slot >= slots && slot - slots < output.size()) {
-      return output.get(slot).getMaxStackSize();
+      return output.get(slot - slots).getMaxStackSize();
     }
-    return ItemStack.EMPTY.getMaxStackSize();
+    return 64; // Magic Number from Vanilla Minecraft. Zero would make more sense
   }
 
   @Override

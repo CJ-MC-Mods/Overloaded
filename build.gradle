@@ -117,9 +117,9 @@ jar {
 }
 
 dependencies {
-    testCompile 'junit:junit:4.12'
-    testCompile "org.mockito:mockito-core:+"
-    testCompile "com.google.truth:truth:+"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:+"
+    testImplementation "com.google.truth:truth:+"
 
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
