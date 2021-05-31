@@ -265,7 +265,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     if (slot < slots && slot < input.size()) {
       return input.get(slot).getMaxStackSize();
     } else if (slot >= slots && slot - slots < output.size()) {
-      return output.get(slot).getMaxStackSize();
+      return output.get(slot - slots).getMaxStackSize();
     }
     return ItemStack.EMPTY.getMaxStackSize();
   }
