@@ -1,3 +1,8 @@
+**Version: 0.0.94 (BETA)**
+
+* Fix weird compatability error with Storage Networks. Had a bad localization entry (#103)
+
+------------------------------------------------------------------
 **Version: 0.0.93 (BETA)**
 
 * Fix out of bounds error in instant furance (#106)
