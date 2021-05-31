@@ -1,8 +1,12 @@
+**Version: 0.0.93 (BETA)**
+
+* Fix out of bounds error in instant furance (#106)
+
+------------------------------------------------------------------
 **Version: 0.0.92 (BETA)**
 
 * Make Armor Event Handler more defensive in its state checks (ticking while dead #105)
 * Add 1.16.5 to curse acceptable version list
-
 
 ------------------------------------------------------------------
 **Version: 0.0.91 (BETA)**
