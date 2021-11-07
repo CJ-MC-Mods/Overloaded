@@ -17,6 +17,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullFunction;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
@@ -26,8 +27,8 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class TileInstantFurnace extends LockableTileEntity implements IDataUpdate {
 
-  @Nonnull private final EnergyInventoryBasedRecipeProcessor processingStorage;
-  @Nonnull private final LazyOptional<?> capability;
+  @Nonnull private final FurnaceProcessor processingStorage;
+  @Nonnull private final LazyOptional<FurnaceProcessor> capability;
 
   public TileInstantFurnace() {
     super(ModTiles.instantFurnace);
@@ -51,8 +52,25 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   @Nonnull
   @Override
   public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || cap == ENERGY) {
+    if ( cap == ENERGY) {
       return capability.cast();
+    }
+
+    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+      if (side == null) {
+        side = Direction.NORTH;
+      }
+      switch (side) {
+        case UP:
+          return capability.lazyMap(FurnaceProcessor::inputIItemHandler).cast();
+        case NORTH:
+        case EAST:
+        case SOUTH:
+        case WEST:
+          return capability.cast();
+        case DOWN:
+          return capability.lazyMap(FurnaceProcessor::outputIItemHandler).cast();
+      }
     }
 
     return super.getCapability(cap, side);

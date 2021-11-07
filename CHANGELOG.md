@@ -1,3 +1,8 @@
+**Version: 0.0.95 (BETA)**
+
+* Add side base filtering for instant furnace. Top: Insert Only, Bottom: Output Only, Rest: Any (Fixes #109) 
+
+------------------------------------------------------------------
 **Version: 0.0.94 (BETA)**
 
 * Fix weird compatability error with Storage Networks. Had a bad localization entry (#103)
