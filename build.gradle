@@ -1,37 +1,29 @@
 buildscript {
     repositories {
         mavenLocal()
-        maven {
-            url = "http://files.minecraftforge.net/maven"
-        }
+        maven { url = 'https://maven.minecraftforge.net' }
         maven {
             url "https://plugins.gradle.org/m2/"
-        }
-        maven {
-            url "https://maven.tterrag.com/"
         }
         jcenter()
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         classpath group: 'gradle.plugin.com.matthewprenger', name: 'CurseGradle', version: "1.+"
     }
-}
-
-plugins {
-    id "com.wynprice.cursemaven" version "2.1.1"
 }
 
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'net.minecraftforge.gradle'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
-apply plugin: 'maven'
-apply plugin: 'idea'
 apply plugin: 'com.matthewprenger.cursegradle'
+apply plugin: 'maven-publish'
 
-import net.minecraftforge.gradle.common.task.SignJar
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
+import net.minecraftforge.gradle.common.tasks.SignJar
 
 idea{
     module{
@@ -46,15 +38,21 @@ repositories  {
     maven {
         name = "CoFH Maven"
         url = "http://maven.covers1624.net"
+        allowInsecureProtocol = true
+    }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
     }
 }
 
 group= "com.cjm721.overloaded"
 archivesBaseName = "Overloaded"
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: mappings_version
+    mappings channel: 'official', version: mappings_version
 
     accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
@@ -63,13 +61,19 @@ minecraft {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // The markers can be changed as needed.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                overloaded {
+                examplemod {
                     source sourceSets.main
                 }
             }
@@ -79,21 +83,49 @@ minecraft {
             workingDirectory project.file('run')
 
             // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            // The markers can be changed as needed.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                overloaded {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be changed as needed.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                examplemod {
                     source sourceSets.main
                 }
             }
         }
     }
-//    replace '${mod_version}', project.config.mod_version
-//    replace '${FINGERPRINT}', project.findProperty('signSHA1')
-//    replaceIn "Overloaded.java"
 }
 
 jar {
@@ -123,12 +155,9 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
-    runtime fg.deobf(project.dependencies.create("curse.maven:jei:3078092") {
-        transitive = false
-    })
-    runtime fg.deobf(project.dependencies.create("curse.maven:simple-storage-network:3257204") {
-        transitive = false
-    })
+    runtimeOnly  fg.deobf("curse.maven:jei-238222:3514175")
+    runtimeOnly  fg.deobf("curse.maven:ssn-268495:3257204")
+    runtimeOnly  fg.deobf("curse.maven:ae2-223794:3502523")
 }
 
 version = "${minecraft_version}-${mod_version}"
