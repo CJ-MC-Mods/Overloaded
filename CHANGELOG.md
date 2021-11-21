@@ -1,3 +1,8 @@
+**Version: 0.0.97 (BETA)**
+
+* Fix Block Lighting effects
+
+------------------------------------------------------------------
 **Version: 0.0.96 (BETA)**
 
 * Update mappings usage.
