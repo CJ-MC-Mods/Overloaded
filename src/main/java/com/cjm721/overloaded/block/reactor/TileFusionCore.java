@@ -21,7 +21,7 @@ public class TileFusionCore extends TileEntity {
   private LongEnergyStorage energyStorage;
 
   public TileFusionCore() {
-    super(TileEntityType.Builder.create(TileFusionCore::new, ModBlocks.fusionCore).build(null));
+    super(TileEntityType.Builder.of(TileFusionCore::new, ModBlocks.fusionCore).build(null));
   }
 
   @Nonnull

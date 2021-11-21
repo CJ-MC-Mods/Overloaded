@@ -37,7 +37,7 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
 
     if (uuid == null) return;
 
-    PlayerEntity player = te.getWorld().getPlayerByUuid(uuid);
+    PlayerEntity player = te.getLevel().getPlayerByUUID(uuid);
 
     if (player == null) {
       if (!uuid.equals(uuidCache)) {
@@ -53,38 +53,38 @@ public class PlayerInterfaceRenderer extends TileEntityRenderer<TilePlayerInterf
   }
 
   private void renderPlayer(TilePlayerInterface te, PlayerEntity player, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer, int lightLevel) {
-    matrixStack.push();
+    matrixStack.pushPose();
 
     matrixStack.translate(0.5, 0.32, 0.5);
     matrixStack.scale(.2f, .2f, .2f);
 
-    matrixStack.push();
+    matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
-    Minecraft.getInstance().getRenderManager().setRenderShadow(false);
-    Minecraft.getInstance().getRenderManager().renderEntityStatic(player, 0, 0, 0, 0, Minecraft.getInstance().getRenderPartialTicks(),
+    matrixStack.mulPose(new Quaternion(Vector3f.YN, angle, true));
+    Minecraft.getInstance().getEntityRenderDispatcher().setRenderShadow(false);
+    Minecraft.getInstance().getEntityRenderDispatcher().render(player, 0, 0, 0, 0, Minecraft.getInstance().getFrameTime(),
         matrixStack,
         iRenderTypeBuffer,
             lightLevel);
-      Minecraft.getInstance().getRenderManager().setRenderShadow(false);
-    matrixStack.pop();
+      Minecraft.getInstance().getEntityRenderDispatcher().setRenderShadow(false);
+    matrixStack.popPose();
 
-    matrixStack.pop();
+    matrixStack.popPose();
   }
 
   private void renderItem(TilePlayerInterface te, ItemStack stack, MatrixStack matrixStack, IRenderTypeBuffer iRenderTypeBuffer) {
-    matrixStack.push();
+    matrixStack.pushPose();
     matrixStack.translate(0.5, 0.32, 0.5);
 
-    matrixStack.push();
+    matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
+    matrixStack.mulPose(new Quaternion(Vector3f.YN, angle, true));
 
     RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, te.getWorld().getLightFor(LightType.BLOCK, te.getPos()) * 16, 0, matrixStack, iRenderTypeBuffer);
+    Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, te.getLevel().getBrightness(LightType.BLOCK, te.getBlockPos()) * 16, 0, matrixStack, iRenderTypeBuffer);
     RenderSystem.disableLighting();
-    matrixStack.pop();
+    matrixStack.popPose();
 
-    matrixStack.pop();
+    matrixStack.popPose();
   }
 }

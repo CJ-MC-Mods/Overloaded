@@ -63,8 +63,8 @@ public class MultiArmorGuiScreen extends Screen {
 
     LazyOptional<IGenericDataStorage> opData = getHelmetDataStorage(Minecraft.getInstance().player);
     if (!opData.isPresent()) {
-      this.minecraft.displayGuiScreen(null);
-      this.minecraft.player.sendStatusMessage(
+      this.minecraft.setScreen(null);
+      this.minecraft.player.displayClientMessage(
           new StringTextComponent("Multi-Helmet not equipped."), true);
       return;
     }
@@ -95,7 +95,7 @@ public class MultiArmorGuiScreen extends Screen {
                           this.giveAirEnabled.getBooleanState(),
                           this.extinguishEnabled.getBooleanState());
                   Overloaded.proxy.networkWrapper.sendToServer(message);
-                  this.minecraft.displayGuiScreen(null);
+                  this.minecraft.setScreen(null);
                 }));
         addButton(
             new Button(
@@ -104,7 +104,7 @@ public class MultiArmorGuiScreen extends Screen {
                 150,
                 20,
                 new StringTextComponent("Cancel"),
-                b -> this.minecraft.displayGuiScreen(null)));
+                b -> this.minecraft.setScreen(null)));
 
     float flightSpeedValue = floats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
     this.flightSpeed =
@@ -122,7 +122,7 @@ public class MultiArmorGuiScreen extends Screen {
             this.flightSpeed.x,
             this.flightSpeed.y,
             this.flightSpeed.getWidth(),
-            this.flightSpeed.getHeightRealms(),
+            this.flightSpeed.getHeight(),
             flightSpeedValue,
             0,
             (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxFlightSpeed));
@@ -151,7 +151,7 @@ public class MultiArmorGuiScreen extends Screen {
             this.groundSpeed.x,
             this.groundSpeed.y,
             this.groundSpeed.getWidth(),
-            this.groundSpeed.getHeightRealms(),
+            this.groundSpeed.getHeight(),
             groundSpeedValue,
             0,
             (float) OverloadedConfig.INSTANCE.multiArmorConfig.maxGroundSpeed));
@@ -203,7 +203,7 @@ public class MultiArmorGuiScreen extends Screen {
 
   @Nullable
   private static LazyOptional<IGenericDataStorage> getHelmetDataStorage(PlayerEntity player) {
-    for (ItemStack stack : player.getArmorInventoryList()) {
+    for (ItemStack stack : player.getArmorSlots()) {
       if (stack.getItem() instanceof ItemMultiHelmet) {
         return stack.getCapability(GENERIC_DATA_STORAGE);
       }
@@ -224,12 +224,12 @@ public class MultiArmorGuiScreen extends Screen {
           this.flightSpeedTextBox.setVisible(true);
           this.flightSpeed.visible = false;
 
-          this.flightSpeedTextBox.setText(Float.toString((float)this.flightSpeed.getEffectiveValue()));
+          this.flightSpeedTextBox.setValue(Float.toString((float)this.flightSpeed.getEffectiveValue()));
 
           this.groundSpeedTextBox.setVisible(true);
           this.groundSpeed.visible = false;
 
-          this.groundSpeedTextBox.setText(Float.toString((float)this.groundSpeed.getEffectiveValue()));
+          this.groundSpeedTextBox.setValue(Float.toString((float)this.groundSpeed.getEffectiveValue()));
         } else {
           this.flightSpeedTextBox.setVisible(false);
           this.flightSpeed.visible = true;

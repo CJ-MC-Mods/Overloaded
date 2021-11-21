@@ -44,7 +44,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
   }
 
   @Override
-  public void read(@Nonnull BlockState state, CompoundNBT compound) {
+  public void load(@Nonnull BlockState state, CompoundNBT compound) {
     if (compound.contains("Item")) {
       itemStack.deserializeNBT((CompoundNBT) compound.get("Item"));
     }
@@ -57,15 +57,15 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
   @Override
   @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT save(CompoundNBT compound) {
     compound.put("Item", itemStack.serializeNBT());
     compound.putInt("Energy", energyStorage.getEnergyStored());
-    return super.write(compound);
+    return super.save(compound);
   }
 
   @Override
   public void tick() {
-    if (this.getWorld().isRemote) {
+    if (this.getLevel().isClientSide) {
       return;
     }
 
@@ -74,7 +74,7 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
     FakePlayer player = getPlayer();
 
-    BlockPos.Mutable blockPos = this.getPos().toMutable();
+    BlockPos.Mutable blockPos = this.getBlockPos().mutable();
     //        for (int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
     //            if (!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
     //                EnumActionResult result = currentItem.getItem().onItemUse(player, getWorld(),
@@ -107,11 +107,11 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
 
   private FakePlayer getPlayer() {
     if (this.player == null || this.player.get() == null) {
-      FakePlayer fakePlayer = FakePlayerFactory.get((ServerWorld) this.getWorld(), FAKEPLAYER);
+      FakePlayer fakePlayer = FakePlayerFactory.get((ServerWorld) this.getLevel(), FAKEPLAYER);
       this.player = new WeakReference<>(fakePlayer);
-      fakePlayer.setLocationAndAngles(
-          this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), 0f, 0f);
-      fakePlayer.inventory.clear();
+      fakePlayer.moveTo(
+          this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 0f, 0f);
+      fakePlayer.inventory.clearContent();
     }
 
     return this.player.get();
@@ -120,8 +120,8 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
   public void breakBlock() {
     ItemStack storedItem = itemStack.getStackInSlot(0);
     if (!storedItem.isEmpty()) {
-      InventoryHelper.spawnItemStack(
-          this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem);
+      InventoryHelper.dropItemStack(
+          this.getLevel(), getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(), storedItem);
     }
   }
 }

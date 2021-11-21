@@ -23,12 +23,12 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable
   /** Like the old updateEntity(), except more generic. */
   @Override
   public void tick() {
-    if (this.getWorld().isRemote) {
+    if (this.getLevel().isClientSide) {
       return;
     }
 
-    BlockPos me = this.getPos();
-    TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
+    BlockPos me = this.getBlockPos();
+    TileEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getNormal()));
 
     frontTE
         .getCapability(ENERGY, getFacing().getOpposite())
@@ -41,7 +41,7 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable
 
                 if (facing == getFacing()) continue;
 
-                TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
+                TileEntity te = level.getBlockEntity(me.offset(facing.getNormal()));
 
                 te.getCapability(ITEM_HANDLER_CAPABILITY, facing.getOpposite())
                     .ifPresent(
@@ -74,13 +74,13 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable
                                         return;
                                       }
 
-                                      getWorld()
-                                          .addEntity(
+                                      getLevel()
+                                          .addFreshEntity(
                                               new ItemEntity(
-                                                  getWorld(),
-                                                  getPos().getX(),
-                                                  getPos().getY(),
-                                                  getPos().getZ(),
+                                                  getLevel(),
+                                                  getBlockPos().getX(),
+                                                  getBlockPos().getY(),
+                                                  getBlockPos().getZ(),
                                                   tempStack));
                                     });
                           }

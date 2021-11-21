@@ -12,6 +12,6 @@ abstract class AbstractTileEntityFaceable extends TileEntity {
   }
 
   Direction getFacing() {
-    return this.getBlockState().get(AbstractModBlockFacing.FACING);
+    return this.getBlockState().getValue(AbstractModBlockFacing.FACING);
   }
 }

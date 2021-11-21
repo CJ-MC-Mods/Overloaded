@@ -107,7 +107,7 @@ public final class ModBlocks {
     registerBlock(registry, block);
 
     CommonProxy.itemToRegister.add(
-        new BlockItem(block, new Item.Properties().group(OverloadedItemGroups.TECH))
+        new BlockItem(block, new Item.Properties().tab(OverloadedItemGroups.TECH))
             .setRegistryName(block.getRegistryName()));
 
     return block;

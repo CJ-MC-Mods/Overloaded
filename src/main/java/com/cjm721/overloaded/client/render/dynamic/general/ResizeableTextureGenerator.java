@@ -31,7 +31,7 @@ public class ResizeableTextureGenerator {
 
   @SubscribeEvent
   public void texturePre(@Nonnull TextureStitchEvent.Pre event) {
-    if (!event.getMap().getTextureLocation().getPath().equals("textures")) {
+    if (!event.getMap().location().getPath().equals("textures")) {
       return;
     }
 

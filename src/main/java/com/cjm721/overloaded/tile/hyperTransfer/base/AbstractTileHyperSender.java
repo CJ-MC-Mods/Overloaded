@@ -36,22 +36,22 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    super.write(compound);
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    super.save(compound);
 
     if (partnerBlockPos != null) {
       compound.putInt("X", partnerBlockPos.getX());
       compound.putInt("Y", partnerBlockPos.getY());
       compound.putInt("Z", partnerBlockPos.getZ());
-      compound.putString("WORLD", partnerWorldID.getLocation().toString());
+      compound.putString("WORLD", partnerWorldID.location().toString());
     }
 
     return compound;
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
 
     if (compound.contains("X")) {
       int x = compound.getInt("X");
@@ -59,14 +59,14 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       int z = compound.getInt("Z");
 
       partnerBlockPos = new BlockPos(x, y, z);
-      partnerWorldID = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, ResourceLocation.tryCreate(compound.getString("WORLD")));
+      partnerWorldID = RegistryKey.create(Registry.DIMENSION_REGISTRY, ResourceLocation.tryParse(compound.getString("WORLD")));
     }
   }
 
   /** Like the old updateEntity(), except more generic. */
   @Override
   public void tick() {
-    if (getWorld().isRemote) return;
+    if (getLevel().isClientSide) return;
 
     if (delayTicks % 20 == 0) {
       if (partnerBlockPos == null) return;
@@ -81,9 +81,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   @Nullable
   private AbstractTileHyperReceiver<T, H> findPartner() {
-    World world = this.getWorld().getServer().getWorld(partnerWorldID);
-    if (world != null && world.isBlockLoaded(partnerBlockPos)) {
-      TileEntity partnerTE = world.getTileEntity(partnerBlockPos);
+    World world = this.getLevel().getServer().getLevel(partnerWorldID);
+    if (world != null && world.hasChunkAt(partnerBlockPos)) {
+      TileEntity partnerTE = world.getBlockEntity(partnerBlockPos);
 
       if (partnerTE == null || !isCorrectPartnerType(partnerTE)) {
         this.partnerBlockPos = null;
@@ -97,7 +97,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   private void send(@Nonnull AbstractTileHyperReceiver<T, H> partner) {
     for (Direction side : Direction.values()) {
-      TileEntity te = this.getWorld().getTileEntity(this.getPos().add(side.getDirectionVec()));
+      TileEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getNormal()));
 
       if (te == null) {
         continue;
@@ -146,7 +146,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
   protected abstract boolean isCorrectPartnerType(TileEntity te);
 
   public void setPartnerInfo(String registryLocation, BlockPos partnerPos) {
-    this.partnerWorldID = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, ResourceLocation.tryCreate(registryLocation));
+    this.partnerWorldID = RegistryKey.create(Registry.DIMENSION_REGISTRY, ResourceLocation.tryParse(registryLocation));
     this.partnerBlockPos = partnerPos;
   }
 
@@ -155,7 +155,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     if (partnerBlockPos != null) {
       return String.format(
           "Bound to Receiver at %s %d,%d,%d",
-          partnerWorldID.getLocation(), partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
+          partnerWorldID.location(), partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
     }
     return "Not bound to anything";
   }

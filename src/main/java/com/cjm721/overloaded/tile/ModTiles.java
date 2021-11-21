@@ -214,6 +214,6 @@ public class ModTiles {
   }
 
   private static TileEntityType build(Supplier<TileEntity> e, Block block, String name) {
-    return TileEntityType.Builder.create(e, block).build(null).setRegistryName(name);
+    return TileEntityType.Builder.of(e, block).build(null).setRegistryName(name);
   }
 }

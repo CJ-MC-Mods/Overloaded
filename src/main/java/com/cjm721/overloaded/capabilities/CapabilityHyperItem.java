@@ -46,7 +46,7 @@ public class CapabilityHyperItem {
             if (tag.contains("Item")) {
               LongItemStack stack =
                   new LongItemStack(
-                      ItemStack.read((CompoundNBT) tag.get("Item")), tag.getLong("Count"));
+                      ItemStack.of((CompoundNBT) tag.get("Item")), tag.getLong("Count"));
               instance.give(stack, false);
             }
           }

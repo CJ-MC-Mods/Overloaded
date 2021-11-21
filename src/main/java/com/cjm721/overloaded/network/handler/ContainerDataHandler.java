@@ -16,12 +16,12 @@ public class ContainerDataHandler
 
   @OnlyIn(Dist.CLIENT)
   private void clientSide(ContainerDataMessage message, Supplier<NetworkEvent.Context> ctx) {
-    if (Minecraft.getInstance().player.openContainer == null
-        || Minecraft.getInstance().player.openContainer.windowId != message.container || !(Minecraft.getInstance().player.openContainer instanceof ModContainer)) {
+    if (Minecraft.getInstance().player.containerMenu == null
+        || Minecraft.getInstance().player.containerMenu.containerId != message.container || !(Minecraft.getInstance().player.containerMenu instanceof ModContainer)) {
       return;
     }
 
-    ((ModContainer)Minecraft.getInstance().player.openContainer).accept(message);
+    ((ModContainer)Minecraft.getInstance().player.containerMenu).accept(message);
   }
 
   @Override

@@ -17,8 +17,8 @@ public class RenderMultiChestplate extends AbstractRenderMultiArmor {
     IBakedModel leftArm = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_chestplate_leftarm"));
     IBakedModel rightArm = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_chestplate_rightarm"));
 
-    this.bipedBody.addChild(new ModelRenderOBJ(this, body));
-    this.bipedLeftArm.addChild(new ModelRenderOBJ(this, leftArm));
-    this.bipedRightArm.addChild(new ModelRenderOBJ(this, rightArm));
+    this.body.addChild(new ModelRenderOBJ(this, body));
+    this.leftArm.addChild(new ModelRenderOBJ(this, leftArm));
+    this.rightArm.addChild(new ModelRenderOBJ(this, rightArm));
   }
 }

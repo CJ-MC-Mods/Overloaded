@@ -66,7 +66,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 
   public void updateSettings(
       ServerPlayerEntity ServerPlayerEntity, MultiArmorSettingsMessage message) {
-    for (ItemStack itemStack : ServerPlayerEntity.getArmorInventoryList()) {
+    for (ItemStack itemStack : ServerPlayerEntity.getArmorSlots()) {
       if (itemStack.getItem() == this) {
         updateSettings(itemStack, message);
       }

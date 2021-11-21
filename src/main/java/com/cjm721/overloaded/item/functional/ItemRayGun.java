@@ -46,10 +46,10 @@ public class ItemRayGun extends PowerModItem {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    tooltip.add(new StringTextComponent("The Little Zapper").mergeStyle(TextFormatting.ITALIC));
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    tooltip.add(new StringTextComponent("The Little Zapper").withStyle(TextFormatting.ITALIC));
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -67,28 +67,28 @@ public class ItemRayGun extends PowerModItem {
   @Override
   @Nonnull
   @OnlyIn(Dist.CLIENT)
-  public ActionResult<ItemStack> onItemRightClick(
+  public ActionResult<ItemStack> use(
       World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
-    if (!worldIn.isRemote)
-      new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+    if (!worldIn.isClientSide)
+      new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
 
     RayTraceResult ray =
         rayTraceWithEntities(
             worldIn,
-            playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks()),
-            playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks()),
+            playerIn.getEyePosition(Minecraft.getInstance().getFrameTime()),
+            playerIn.getViewVector(Minecraft.getInstance().getFrameTime()),
             playerIn,
             OverloadedConfig.INSTANCE.railGun.maxRange);
 
     if (ray != null) {
-      Overloaded.proxy.networkWrapper.sendToServer(new RayGunMessage(ray.getHitVec()));
+      Overloaded.proxy.networkWrapper.sendToServer(new RayGunMessage(ray.getLocation()));
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   public void handleMessage(ServerPlayerEntity player, RayGunMessage message) {
-    ItemStack itemStack = player.getHeldItem(Hand.MAIN_HAND);
+    ItemStack itemStack = player.getItemInHand(Hand.MAIN_HAND);
     if (itemStack.getItem() != this) {
       return;
     }
@@ -103,19 +103,19 @@ public class ItemRayGun extends PowerModItem {
 
     if (energy.getEnergyStored() < OverloadedConfig
         .INSTANCE.rayGun.energyPerShot) {
-      player.sendStatusMessage(new StringTextComponent("Not enough power to fire."), true);
+      player.displayClientMessage(new StringTextComponent("Not enough power to fire."), true);
       return;
     }
 
     Vector3d eyePos = player.getEyePosition(1);
 
     if (eyePos.distanceTo(message.vector) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
-      player.sendStatusMessage(new StringTextComponent("Target out of range."), true);
+      player.displayClientMessage(new StringTextComponent("Target out of range."), true);
       return;
     }
 
     BlockRayTraceResult sanityCheckVec =
-        player.world.rayTraceBlocks(
+        player.level.clip(
             new RayTraceContext(
                 eyePos,
                 message.vector,
@@ -123,13 +123,13 @@ public class ItemRayGun extends PowerModItem {
                 RayTraceContext.FluidMode.NONE,
                 player));
     if (sanityCheckVec.getType() != RayTraceResult.Type.MISS) {
-      player.sendStatusMessage(new StringTextComponent("Target no longer in sight."), true);
+      player.displayClientMessage(new StringTextComponent("Target no longer in sight."), true);
       return;
     }
 
     energy.extractEnergy(OverloadedConfig.INSTANCE.rayGun.energyPerShot, false);
-    LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, player.world);
-    entity.setLocationAndAngles(message.vector.x, message.vector.y, message.vector.z, 0,0);
-    player.world.addEntity(entity);
+    LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, player.level);
+    entity.moveTo(message.vector.x, message.vector.y, message.vector.z, 0,0);
+    player.level.addFreshEntity(entity);
   }
 }

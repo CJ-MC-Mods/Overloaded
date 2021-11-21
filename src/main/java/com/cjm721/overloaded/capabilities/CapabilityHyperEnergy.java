@@ -34,7 +34,7 @@ public class CapabilityHyperEnergy {
               IHyperHandlerEnergy instance,
               Direction direction,
               INBT nbt) {
-            instance.give(new LongEnergyStack(((LongNBT) nbt).getLong()), true);
+            instance.give(new LongEnergyStack(((LongNBT) nbt).getAsLong()), true);
           }
         },
         () -> new LongEnergyStorage(() -> {}));

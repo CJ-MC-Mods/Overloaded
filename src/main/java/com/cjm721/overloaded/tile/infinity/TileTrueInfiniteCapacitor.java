@@ -27,15 +27,15 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    compound = super.write(compound);
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    compound = super.save(compound);
     compound.put("BigIntEnergyStorage", energyStorage.serializeNBT());
     return compound;
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
     if(compound.contains("BigIntEnergyStorage")) {
       energyStorage.deserializeNBT((CompoundNBT) compound.get("BigIntEnergyStorage"));
     }
@@ -52,7 +52,7 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
 
   @Override
   public void dataUpdated() {
-    markDirty();
+    setChanged();
   }
 
   @Override

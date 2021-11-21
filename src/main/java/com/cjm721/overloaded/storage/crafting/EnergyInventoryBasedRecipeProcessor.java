@@ -231,7 +231,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
-      return ItemStackHelper.getAndSplit(
+      return ItemStackHelper.removeItem(
           slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
     ItemStack toReturn;
@@ -302,7 +302,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   }
 
   private boolean isOnServer() {
-    return worldSupplier != null && worldSupplier.get() != null && !worldSupplier.get().isRemote;
+    return worldSupplier != null && worldSupplier.get() != null && !worldSupplier.get().isClientSide;
   }
 
   private void tryProcessRecipes(boolean simulate) {
@@ -325,7 +325,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     return this.worldSupplier
         .get()
         .getRecipeManager()
-        .getRecipes(recipeType, inventory, this.worldSupplier.get());
+        .getRecipesFor(recipeType, inventory, this.worldSupplier.get());
   }
 
   private ItemStack processRecipeAndStoreOutput(ItemStack stack, boolean simulate) {
@@ -334,14 +334,14 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
     List<T> recipesForInput = getRecipe(inventory);
 
     if (recipesForInput.isEmpty()) {
-      return inventory.getStackInSlot(0);
+      return inventory.getItem(0);
     }
 
     T recipe = recipesForInput.get(0);
 
     ItemStack result;
-    while (!inventory.getStackInSlot(0).isEmpty()
-        && !(result = recipe.getCraftingResult(inventory)).isEmpty()) {
+    while (!inventory.getItem(0).isEmpty()
+        && !(result = recipe.assemble(inventory)).isEmpty()) {
       int energyCost = energyCostPerRecipeOperation(recipe);
       if (energyCost != this.extractEnergy(energyCost, true)) {
         break;
@@ -356,11 +356,11 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
       }
       insertItem(output, result, simulate);
       this.extractEnergy(energyCost, simulate);
-      int deduct = recipe.getIngredients().get(0).getMatchingStacks()[0].getCount();
-      inventory.getStackInSlot(0).shrink(deduct);
+      int deduct = recipe.getIngredients().get(0).getItems()[0].getCount();
+      inventory.getItem(0).shrink(deduct);
     }
 
-    return inventory.getStackInSlot(0);
+    return inventory.getItem(0);
     //    NonNullList<ItemStack> leftOvers = recipe.getRemainingItems(inventory);
     //
     //    if (leftOvers.isEmpty() || leftOvers.stream().allMatch(ItemStack::isEmpty)) {

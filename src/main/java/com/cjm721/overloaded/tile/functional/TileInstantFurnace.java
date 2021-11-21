@@ -33,7 +33,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   public TileInstantFurnace() {
     super(ModTiles.instantFurnace);
 
-    processingStorage = new FurnaceProcessor(this::getWorld, Integer.MAX_VALUE, 9, this);
+    processingStorage = new FurnaceProcessor(this::getLevel, Integer.MAX_VALUE, 9, this);
     capability = LazyOptional.of(() -> processingStorage);
   }
 
@@ -77,7 +77,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   }
 
   @Override
-  public int getSizeInventory() {
+  public int getContainerSize() {
     return processingStorage.getSlots();
   }
 
@@ -88,41 +88,41 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
 
   @Override
   @Nonnull
-  public ItemStack getStackInSlot(int index) {
+  public ItemStack getItem(int index) {
     return processingStorage.getStackInSlot(index);
   }
 
   @Override
   @Nonnull
-  public ItemStack decrStackSize(int index, int count) {
+  public ItemStack removeItem(int index, int count) {
     return processingStorage.extractItem(index, count, false);
   }
 
   @Override
   @Nonnull
-  public ItemStack removeStackFromSlot(int index) {
+  public ItemStack removeItemNoUpdate(int index) {
     return processingStorage.extractItem(index, Integer.MAX_VALUE, false);
   }
 
   @Override
-  public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
+  public void setItem(int index, @Nonnull ItemStack stack) {
     processingStorage.setItem(index, stack);
   }
 
   @Override
-  public boolean isUsableByPlayer(@Nonnull PlayerEntity player) {
+  public boolean stillValid(@Nonnull PlayerEntity player) {
     // TODO Do I want to make sure the player is nearby?
     return true;
   }
 
   @Override
-  public void clear() {
+  public void clearContent() {
     throw new RuntimeException("clear is called");
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
     if (compound.contains("Processor")) {
       processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
     }
@@ -130,13 +130,13 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
 
   @Override
   @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT save(CompoundNBT compound) {
     compound.put("Processor", processingStorage.serializeNBT());
-    return super.write(compound);
+    return super.save(compound);
   }
 
   @Override
   public void dataUpdated() {
-    markDirty();
+    setChanged();
   }
 }

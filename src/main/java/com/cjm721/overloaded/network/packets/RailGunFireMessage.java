@@ -20,12 +20,12 @@ public class RailGunFireMessage {
 
   public static RailGunFireMessage fromBytes(PacketBuffer buf) {
     return new RailGunFireMessage(
-        buf.readInt(), MessageUtility.vecFromBytes(buf), Hand.valueOf(buf.readString(32)));
+        buf.readInt(), MessageUtility.vecFromBytes(buf), Hand.valueOf(buf.readUtf(32)));
   }
 
   public static void toBytes(RailGunFireMessage message, PacketBuffer buf) {
     buf.writeInt(message.id);
     MessageUtility.toBytes(buf, message.moveVector);
-    buf.writeString(message.hand.name());
+    buf.writeUtf(message.hand.name());
   }
 }

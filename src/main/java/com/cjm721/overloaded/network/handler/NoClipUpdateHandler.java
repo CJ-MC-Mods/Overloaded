@@ -23,7 +23,7 @@ public class NoClipUpdateHandler
               ArmorEventHandler.setNoClip(Minecraft.getInstance().player, message.isEnabled());
               Minecraft.getInstance()
                   .player
-                  .sendStatusMessage(
+                  .displayClientMessage(
                       new StringTextComponent("No Clip: " + message.isEnabled()), true);
             });
   }

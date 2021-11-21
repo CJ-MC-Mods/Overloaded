@@ -18,7 +18,7 @@ public class WorldUtil {
       double maxDistance) {
     Vector3d endingLocation = startingLocation.add(direction.scale(maxDistance));
     BlockRayTraceResult rayTraceResult =
-        world.rayTraceBlocks(
+        world.clip(
             new RayTraceContext(
                 startingLocation,
                 endingLocation,
@@ -29,9 +29,9 @@ public class WorldUtil {
     if (rayTraceResult.getType() != RayTraceResult.Type.MISS) {
       endingLocation =
           new Vector3d(
-              rayTraceResult.getHitVec().x,
-              rayTraceResult.getHitVec().y,
-              rayTraceResult.getHitVec().z);
+              rayTraceResult.getLocation().x,
+              rayTraceResult.getLocation().y,
+              rayTraceResult.getLocation().z);
     }
 
     Entity entity = null;
@@ -59,13 +59,13 @@ public class WorldUtil {
           new AxisAlignedBB(
               vertexes[0], vertexes[1], vertexes[2], vertexes[3], vertexes[4], vertexes[5]);
 
-      List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(excludedEntity, boundingBox);
+      List<Entity> list = world.getEntities(excludedEntity, boundingBox);
       double smallestEntityDistance = 0.0D;
       for (Entity entity1 : list) {
-        if (entity1.canBeCollidedWith()
-            && (!entity1.isEntityEqual(excludedEntity))
-            && !entity1.noClip) {
-          AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow(0.30000001192092896D);
+        if (entity1.isPickable()
+            && (!entity1.is(excludedEntity))
+            && !entity1.noPhysics) {
+          AxisAlignedBB axisalignedbb = entity1.getBoundingBox().inflate(0.30000001192092896D);
           //          RayTraceResult intercept =
           //              axisalignedbb.intersects(startingLocation, endingLocation);
           //

@@ -20,7 +20,7 @@ import java.util.List;
 class ModelUtils implements IResourceManagerReloadListener {
   public static void renderQuads(List<BakedQuad> listQuads) {
     Tessellator tessellator = Tessellator.getInstance();
-    BufferBuilder vertexbuffer = tessellator.getBuffer();
+    BufferBuilder vertexbuffer = tessellator.getBuilder();
     int i = 0;
     vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
     for (int j = listQuads.size(); i < j; ++i) {
@@ -30,10 +30,10 @@ class ModelUtils implements IResourceManagerReloadListener {
 
       vertexbuffer.color(1,1,1,1);
 
-      Vector3i vec3i = bakedquad.getFace().getDirectionVec();
+      Vector3i vec3i = bakedquad.getDirection().getNormal();
       vertexbuffer.normal((float) vec3i.getX(), (float) vec3i.getY(), (float) vec3i.getZ());
     }
-    tessellator.draw();
+    tessellator.end();
   }
 
   @Override

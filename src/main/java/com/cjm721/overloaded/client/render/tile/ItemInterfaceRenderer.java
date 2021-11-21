@@ -29,17 +29,17 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
 
     if (stack.isEmpty()) return;
 
-    matrixStack.push();
+    matrixStack.pushPose();
     matrixStack.translate(0.5,0.32,0.5);
 
-    matrixStack.push();
+    matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    matrixStack.rotate(new Quaternion(Vector3f.YN, angle, true));
+    matrixStack.mulPose(new Quaternion(Vector3f.YN, angle, true));
 
     RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderItem(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn,0, matrixStack, iRenderTypeBuffer);
+    Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn,0, matrixStack, iRenderTypeBuffer);
     RenderSystem.disableLighting();
-    matrixStack.pop();
-    matrixStack.pop();
+    matrixStack.popPose();
+    matrixStack.popPose();
   }
 }

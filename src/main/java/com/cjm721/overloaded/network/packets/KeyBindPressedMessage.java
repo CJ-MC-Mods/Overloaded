@@ -22,10 +22,10 @@ public class KeyBindPressedMessage {
   }
 
   public static KeyBindPressedMessage fromBytes(PacketBuffer buf) {
-    return new KeyBindPressedMessage(KeyBind.valueOf(buf.readString(32)));
+    return new KeyBindPressedMessage(KeyBind.valueOf(buf.readUtf(32)));
   }
 
   public static void toBytes(KeyBindPressedMessage message, @Nonnull PacketBuffer buf) {
-    buf.writeString(message.bind.toString());
+    buf.writeUtf(message.bind.toString());
   }
 }

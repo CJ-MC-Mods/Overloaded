@@ -28,16 +28,16 @@ public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage<LongEn
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    super.write(compound);
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    super.save(compound);
     CompoundNBT energy = energyStorage.serializeNBT();
     compound.put("LongEnergyStorage", energy);
     return compound;
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
     if(compound.contains("LongEnergyStorage")) {
       energyStorage.deserializeNBT((CompoundNBT) compound.get("LongEnergyStorage"));
     }
@@ -61,7 +61,7 @@ public class TileAlmostInfiniteCapacitor extends AbstractTileHyperStorage<LongEn
 
   @Override
   public void dataUpdated() {
-    markDirty();
+    setChanged();
   }
 
   @Override

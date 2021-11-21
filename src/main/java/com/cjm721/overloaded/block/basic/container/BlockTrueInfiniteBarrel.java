@@ -22,15 +22,15 @@ public class BlockTrueInfiniteBarrel extends AbstractBlockHyperContainer {
   @Override
   protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
     BigIntItemStack stack =
-        ((TileTrueInfiniteBarrel) world.getTileEntity(pos)).getStorage().bigStatus();
+        ((TileTrueInfiniteBarrel) world.getBlockEntity(pos)).getStorage().bigStatus();
 
     if (stack.itemStack.isEmpty()) {
-      player.sendStatusMessage(new StringTextComponent("Item: EMPTY"), false);
+      player.displayClientMessage(new StringTextComponent("Item: EMPTY"), false);
     } else {
-      player.sendStatusMessage(
+      player.displayClientMessage(
           new StringTextComponent("Item: ")
-              .append(stack.itemStack.getTextComponent())
-              .appendString(
+              .append(stack.itemStack.getDisplayName())
+              .append(
                   String.format(
                       " Amount %,d Bits: %,d", stack.getAmount(), stack.getAmount().bitLength())),
           false);

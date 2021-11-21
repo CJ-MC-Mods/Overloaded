@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
 
   @ObjectHolder("minecraft:water")
@@ -61,7 +63,7 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
 
   @Override
   public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-    return tank == 0 && stack.getFluid().isEquivalentTo(WATER);
+    return tank == 0 && stack.getFluid().isSame(WATER);
   }
 
   @Override

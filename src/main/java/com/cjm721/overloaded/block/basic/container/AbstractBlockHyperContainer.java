@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 abstract class AbstractBlockHyperContainer extends ModBlockTile {
     AbstractBlockHyperContainer(Properties materialIn) {
         super(materialIn);
@@ -38,15 +40,15 @@ abstract class AbstractBlockHyperContainer extends ModBlockTile {
 
     @Override
     @Nonnull
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if (!world.isRemote) {
-            ItemStack heldItem = player.getHeldItem(handIn);
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        if (!world.isClientSide) {
+            ItemStack heldItem = player.getItemInHand(handIn);
             if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
                 sendPlayerStatus(world, pos, player);
                 return ActionResultType.SUCCESS;
             }
         }
-        return super.onBlockActivated(state,world,pos,player, handIn, hit);
+        return super.use(state,world,pos,player, handIn, hit);
     }
 
     protected abstract void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player);

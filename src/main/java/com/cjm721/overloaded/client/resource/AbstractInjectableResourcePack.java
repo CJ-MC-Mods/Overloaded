@@ -25,6 +25,6 @@ public abstract class AbstractInjectableResourcePack implements IResourcePack {
                         SimpleReloadableResourceManager.class,
                         (SimpleReloadableResourceManager) Minecraft.getInstance().getResourceManager(),
                         "field_110548_a");
-        domainResourceManagers.get("overloaded").addResourcePack(this);
+        domainResourceManagers.get("overloaded").add(this);
     }
 }

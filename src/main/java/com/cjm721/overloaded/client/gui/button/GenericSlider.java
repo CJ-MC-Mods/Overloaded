@@ -80,7 +80,7 @@ public class GenericSlider extends AbstractSlider {
   }
   //
   public double getEffectiveValue() {
-    return scaleUp(this.sliderValue, this.minValue, this.maxValue);
+    return scaleUp(this.value, this.minValue, this.maxValue);
   }
 
   private static double scaleUp(double unScaled, double min, double max) {
@@ -93,18 +93,18 @@ public class GenericSlider extends AbstractSlider {
   }
 
   public void setBasedOnEffectiveValue(float effectiveValue) {
-    this.sliderValue = scaleDown(effectiveValue, this.minValue, this.maxValue);
+    this.value = scaleDown(effectiveValue, this.minValue, this.maxValue);
     resetDisplayString();
   }
 
   @Override
-  protected void func_230979_b_() {
+  protected void updateMessage() {
     // updateMessage?
     resetDisplayString();
   }
 
   @Override
-  protected void func_230972_a_() {
+  protected void applyValue() {
     // applyValue?
   }
 }

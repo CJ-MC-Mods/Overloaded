@@ -25,10 +25,12 @@ import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockItemInterface extends ModBlock {
 
   public BlockItemInterface() {
-    super(Properties.create(Material.GLASS).hardnessAndResistance(3).variableOpacity().notSolid());
+    super(Properties.of(Material.GLASS).strength(3).dynamicShape().noOcclusion());
     setRegistryName("item_interface");
   }
 
@@ -54,26 +56,26 @@ public class BlockItemInterface extends ModBlock {
   }
 
   @Override
-  public void onBlockHarvested(World world,@Nonnull BlockPos pos, BlockState state, PlayerEntity player) {
-    ((TileItemInterface) world.getTileEntity(pos)).breakBlock();
+  public void playerWillDestroy(World world,@Nonnull BlockPos pos, BlockState state, PlayerEntity player) {
+    ((TileItemInterface) world.getBlockEntity(pos)).breakBlock();
 
-    super.onBlockHarvested(world, pos, state, player);
+    super.playerWillDestroy(world, pos, state, player);
   }
 
   @Override
   @Nonnull
-  public ActionResultType onBlockActivated(
+  public ActionResultType use(
       BlockState state,
       World world,
       BlockPos pos,
       PlayerEntity player,
       Hand hand,
       BlockRayTraceResult rayTraceResult) {
-    if (world.isRemote) return ActionResultType.CONSUME;
+    if (world.isClientSide) return ActionResultType.CONSUME;
 
     if (hand != Hand.MAIN_HAND) return ActionResultType.CONSUME;
 
-    TileEntity te = world.getTileEntity(pos);
+    TileEntity te = world.getBlockEntity(pos);
 
     if (!(te instanceof TileItemInterface)) return ActionResultType.CONSUME;
 
@@ -81,25 +83,25 @@ public class BlockItemInterface extends ModBlock {
 
     ItemStack stack = anInterface.getStoredItem();
     if (stack.isEmpty()) {
-      ItemStack handStack = player.getHeldItem(hand);
+      ItemStack handStack = player.getItemInHand(hand);
 
       if (handStack.isEmpty()) return ActionResultType.FAIL;
 
       ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
-      player.setHeldItem(hand, returnedItem);
+      player.setItemInHand(hand, returnedItem);
     } else {
-      if (!player.getHeldItem(hand).isEmpty()) return ActionResultType.FAIL;
+      if (!player.getItemInHand(hand).isEmpty()) return ActionResultType.FAIL;
 
       ItemStack toSpawn = anInterface.extractItem(0, 1, false);
       if (toSpawn.isEmpty()) return ActionResultType.FAIL;
 
-      ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.inventory.currentItem);
+      ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.inventory.selected);
     }
     return ActionResultType.CONSUME;
   }
 
   @Override
-  public boolean isTransparent(BlockState state) {
+  public boolean useShapeForLightOcclusion(BlockState state) {
     return true;
   }
 

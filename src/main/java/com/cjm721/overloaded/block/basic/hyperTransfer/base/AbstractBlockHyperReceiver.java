@@ -17,6 +17,8 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode {
 
   protected AbstractBlockHyperReceiver(@Nonnull Properties materialIn) {
@@ -25,8 +27,8 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
 
   @Override
   @Nonnull
-  public ActionResultType onBlockActivated(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-    ItemStack heldItem = player.getHeldItem(hand);
+  public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
+    ItemStack heldItem = player.getItemInHand(hand);
     if (heldItem.getItem().equals(ModItems.linkingCard)) {
       CompoundNBT tag = heldItem.getTag();
       if (tag == null) {
@@ -34,20 +36,20 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
       }
 
 
-      ResourceLocation worldId = world.getDimensionKey().getLocation();
+      ResourceLocation worldId = world.dimension().location();
       writeNodeData(tag, worldId, pos);
       heldItem.setTag(tag);
 
-      if (world.isRemote) {
-        player.sendStatusMessage(
+      if (world.isClientSide) {
+        player.displayClientMessage(
             new StringTextComponent(
-                String.format("Recorded: World: %s Position: %s", worldId, pos.getCoordinatesAsString())),
+                String.format("Recorded: World: %s Position: %s", worldId, pos.toShortString())),
             false);
       }
 
       return ActionResultType.CONSUME;
     } else {
-      return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+      return super.use(state, world, pos, player, hand, rayTraceResult);
     }
   }
 

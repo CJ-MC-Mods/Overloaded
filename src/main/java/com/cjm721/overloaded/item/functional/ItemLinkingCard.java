@@ -19,17 +19,19 @@ import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemLinkingCard extends ModItem {
 
   public ItemLinkingCard() {
-    super(new Properties().maxStackSize(1));
+    super(new Properties().stacksTo(1));
     setRegistryName("linking_card");
     //        setTranslationKey("linking_card");
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     CompoundNBT tag = stack.getTag();
     if (tag != null && tag.contains("TYPE")) {
@@ -43,7 +45,7 @@ public class ItemLinkingCard extends ModItem {
           new StringTextComponent(
               String.format("Bound to %s at %s: %d,%d,%d", type, worldID, x, y, z)));
     }
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @OnlyIn(Dist.CLIENT)

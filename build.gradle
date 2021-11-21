@@ -120,7 +120,7 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                examplemod {
+                overloaded {
                     source sourceSets.main
                 }
             }
@@ -155,25 +155,12 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:' + minecraft_version + '-' + forge_version
 
-    runtimeOnly  fg.deobf("curse.maven:jei-238222:3514175")
-    runtimeOnly  fg.deobf("curse.maven:ssn-268495:3257204")
-    runtimeOnly  fg.deobf("curse.maven:ae2-223794:3502523")
+//    runtimeOnly  fg.deobf("curse.maven:jei-238222:3514175")
+//    runtimeOnly  fg.deobf("curse.maven:ssn-268495:3257204")
+//    runtimeOnly  fg.deobf("curse.maven:ae2-223794:3502523")
 }
 
 version = "${minecraft_version}-${mod_version}"
-
-processResources {
-    exclude '**/*.xcf'
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
-
-        expand 'version': project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'META-INF/mods.toml'
-    }
-}
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava

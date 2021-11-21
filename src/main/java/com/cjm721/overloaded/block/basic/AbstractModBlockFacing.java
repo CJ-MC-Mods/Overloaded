@@ -19,33 +19,35 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractModBlockFacing extends ModBlock {
   public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
   AbstractModBlockFacing(@Nonnull Properties materialIn) {
     super(materialIn);
 
-    this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
 
   @Nullable
   @Override
   public BlockState getStateForPlacement(BlockItemUseContext context) {
-    return this.getDefaultState().with(FACING, context.getNearestLookingDirection());
+    return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
   }
 
   @Override
   public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation direction) {
-    return state.with(FACING,  direction.rotate(state.get(FACING)));
+    return state.setValue(FACING,  direction.rotate(state.getValue(FACING)));
   }
 
   @Override
   public BlockState mirror(BlockState state, Mirror mirrorIn) {
-    return state.with(FACING, mirrorIn.mirror(state.get(FACING)));
+    return state.setValue(FACING, mirrorIn.mirror(state.getValue(FACING)));
   }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
   {
     builder.add(FACING);
   }

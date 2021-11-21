@@ -30,7 +30,7 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
   public void deserializeNBT(CompoundNBT compound) {
     ItemStack itemStack =
         compound.contains("Stack")
-            ? ItemStack.read((CompoundNBT) compound.get("Stack"))
+            ? ItemStack.of((CompoundNBT) compound.get("Stack"))
             : ItemStack.EMPTY;
 
     BigInteger amount =
@@ -46,7 +46,7 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
     CompoundNBT compound = new CompoundNBT();
     if (storedItem.itemStack != ItemStack.EMPTY) {
       CompoundNBT tag = new CompoundNBT();
-      storedItem.itemStack.write(tag);
+      storedItem.itemStack.save(tag);
       compound.put("Stack", tag);
       compound.putByteArray("Count", storedItem.amount.toByteArray());
     }

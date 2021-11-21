@@ -34,16 +34,18 @@ import java.util.List;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemEnergyShield extends ModItem {
 
   private final long constantUseCost = 100L;
   private final long initialUseCost = 10000L;
 
   public ItemEnergyShield() {
-    super(new Properties().maxStackSize(1).maxDamage(500));
+    super(new Properties().stacksTo(1).durability(500));
     setRegistryName("energy_shield");
     //        setTranslationKey("energy_shield");
-    DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+    DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -56,7 +58,7 @@ public class ItemEnergyShield extends ModItem {
 
   @Override
   @Nonnull
-  public UseAction getUseAction(ItemStack stack) {
+  public UseAction getUseAnimation(ItemStack stack) {
     //        return EnumAction.BLOCK;
 
     //        if(energy.amount == constantUseCost) {
@@ -74,12 +76,12 @@ public class ItemEnergyShield extends ModItem {
 
   @Override
   @Nonnull
-  public ActionResultType onItemUse(ItemUseContext context) {
-    if (!context.getWorld().isRemote) {
+  public ActionResultType useOn(ItemUseContext context) {
+    if (!context.getLevel().isClientSide) {
       System.out.println("On Item Use");
-      LazyOptional<IHyperHandlerEnergy> opHandler = context.getItem().getCapability(HYPER_ENERGY_HANDLER);
+      LazyOptional<IHyperHandlerEnergy> opHandler = context.getItemInHand().getCapability(HYPER_ENERGY_HANDLER);
       if(!opHandler.isPresent()) {
-        Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + context.getItem().getTag());
+        Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + context.getItemInHand().getTag());
         return ActionResultType.FAIL;
       }
       IHyperHandlerEnergy handler = opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"));
@@ -97,7 +99,7 @@ public class ItemEnergyShield extends ModItem {
 
   @Override
   public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-    if (player.isActiveItemStackBlocking()) {
+    if (player.isBlocking()) {
       System.out.println("On Using Tick Blocking: " + count);
       return;
     }
@@ -106,10 +108,10 @@ public class ItemEnergyShield extends ModItem {
 
   @Nonnull
   @Override
-  public ActionResult<ItemStack> onItemRightClick(
+  public ActionResult<ItemStack> use(
       World worldIn, PlayerEntity playerIn, @Nonnull Hand handIn) {
-    ItemStack itemstack = playerIn.getHeldItem(handIn);
-    playerIn.setActiveHand(handIn);
+    ItemStack itemstack = playerIn.getItemInHand(handIn);
+    playerIn.startUsingItem(handIn);
 
     LazyOptional<IHyperHandlerEnergy> opHandler = itemstack.getCapability(HYPER_ENERGY_HANDLER);
     if(!opHandler.isPresent()) {
@@ -137,7 +139,7 @@ public class ItemEnergyShield extends ModItem {
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     stack
         .getCapability(HYPER_ENERGY_HANDLER)
@@ -146,7 +148,7 @@ public class ItemEnergyShield extends ModItem {
                 tooltip.add(
                     new StringTextComponent("Energy Stored: " + handler.status().getAmount())));
 
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @Override
@@ -168,7 +170,7 @@ public class ItemEnergyShield extends ModItem {
   }
 
   @Override
-  public boolean updateItemStackNBT(CompoundNBT nbt) {
+  public boolean verifyTagAfterLoad(CompoundNBT nbt) {
     return false;
   }
 }

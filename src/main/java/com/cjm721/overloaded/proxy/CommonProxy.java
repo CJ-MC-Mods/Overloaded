@@ -47,7 +47,7 @@ public class CommonProxy {
 
     networkWrapper =
         newSimpleChannel(
-            ResourceLocation.create("overloaded_network", '_'), () -> "1.0", v -> true, v -> true);
+            ResourceLocation.of("overloaded_network", '_'), () -> "1.0", v -> true, v -> true);
 
     int dis = 0;
     networkWrapper.registerMessage(

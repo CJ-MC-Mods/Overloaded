@@ -9,7 +9,7 @@ class TileFusionInterface extends TileEntity {
 
   public TileFusionInterface() {
     super(
-        TileEntityType.Builder.create(TileFusionInterface::new, ModBlocks.fusionInterface)
+        TileEntityType.Builder.of(TileFusionInterface::new, ModBlocks.fusionInterface)
             .build(null));
   }
 }

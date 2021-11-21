@@ -39,43 +39,43 @@ public class PlayerInteractionUtil {
   public static boolean tryHarvestBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
     int exp =
         net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(
-            world, player.interactionManager.getGameType(), player, pos);
+            world, player.gameMode.getGameModeForPlayer(), player, pos);
     if (exp == -1) {
       return false;
     } else {
       BlockState iblockstate = world.getBlockState(pos);
-      TileEntity tileentity = world.getTileEntity(pos);
+      TileEntity tileentity = world.getBlockEntity(pos);
       Block block = iblockstate.getBlock();
 
       if ((block instanceof CommandBlockBlock || block instanceof StructureBlock)
-          && !player.canUseCommandBlock()) {
-        world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
+          && !player.canUseGameMasterBlocks()) {
+        world.sendBlockUpdated(pos, iblockstate, iblockstate, 3);
         return false;
       } else {
-        world.playEvent(null, 2001, pos, Block.getStateId(iblockstate));
+        world.levelEvent(null, 2001, pos, Block.getId(iblockstate));
         boolean flag1;
 
-        if (player.abilities.isCreativeMode) {
+        if (player.abilities.instabuild) {
           flag1 = removeBlock(world, pos, player, false);
-          player.connection.sendPacket(new SChangeBlockPacket(world, pos));
+          player.connection.send(new SChangeBlockPacket(world, pos));
         } else {
-          ItemStack itemstack1 = player.getHeldItemMainhand();
+          ItemStack itemstack1 = player.getMainHandItem();
           ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
           boolean flag = iblockstate.canHarvestBlock(world, pos, player);
 
-          itemstack1.onBlockDestroyed(world, iblockstate, pos, player);
+          itemstack1.mineBlock(world, iblockstate, pos, player);
 
           flag1 = removeBlock(world, pos, player, flag);
           if (flag1 && flag) {
             iblockstate
                 .getBlock()
-                .harvestBlock(world, player, pos, iblockstate, tileentity, itemstack2);
+                .playerDestroy(world, player, pos, iblockstate, tileentity, itemstack2);
           }
         }
 
         // Drop experience
         if (!player.isCreative() && flag1 && exp > 0) {
-          iblockstate.getBlock().dropXpOnBlockBreak(world, player.getPosition(), exp);
+          iblockstate.getBlock().popExperience(world, player.blockPosition(), exp);
         }
         return flag1;
       }
@@ -89,7 +89,7 @@ public class PlayerInteractionUtil {
         iblockstate.getBlock().removedByPlayer(iblockstate, world, pos, player, canHarvest, iblockstate.getFluidState());
 
     if (flag) {
-      iblockstate.getBlock().onPlayerDestroy(world, pos, iblockstate);
+      iblockstate.getBlock().destroy(world, pos, iblockstate);
     }
 
     return flag;
@@ -109,14 +109,14 @@ public class PlayerInteractionUtil {
 
     // Can we place a block at this Pos
     BlockItem itemBlock = ((BlockItem) searchStack.getItem());
-//    if (worldIn.func_217400_a(newPosition, player)) {
+//    if (worldIn.loadedAndEntityCanStandOn(newPosition, player)) {
 //      return BlockPlaceResult.FAIL_DENY;
 //    }
 
     BlockSnapshot blockSnapshot =
-        BlockSnapshot.create(worldIn.getDimensionKey(), worldIn, newPosition);
+        BlockSnapshot.create(worldIn.dimension(), worldIn, newPosition);
     BlockState placedAgainst =
-        blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().offset(facing.getOpposite()));
+        blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().relative(facing.getOpposite()));
     BlockEvent.EntityPlaceEvent event =
         new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
     MinecraftForge.EVENT_BUS.post(event);
@@ -125,12 +125,12 @@ public class PlayerInteractionUtil {
       return BlockPlaceResult.FAIL_DENY;
     }
 
-    long distance = Math.round(Math.sqrt(player.getPosition().distanceSq(newPosition)));
+    long distance = Math.round(Math.sqrt(player.blockPosition().distSqr(newPosition)));
 
     long cost =
         OverloadedConfig.INSTANCE.multiToolConfig.placeBaseCost
             + OverloadedConfig.INSTANCE.multiToolConfig.costPerMeterAway * distance;
-    if (!player.abilities.isCreativeMode
+    if (!player.abilities.instabuild
         && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
       return BlockPlaceResult.FAIL_ENERGY;
 
@@ -148,7 +148,7 @@ public class PlayerInteractionUtil {
       return BlockPlaceResult.FAIL_PREREQUISITE;
     }
     ItemStack foundStack =
-        inventory.extractItem(foundStackSlot, 1, player.abilities.isCreativeMode);
+        inventory.extractItem(foundStackSlot, 1, player.abilities.instabuild);
 
     BlockItemUseContext context =
         new BlockItemUseContextPublic(
@@ -182,14 +182,14 @@ public class PlayerInteractionUtil {
             SoundCategory.BLOCKS,
             (soundtype.getVolume() + 1.0F) / 2.0F,
             soundtype.getPitch() * 0.8F);
-        if (!player.abilities.isCreativeMode) {
+        if (!player.abilities.instabuild) {
           energy.extractEnergy((int) cost, false);
         }
         return BlockPlaceResult.SUCCESS;
       case PASS:
       case FAIL:
       default:
-        inventory.insertItem(foundStackSlot, foundStack, player.abilities.isCreativeMode);
+        inventory.insertItem(foundStackSlot, foundStack, player.abilities.instabuild);
         return BlockPlaceResult.FAIL_DENY;
     }
   }
@@ -198,7 +198,7 @@ public class PlayerInteractionUtil {
     int size = inventory.getSlots();
     for (int i = 0; i < size; i++) {
       ItemStack stack = inventory.getStackInSlot(i);
-      if (!stack.isEmpty() && stack.isItemEqual(item)) {
+      if (!stack.isEmpty() && stack.sameItem(item)) {
         return i;
       }
     }
@@ -211,12 +211,12 @@ public class PlayerInteractionUtil {
   public static BlockRayTraceResult getBlockPlayerLookingAtClient(
       PlayerEntity player, float partialTicks) {
     return player
-        .getEntityWorld()
-        .rayTraceBlocks(
+        .getCommandSenderWorld()
+        .clip(
             new RayTraceContext(
                 player.getEyePosition(partialTicks),
                 player
-                    .getLook(partialTicks)
+                    .getViewVector(partialTicks)
                     .scale(OverloadedConfig.INSTANCE.multiToolConfig.reach)
                     .add(player.getEyePosition(partialTicks)),
                 RayTraceContext.BlockMode.COLLIDER,

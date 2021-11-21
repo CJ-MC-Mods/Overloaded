@@ -29,37 +29,37 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
     compound.put("StoredItem", storedItem.serializeNBT());
 
-    return super.write(compound);
+    return super.save(compound);
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    storedItem = ItemStack.read((CompoundNBT) compound.get("StoredItem"));
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    storedItem = ItemStack.of((CompoundNBT) compound.get("StoredItem"));
 
-    super.read(state, compound);
+    super.load(state, compound);
   }
 
   @Override
   @Nonnull
   public CompoundNBT getUpdateTag() {
-    return write(new CompoundNBT());
+    return save(new CompoundNBT());
   }
 
   @Nullable
   @Override
   public SUpdateTileEntityPacket getUpdatePacket() {
     CompoundNBT tag = new CompoundNBT();
-    write(tag);
+    save(tag);
 
-    return new SUpdateTileEntityPacket(getPos(), 1, tag);
+    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
   }
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.read(this.getBlockState(), pkt.getNbtCompound());
+    this.load(this.getBlockState(), pkt.getTag());
   }
 
   @Override
@@ -81,7 +81,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
         if (!simulate) {
           this.storedItem = stack;
           updateClient();
-          markDirty();
+          setChanged();
         }
         return ItemStack.EMPTY;
       }
@@ -96,7 +96,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
       if (!simulate) {
         this.storedItem = storedCopy;
         updateClient();
-        markDirty();
+        setChanged();
       }
 
       return returnCopy;
@@ -115,7 +115,7 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
       if (storedItem.getCount() == 0) {
         storedItem = ItemStack.EMPTY;
       }
-      markDirty();
+      setChanged();
       updateClient();
     }
 
@@ -123,8 +123,8 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
   }
 
   private void updateClient() {
-    BlockState state = getWorld().getBlockState(getPos());
-    getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+    BlockState state = getLevel().getBlockState(getBlockPos());
+    getLevel().sendBlockUpdated(this.getBlockPos(), state, state, 3);
   }
 
   @Override
@@ -158,9 +158,9 @@ public class TileItemInterface extends TileEntity implements IItemHandler {
 
   public void breakBlock() {
     if (!storedItem.isEmpty())
-      this.getWorld()
-          .addEntity(
+      this.getLevel()
+          .addFreshEntity(
               new ItemEntity(
-                  this.getWorld(), getPos().getX(), getPos().getY(), getPos().getZ(), storedItem));
+                  this.getLevel(), getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(), storedItem));
   }
 }

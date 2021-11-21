@@ -64,7 +64,7 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
-      return ItemStackHelper.getAndSplit(
+      return ItemStackHelper.removeItem(
           slot < inputSlots ? input : output, slot < inputSlots ? slot : slot - inputSlots, amount);
     }
     ItemStack toReturn =

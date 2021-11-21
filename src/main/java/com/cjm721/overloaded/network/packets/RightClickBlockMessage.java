@@ -32,7 +32,7 @@ public class RightClickBlockMessage {
 
     return new RightClickBlockMessage(
         new BlockPos(x, y, z),
-        Direction.byIndex(facing),
+        Direction.from3DDataValue(facing),
         buf.readFloat(),
         buf.readFloat(),
         buf.readFloat());
@@ -42,7 +42,7 @@ public class RightClickBlockMessage {
     buf.writeInt(message.pos.getX());
     buf.writeInt(message.pos.getY());
     buf.writeInt(message.pos.getZ());
-    buf.writeInt(message.hitSide.getIndex());
+    buf.writeInt(message.hitSide.get3DDataValue());
 
     buf.writeFloat(message.hitX);
     buf.writeFloat(message.hitY);

@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 
     protected AbstractBlockHyperSender(@Nonnull Properties materialIn) {
@@ -24,15 +26,15 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 
     @Override
     @Nonnull
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (hand == Hand.MAIN_HAND) {
-            ItemStack heldItem = player.getHeldItem(hand);
+            ItemStack heldItem = player.getItemInHand(hand);
             if (heldItem.isEmpty()) {
                 // SubIf so that Else block does not also need to check for heldItem == null
                 // Should find a cleaner way of showing all of this
-                if (!world.isRemote) {
-                    String message = ((AbstractTileHyperSender) world.getTileEntity(pos)).getRightClickMessage();
-                    player.sendStatusMessage(new StringTextComponent(message), false);
+                if (!world.isClientSide) {
+                    String message = ((AbstractTileHyperSender) world.getBlockEntity(pos)).getRightClickMessage();
+                    player.displayClientMessage(new StringTextComponent(message), false);
                 }
               return ActionResultType.SUCCESS;
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
@@ -45,12 +47,12 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                         int z = tag.getInt("Z");
 
                         bindToPartner(world, pos, worldID, new BlockPos(x, y, z));
-                        if (world.isRemote) {
-                            player.sendStatusMessage(new StringTextComponent("Bound Hyper Nodes"), true);
+                        if (world.isClientSide) {
+                            player.displayClientMessage(new StringTextComponent("Bound Hyper Nodes"), true);
                         }
                     } else {
-                        if (world.isRemote) {
-                            player.sendStatusMessage(new StringTextComponent("Incorrect Hyper Node Type to bind."), true);
+                        if (world.isClientSide) {
+                            player.displayClientMessage(new StringTextComponent("Incorrect Hyper Node Type to bind."), true);
                         }
                     }
                 }
@@ -58,11 +60,11 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
             }
         }
 
-        return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+        return super.use(state, world, pos, player, hand, rayTraceResult);
     }
 
     private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, String registryLocation, @Nonnull BlockPos partnerPos) {
-        ((AbstractTileHyperSender) world.getTileEntity(pos)).setPartnerInfo(registryLocation, partnerPos);
+        ((AbstractTileHyperSender) world.getBlockEntity(pos)).setPartnerInfo(registryLocation, partnerPos);
     }
 }
 

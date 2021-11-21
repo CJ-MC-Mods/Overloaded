@@ -15,6 +15,6 @@ public class RenderMultiHelmet extends AbstractRenderMultiArmor {
 
     IBakedModel helmet = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_helmet"));
 
-    this.bipedHead.addChild(new ModelRenderOBJ(this, helmet));
+    this.head.addChild(new ModelRenderOBJ(this, helmet));
   }
 }

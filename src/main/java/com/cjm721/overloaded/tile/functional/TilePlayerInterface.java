@@ -27,40 +27,40 @@ public class TilePlayerInterface extends TileEntity {
   @Override
   @Nonnull
   public CompoundNBT getUpdateTag() {
-    return write(new CompoundNBT());
+    return save(new CompoundNBT());
   }
 
   @Nullable
   @Override
   public SUpdateTileEntityPacket getUpdatePacket() {
     CompoundNBT tag = new CompoundNBT();
-    write(tag);
+    save(tag);
 
-    return new SUpdateTileEntityPacket(getPos(), 1, tag);
+    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
   }
 
   @Override
   public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.read(this.getBlockState(), pkt.getNbtCompound());
+    this.load(this.getBlockState(), pkt.getTag());
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
     if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
 
-    super.read(state, compound);
+    super.load(state, compound);
   }
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
     if (placer != null) compound.putString("Placer", placer.toString());
 
-    return super.write(compound);
+    return super.save(compound);
   }
 
   public void setPlacer(@Nonnull LivingEntity placer) {
-    if (placer instanceof PlayerEntity) this.placer = placer.getUniqueID();
+    if (placer instanceof PlayerEntity) this.placer = placer.getUUID();
   }
 
   @Nonnull
@@ -68,7 +68,7 @@ public class TilePlayerInterface extends TileEntity {
   public <T> LazyOptional<T> getCapability(
       @Nonnull Capability<T> capability, @Nullable Direction facing) {
     if (this.placer != null) {
-      PlayerEntity player = this.getWorld().getPlayerByUuid(this.placer);
+      PlayerEntity player = this.getLevel().getPlayerByUUID(this.placer);
 
       if (player != null) {
         return player.getCapability(capability, facing);

@@ -23,73 +23,73 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockInstantFurnace extends ModBlockContainer {
-  private static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+  private static final DirectionProperty FACING = HorizontalBlock.FACING;
 
   public BlockInstantFurnace() {
     super(ModBlock.getDefaultProperties());
-    this.setDefaultState(this.stateContainer.getBaseState().with(FACING, Direction.NORTH));
+    this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     setRegistryName("instant_furnace");
   }
 
   @Override
-  protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
+  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
     p_206840_1_.add(FACING);
-    super.fillStateContainer(p_206840_1_);
+    super.createBlockStateDefinition(p_206840_1_);
   }
 
   @Override
   @Nonnull
-  public ActionResultType onBlockActivated(
+  public ActionResultType use(
       BlockState state,
       World worldIn,
       BlockPos pos,
       PlayerEntity player,
       Hand handIn,
       BlockRayTraceResult hit) {
-    player.openContainer(state.getContainer(worldIn, pos));
+    player.openMenu(state.getMenuProvider(worldIn, pos));
     return ActionResultType.SUCCESS;
   }
 
   @Override
   @Nonnull
   public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
-    return this.getDefaultState().with(FACING, p_196258_1_.getPlacementHorizontalFacing().getOpposite());
+    return this.defaultBlockState().setValue(FACING, p_196258_1_.getHorizontalDirection().getOpposite());
   }
 
   @Nonnull
   @Override
-  public BlockRenderType getRenderType(BlockState state) {
+  public BlockRenderType getRenderShape(BlockState state) {
     return BlockRenderType.MODEL;
   }
 
   @Nullable
   @Override
-  public TileEntity createNewTileEntity(IBlockReader worldIn) {
+  public TileEntity newBlockEntity(IBlockReader worldIn) {
     return new TileInstantFurnace();
   }
 
   @Override
-  public void onReplaced(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if(oldState.getBlock() != newState.getBlock()) {
-      TileEntity te = world.getTileEntity(pos);
+      TileEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TileInstantFurnace) {
-        InventoryHelper.dropInventoryItems(world, pos, ((TileInstantFurnace) te));
+        InventoryHelper.dropContents(world, pos, ((TileInstantFurnace) te));
       }
     }
 
-    super.onReplaced(oldState, world, pos, newState, isMoving);
+    super.onRemove(oldState, world, pos, newState, isMoving);
   }
 
   @Override
   @Nonnull
   public BlockState rotate(@Nonnull BlockState state, Rotation p_185499_2_) {
-    return state.with(FACING, p_185499_2_.rotate(state.get(FACING)));
+    return state.setValue(FACING, p_185499_2_.rotate(state.getValue(FACING)));
   }
 
   @Override
   @Nonnull
   public BlockState mirror(@Nonnull BlockState state, Mirror p_185471_2_) {
-    return state.rotate(p_185471_2_.toRotation(state.get(FACING)));
+    return state.rotate(p_185471_2_.getRotation(state.getValue(FACING)));
   }
 }

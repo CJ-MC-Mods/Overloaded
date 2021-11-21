@@ -9,10 +9,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public abstract class AbstractBlockHyperNode extends ModBlock {
 
   AbstractBlockHyperNode(@Nonnull Properties materialIn) {
-    super(materialIn.notSolid());
+    super(materialIn.noOcclusion());
   }
 
   @Override

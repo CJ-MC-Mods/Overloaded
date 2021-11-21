@@ -16,6 +16,6 @@ public class RenderMultiLeggings extends AbstractRenderMultiArmor {
     IBakedModel rightLeg = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_right_leg"));
 
 //    this.bipedLeftLeg.addChild(new ModelRenderOBJ(this, leftLeg));
-    this.bipedRightLeg.addChild(new ModelRenderOBJ(this, rightLeg));
+    this.rightLeg.addChild(new ModelRenderOBJ(this, rightLeg));
   }
 }

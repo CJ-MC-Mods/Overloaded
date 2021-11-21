@@ -5,7 +5,7 @@ license="All rights reserved"
 [[mods]]
     modId="overloaded"
     namespace="overloaded"
-    version="${version}"
+    version="${file.jarVersion}"
     displayName="Overloaded"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/overloaded"
     logoFile="logo.png"

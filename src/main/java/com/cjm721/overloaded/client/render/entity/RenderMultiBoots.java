@@ -15,7 +15,7 @@ public class RenderMultiBoots extends AbstractRenderMultiArmor {
         IBakedModel leftLeg = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_left_boot"));
         IBakedModel rightLeg = Minecraft.getInstance().getModelManager().getModel(new ResourceLocation(Overloaded.MODID, "item/armor/multi_right_boot"));
 
-        this.bipedLeftLeg.addChild(new ModelRenderOBJ(this, leftLeg));
-        this.bipedRightLeg.addChild(new ModelRenderOBJ(this, rightLeg));
+        this.leftLeg.addChild(new ModelRenderOBJ(this, leftLeg));
+        this.rightLeg.addChild(new ModelRenderOBJ(this, rightLeg));
     }
 }

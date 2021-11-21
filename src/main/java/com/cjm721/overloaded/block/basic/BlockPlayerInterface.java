@@ -28,10 +28,12 @@ import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockPlayerInterface extends ModBlockTile {
 
   public BlockPlayerInterface() {
-    super(Properties.create(Material.GLASS).hardnessAndResistance(3).variableOpacity().notSolid());
+    super(Properties.of(Material.GLASS).strength(3).dynamicShape().noOcclusion());
     setRegistryName("player_interface");
   }
 
@@ -42,11 +44,11 @@ public class BlockPlayerInterface extends ModBlockTile {
   }
 
   @Override
-  public void onBlockPlacedBy(
+  public void setPlacedBy(
       World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity entity, @Nonnull ItemStack stack) {
-    ((TilePlayerInterface) world.getTileEntity(pos)).setPlacer(entity);
+    ((TilePlayerInterface) world.getBlockEntity(pos)).setPlacer(entity);
 
-    super.onBlockPlacedBy(world, pos, state, entity, stack);
+    super.setPlacedBy(world, pos, state, entity, stack);
   }
 
   @Override
@@ -61,37 +63,37 @@ public class BlockPlayerInterface extends ModBlockTile {
 
   @Override
   @Nonnull
-  public ActionResultType onBlockActivated(
+  public ActionResultType use(
       @Nonnull BlockState state,
       World world,
       @Nonnull BlockPos pos,
       @Nonnull PlayerEntity player,
       @Nonnull Hand hand,
       @Nonnull BlockRayTraceResult rayTraceResult) {
-    if (!world.isRemote && hand == Hand.MAIN_HAND) {
-      TileEntity te = world.getTileEntity(pos);
+    if (!world.isClientSide && hand == Hand.MAIN_HAND) {
+      TileEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TilePlayerInterface) {
         UUID placer = ((TilePlayerInterface) te).getPlacer();
 
         if (placer == null) {
           player.sendMessage(
-              new StringTextComponent("Not bound to anyone..... ghosts placed this."), player.getUniqueID());
+              new StringTextComponent("Not bound to anyone..... ghosts placed this."), player.getUUID());
         } else {
           String username = UsernameCache.getLastKnownUsername(placer);
           player.sendMessage(
               new StringTextComponent(
-                  "Bound to player: " + (username == null ? placer.toString() : username)), player.getUniqueID());
+                  "Bound to player: " + (username == null ? placer.toString() : username)), player.getUUID());
         }
       }
       return ActionResultType.SUCCESS;
     }
 
-    return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
+    return super.use(state, world, pos, player, hand, rayTraceResult);
   }
 
   @Override
-  public boolean isTransparent(@Nonnull BlockState state) {
+  public boolean useShapeForLightOcclusion(@Nonnull BlockState state) {
     return true;
   }
 }

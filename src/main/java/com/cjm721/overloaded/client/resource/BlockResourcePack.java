@@ -56,12 +56,12 @@ public class BlockResourcePack extends AbstractInjectableResourcePack {
 
   @Override
   @Nonnull
-  public InputStream getRootResourceStream(String fileName) {
+  public InputStream getRootResource(String fileName) {
     return null;
   }
 
   @Override
-  public InputStream getResourceStream(ResourcePackType type, ResourceLocation location)
+  public InputStream getResource(ResourcePackType type, ResourceLocation location)
       throws IOException {
     if (location.getPath().endsWith(".png")) {
       return getImageInputStream(location);
@@ -79,7 +79,7 @@ public class BlockResourcePack extends AbstractInjectableResourcePack {
 
 
   @Override
-  public Collection<ResourceLocation> getAllResourceLocations(ResourcePackType type, String namespaceIn, String pathIn, int maxDepthIn, Predicate<String> filterIn) {
+  public Collection<ResourceLocation> getResources(ResourcePackType type, String namespaceIn, String pathIn, int maxDepthIn, Predicate<String> filterIn) {
     return ImmutableList.<ResourceLocation>builder()
         .addAll(images.keySet())
         .addAll(blockStates.keySet())
@@ -87,18 +87,18 @@ public class BlockResourcePack extends AbstractInjectableResourcePack {
   }
 
   @Override
-  public boolean resourceExists(ResourcePackType type, ResourceLocation location) {
+  public boolean hasResource(ResourcePackType type, ResourceLocation location) {
     return images.containsKey(location) || blockStates.containsKey(location);
   }
 
   @Override
-  public Set<String> getResourceNamespaces(ResourcePackType type) {
+  public Set<String> getNamespaces(ResourcePackType type) {
     return ImmutableSet.copyOf(domains);
   }
 
   @Nullable
   @Override
-  public <T> T getMetadata(IMetadataSectionSerializer<T> deserializer) {
+  public <T> T getMetadataSection(IMetadataSectionSerializer<T> deserializer) {
     return null;
   }
 

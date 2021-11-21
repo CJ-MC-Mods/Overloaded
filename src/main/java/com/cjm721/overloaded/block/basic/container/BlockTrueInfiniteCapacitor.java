@@ -22,9 +22,9 @@ public class BlockTrueInfiniteCapacitor extends AbstractBlockHyperContainer {
   @Override
   protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
     BigIntEnergyStack stack =
-        ((TileTrueInfiniteCapacitor) world.getTileEntity(pos)).getStorage().bigStatus();
+        ((TileTrueInfiniteCapacitor) world.getBlockEntity(pos)).getStorage().bigStatus();
 
-    player.sendStatusMessage(
+    player.displayClientMessage(
         new StringTextComponent(
             String.format("Energy Amount: %,d Bits: %,d", stack.getAmount(), stack.getAmount().bitLength())),
         false);

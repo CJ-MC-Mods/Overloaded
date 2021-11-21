@@ -34,7 +34,7 @@ public class InstantFurnaceContainer extends ModContainer {
 
   public InstantFurnaceContainer(int id, PlayerInventory playerInventory) {
     this(id, playerInventory, new TileInstantFurnace());
-    this.instanceFurnace.setWorldAndPos(playerInventory.player.world, playerInventory.player.getPosition());
+    this.instanceFurnace.setLevelAndPosition(playerInventory.player.level, playerInventory.player.blockPosition());
   }
 
   public InstantFurnaceContainer(
@@ -58,7 +58,7 @@ public class InstantFurnaceContainer extends ModContainer {
                 .ifPresent(e -> ((EnergyInventoryBasedRecipeProcessor) e).setCurrentEnergy(amount));
           }
         };
-    maxPower = IntReferenceHolder.single();
+    maxPower = IntReferenceHolder.standalone();
 
     IItemHandler handler =
         instanceFurnace
@@ -90,20 +90,20 @@ public class InstantFurnaceContainer extends ModContainer {
       this.addSlot(new Slot(playerInventory, k, 8 + k * 18, 166));
     }
 
-    this.trackInt(power).set(getPowerFromTE());
-    this.trackInt(maxPower).set(getMaxPowerFromTE());
+    this.addDataSlot(power).set(getPowerFromTE());
+    this.addDataSlot(maxPower).set(getMaxPowerFromTE());
   }
 
   @Override
   @Nonnull
-  public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
+  public ItemStack quickMoveStack(PlayerEntity playerIn, int index) {
     return ContainerUtil.transferStackInSlot(playerIn, index, this);
   }
 
   @Override
-  public boolean canInteractWith(@Nonnull PlayerEntity playerIn) {
-    return isWithinUsableDistance(
-        IWorldPosCallable.of(instanceFurnace.getWorld(), instanceFurnace.getPos()),
+  public boolean stillValid(@Nonnull PlayerEntity playerIn) {
+    return stillValid(
+        IWorldPosCallable.create(instanceFurnace.getLevel(), instanceFurnace.getBlockPos()),
         playerIn,
         ModBlocks.instantFurnace);
   }
@@ -117,28 +117,28 @@ public class InstantFurnaceContainer extends ModContainer {
   }
 
   @Override
-  public void detectAndSendChanges() {
+  public void broadcastChanges() {
     int j;
-    for (j = 0; j < this.inventorySlots.size(); ++j) {
-      ItemStack itemstack = this.inventorySlots.get(j).getStack();
+    for (j = 0; j < this.slots.size(); ++j) {
+      ItemStack itemstack = this.slots.get(j).getItem();
       itemstack = itemstack.isEmpty() ? ItemStack.EMPTY : itemstack.copy();
-      this.inventoryItemStacks.set(j, itemstack);
+      this.lastSlots.set(j, itemstack);
 
-      for (IContainerListener icontainerlistener : this.listeners) {
-        icontainerlistener.sendSlotContents(this, j, itemstack);
+      for (IContainerListener icontainerlistener : this.containerListeners) {
+        icontainerlistener.slotChanged(this, j, itemstack);
       }
     }
 
-    ContainerDataMessage message = new ContainerDataMessage(this.windowId);
-    for (j = 0; j < this.trackedIntReferences.size(); ++j) {
-      IntReferenceHolder intreferenceholder = this.trackedIntReferences.get(j);
-      if (intreferenceholder.isDirty()) {
+    ContainerDataMessage message = new ContainerDataMessage(this.containerId);
+    for (j = 0; j < this.dataSlots.size(); ++j) {
+      IntReferenceHolder intreferenceholder = this.dataSlots.get(j);
+      if (intreferenceholder.checkAndClearUpdateFlag()) {
         message.addData(j, intreferenceholder.get());
       }
     }
 
     if (!message.getData().isEmpty()) {
-      for (IContainerListener listener : this.listeners) {
+      for (IContainerListener listener : this.containerListeners) {
         if (listener instanceof ServerPlayerEntity) {
           Overloaded.proxy.networkWrapper.send(
               PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) listener), message);

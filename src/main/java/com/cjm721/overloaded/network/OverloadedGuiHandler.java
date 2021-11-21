@@ -9,6 +9,6 @@ import javax.annotation.Nullable;
 
 public class OverloadedGuiHandler {
   public static void openMultiArmorGUI() {
-    Minecraft.getInstance().displayGuiScreen(new MultiArmorGuiScreen());
+    Minecraft.getInstance().setScreen(new MultiArmorGuiScreen());
   }
 }

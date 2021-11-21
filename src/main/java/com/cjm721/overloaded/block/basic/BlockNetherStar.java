@@ -9,10 +9,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BlockNetherStar extends ModBlock {
 
   public BlockNetherStar() {
-    super(Properties.create(Material.IRON).hardnessAndResistance(16384));
+    super(Properties.of(Material.METAL).strength(16384));
     setRegistryName("nether_star_block");
   }
 

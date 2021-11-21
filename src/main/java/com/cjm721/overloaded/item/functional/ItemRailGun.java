@@ -58,7 +58,7 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     stack
         .getCapability(GENERIC_DATA_STORAGE)
@@ -75,7 +75,7 @@ public class ItemRailGun extends PowerModItem {
                           NumberFormat.getInstance().format(energyRequirement))));
             });
 
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -93,49 +93,49 @@ public class ItemRailGun extends PowerModItem {
   @Override
   @Nonnull
   @OnlyIn(Dist.CLIENT)
-  public ActionResult<ItemStack> onItemRightClick(
+  public ActionResult<ItemStack> use(
       World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
-    if (worldIn.isRemote) {
+    if (worldIn.isClientSide) {
       int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
-      Vector3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getRenderPartialTicks());
-      Vector3d vec3d1 = playerIn.getLook(Minecraft.getInstance().getRenderPartialTicks());
+      Vector3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getFrameTime());
+      Vector3d vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getFrameTime());
       Vector3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
       AxisAlignedBB axisalignedbb =
-          playerIn.getBoundingBox().expand(vec3d1.scale(distance)).grow(1.0D, 1.0D, 1.0D);
+          playerIn.getBoundingBox().expandTowards(vec3d1.scale(distance)).inflate(1.0D, 1.0D, 1.0D);
       EntityRayTraceResult ray =
-          ProjectileHelper.rayTraceEntities(
+          ProjectileHelper.getEntityHitResult(
               playerIn,
               vec3d,
               vec3d2,
               axisalignedbb,
-              (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.canBeCollidedWith(),
+              (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.isPickable(),
               distance * distance);
       if (ray != null) {
         Vector3d moveVev =
-            playerIn.getEyePosition(1).subtract(ray.getHitVec()).normalize().scale(-1.0);
+            playerIn.getEyePosition(1).subtract(ray.getLocation()).normalize().scale(-1.0);
         Overloaded.proxy.networkWrapper.sendToServer(
-            new RailGunFireMessage(ray.getEntity().getEntityId(), moveVev, handIn));
+            new RailGunFireMessage(ray.getEntity().getId(), moveVev, handIn));
       } else {
         Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vector3d.ZERO, handIn));
       }
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   @SubscribeEvent
   public void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
-    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
-      ItemStack stack = player.getHeldItemMainhand();
-      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == this) {
+    if (event.getScrollDelta() != 0 && player != null && player.isShiftKeyDown()) {
+      ItemStack stack = player.getMainHandItem();
+      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() == this) {
         int powerDelta =
             Long.signum(Math.round(event.getScrollDelta()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
         if (InputMappings.isKeyDown(
-            Minecraft.getInstance().getMainWindow().getHandle(),
-            ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getKeyCode())) {
+            Minecraft.getInstance().getWindow().getWindow(),
+            ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getValue())) {
           powerDelta *= 100;
         }
         Overloaded.proxy.networkWrapper.sendToServer(new RailGunSettingsMessage(powerDelta));
@@ -146,7 +146,7 @@ public class ItemRailGun extends PowerModItem {
 
   public void handleFireMessage(
       @Nonnull ServerPlayerEntity player, @Nonnull RailGunFireMessage message) {
-    ItemStack itemStack = player.getHeldItem(message.hand);
+    ItemStack itemStack = player.getItemInHand(message.hand);
     if (itemStack.getItem() != this) {
       return;
     }
@@ -178,24 +178,24 @@ public class ItemRailGun extends PowerModItem {
             .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
 
     if (energy.getEnergyStored() < energyRequired) {
-      player.sendStatusMessage(new StringTextComponent("Not enough power to fire."), true);
+      player.displayClientMessage(new StringTextComponent("Not enough power to fire."), true);
       return;
     }
 
     int energyExtracted = energy.extractEnergy(energyRequired, false);
 
-    @Nullable Entity entity = player.world.getEntityByID(message.id);
+    @Nullable Entity entity = player.level.getEntity(message.id);
     if (entity == null || !entity.isAlive()) {
       return;
-    } else if (player.getDistance(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
-      player.sendStatusMessage(new StringTextComponent("Target out of range."), true);
-    } else if (entity.attackEntityFrom(
-        DamageSource.causePlayerDamage(player),
+    } else if (player.distanceTo(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
+      player.displayClientMessage(new StringTextComponent("Target out of range."), true);
+    } else if (entity.hurt(
+        DamageSource.playerAttack(player),
         (float) (OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted))) {
       Vector3d knockback =
           message.moveVector.scale(
               energyExtracted * OverloadedConfig.INSTANCE.railGun.knockbackPerRF);
-      entity.addVelocity(knockback.x, knockback.y, knockback.z);
+      entity.push(knockback.x, knockback.y, knockback.z);
     }
   }
 
@@ -211,7 +211,7 @@ public class ItemRailGun extends PowerModItem {
 
   public void handleSettingsMessage(
       @Nonnull ServerPlayerEntity player, @Nonnull RailGunSettingsMessage message) {
-    ItemStack itemStack = player.getHeldItem(Hand.MAIN_HAND);
+    ItemStack itemStack = player.getItemInHand(Hand.MAIN_HAND);
     if (itemStack.getItem() != this) {
       return;
     }
@@ -237,7 +237,7 @@ public class ItemRailGun extends PowerModItem {
     integerMap.put(RAILGUN_POWER_KEY, power);
     cap.suggestSave();
 
-    player.sendStatusMessage(
+    player.displayClientMessage(
         new StringTextComponent("Power usage set to: " + NumberFormat.getInstance().format(power)),
         true);
   }

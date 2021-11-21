@@ -108,8 +108,8 @@ public class GenericDataStorage
     Map<String, Float> floats = instance.getFloatMap();
     Map<String, Double> doubles = instance.getDoubleMap();
 
-    for (String key : tagCompound.keySet()) {
-      switch (tagCompound.getTagId(key)) {
+    for (String key : tagCompound.getAllKeys()) {
+      switch (tagCompound.getTagType(key)) {
         case Constants.NBT.TAG_INT:
           integers.put(key, tagCompound.getInt(key));
           break;

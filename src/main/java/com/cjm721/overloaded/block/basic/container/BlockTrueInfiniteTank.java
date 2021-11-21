@@ -22,14 +22,14 @@ public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
   @Override
   protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
     BigIntFluidStack storedFluid =
-        ((TileTrueInfiniteTank) world.getTileEntity(pos)).getStorage().bigStatus();
+        ((TileTrueInfiniteTank) world.getBlockEntity(pos)).getStorage().bigStatus();
     if (storedFluid == null || storedFluid.fluidStack == null) {
-      player.sendStatusMessage(new StringTextComponent("Fluid: EMPTY"), false);
+      player.displayClientMessage(new StringTextComponent("Fluid: EMPTY"), false);
     } else {
-      player.sendStatusMessage(
+      player.displayClientMessage(
           new StringTextComponent("Fluid: ")
               .append(storedFluid.fluidStack.getDisplayName())
-              .appendString(
+              .append(
                   String.format(
                       " Amount: %,d Bits: %,d",
                       storedFluid.amount, storedFluid.amount.bitLength())),

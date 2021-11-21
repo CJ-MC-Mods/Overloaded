@@ -36,13 +36,13 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
 
   @Override
   public void tick() {
-    if (this.getWorld().isRemote) {
+    if (this.getLevel().isClientSide) {
       return;
     }
 
     if (stack.isEmpty()) return;
 
-    float hardness = ((BlockItem) stack.getItem()).getBlock().getDefaultState().getBlockHardness(null, null);
+    float hardness = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getDestroySpeed(null, null);
     if (hardness <= 0) return;
 
     float ecFloat =
@@ -71,8 +71,8 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
 //    fluidStorage.readFromNBT((CompoundNBT) compound.get("Fluid"));
     energyStorage =
         new EnergyStorage(compound.getInt("Energy"), Integer.MAX_VALUE, Integer.MAX_VALUE);
@@ -80,7 +80,7 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
 
   @Override
   @Nonnull
-  public CompoundNBT write(CompoundNBT compound) {
+  public CompoundNBT save(CompoundNBT compound) {
     CompoundNBT fluid = new CompoundNBT();
 
 //    fluidStorage.writeToNBT(fluid);
@@ -88,7 +88,7 @@ public class TileMatterPurifier extends TileEntity implements ITickableTileEntit
     compound.put("Fluid", fluid);
     compound.putInt("Energy", energyStorage.getEnergyStored());
 
-    return super.write(compound);
+    return super.save(compound);
   }
 
   @Nonnull

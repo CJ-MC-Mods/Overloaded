@@ -13,15 +13,15 @@ public class OverloadedItemGroups {
   public static final ItemGroup TECH =
       new ItemGroup("Overloaded_Tech") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
           return new ItemStack(ModBlocks.creativeGenerator);
         }
 
         @Override
-        public void fill(@Nonnull NonNullList<ItemStack> items) {
-          super.fill(items);
+        public void fillItemList(@Nonnull NonNullList<ItemStack> items) {
+          super.fillItemList(items);
 
-          items.sort(Comparator.comparing(is -> is.getDisplayName().toString()));
+          items.sort(Comparator.comparing(is -> is.getHoverName().toString()));
         }
       };
 }

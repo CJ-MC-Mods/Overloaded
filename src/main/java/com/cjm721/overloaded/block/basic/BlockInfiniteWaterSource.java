@@ -31,7 +31,7 @@ import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_
 public class BlockInfiniteWaterSource extends ModBlock {
 
   public BlockInfiniteWaterSource() {
-    super(getDefaultProperties().notSolid());
+    super(getDefaultProperties().noOcclusion());
     setRegistryName("infinite_water_source");
   }
 
@@ -60,22 +60,22 @@ public class BlockInfiniteWaterSource extends ModBlock {
 
   @Override
   @Nonnull
-  public ActionResultType onBlockActivated(
+  public ActionResultType use(
       BlockState state,
       World world,
       BlockPos pos,
       PlayerEntity player,
       Hand handIn,
       BlockRayTraceResult hit) {
-    ItemStack heldItem = player.getHeldItem(handIn);
+    ItemStack heldItem = player.getItemInHand(handIn);
     if (!heldItem.isEmpty()) {
-      TileEntity te = world.getTileEntity(pos);
+      TileEntity te = world.getBlockEntity(pos);
       if (te instanceof TileInfiniteWaterSource) {
         LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
         if (!opHandler.isPresent()) {
           Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
         } else {
-          if (!world.isRemote) {
+          if (!world.isClientSide) {
             return FluidUtil.interactWithFluidHandler(
                     player,
                     handIn,

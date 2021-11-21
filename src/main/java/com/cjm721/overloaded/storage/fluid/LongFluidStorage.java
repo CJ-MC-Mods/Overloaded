@@ -13,6 +13,8 @@ import javax.annotation.Nonnull;
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+
 public class LongFluidStorage
     implements IFluidHandler, IHyperHandlerFluid, INBTSerializable<CompoundNBT> {
 

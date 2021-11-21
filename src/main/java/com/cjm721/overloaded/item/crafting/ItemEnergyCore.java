@@ -11,10 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemEnergyCore extends ModItem {
 
   public ItemEnergyCore() {
-    super(new Properties().maxStackSize(64));
+    super(new Properties().stacksTo(64));
     setRegistryName("energy_core");
     //        setTranslationKey("energy_core");
   }

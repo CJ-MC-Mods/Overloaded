@@ -36,6 +36,8 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.client.renderer.RenderType.State;
+
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RenderMultiToolAssist {
 
@@ -43,11 +45,11 @@ public class RenderMultiToolAssist {
   public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
     ClientPlayerEntity player = Minecraft.getInstance().player;
 
-    if (event.getScrollDelta() != 0 && player != null && player.isSneaking()) {
-      ItemStack stack = player.getHeldItemMainhand();
-      if (player.isSneaking() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
+    if (event.getScrollDelta() != 0 && player != null && player.isShiftKeyDown()) {
+      ItemStack stack = player.getMainHandItem();
+      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
         changeHelpMode((int) Math.round(event.getScrollDelta()));
-        player.sendStatusMessage(
+        player.displayClientMessage(
             new StringTextComponent("Assist Mode: " + getAssistMode().getName()), true);
         event.setCanceled(true);
       }
@@ -81,9 +83,9 @@ public class RenderMultiToolAssist {
 
   @SubscribeEvent
   public static void renderWorldLastEvent(RenderWorldLastEvent event) {
-    float partialTick = Minecraft.getInstance().getRenderPartialTicks();
+    float partialTick = Minecraft.getInstance().getFrameTime();
     PlayerEntity player = Minecraft.getInstance().player;
-    if (player.getHeldItemMainhand().getItem() != ModItems.multiTool) return;
+    if (player.getMainHandItem().getItem() != ModItems.multiTool) return;
 
     RayTraceResult resultPick =
         player.pick(OverloadedConfig.INSTANCE.multiToolConfig.reach, partialTick, false);
@@ -92,20 +94,20 @@ public class RenderMultiToolAssist {
     }
 
     BlockRayTraceResult result = ((BlockRayTraceResult) resultPick);
-    ItemStack stack = ModItems.multiTool.getSelectedBlockItemStack(player.getHeldItemMainhand());
+    ItemStack stack = ModItems.multiTool.getSelectedBlockItemStack(player.getMainHandItem());
 
     BlockState state;
     if (stack.getItem() instanceof BlockItem) {
-      state = ((BlockItem) stack.getItem()).getBlock().getDefaultState();
-      state = state.getStateAtViewpoint(player.getEntityWorld(), result.getPos(), player.getEyePosition(partialTick));
+      state = ((BlockItem) stack.getItem()).getBlock().defaultBlockState();
+      state = state.getStateAtViewpoint(player.getCommandSenderWorld(), result.getBlockPos(), player.getEyePosition(partialTick));
       state =
           state
               .getBlock()
               .getStateForPlacement(
                   new BlockItemUseContextPublic(
-                      player.getEntityWorld(), player, Hand.MAIN_HAND, stack, result));
+                      player.getCommandSenderWorld(), player, Hand.MAIN_HAND, stack, result));
     } else {
-      state = Blocks.COBBLESTONE.getDefaultState();
+      state = Blocks.COBBLESTONE.defaultBlockState();
     }
 
     switch (getAssistMode()) {
@@ -126,44 +128,44 @@ public class RenderMultiToolAssist {
         Minecraft.getInstance()
             .getModelManager()
             .getModel(new ModelResourceLocation(MODID + ":remove_preview", ""));
-    BlockPos toRenderAt = result.getPos();
+    BlockPos toRenderAt = result.getBlockPos();
 
-    renderBlockModel(event, toRenderAt, bakeModel, Blocks.COBBLESTONE.getDefaultState());
+    renderBlockModel(event, toRenderAt, bakeModel, Blocks.COBBLESTONE.defaultBlockState());
   }
 
   private static void renderBlockPreview(RenderWorldLastEvent event, BlockRayTraceResult result, @Nonnull BlockState state) {
     IBakedModel model =
-        Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
-    BlockPos toRenderAt = result.getPos().add(result.getFace().getDirectionVec());
+        Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+    BlockPos toRenderAt = result.getBlockPos().offset(result.getDirection().getNormal());
 
     renderBlockModel(event, toRenderAt, model, state);
   }
 
   private static void renderBlockModel(RenderWorldLastEvent event,
                                        BlockPos toRenderAt, @Nonnull IBakedModel model, @Nonnull BlockState state) {
-    ActiveRenderInfo camera = Minecraft.getInstance().gameRenderer.getActiveRenderInfo();
+    ActiveRenderInfo camera = Minecraft.getInstance().gameRenderer.getMainCamera();
 
-    final double x = camera.getProjectedView().getX();
-    final double y = camera.getProjectedView().getY();
-    final double z = camera.getProjectedView().getZ();
+    final double x = camera.getPosition().x();
+    final double y = camera.getPosition().y();
+    final double z = camera.getPosition().z();
 
-    event.getMatrixStack().push();
+    event.getMatrixStack().pushPose();
     event.getMatrixStack().translate(toRenderAt.getX() - x, toRenderAt.getY() - y, toRenderAt.getZ() - z);
-    IVertexBuilder buffer = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(GhostRenderType.getInstance());
-    Minecraft.getInstance().getBlockRendererDispatcher().getBlockModelRenderer().renderModel(
-        Minecraft.getInstance().world,
+    IVertexBuilder buffer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(GhostRenderType.getInstance());
+    Minecraft.getInstance().getBlockRenderer().getModelRenderer().tesselateBlock(
+        Minecraft.getInstance().level,
         model,
         state,
         toRenderAt,
         event.getMatrixStack(),
         buffer,
         false,
-        Minecraft.getInstance().world.rand,
+        Minecraft.getInstance().level.random,
         0, 0
     );
-    event.getMatrixStack().pop();
+    event.getMatrixStack().popPose();
 
-    Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(GhostRenderType.getInstance());
+    Minecraft.getInstance().renderBuffers().bufferSource().endBatch(GhostRenderType.getInstance());
   }
 
   public static class GhostRenderType extends RenderType {
@@ -173,17 +175,17 @@ public class RenderMultiToolAssist {
     }
 
     public static RenderType getInstance() {
-      return makeType("ghost_model",
+      return create("ghost_model",
           DefaultVertexFormats.BLOCK,
           7,
           262144,
           true,
           true,
-          State.getBuilder().shadeModel(SHADE_ENABLED).lightmap(LIGHTMAP_DISABLED).texture(BLOCK_SHEET_MIPPED).transparency(new RenderState.TransparencyState("ghost_transparency", () -> {
+          State.builder().setShadeModelState(SMOOTH_SHADE).setLightmapState(NO_LIGHTMAP).setTextureState(BLOCK_SHEET_MIPPED).setTransparencyState(new RenderState.TransparencyState("ghost_transparency", () -> {
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             RenderSystem.colorMask(true, true, true, true);
-          }, RenderSystem::disableBlend)).build(true));
+          }, RenderSystem::disableBlend)).createCompositeState(true));
     }
   }
 }

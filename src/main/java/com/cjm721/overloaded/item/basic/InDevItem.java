@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+import net.minecraft.item.Item.Properties;
+
 public class InDevItem extends ModItem {
 
   public InDevItem(String name) {

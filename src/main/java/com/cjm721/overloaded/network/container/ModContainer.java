@@ -15,7 +15,7 @@ public abstract class ModContainer extends Container implements Consumer<Contain
   @Override
   public void accept(ContainerDataMessage message) {
     for (ContainerDataMessage.ContainerData data : message.getData()) {
-      this.trackedIntReferences.get(data.index).set(data.value);
+      this.dataSlots.get(data.index).set(data.value);
     }
   }
 }

@@ -25,12 +25,12 @@ public class ModelRenderOBJ extends ModelRenderer {
 
     @Override
     public void render(@Nonnull MatrixStack matrix, @Nonnull IVertexBuilder vertex, int light, int overlay, float r, float g, float b, float a) {
-        if(this.showModel) {
-            matrix.push();
-            vertex = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().getBuffer(RenderType.getCutout());
+        if(this.visible) {
+            matrix.pushPose();
+            vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.cutout());
             this.renderModel(objModel, ItemStack.EMPTY, light, overlay, matrix, vertex);
-            matrix.pop();
-            Minecraft.getInstance().getRenderTypeBuffers().getBufferSource().finish(RenderType.getCutout());
+            matrix.popPose();
+            Minecraft.getInstance().renderBuffers().bufferSource().endBatch(RenderType.cutout());
         }
     }
 
@@ -44,10 +44,10 @@ public class ModelRenderOBJ extends ModelRenderer {
 //        matrixStackIn.translate(0,-12,0);
         for(Direction direction : Direction.values()) {
             random.setSeed(i);
-            Minecraft.getInstance().getItemRenderer().renderQuads(matrixStackIn, bufferIn, modelIn.getQuads(null, direction, random), stack, combinedLightIn, combinedOverlayIn);
+            Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, direction, random), stack, combinedLightIn, combinedOverlayIn);
         }
 
         random.setSeed(i);
-        Minecraft.getInstance().getItemRenderer().renderQuads(matrixStackIn, bufferIn, modelIn.getQuads(null, null, random), stack, combinedLightIn, combinedOverlayIn);
+        Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, null, random), stack, combinedLightIn, combinedOverlayIn);
     }
 }

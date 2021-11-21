@@ -19,22 +19,24 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemSettingEditor extends ModItem {
 
   public ItemSettingEditor() {
-    super(new Properties().maxStackSize(1));
+    super(new Properties().stacksTo(1));
     setRegistryName("settings_editor");
   }
 
   @Override
   @Nonnull
-  public ActionResult<ItemStack> onItemRightClick(
+  public ActionResult<ItemStack> use(
       World worldIn, PlayerEntity playerIn, Hand handIn) {
-    if (worldIn.isRemote) {
+    if (worldIn.isClientSide) {
       OverloadedGuiHandler.openMultiArmorGUI();
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getHeldItem(handIn));
+    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   @OnlyIn(Dist.CLIENT)

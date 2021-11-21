@@ -28,15 +28,15 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    compound = super.write(compound);
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    compound = super.save(compound);
     compound.put("BigIntItemStorage", itemStorage.serializeNBT());
     return compound;
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
     if (compound.contains("BigIntItemStorage")) {
       itemStorage.deserializeNBT((CompoundNBT) compound.get("BigIntItemStorage"));
     }
@@ -53,7 +53,7 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
 
   @Override
   public void dataUpdated() {
-    markDirty();
+    setChanged();
   }
 
   @Nonnull

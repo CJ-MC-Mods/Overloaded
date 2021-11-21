@@ -28,7 +28,7 @@ public class FurnaceProcessor extends EnergyInventoryBasedRecipeProcessor<Furnac
 
   @Override
   int energyCostPerRecipeOperation(FurnaceRecipe recipe) {
-    long energy = recipe.getCookTime() * (long) OverloadedConfig.INSTANCE.productionConfig.energyPerCookTime;
+    long energy = recipe.getCookingTime() * (long) OverloadedConfig.INSTANCE.productionConfig.energyPerCookTime;
 
     return (int) Math.min(energy, Integer.MAX_VALUE);
   }

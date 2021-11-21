@@ -21,9 +21,9 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
     super(fontRendererObj, x, y, width, height, new StringTextComponent(""));
     this.min = min;
     this.max = max;
-    this.setValidator(this::floatValidate);
+    this.setFilter(this::floatValidate);
 
-    this.setText(Float.toString(currentValue));
+    this.setValue(Float.toString(currentValue));
   }
 
   private boolean floatValidate(String text) {
@@ -42,12 +42,12 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
     super.setFocused(isFocusedIn);
 
     if (!isFocusedIn) {
-      this.setText(Float.toString(getFloatValue()));
+      this.setValue(Float.toString(getFloatValue()));
     }
   }
 
   public float getFloatValue() {
-    String text = this.getText();
+    String text = this.getValue();
     if (text.isEmpty()) {
       return min;
     }

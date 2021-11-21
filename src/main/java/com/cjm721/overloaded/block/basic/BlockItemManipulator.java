@@ -74,21 +74,21 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
   //    }
 
   private Direction getFront(LivingEntity placer) {
-    Vector3d lookVec = placer.getLookVec();
-    return Direction.getFacingFromVector((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
+    Vector3d lookVec = placer.getLookAngle();
+    return Direction.getNearest((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
   }
 
   @Override
-  public void onReplaced(
+  public void onRemove(
       BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock()) {
-      TileEntity te = world.getTileEntity(pos);
+      TileEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TileItemManipulator) {
         ((TileItemManipulator) te).breakBlock();
       }
     }
 
-    super.onReplaced(oldState, world, pos, newState, isMoving);
+    super.onRemove(oldState, world, pos, newState, isMoving);
   }
 }

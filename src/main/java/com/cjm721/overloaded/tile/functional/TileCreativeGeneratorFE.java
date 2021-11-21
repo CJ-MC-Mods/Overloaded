@@ -23,11 +23,11 @@ public class TileCreativeGeneratorFE extends TileEntity
 
   @Override
   public void tick() {
-    if (getWorld().isRemote) return;
+    if (getLevel().isClientSide) return;
 
-    BlockPos pos = this.getPos();
+    BlockPos pos = this.getBlockPos();
     for (Direction facing : Direction.values()) {
-      TileEntity te = world.getTileEntity(pos.add(facing.getDirectionVec()));
+      TileEntity te = level.getBlockEntity(pos.offset(facing.getNormal()));
 
       if (te == null) continue;
 

@@ -22,19 +22,21 @@ import java.util.List;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
+import net.minecraft.item.Item.Properties;
+
 abstract class PowerModItem extends ModItem {
 
   PowerModItem() {
-    super(new Properties().maxStackSize(1));
+    super(new Properties().stacksTo(1));
   }
 
   PowerModItem(Properties properties) {
-    super(properties.maxStackSize(1));
+    super(properties.stacksTo(1));
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     stack
         .getCapability(ENERGY, null)
@@ -45,11 +47,11 @@ abstract class PowerModItem extends ModItem {
                         "Energy Stored: "
                             + NumberFormat.getInstance().format(handler.getEnergyStored()))));
 
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @Override
-  public boolean isDamageable() {
+  public boolean canBeDepleted() {
     return false;
   }
 

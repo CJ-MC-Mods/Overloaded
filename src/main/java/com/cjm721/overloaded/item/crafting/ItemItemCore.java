@@ -11,10 +11,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
+import net.minecraft.item.Item.Properties;
+
 public class ItemItemCore extends ModItem {
 
   public ItemItemCore() {
-    super(new Properties().maxStackSize(64));
+    super(new Properties().stacksTo(64));
     setRegistryName("item_core");
     //        setTranslationKey("item_core");
   }

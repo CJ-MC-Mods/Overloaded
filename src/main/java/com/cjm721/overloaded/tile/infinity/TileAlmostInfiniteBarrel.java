@@ -27,15 +27,15 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
 
   @Override
   @Nonnull
-  public CompoundNBT write(@Nonnull CompoundNBT compound) {
-    compound = super.write(compound);
+  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+    compound = super.save(compound);
     compound.put("LongItemStorage", itemStorage.serializeNBT());
     return compound;
   }
 
   @Override
-  public void read(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.read(state, compound);
+  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+    super.load(state, compound);
 
     if(compound.contains("LongItemStorage")) {
       itemStorage.deserializeNBT((CompoundNBT) compound.get("LongItemStorage"));
@@ -61,7 +61,7 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
 
   @Override
   public void dataUpdated() {
-    markDirty();
+    setChanged();
   }
 
   @Override

@@ -70,10 +70,10 @@ public class ClientProxy extends CommonProxy {
 
     ClientRegistry.bindTileEntityRenderer(ModTiles.playerInterface, PlayerInterfaceRenderer::new);
 
-    ScreenManager.registerFactory(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
+    ScreenManager.register(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
 
-    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.getTranslucent());
-    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.getTranslucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.translucent());
+    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.translucent());
   }
 
   private void registerModels(ModelRegistryEvent event) {
@@ -103,10 +103,10 @@ public class ClientProxy extends CommonProxy {
 
   private static void bakeModelAndPut(
       ResourceLocation raw, ResourceLocation baked, ModelBakeEvent event) {
-    IUnbakedModel unbakedModel = event.getModelLoader().getUnbakedModel(raw);
+    IUnbakedModel unbakedModel = event.getModelLoader().getModel(raw);
 
         IBakedModel bakedModel =
-            unbakedModel.bakeModel(
+            unbakedModel.bake(
                 event.getModelLoader(),
                 ModelLoader.defaultTextureGetter(),
                 ModelRotation.X0_Y0,

@@ -21,8 +21,8 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
   public InstantFurnaceScreen(
       InstantFurnaceContainer container, PlayerInventory playerInventory, ITextComponent name) {
     super(container, playerInventory, name);
-    this.ySize += 24;
-    this.playerInventoryTitleY += 24;
+    this.imageHeight += 24;
+    this.inventoryLabelY += 24;
   }
 
   @Override
@@ -31,23 +31,23 @@ public class InstantFurnaceScreen extends ContainerScreen<InstantFurnaceContaine
   }
 
   @Override
-  protected void drawGuiContainerBackgroundLayer(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
+  protected void renderBg(@Nonnull MatrixStack matrixStack, float partialTicks, int x, int y) {
     renderBackground(matrixStack);
-    this.minecraft.getTextureManager().bindTexture(INSTANT_FURNACE_GUI_TEXTURES);
-    int i = this.guiLeft;
-    int j = this.guiTop;
-    this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
+    this.minecraft.getTextureManager().bind(INSTANT_FURNACE_GUI_TEXTURES);
+    int i = this.leftPos;
+    int j = this.topPos;
+    this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-    double percent = this.container.getPowerFromTE() / (double) this.container.getMaxPowerFromTE();
+    double percent = this.menu.getPowerFromTE() / (double) this.menu.getMaxPowerFromTE();
 
-    this.blit(matrixStack, this.guiLeft + 8, this.guiTop + 79, 0, 194, (int) Math.round(percent * 160), 10);
+    this.blit(matrixStack, this.leftPos + 8, this.topPos + 79, 0, 194, (int) Math.round(percent * 160), 10);
 
     String text = String.format("%,.2f%%", percent * 100);
 
-    this.font.drawString(matrixStack,
+    this.font.draw(matrixStack,
         text,
-        this.guiLeft + this.xSize / 2.0f - this.font.getStringWidth(text) / 2.0f,
-        this.guiTop + 80,
+        this.leftPos + this.imageWidth / 2.0f - this.font.width(text) / 2.0f,
+        this.topPos + 80,
         0);
   }
 }

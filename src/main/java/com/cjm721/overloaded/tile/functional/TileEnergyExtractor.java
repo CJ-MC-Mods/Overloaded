@@ -26,12 +26,12 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
 
   @Override
   public void tick() {
-    if (getWorld().isRemote) {
+    if (getLevel().isClientSide) {
       return;
     }
 
-    BlockPos me = this.getPos();
-    TileEntity frontTE = getWorld().getTileEntity(me.add(getFacing().getDirectionVec()));
+    BlockPos me = this.getBlockPos();
+    TileEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getNormal()));
 
     if (frontTE == null) {
       return;
@@ -48,7 +48,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable implements I
     for (Direction facing : Direction.values()) {
       if (facing == getFacing()) continue;
 
-      TileEntity te = world.getTileEntity(me.add(facing.getDirectionVec()));
+      TileEntity te = level.getBlockEntity(me.offset(facing.getNormal()));
       if (te == null) continue;
 
       LazyOptional<IEnergyStorage> optionalReceiver =

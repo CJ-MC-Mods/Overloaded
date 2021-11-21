@@ -101,7 +101,7 @@ public class LongItemStorage
   @Override
   public void deserializeNBT(CompoundNBT compound) {
     ItemStack storedItem =
-        compound.contains("Item") ? ItemStack.read((CompoundNBT) compound.get("Item")) : null;
+        compound.contains("Item") ? ItemStack.of((CompoundNBT) compound.get("Item")) : null;
     if (storedItem != null) {
       long storedAmount = compound.contains("Count") ? compound.getLong("Count") : 0L;
       longItemStack = new LongItemStack(storedItem, storedAmount);

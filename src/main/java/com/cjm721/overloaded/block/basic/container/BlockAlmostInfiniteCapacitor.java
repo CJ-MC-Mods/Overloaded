@@ -50,10 +50,10 @@ public class BlockAlmostInfiniteCapacitor extends AbstractBlockHyperContainer {
   @Override
   protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
     LongEnergyStack stack =
-        ((TileAlmostInfiniteCapacitor) world.getTileEntity(pos)).getStorage().status();
+        ((TileAlmostInfiniteCapacitor) world.getBlockEntity(pos)).getStorage().status();
 
     double percent = 100 * (double) stack.getAmount() / (double) Long.MAX_VALUE;
-    player.sendStatusMessage(
+    player.displayClientMessage(
         new StringTextComponent(
             String.format("Energy Amount: %,d  %,.4f%%", stack.getAmount(), percent)),
         false);
