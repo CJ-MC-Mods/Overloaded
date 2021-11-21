@@ -1,3 +1,11 @@
+**Version: 0.0.96 (BETA)**
+
+* Update mappings usage.
+* Change Multi-Armor Max Health to be based on set instead of per item. Seems bug with vanilla MC with not syncing hp 
+  correctly. So instead of tracking armor equip / dequip just making it like flying. In effect fixes #111. Think this
+  is realted to Vanilla Bug MC-17876.
+
+------------------------------------------------------------------
 **Version: 0.0.95 (BETA)**
 
 * Add side base filtering for instant furnace. Top: Insert Only, Bottom: Output Only, Rest: Any (Fixes #109) 

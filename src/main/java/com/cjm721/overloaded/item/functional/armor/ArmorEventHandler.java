@@ -47,6 +47,8 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
 public class ArmorEventHandler {
 
+  private static final UUID HEALTH_MODIFIER = UUID.fromString("def4cf44-4a8a-11ec-81d3-0242ac130003");
+
   @SubscribeEvent
   public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
     if (event.getObject() instanceof PlayerEntity) {
@@ -72,6 +74,15 @@ public class ArmorEventHandler {
       Map<String, Boolean> armorBooleans = armorDataStorage.getBooleanMap();
 
       playerDataStorage.getBooleanMap().put(set, true);
+
+      AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(HEALTH_MODIFIER);
+      if (modifier == null) {
+        player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(new AttributeModifier(
+            HEALTH_MODIFIER,
+            "Max Health",
+            100,
+            AttributeModifier.Operation.ADDITION));
+      }
 
       if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
         tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
@@ -101,6 +112,8 @@ public class ArmorEventHandler {
         disableFlight(player, event.side);
         disableNoClip(player, playerDataStorage);
         disableGroundSpeed(player, event.side);
+        player.getAttribute(Attributes.MAX_HEALTH).removeModifier  (HEALTH_MODIFIER);
+        player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
       }
     }
   }
@@ -112,7 +125,7 @@ public class ArmorEventHandler {
 
     float powerRequired =
         (float)
-            ((player.distanceWalkedModified - player.prevDistanceWalkedModified)
+            ((player.walkDist - player.walkDistO)
                 / 0.6F
                 * OverloadedConfig.INSTANCE.multiArmorConfig.energyPerBlockWalked
                 * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerGroundSpeed
@@ -125,7 +138,7 @@ public class ArmorEventHandler {
           groundSpeed,
           AttributeModifier.Operation.ADDITION);
       if(!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(modifier)) {
-        player.getAttribute(Attributes.MOVEMENT_SPEED).applyNonPersistentModifier(modifier);
+        player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(modifier);
       }
     } else {
       disableGroundSpeed(player, side);
@@ -137,7 +150,7 @@ public class ArmorEventHandler {
   }
 
   private void disableNoClip(PlayerEntity player, IGenericDataStorage dataStorage) {
-    player.noClip = false;
+    player.noPhysics = false;
     dataStorage.getBooleanMap().put(noClip, false);
   }
 
@@ -157,36 +170,36 @@ public class ArmorEventHandler {
           player,
           OverloadedConfig.INSTANCE.multiArmorConfig.noClipEnergyPerTick,
           side == LogicalSide.CLIENT)) {
-        player.noClip = true;
+        player.noPhysics = true;
         if (armorBooleans.getOrDefault(DataKeys.NOCLIP_FLIGHT_LOCK, Default.NOCLIP_FLIGHT_LOCK)) {
           tryEnableFlight(player, dataStorage, helmetDataStorage, side);
-          player.abilities.isFlying = true;
+          player.abilities.flying = true;
         }
       } else {
-        setNoClip(player, false);
+        disableNoClip(player, dataStorage);
       }
     }
   }
 
   private void tryGiveAir(PlayerEntity player, LogicalSide side) {
-    int airNeeded = 300 - player.getAir();
+    int airNeeded = 300 - player.getAirSupply();
 
     if (airNeeded > 0
         && extractEnergy(
             player,
             airNeeded * OverloadedConfig.INSTANCE.multiArmorConfig.costPerAir,
             side == LogicalSide.CLIENT)) {
-      player.setAir(300);
+      player.setAirSupply(300);
     }
   }
 
   private void tryExtinguish(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    if (player.isBurning()
+    if (player.isOnFire()
         && extractEnergy(
             player,
             OverloadedConfig.INSTANCE.multiArmorConfig.extinguishCost,
             side == LogicalSide.CLIENT)) {
-      player.extinguish();
+      player.clearFire();
     }
   }
 
@@ -200,16 +213,16 @@ public class ArmorEventHandler {
             player,
             OverloadedConfig.INSTANCE.multiArmorConfig.costPerHealth * toHeal,
             side == LogicalSide.CLIENT)) {
-      player.setHealth(maxHealth);
+      player.heal(toHeal);
     }
   }
 
   private void tryRemoveHarmful(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    Iterator<EffectInstance> potionEffectIterator = player.getActivePotionEffects().iterator();
+    Iterator<EffectInstance> potionEffectIterator = player.getActiveEffects().iterator();
 
     while (potionEffectIterator.hasNext()) {
       EffectInstance effect = potionEffectIterator.next();
-      Effect potion = effect.getPotion();
+      Effect potion = effect.getEffect();
       if (potion.isBeneficial()) continue;
 
       if (!extractEnergy(
@@ -231,7 +244,7 @@ public class ArmorEventHandler {
   }
 
   private void tryFeedPlayer(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    FoodStats foodStats = player.getFoodStats();
+    FoodStats foodStats = player.getFoodData();
     int foodLevel = foodStats.getFoodLevel();
     int toFeed = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - foodLevel;
     float saturationLevel = foodStats.getSaturationLevel();
@@ -242,7 +255,7 @@ public class ArmorEventHandler {
             player,
             Math.round(OverloadedConfig.INSTANCE.multiArmorConfig.costPerFood * toFeed),
             side == LogicalSide.CLIENT)) {
-      foodStats.addStats(toFeed, 0);
+      foodStats.eat(toFeed, 0);
     }
 
     if (toAdd > 0.0F
@@ -251,7 +264,7 @@ public class ArmorEventHandler {
             (int) Math.round(OverloadedConfig.INSTANCE.multiArmorConfig.costPerSaturation * toAdd),
             side == LogicalSide.CLIENT)) {
       toFeed = Math.round(toAdd);
-      foodStats.addStats(toFeed, 0.5F);
+      foodStats.eat(toFeed, 0.5F);
     }
   }
 
@@ -265,9 +278,9 @@ public class ArmorEventHandler {
 
     float flightSpeed = armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
 
-    player.abilities.allowFlying = true;
+    player.abilities.mayfly = true;
     if (side == LogicalSide.CLIENT) {
-      player.abilities.setFlySpeed(
+      player.abilities.setFlyingSpeed(
           armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED));
     }
     booleans.put(set, true);
@@ -279,17 +292,17 @@ public class ArmorEventHandler {
                     * flightSpeed
                     * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerFlightSpeed);
 
-    if (player.abilities.isFlying
+    if (player.abilities.flying
         && !extractEnergy(player, energyCost, side == LogicalSide.CLIENT)) {
       disableFlight(player, side);
     }
   }
 
   private void disableFlight(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    player.abilities.allowFlying = false;
-    player.abilities.isFlying = false;
+    player.abilities.mayfly = false;
+    player.abilities.flying = false;
     if (side == LogicalSide.CLIENT) {
-      player.abilities.setFlySpeed(0.05F);
+      player.abilities.setFlyingSpeed(0.05F);
     }
   }
 
@@ -309,10 +322,10 @@ public class ArmorEventHandler {
       float damageAmount =
           (float) (event.getAmount() * OverloadedConfig.INSTANCE.multiArmorConfig.damageMultiplier);
 
-      if (damageSource.isDamageAbsolute())
+      if (damageSource.isBypassMagic())
         damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.absoluteDamageMultiplier;
 
-      if (damageSource.isUnblockable())
+      if (damageSource.isBypassArmor())
         damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.unblockableMultiplier;
 
       if (damageAmount > Integer.MAX_VALUE) return;
@@ -332,7 +345,7 @@ public class ArmorEventHandler {
   public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
     Entity entity = event.getEntity();
 
-    if (entity instanceof PlayerEntity) {
+    if (entity instanceof PlayerEntity && isMultiArmorSetEquipped((PlayerEntity) entity)) {
       PlayerEntity player = ((PlayerEntity) entity);
       tryEnableNoClip(
           player, getPlayerDataStorage(player), getHelmetDataStorage(player), LogicalSide.SERVER);
@@ -340,7 +353,7 @@ public class ArmorEventHandler {
   }
 
   private boolean hasEnergy(PlayerEntity player) {
-    for (ItemStack stack : player.getArmorInventoryList()) {
+    for (ItemStack stack : player.getArmorSlots()) {
       if (stack.getCapability(ENERGY).map(e -> e.getEnergyStored() > 0).orElse(false)) {
         return true;
       }
@@ -355,7 +368,7 @@ public class ArmorEventHandler {
     }
 
     final int originalCost = energyCost;
-    for (ItemStack stack : player.getArmorInventoryList()) {
+    for (ItemStack stack : player.getArmorSlots()) {
       LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
       energyCost -=
           opEnergyStorage.map(e -> e.extractEnergy(originalCost / 4, simulated)).orElse(0);
@@ -365,7 +378,7 @@ public class ArmorEventHandler {
       }
     }
 
-    for (ItemStack stack : player.getArmorInventoryList()) {
+    for (ItemStack stack : player.getArmorSlots()) {
       LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
       final int extractAmount = energyCost;
       energyCost -=
@@ -384,7 +397,7 @@ public class ArmorEventHandler {
 
   @Nonnull
   private static IGenericDataStorage getHelmetDataStorage(PlayerEntity player) {
-    for (ItemStack stack : player.inventory.armorInventory) {
+    for (ItemStack stack : player.inventory.armor) {
       if (stack.getItem() instanceof ItemMultiHelmet) {
         IGenericDataStorage cap =
             stack.getCapability(GENERIC_DATA_STORAGE).orElse(new GenericDataStorage());
@@ -396,19 +409,18 @@ public class ArmorEventHandler {
   }
 
   private boolean isMultiArmorSetEquipped(PlayerEntity player) {
-    boolean setEquipped = true;
-    for (ItemStack stack : player.inventory.armorInventory) {
+    for (ItemStack stack : player.inventory.armor) {
       if (!(stack.getItem() instanceof IMultiArmor)) {
-        setEquipped = false;
+        return false;
       }
     }
-    return setEquipped;
+    return true;
   }
 
   @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
   public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
-    if (((ClientProxy) Overloaded.proxy).noClipKeybind.isPressed()
+    if (((ClientProxy) Overloaded.proxy).noClipKeybind.consumeClick()
         && isMultiArmorSetEquipped(Minecraft.getInstance().player)) {
       Overloaded.proxy.networkWrapper.sendToServer(
           new KeyBindPressedMessage(KeyBindPressedMessage.KeyBind.NO_CLIP));

@@ -42,40 +42,42 @@ import java.util.UUID;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
+import net.minecraft.item.Item.Properties;
+
 abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
   private static final UUID[] ARMOR_MODIFIERS =
       new UUID[] {
-        UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"),
-        UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),
-        UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"),
-        UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")
+        UUID.fromString("d5764ecb-e212-448f-a472-bb0c41fbccc9"),
+        UUID.fromString("8814d238-8af0-4639-aa27-1822720375e1"),
+        UUID.fromString("7148eab4-7390-43f6-a675-9931750dbde3"),
+        UUID.fromString("7a1424b3-faca-4026-b104-9b3c81bdddee")
       };
   private static final IArmorMaterial pureMatter =
       new IArmorMaterial() {
         @Override
-        public int getDurability(@Nonnull EquipmentSlotType equipmentSlotType) {
+        public int getDurabilityForSlot(@Nonnull EquipmentSlotType equipmentSlotType) {
           return -1;
         }
 
         @Override
-        public int getDamageReductionAmount(@Nonnull EquipmentSlotType equipmentSlotType) {
+        public int getDefenseForSlot(@Nonnull EquipmentSlotType equipmentSlotType) {
           return 100;
         }
 
         @Override
-        public int getEnchantability() {
+        public int getEnchantmentValue() {
           return 100;
         }
 
         @Override
         @Nonnull
-        public SoundEvent getSoundEvent() {
-          return SoundEvents.ITEM_ARMOR_EQUIP_GOLD;
+        public SoundEvent getEquipSound() {
+          return SoundEvents.ARMOR_EQUIP_GOLD;
         }
 
         @Override
         @Nonnull
-        public Ingredient getRepairMaterial() {
+        public Ingredient getRepairIngredient() {
           return Ingredient.EMPTY;
         }
 
@@ -100,18 +102,19 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
         pureMatter,
         equipmentSlot,
         new Properties()
-            .maxDamage(-1)
-            .maxStackSize(1)
+            .durability(-1)
+            .stacksTo(1)
             .rarity(Rarity.EPIC)
-            .group(OverloadedItemGroups.TECH));
+            .fireResistant()
+            .tab(OverloadedItemGroups.TECH));
 
-    DispenserBlock.registerDispenseBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+    DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
     ModItems.addToSecondaryInit(this);
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void addInformation(
+  public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, @Nonnull List<ITextComponent> tooltip, @Nonnull ITooltipFlag flagIn) {
     stack
         .getCapability(ENERGY)
@@ -122,7 +125,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
                         "Energy Stored: "
                             + NumberFormat.getInstance().format(handler.getEnergyStored()))));
 
-    super.addInformation(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
   @Override
@@ -136,7 +139,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
   }
 
   @Override
-  public boolean isDamageable() {
+  public boolean canBeDepleted() {
     return false;
   }
 
@@ -180,48 +183,21 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
     return collection;
   }
 
-  @Override
-  @Nonnull
-  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
-      @Nullable EquipmentSlotType equipmentSlot) {
-    return HashMultimap.create();
-  }
-
-  @Override
-  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
-      EquipmentSlotType slot, ItemStack stack) {
-    if (hasPower(stack)) {
-      Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create(super.getAttributeModifiers(slot));
-
-      if (slot == this.getEquipmentSlot()) {
-        multimap.put(
-            Attributes.ARMOR,
-            new AttributeModifier(
-                ARMOR_MODIFIERS[slot.getIndex()],
-                "Armor modifier",
-                this.getDamageReduceAmount(),
-                AttributeModifier.Operation.ADDITION));
-        multimap.put(
-            Attributes.ARMOR_TOUGHNESS,
-            new AttributeModifier(
-                ARMOR_MODIFIERS[slot.getIndex()],
-                "Armor toughness",
-                this.getDamageReduceAmount(),
-                AttributeModifier.Operation.ADDITION));
-        multimap.put(
-            Attributes.MAX_HEALTH,
-            new AttributeModifier(
-                ARMOR_MODIFIERS[slot.getIndex()],
-                "Max Health",
-                this.getDamageReduceAmount() / 2.0,
-                AttributeModifier.Operation.ADDITION));
-      }
-
-      return multimap;
-    } else {
-      return getAttributeModifiers(slot);
-    }
-  }
+//  @Override
+//  public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
+//      EquipmentSlotType slot, ItemStack stack) {
+//    Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create(super.getAttributeModifiers(slot, stack));
+//    if (slot == this.getSlot()) {
+//      multimap.put(
+//          Attributes.MAX_HEALTH,
+//          new AttributeModifier(
+//              ARMOR_MODIFIERS[slot.getIndex()],
+//              "Max Health",
+//              hasPower(stack) ? this.getDefense() / 2.0 : 0,
+//              AttributeModifier.Operation.ADDITION));
+//    }
+//    return multimap;
+//  }
 
   private boolean hasPower(ItemStack stack) {
     return stack.getCapability(ENERGY).map(storage -> storage.getEnergyStored() > 0).orElse(false);
@@ -229,14 +205,14 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 
   @Override
   @Nonnull
-  public ITextComponent getDisplayName(@Nonnull ItemStack stack) {
-    ITextComponent name = super.getDisplayName(stack);
-    name.getStyle().applyFormatting(TextFormatting.GOLD);
+  public ITextComponent getName(@Nonnull ItemStack stack) {
+    ITextComponent name = super.getName(stack);
+    name.getStyle().applyFormat(TextFormatting.GOLD);
     return name;
   }
 
   @Override
-  public boolean hasEffect(@Nonnull ItemStack stack) {
+  public boolean isFoil(@Nonnull ItemStack stack) {
     return false;
   }
 }
