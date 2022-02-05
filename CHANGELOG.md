@@ -1,6 +1,11 @@
+**Version: 0.0.98 (BETA)**
+
+
+------------------------------------------------------------------
 **Version: 0.0.97 (BETA)**
 
 * Fix Block Lighting effects
+* Be more defensive with nulls in player interaction event (Fixes #112)
 
 ------------------------------------------------------------------
 **Version: 0.0.96 (BETA)**

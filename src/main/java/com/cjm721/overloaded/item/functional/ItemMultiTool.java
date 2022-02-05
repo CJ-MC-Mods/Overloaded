@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,6 +54,7 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -450,13 +452,22 @@ public class ItemMultiTool extends PowerModItem {
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-      if (!event.getEntity().getUUID().equals(Minecraft.getInstance().player.getUUID()))
+      if (!Objects.equals(getUUID(event.getEntity()),getUUID(Minecraft.getInstance().player))) {
         return;
+      }
 
       ItemStack stack = event.getItemStack();
       if (stack.getItem().equals(ModItems.multiTool)) {
         leftClickOnBlockClient(event.getPos());
       }
+    }
+
+    @Nullable
+    private static UUID getUUID(@Nullable Entity entity) {
+      if(entity == null)
+        return null;
+
+      return entity.getUUID();
     }
 
     @SubscribeEvent

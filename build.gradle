@@ -189,7 +189,8 @@ task signJar(type: SignJar, dependsOn: jar) {
     outputFile = jar.archivePath
 }
 
-jar.finalizedBy(signJar)
+//jar.finalizedBy(signJar)
+//reobfJar.dependsOn(signJar)
 
 curseforge {
     if (project.hasProperty('curseForgeAPIKey')) {
