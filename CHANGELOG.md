@@ -1,3 +1,7 @@
+**Version: 0.0.99 (BETA)**
+
+
+------------------------------------------------------------------
 **Version: 0.0.98 (BETA)**
 
 * Merge Pull Request for upgrading zh_cn language file. Also fixes "" text bug.
