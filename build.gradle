@@ -40,10 +40,11 @@ repositories  {
         url = "http://maven.covers1624.net"
         allowInsecureProtocol = true
     }
-    maven {
-        url "https://cursemaven.com"
+    maven { // modmaven, maven proxy
+        name 'modmaven'
+        url "https://modmaven.dev/"
         content {
-            includeGroup "curse.maven"
+            includeGroup 'appeng'
         }
     }
 }
@@ -157,7 +158,7 @@ dependencies {
 
 //    runtimeOnly  fg.deobf("curse.maven:jei-238222:3514175")
 //    runtimeOnly  fg.deobf("curse.maven:ssn-268495:3257204")
-//    runtimeOnly  fg.deobf("curse.maven:ae2-223794:3502523")
+    runtimeOnly  fg.deobf("appeng:appliedenergistics2:8.4.7")
 }
 
 version = "${minecraft_version}-${mod_version}"

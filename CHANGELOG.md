@@ -1,5 +1,6 @@
 **Version: 0.0.99 (BETA)**
 
+* Fix Fluid Storage interactions with AE2 (Fixes #118).
 
 ------------------------------------------------------------------
 **Version: 0.0.98 (BETA)**

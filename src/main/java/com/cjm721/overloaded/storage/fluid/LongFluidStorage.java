@@ -1,8 +1,10 @@
 package com.cjm721.overloaded.storage.fluid;
 
+import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidStack;
@@ -28,7 +30,11 @@ public class LongFluidStorage
 
   @Override
   public int fill(FluidStack resource, FluidAction fluidAction) {
-    LongFluidStack fluidStack = give(new LongFluidStack(resource, resource.getAmount()), fluidAction.execute());
+    if (resource.getFluid() == Fluids.EMPTY) {
+      return resource.getAmount();
+    }
+
+    LongFluidStack fluidStack = give(new LongFluidStack(resource.copy(), resource.getAmount()), fluidAction.execute());
 
     return (int) (resource.getAmount() - fluidStack.amount);
   }
@@ -101,7 +107,7 @@ public class LongFluidStorage
   @Override
   @Nonnull
   public LongFluidStack take(@Nonnull LongFluidStack stack, boolean doAction) {
-    if (storedFluid.fluidStack == null) return LongFluidStack.EMPTY_STACK;
+    if (storedFluid.fluidStack == null || storedFluid.fluidStack.isEmpty() || storedFluid.fluidStack.getFluid() == Fluids.EMPTY) return LongFluidStack.EMPTY_STACK;
 
     if (stack.fluidStack != null && !fluidsAreEqual(storedFluid.fluidStack, stack.fluidStack)) {
       return LongFluidStack.EMPTY_STACK;
@@ -134,6 +140,7 @@ public class LongFluidStorage
       NumberUtil.AddReturn<Long> value = addToMax(storedFluid.amount, fluidStack.amount);
       if (doAction) {
         storedFluid.amount = value.result;
+        storedFluid.fluidStack.setAmount((int) Math.min(storedFluid.amount, Integer.MAX_VALUE));
         dataUpdate.dataUpdated();
       }
 
@@ -151,7 +158,7 @@ public class LongFluidStorage
   @Nonnull
   @Override
   public FluidStack getFluidInTank(int i) {
-    return storedFluid.fluidStack;
+    return storedFluid.fluidStack == null ? FluidStack.EMPTY : storedFluid.fluidStack;
   }
 
   @Override
@@ -161,6 +168,6 @@ public class LongFluidStorage
 
   @Override
   public boolean isFluidValid(int i, @Nonnull FluidStack fluidStack) {
-    return storedFluid.fluidStack.isFluidEqual(fluidStack);
+    return (storedFluid.fluidStack == null ? FluidStack.EMPTY : storedFluid.fluidStack).isFluidEqual(fluidStack);
   }
 }
