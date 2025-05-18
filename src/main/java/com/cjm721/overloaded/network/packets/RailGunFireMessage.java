@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.network.packets;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Hand;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.util.math.vector.Vector3d;
 
 public class RailGunFireMessage {

@@ -2,21 +2,17 @@ package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.item.ModItems;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.InteractionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.RegistryKey;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nonnull;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 
@@ -25,9 +21,8 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
     }
 
     @Override
-    @Nonnull
-    public InteractionResult use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
-        if (hand == Hand.MAIN_HAND) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (hand == InteractionHand.MAIN_HAND) {
             ItemStack heldItem = player.getItemInHand(hand);
             if (heldItem.isEmpty()) {
                 // SubIf so that Else block does not also need to check for heldItem == null
@@ -38,32 +33,32 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                 }
               return InteractionResult.SUCCESS;
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
-                CompoundNBT tag = heldItem.getTag();
-                if (tag != null) {
-                    if (tag.getString("TYPE").equals(this.getType())) {
-                        String worldID = tag.getString("WORLD");
-                        int x = tag.getInt("X");
-                        int y = tag.getInt("Y");
-                        int z = tag.getInt("Z");
-
-                        bindToPartner(world, pos, worldID, new BlockPos(x, y, z));
-                        if (world.isClientSide) {
-                            player.displayClientMessage(Component.literal("Bound Hyper Nodes"), true);
-                        }
-                    } else {
-                        if (world.isClientSide) {
-                            player.displayClientMessage(Component.literal("Incorrect Hyper Node Type to bind."), true);
-                        }
-                    }
-                }
+//                CompoundTag tag = heldItem.getTag();
+//                if (tag != null) {
+//                    if (tag.getString("TYPE").equals(this.getType())) {
+//                        String worldID = tag.getString("WORLD");
+//                        int x = tag.getInt("X");
+//                        int y = tag.getInt("Y");
+//                        int z = tag.getInt("Z");
+//
+//                        bindToPartner(world, pos, worldID, new BlockPos(x, y, z));
+//                        if (world.isClientSide) {
+//                            player.displayClientMessage(Component.literal("Bound Hyper Nodes"), true);
+//                        }
+//                    } else {
+//                        if (world.isClientSide) {
+//                            player.displayClientMessage(Component.literal("Incorrect Hyper Node Type to bind."), true);
+//                        }
+//                    }
+//                }
               return InteractionResult.SUCCESS;
             }
         }
 
-        return super.use(state, world, pos, player, hand, rayTraceResult);
+        return super.useItemOn(stack, state, world, pos, player, hand,hitResult);
     }
 
-    private void bindToPartner(@Nonnull World world, @Nonnull BlockPos pos, String registryLocation, @Nonnull BlockPos partnerPos) {
+    private void bindToPartner(@Nonnull Level world, @Nonnull BlockPos pos, String registryLocation, @Nonnull BlockPos partnerPos) {
         ((AbstractTileHyperSender) world.getBlockEntity(pos)).setPartnerInfo(registryLocation, partnerPos);
     }
 }

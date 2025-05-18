@@ -2,18 +2,16 @@ package com.cjm721.overloaded.storage;
 
 import com.google.common.collect.Maps;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
-import org.jetbrains.annotations.UnknownNullability;
 
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 
 public class GenericDataStorage
     implements IGenericDataStorage,
@@ -58,12 +56,12 @@ public class GenericDataStorage
 
   @Override
   public CompoundTag serializeNBT() {
-    return writeNBT(GENERIC_DATA_STORAGE, this, null);
+    return writeNBT(GENERIC_DATA_STORAGE_ITEM, this, null);
   }
 
   @Override
   public void deserializeNBT(CompoundTag tagCompound) {
-    readNBT(GENERIC_DATA_STORAGE, this, null, tagCompound);
+    readNBT(GENERIC_DATA_STORAGE_ITEM, this, null, tagCompound);
   }
 
   @Nullable

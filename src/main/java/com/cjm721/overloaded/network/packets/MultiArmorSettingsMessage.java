@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.PacketBuffer;
+import io.netty.buffer.ByteBuf;
 
 public class MultiArmorSettingsMessage {
 
@@ -38,7 +38,7 @@ public class MultiArmorSettingsMessage {
     this.extinguish = extinguish;
   }
 
-  public static MultiArmorSettingsMessage fromBytes(PacketBuffer buf) {
+  public static MultiArmorSettingsMessage fromBytes(ByteBuf buf) {
     return new MultiArmorSettingsMessage(
         buf.readFloat(),
         buf.readFloat(),

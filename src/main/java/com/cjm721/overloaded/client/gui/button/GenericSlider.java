@@ -1,14 +1,12 @@
 package com.cjm721.overloaded.client.gui.button;
 
-import net.minecraft.client.gui.widget.AbstractSlider;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GenericSlider extends AbstractSlider {
+public class GenericSlider extends AbstractSliderButton {
 
   private final String baseText;
   private boolean dragging;
@@ -17,7 +15,7 @@ public class GenericSlider extends AbstractSlider {
 
   public GenericSlider(
       int x, int y, float minValue, float maxValue, float currentValue, String baseText) {
-    super(x, y, 150, 20,Component.literal(baseText), scaleDown(currentValue, minValue, maxValue));
+    super(x, y, 150, 20, Component.literal(baseText), scaleDown(currentValue, minValue, maxValue));
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.baseText = baseText;
@@ -88,7 +86,7 @@ public class GenericSlider extends AbstractSlider {
   }
 
   private static double scaleDown(double scaled, double min, double max) {
-    scaled = MathHelper.clamp(scaled, min, max);
+    scaled = Math.clamp(scaled, min, max);
     return (scaled - min) / (max - min);
   }
 

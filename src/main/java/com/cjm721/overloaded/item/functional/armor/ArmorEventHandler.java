@@ -4,162 +4,155 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
-import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.FoodStats;
-import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.common.neoforged;
-import net.neoforged.common.util.LazyOptional;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.event.TickEvent;
-import net.neoforged.event.entity.living.LivingAttackEvent;
-import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
-import net.neoforged.event.entity.living.LivingEvent;
-import net.neoforged.event.entity.living.PotionEvent;
-import net.neoforged.eventbus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.entity.EntityInvulnerabilityCheckEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ENTITY;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Default;
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
 
 public class ArmorEventHandler {
 
   private static final UUID HEALTH_MODIFIER = UUID.fromString("def4cf44-4a8a-11ec-81d3-0242ac130003");
 
-  @SubscribeEvent
-  public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
-    if (event.getObject() instanceof PlayerEntity) {
-      event.addCapability(
-          new ResourceLocation(MODID, "player_data"), new GenericDataCapabilityProvider());
-    }
-  }
+//  @SubscribeEvent
+//  public void onAttachCapability(AttachCapabilitiesEvent<Entity> event) {
+//    if (event.getObject() instanceof Player) {
+//      event.addCapability(
+//          new ResourceLocation(MODID, "player_data"), new GenericDataCapabilityProvider());
+//    }
+//  }
 
   private static final String set = "set";
   private static final String noClip = "noClip";
   private static final UUID groundSpeedAttribute =
       UUID.fromString("241a8bbe-1660-11eb-adc1-0242ac120002");
 
-  @SubscribeEvent
-  public void onPlayerTickEvent(@Nonnull EntityTickEvent.Pre event) {
-    Entity entity = event.getEntity();
-    if (!(entity instanceof Player player)) {
-      return;
-    }
-      if (player == null || player.isDeadOrDying()) return;
-
-    IGenericDataStorage playerDataStorage = getPlayerDataStorage(player);
-
-    if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
-      IGenericDataStorage armorDataStorage = getHelmetDataStorage(player);
-      Map<String, Boolean> armorBooleans = armorDataStorage.getBooleanMap();
-
-      playerDataStorage.getBooleanMap().put(set, true);
-
-      AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(HEALTH_MODIFIER);
-      if (modifier == null) {
-        player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(new AttributeModifier(
-            HEALTH_MODIFIER,
-            "Max Health",
-            100,
-            AttributeModifier.Operation.ADDITION));
-      }
-
-      if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
-        tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
-      } else {
-        disableFlight(player, event.side);
-      }
-      if (armorBooleans.getOrDefault(DataKeys.FEED, Default.FEED)) {
-        tryFeedPlayer(player, event.side);
-      }
-      if (armorBooleans.getOrDefault(DataKeys.HEAL, Default.HEAL)) {
-        tryHealPlayer(player, event.side);
-      }
-      if (armorBooleans.getOrDefault(DataKeys.REMOVE_HARMFUL, Default.REMOVE_HARMFUL)) {
-        tryRemoveHarmful(player, event.side);
-      }
-      if (armorBooleans.getOrDefault(DataKeys.EXTINGUISH, Default.EXTINGUISH)) {
-        tryExtinguish(player, event.side);
-      }
-      if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
-        tryGiveAir(player, event.side);
-      }
-      tryGroundSpeed(player, armorDataStorage, event.side);
-    } else {
-      Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
-      if (boolMap.containsKey(set) && boolMap.get(set)) {
-        boolMap.put(set, false);
-        disableFlight(player, event.side);
-        disableNoClip(player, playerDataStorage);
-        disableGroundSpeed(player, event.side);
-        player.getAttribute(Attributes.MAX_HEALTH).removeModifier  (HEALTH_MODIFIER);
-        player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
-      }
-    }
-  }
+//  @SubscribeEvent
+//  public void onPlayerTickEvent(@Nonnull EntityTickEvent.Pre event) {
+//    Entity entity = event.getEntity();
+//    if (!(entity instanceof Player player)) {
+//      return;
+//    }
+//      if (player == null || player.isDeadOrDying()) return;
+//
+//    IGenericDataStorage playerDataStorage = getPlayerDataStorage(player);
+//
+//    if (isMultiArmorSetEquipped(player) && hasEnergy(player)) {
+//      IGenericDataStorage armorDataStorage = getHelmetDataStorage(player);
+//      Map<String, Boolean> armorBooleans = armorDataStorage.getBooleanMap();
+//
+//      playerDataStorage.getBooleanMap().put(set, true);
+//
+//      AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(HEALTH_MODIFIER);
+//      if (modifier == null) {
+//        player.getAttribute(Attributes.MAX_HEALTH).addTransientModifier(new AttributeModifier(
+//            HEALTH_MODIFIER,
+//            "Max Health",
+//            100,
+//            AttributeModifier.Operation.ADDITION));
+//      }
+//
+//      if (armorBooleans.getOrDefault(DataKeys.FLIGHT, Default.FLIGHT)) {
+//        tryEnableFlight(player, playerDataStorage, armorDataStorage, event.side);
+//      } else {
+//        disableFlight(player, event.side);
+//      }
+//      if (armorBooleans.getOrDefault(DataKeys.FEED, Default.FEED)) {
+//        tryFeedPlayer(player, event.side);
+//      }
+//      if (armorBooleans.getOrDefault(DataKeys.HEAL, Default.HEAL)) {
+//        tryHealPlayer(player, event.side);
+//      }
+//      if (armorBooleans.getOrDefault(DataKeys.REMOVE_HARMFUL, Default.REMOVE_HARMFUL)) {
+//        tryRemoveHarmful(player, event.side);
+//      }
+//      if (armorBooleans.getOrDefault(DataKeys.EXTINGUISH, Default.EXTINGUISH)) {
+//        tryExtinguish(player, event.side);
+//      }
+//      if (armorBooleans.getOrDefault(DataKeys.GIVE_AIR, Default.GIVE_AIR)) {
+//        tryGiveAir(player, event.side);
+//      }
+//      tryGroundSpeed(player, armorDataStorage, event.side);
+//    } else {
+//      Map<String, Boolean> boolMap = playerDataStorage.getBooleanMap();
+//      if (boolMap.containsKey(set) && boolMap.get(set)) {
+//        boolMap.put(set, false);
+//        disableFlight(player, event.side);
+//        disableNoClip(player, playerDataStorage);
+//        disableGroundSpeed(player, event.side);
+//        player.getAttribute(Attributes.MAX_HEALTH).removeModifier  (HEALTH_MODIFIER);
+//        player.setHealth(Math.min(player.getHealth(), player.getMaxHealth()));
+//      }
+//    }
+//  }
 
   private void tryGroundSpeed(
-      PlayerEntity player, IGenericDataStorage armorDataStorage, LogicalSide side) {
+      Player player, IGenericDataStorage armorDataStorage, LogicalSide side) {
     float groundSpeed =
         armorDataStorage.getFloatMap().getOrDefault(DataKeys.GROUND_SPEED, Default.GROUND_SPEED);
 
-    float powerRequired =
-        (float)
-            ((player.walkDist - player.walkDistO)
-                / 0.6F
-                * OverloadedConfig.INSTANCE.multiArmorConfig.energyPerBlockWalked
-                * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerGroundSpeed
-                * (groundSpeed - Default.GROUND_SPEED));
-
-    if (extractEnergy(player, Math.round(powerRequired), side == LogicalSide.CLIENT)) {
-      AttributeModifier modifier = new AttributeModifier(
-          groundSpeedAttribute,
-          "Ground Speed modifier",
-          groundSpeed,
-          AttributeModifier.Operation.ADDITION);
-      if(!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(modifier)) {
-        player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(modifier);
-      }
-    } else {
-      disableGroundSpeed(player, side);
-    }
+//    float powerRequired =
+//        (float)
+//            ((player.walkDist - player.walkDistO)
+//                / 0.6F
+//                * OverloadedConfig.INSTANCE.multiArmorConfig.energyPerBlockWalked
+//                * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerGroundSpeed
+//                * (groundSpeed - Default.GROUND_SPEED));
+//
+//    if (extractEnergy(player, Math.round(powerRequired), side == LogicalSide.CLIENT)) {
+//      AttributeModifier modifier = new AttributeModifier(
+//          groundSpeedAttribute,
+//          "Ground Speed modifier",
+//          groundSpeed,
+//          AttributeModifier.Operation.ADDITION);
+//      if(!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(modifier)) {
+//        player.getAttribute(Attributes.MOVEMENT_SPEED).addTransientModifier(modifier);
+//      }
+//    } else {
+//      disableGroundSpeed(player, side);
+//    }
   }
 
-  private void disableGroundSpeed(PlayerEntity player, LogicalSide side) {
-    player.getAttribute(Attributes.MOVEMENT_SPEED).removeModifier(groundSpeedAttribute);
+  private void disableGroundSpeed(Player player, LogicalSide side) {
+    player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).removeModifier(groundSpeedAttribute);
   }
 
-  private void disableNoClip(PlayerEntity player, IGenericDataStorage dataStorage) {
+  private void disableNoClip(Player player, IGenericDataStorage dataStorage) {
     player.noPhysics = false;
     dataStorage.getBooleanMap().put(noClip, false);
   }
 
   private void tryEnableNoClip(
-      PlayerEntity player,
+      Player player,
       IGenericDataStorage dataStorage,
       IGenericDataStorage helmetDataStorage,
       LogicalSide side) {
@@ -177,7 +170,7 @@ public class ArmorEventHandler {
         player.noPhysics = true;
         if (armorBooleans.getOrDefault(DataKeys.NOCLIP_FLIGHT_LOCK, Default.NOCLIP_FLIGHT_LOCK)) {
           tryEnableFlight(player, dataStorage, helmetDataStorage, side);
-          player.abilities.flying = true;
+          player.getAbilities().flying = true;
         }
       } else {
         disableNoClip(player, dataStorage);
@@ -185,7 +178,7 @@ public class ArmorEventHandler {
     }
   }
 
-  private void tryGiveAir(PlayerEntity player, LogicalSide side) {
+  private void tryGiveAir(Player player, LogicalSide side) {
     int airNeeded = 300 - player.getAirSupply();
 
     if (airNeeded > 0
@@ -197,7 +190,7 @@ public class ArmorEventHandler {
     }
   }
 
-  private void tryExtinguish(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
+  private void tryExtinguish(@Nonnull Player player, @Nonnull LogicalSide side) {
     if (player.isOnFire()
         && extractEnergy(
             player,
@@ -207,7 +200,7 @@ public class ArmorEventHandler {
     }
   }
 
-  private void tryHealPlayer(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
+  private void tryHealPlayer(@Nonnull Player player, @Nonnull LogicalSide side) {
     float currentHealth = player.getHealth();
     float maxHealth = player.getMaxHealth();
 
@@ -221,12 +214,12 @@ public class ArmorEventHandler {
     }
   }
 
-  private void tryRemoveHarmful(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    Iterator<EffectInstance> potionEffectIterator = player.getActiveEffects().iterator();
+  private void tryRemoveHarmful(@Nonnull Player player, @Nonnull LogicalSide side) {
+    Iterator<MobEffectInstance> potionEffectIterator = player.getActiveEffects().iterator();
 
     while (potionEffectIterator.hasNext()) {
-      EffectInstance effect = potionEffectIterator.next();
-      Effect potion = effect.getEffect();
+      MobEffectInstance effect = potionEffectIterator.next();
+      MobEffect potion = effect.getEffect().value();
       if (potion.isBeneficial()) continue;
 
       if (!extractEnergy(
@@ -240,15 +233,15 @@ public class ArmorEventHandler {
           OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
           side == LogicalSide.CLIENT)) {
         // If not canceled
-        if(!neoforged.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(player, potion))) {
+        if(!EVENT_BUS.post(new MobEffectEvent.Remove(player, effect.getEffect())).isCanceled()) {
           potionEffectIterator.remove();
         }
       }
     }
   }
 
-  private void tryFeedPlayer(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    FoodStats foodStats = player.getFoodData();
+  private void tryFeedPlayer(@Nonnull Player player, @Nonnull LogicalSide side) {
+    FoodData foodStats = player.getFoodData();
     int foodLevel = foodStats.getFoodLevel();
     int toFeed = OverloadedConfig.INSTANCE.multiArmorConfig.maxFoodLevel - foodLevel;
     float saturationLevel = foodStats.getSaturationLevel();
@@ -273,7 +266,7 @@ public class ArmorEventHandler {
   }
 
   private void tryEnableFlight(
-      @Nonnull PlayerEntity player,
+      @Nonnull Player player,
       @Nonnull IGenericDataStorage dataStorage,
       IGenericDataStorage armorDataStorage,
       @Nonnull LogicalSide side) {
@@ -282,9 +275,9 @@ public class ArmorEventHandler {
 
     float flightSpeed = armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);
 
-    player.abilities.mayfly = true;
+    player.getAbilities().mayfly = true;
     if (side == LogicalSide.CLIENT) {
-      player.abilities.setFlyingSpeed(
+      player.getAbilities().setFlyingSpeed(
           armorFloats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED));
     }
     booleans.put(set, true);
@@ -296,26 +289,26 @@ public class ArmorEventHandler {
                     * flightSpeed
                     * OverloadedConfig.INSTANCE.multiArmorConfig.energyMultiplierPerFlightSpeed);
 
-    if (player.abilities.flying
+    if (player.getAbilities().flying
         && !extractEnergy(player, energyCost, side == LogicalSide.CLIENT)) {
       disableFlight(player, side);
     }
   }
 
-  private void disableFlight(@Nonnull PlayerEntity player, @Nonnull LogicalSide side) {
-    player.abilities.mayfly = false;
-    player.abilities.flying = false;
+  private void disableFlight(@Nonnull Player player, @Nonnull LogicalSide side) {
+    player.getAbilities().mayfly = false;
+    player.getAbilities().flying = false;
     if (side == LogicalSide.CLIENT) {
-      player.abilities.setFlyingSpeed(0.05F);
+      player.getAbilities().setFlyingSpeed(0.05F);
     }
   }
 
   @SubscribeEvent(priority = EventPriority.LOWEST)
-  public void onLivingAttackedEvent(LivingAttackEvent event) {
+  public void onLivingAttackedEvent(EntityInvulnerabilityCheckEvent event) {
     Entity entity = event.getEntity();
-    if (!(entity instanceof PlayerEntity)) return;
+    if (!(entity instanceof Player)) return;
 
-    PlayerEntity player = ((PlayerEntity) entity);
+    Player player = ((Player) entity);
     boolean setEquipped = isMultiArmorSetEquipped(player);
 
     if (setEquipped) {
@@ -323,13 +316,14 @@ public class ArmorEventHandler {
 
       int energyCost = OverloadedConfig.INSTANCE.multiArmorConfig.baseCost;
 
-      float damageAmount =
-          (float) (event.getAmount() * OverloadedConfig.INSTANCE.multiArmorConfig.damageMultiplier);
+      float damageAmount = 100;
+//          (float) (event..getOriginalDamage() * OverloadedConfig.INSTANCE.multiArmorConfig.damageMultiplier);
 
-      if (damageSource.isBypassMagic())
+      if (damageSource.is(DamageTypeTags.BYPASSES_RESISTANCE))
         damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.absoluteDamageMultiplier;
 
-      if (damageSource.isBypassArmor())
+
+      if (damageSource.is(DamageTypeTags.BYPASSES_ARMOR))
         damageAmount *= OverloadedConfig.INSTANCE.multiArmorConfig.unblockableMultiplier;
 
       if (damageAmount > Integer.MAX_VALUE) return;
@@ -340,25 +334,26 @@ public class ArmorEventHandler {
       if (energyCost < 0) return;
 
       if (extractEnergy(player, energyCost, false)) {
-        event.setCanceled(true);
+        event.setInvulnerable(true);
+//        event.setNewDamage(0);
       }
     }
   }
 
-  @SubscribeEvent
-  public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
-    Entity entity = event.getEntity();
+//  @SubscribeEvent
+//  public void onLivingUpdateEvent(LivingEvent.LivingTickEvent LivingEvent.LivingUpdateEvent event) {
+//    Entity entity = event.getEntity();
+//
+//    if (entity instanceof Player && isMultiArmorSetEquipped((Player) entity)) {
+//      Player player = ((Player) entity);
+//      tryEnableNoClip(
+//          player, getPlayerDataStorage(player), getHelmetDataStorage(player), LogicalSide.SERVER);
+//    }
+//  }
 
-    if (entity instanceof PlayerEntity && isMultiArmorSetEquipped((PlayerEntity) entity)) {
-      PlayerEntity player = ((PlayerEntity) entity);
-      tryEnableNoClip(
-          player, getPlayerDataStorage(player), getHelmetDataStorage(player), LogicalSide.SERVER);
-    }
-  }
-
-  private boolean hasEnergy(PlayerEntity player) {
+  private boolean hasEnergy(Player player) {
     for (ItemStack stack : player.getArmorSlots()) {
-      if (stack.getCapability(ENERGY).map(e -> e.getEnergyStored() > 0).orElse(false)) {
+      if (stack.getCapability(Capabilities.EnergyStorage.ITEM).getEnergyStored() > 0) {
         return true;
       }
     }
@@ -366,16 +361,16 @@ public class ArmorEventHandler {
     return false;
   }
 
-  private boolean extractEnergy(PlayerEntity player, int energyCost, boolean simulated) {
+  private boolean extractEnergy(Player player, int energyCost, boolean simulated) {
     if (energyCost <= 0) {
       return true;
     }
 
     final int originalCost = energyCost;
     for (ItemStack stack : player.getArmorSlots()) {
-      LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
+      IEnergyStorage opEnergyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
       energyCost -=
-          opEnergyStorage.map(e -> e.extractEnergy(originalCost / 4, simulated)).orElse(0);
+          opEnergyStorage.extractEnergy(originalCost / 4, simulated);
 
       if (energyCost <= 0) {
         return true;
@@ -383,10 +378,10 @@ public class ArmorEventHandler {
     }
 
     for (ItemStack stack : player.getArmorSlots()) {
-      LazyOptional<IEnergyStorage> opEnergyStorage = stack.getCapability(ENERGY);
+      IEnergyStorage opEnergyStorage = stack.getCapability(Capabilities.EnergyStorage.ITEM);
       final int extractAmount = energyCost;
       energyCost -=
-          opEnergyStorage.map(e -> e.extractEnergy(extractAmount, simulated)).orElse(0);
+          opEnergyStorage.extractEnergy(extractAmount, simulated);
       if (energyCost <= 0) {
         return true;
       }
@@ -395,16 +390,16 @@ public class ArmorEventHandler {
   }
 
   @Nonnull
-  private static IGenericDataStorage getPlayerDataStorage(PlayerEntity player) {
-    return player.getCapability(GENERIC_DATA_STORAGE).orElse(new GenericDataStorage());
+  private static IGenericDataStorage getPlayerDataStorage(Player player) {
+    return player.getCapability(GENERIC_DATA_STORAGE_ENTITY);
   }
 
   @Nonnull
-  private static IGenericDataStorage getHelmetDataStorage(PlayerEntity player) {
-    for (ItemStack stack : player.inventory.armor) {
+  private static IGenericDataStorage getHelmetDataStorage(Player player) {
+    for (ItemStack stack : player.getInventory().armor) {
       if (stack.getItem() instanceof ItemMultiHelmet) {
         IGenericDataStorage cap =
-            stack.getCapability(GENERIC_DATA_STORAGE).orElse(new GenericDataStorage());
+            stack.getCapability(GENERIC_DATA_STORAGE_ITEM);
         cap.suggestUpdate();
         return cap;
       }
@@ -413,7 +408,7 @@ public class ArmorEventHandler {
   }
 
   private boolean isMultiArmorSetEquipped(Player player) {
-    for (ItemStack stack : player.inventory.armor) {
+    for (ItemStack stack : player.getInventory().armor) {
       if (!(stack.getItem() instanceof IMultiArmor)) {
         return false;
       }
@@ -426,12 +421,12 @@ public class ArmorEventHandler {
   public void onKeyInputEvent(InputEvent.Key event) {
     if (((ClientProxy) Overloaded.proxy).noClipKeybind.consumeClick()
         && isMultiArmorSetEquipped(Minecraft.getInstance().player)) {
-      Overloaded.proxy.networkWrapper.sendToServer(
+      PacketDistributor.sendToServer(
           new KeyBindPressedMessage(KeyBindPressedMessage.KeyBind.NO_CLIP));
     }
   }
 
-  public static boolean toggleNoClip(ServerPlayerEntity player) {
+  public static boolean toggleNoClip(ServerPlayer player) {
     IGenericDataStorage storage = getPlayerDataStorage(player);
 
     final Map<String, Boolean> booleans = storage.getBooleanMap();

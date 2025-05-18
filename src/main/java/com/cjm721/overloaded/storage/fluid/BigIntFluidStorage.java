@@ -3,7 +3,7 @@ package com.cjm721.overloaded.storage.fluid;
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntFluidStack;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.neoforged.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
 

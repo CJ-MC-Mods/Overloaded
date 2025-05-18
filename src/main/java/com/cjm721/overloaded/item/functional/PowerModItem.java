@@ -5,7 +5,7 @@ import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;

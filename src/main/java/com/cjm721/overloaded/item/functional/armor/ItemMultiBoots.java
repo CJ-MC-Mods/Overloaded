@@ -1,26 +1,13 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.client.render.entity.RenderMultiBoots;
-import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
-
 public class ItemMultiBoots extends AbstractMultiArmor {
 
   public ItemMultiBoots(Properties properties) {
-    super(ArmorType.BOOTS,  properties.mo);
+    super(ArmorType.BOOTS, properties);
   }
 
   @OnlyIn(Dist.CLIENT)

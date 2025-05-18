@@ -8,7 +8,7 @@ import net.neoforged.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 
 public class GenericDataCapabilityProvider extends GenericDataStorage
     implements ICapabilityProvider {
@@ -23,7 +23,7 @@ public class GenericDataCapabilityProvider extends GenericDataStorage
     if (capability == null) {
       return LazyOptional.empty();
     }
-    if (capability == GENERIC_DATA_STORAGE) {
+    if (capability == GENERIC_DATA_STORAGE_ITEM) {
       return LazyOptional.of(() -> this).cast();
     }
     return LazyOptional.empty();

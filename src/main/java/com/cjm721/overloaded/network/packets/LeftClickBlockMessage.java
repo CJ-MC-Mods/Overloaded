@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.network.packets;
 
-import net.minecraft.network.PacketBuffer;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 
 public class LeftClickBlockMessage {

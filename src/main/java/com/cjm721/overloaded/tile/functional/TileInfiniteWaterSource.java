@@ -2,27 +2,15 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.LazyOptional;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import static net.neoforged.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
-
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandler {
-
-  @ObjectHolder("minecraft:water")
-  private static Fluid WATER;
 
   public TileInfiniteWaterSource(BlockPos pos, BlockState blockState) {
     
@@ -32,21 +20,19 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
   @Nonnull
   @Override
   public FluidStack drain(int maxDrain, FluidAction fluidAction) {
-    return new FluidStack(WATER, maxDrain);
+    return new FluidStack(Fluids.WATER, maxDrain);
   }
 
-  get
 
-
-  @Override
-  @Nonnull
-  public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction facing) {
-    if (capability == FLUID_HANDLER_CAPABILITY) {
-      return LazyOptional.of(() -> this).cast();
-    }
-    return super.getCapability(capability, facing);
-  }
+//  @Override
+//  @Nonnull
+//  public <T> LazyOptional<T> getCapability(
+//      @Nonnull Capability<T> capability, @Nullable Direction facing) {
+//    if (capability == FLUID_HANDLER_CAPABILITY) {
+//      return LazyOptional.of(() -> this).cast();
+//    }
+//    return super.getCapability(capability, facing);
+//  }
 
   @Override
   public int getTanks() {
@@ -59,7 +45,7 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
     if (tank != 0) {
       return FluidStack.EMPTY;
     }
-    return new FluidStack(WATER, Integer.MAX_VALUE);
+    return new FluidStack(Fluids.WATER, Integer.MAX_VALUE);
   }
 
   @Override
@@ -69,7 +55,7 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
 
   @Override
   public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-    return tank == 0 && stack.getFluid().isSame(WATER);
+    return tank == 0 && stack.getFluid().isSame(Fluids.WATER);
   }
 
   @Override
@@ -83,6 +69,6 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
     if(!isFluidValid(0, resource)) {
       return FluidStack.EMPTY;
     }
-    return new FluidStack(WATER, resource.getAmount());
+    return new FluidStack(Fluids.WATER, resource.getAmount());
   }
 }

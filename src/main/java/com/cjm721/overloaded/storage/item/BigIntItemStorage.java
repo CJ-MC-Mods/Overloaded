@@ -4,7 +4,7 @@ import com.cjm721.overloaded.storage.stacks.bigint.BigIntItemStack;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.neoforged.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 

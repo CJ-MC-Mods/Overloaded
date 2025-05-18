@@ -20,19 +20,16 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -59,19 +56,16 @@ import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
-import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.neoforged.energy.CapabilityEnergy.ENERGY;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class ItemMultiTool extends PowerModItem {
 
   public ItemMultiTool(Properties properties) {
     super(
-        properties
-            .addToolType(ToolType.AXE, Integer.MAX_VALUE)
-            .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
-            .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
+        properties);
+//            .addToolType(ToolType.AXE, Integer.MAX_VALUE)
+//            .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
+//            .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
   }
 
   private static double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {

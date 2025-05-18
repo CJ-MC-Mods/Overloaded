@@ -1,22 +1,17 @@
 package com.cjm721.overloaded;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.proxy.ClientProxy;
-import com.cjm721.overloaded.proxy.CommonProxy;
-import com.cjm721.overloaded.proxy.ServerProxy;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
-import net.neoforged.fml.DistExecutor;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.fml.ModContainer;
 import org.slf4j.Logger;
 
 @Mod(Overloaded.MODID)
@@ -26,8 +21,8 @@ public class Overloaded {
 
   public static final String MODID = "overloaded";
 
-  public static final CommonProxy proxy =
-      DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
+//  public static final CommonProxy proxy =
+//      DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
   public static final Logger logger = LogUtils.getLogger();
 
@@ -46,10 +41,10 @@ public class Overloaded {
     modContainer.registerConfig(ModConfig.Type.SERVER, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.SERVER));
     modContainer.registerConfig(ModConfig.Type.CLIENT, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.CLIENT));
 
-    proxy.registerEvents();
+//    proxy.registerEvents();
   }
 
   private void commonSetup(final FMLCommonSetupEvent event) {
-    proxy.commonSetup(event);
+//    proxy.commonSetup(event);
   }
 }

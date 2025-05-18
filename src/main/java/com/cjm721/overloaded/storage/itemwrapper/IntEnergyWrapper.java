@@ -3,7 +3,7 @@ package com.cjm721.overloaded.storage.itemwrapper;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Direction;
 import net.neoforged.common.capabilities.Capability;
 import net.neoforged.common.capabilities.ICapabilityProvider;

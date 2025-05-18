@@ -2,22 +2,14 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class TileItemInterface extends BlockEntity implements IItemHandler {
 
@@ -28,40 +20,40 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
     storedItem = ItemStack.EMPTY;
   }
 
-  @Override
-  @Nonnull
-  public CompoundNBT save(@Nonnull CompoundNBT compound) {
-    compound.put("StoredItem", storedItem.serializeNBT());
-
-    return super.save(compound);
-  }
-
-  @Override
-  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    storedItem = ItemStack.of((CompoundNBT) compound.get("StoredItem"));
-
-    super.load(state, compound);
-  }
-
-  @Override
-  @Nonnull
-  public CompoundNBT getUpdateTag() {
-    return save(new CompoundNBT());
-  }
-
-  @Nullable
-  @Override
-  public SUpdateTileEntityPacket getUpdatePacket() {
-    CompoundNBT tag = new CompoundNBT();
-    save(tag);
-
-    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
-  }
-
-  @Override
-  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-    this.load(this.getBlockState(), pkt.getTag());
-  }
+//  @Override
+//  @Nonnull
+//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//    compound.put("StoredItem", storedItem.serializeNBT());
+//
+//    return super.save(compound);
+//  }
+//
+//  @Override
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+//    storedItem = ItemStack.of((CompoundNBT) compound.get("StoredItem"));
+//
+//    super.load(state, compound);
+//  }
+//
+//  @Override
+//  @Nonnull
+//  public CompoundNBT getUpdateTag() {
+//    return save(new CompoundNBT());
+//  }
+//
+//  @Nullable
+//  @Override
+//  public SUpdateTileEntityPacket getUpdatePacket() {
+//    CompoundNBT tag = new CompoundNBT();
+//    save(tag);
+//
+//    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
+//  }
+//
+//  @Override
+//  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+//    this.load(this.getBlockState(), pkt.getTag());
+//  }
 
   @Override
   public int getSlots() {
@@ -138,20 +130,20 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
     return true;
   }
 
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-    if ((side == Direction.UP || side == Direction.DOWN) && cap == ITEM_HANDLER_CAPABILITY) {
-      return ITEM_HANDLER_CAPABILITY
-          .orEmpty(ITEM_HANDLER_CAPABILITY, LazyOptional.of(() -> this))
-          .cast();
-    }
-
-    LazyOptional<T> t = storedItem.getCapability(cap, side);
-
-    if (t.isPresent()) return t;
-    return super.getCapability(cap, side);
-  }
+//  @Nonnull
+//  @Override
+//  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+//    if ((side == Direction.UP || side == Direction.DOWN) && cap == ITEM_HANDLER_CAPABILITY) {
+//      return ITEM_HANDLER_CAPABILITY
+//          .orEmpty(ITEM_HANDLER_CAPABILITY, LazyOptional.of(() -> this))
+//          .cast();
+//    }
+//
+//    LazyOptional<T> t = storedItem.getCapability(cap, side);
+//
+//    if (t.isPresent()) return t;
+//    return super.getCapability(cap, side);
+//  }
 
   public ItemStack getStoredItem() {
     return storedItem;

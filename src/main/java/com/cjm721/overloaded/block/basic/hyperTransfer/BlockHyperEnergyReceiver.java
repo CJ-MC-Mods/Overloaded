@@ -2,20 +2,14 @@ package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.tile.hyperTransfer.TileHyperEnergyReceiver;
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.IBlockReader;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 

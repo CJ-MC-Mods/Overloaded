@@ -1,53 +1,53 @@
-package com.cjm721.overloaded.client.render.entity;
-
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.*;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.Direction;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
-
-@OnlyIn(Dist.CLIENT)
-public class ModelRenderOBJ extends ModelRenderer {
-
-    private final IBakedModel objModel;
-
-    public ModelRenderOBJ(Model baseModel, IBakedModel model) {
-        super(baseModel);
-        objModel = model;
-    }
-
-    @Override
-    public void render(@Nonnull MatrixStack matrix, @Nonnull IVertexBuilder vertex, int light, int overlay, float r, float g, float b, float a) {
-        if(this.visible) {
-            matrix.pushPose();
-            vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.cutout());
-            this.renderModel(objModel, ItemStack.EMPTY, light, overlay, matrix, vertex);
-            matrix.popPose();
-            Minecraft.getInstance().renderBuffers().bufferSource().endBatch(RenderType.cutout());
-        }
-    }
-
-    private void renderModel(IBakedModel modelIn, ItemStack stack, int combinedLightIn, int combinedOverlayIn, MatrixStack matrixStackIn, IVertexBuilder bufferIn) {
-        Random random = new Random();
-        long i = 42L;
-
-//        matrixStackIn.scale(1/16f,1/16f,1/16f);
-//        matrixStackIn.rotate(new Quaternion(Vector3f.YN, 90, true));
-//        matrixStackIn.rotate(new Quaternion(Vector3f.ZP, 180, true));
-//        matrixStackIn.translate(0,-12,0);
-        for(Direction direction : Direction.values()) {
-            random.setSeed(i);
-            Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, direction, random), stack, combinedLightIn, combinedOverlayIn);
-        }
-
-        random.setSeed(i);
-        Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, null, random), stack, combinedLightIn, combinedOverlayIn);
-    }
-}
+//package com.cjm721.overloaded.client.render.entity;
+//
+//import com.mojang.blaze3d.matrix.MatrixStack;
+//import com.mojang.blaze3d.vertex.IVertexBuilder;
+//import net.minecraft.client.Minecraft;
+//import net.minecraft.client.renderer.RenderType;
+//import net.minecraft.client.renderer.model.*;
+//import net.minecraft.world.item.ItemStack;
+//import net.minecraft.util.Direction;
+//import net.neoforged.api.distmarker.Dist;
+//import net.neoforged.api.distmarker.OnlyIn;
+//
+//import javax.annotation.Nonnull;
+//import java.util.Random;
+//
+//@OnlyIn(Dist.CLIENT)
+//public class ModelRenderOBJ extends ModelRenderer {
+//
+//    private final IBakedModel objModel;
+//
+//    public ModelRenderOBJ(Model baseModel, IBakedModel model) {
+//        super(baseModel);
+//        objModel = model;
+//    }
+//
+//    @Override
+//    public void render(@Nonnull MatrixStack matrix, @Nonnull IVertexBuilder vertex, int light, int overlay, float r, float g, float b, float a) {
+//        if(this.visible) {
+//            matrix.pushPose();
+//            vertex = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.cutout());
+//            this.renderModel(objModel, ItemStack.EMPTY, light, overlay, matrix, vertex);
+//            matrix.popPose();
+//            Minecraft.getInstance().renderBuffers().bufferSource().endBatch(RenderType.cutout());
+//        }
+//    }
+//
+//    private void renderModel(IBakedModel modelIn, ItemStack stack, int combinedLightIn, int combinedOverlayIn, MatrixStack matrixStackIn, IVertexBuilder bufferIn) {
+//        Random random = new Random();
+//        long i = 42L;
+//
+////        matrixStackIn.scale(1/16f,1/16f,1/16f);
+////        matrixStackIn.rotate(new Quaternion(Vector3f.YN, 90, true));
+////        matrixStackIn.rotate(new Quaternion(Vector3f.ZP, 180, true));
+////        matrixStackIn.translate(0,-12,0);
+//        for(Direction direction : Direction.values()) {
+//            random.setSeed(i);
+//            Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, direction, random), stack, combinedLightIn, combinedOverlayIn);
+//        }
+//
+//        random.setSeed(i);
+//        Minecraft.getInstance().getItemRenderer().renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, null, random), stack, combinedLightIn, combinedOverlayIn);
+//    }
+//}

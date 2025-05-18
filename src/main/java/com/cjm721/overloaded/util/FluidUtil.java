@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.util;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;

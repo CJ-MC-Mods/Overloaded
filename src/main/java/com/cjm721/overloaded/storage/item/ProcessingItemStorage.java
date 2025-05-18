@@ -3,7 +3,7 @@ package com.cjm721.overloaded.storage.item;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.NonNullList;
 import net.neoforged.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.IItemHandler;

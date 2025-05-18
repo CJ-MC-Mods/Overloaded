@@ -1,30 +1,24 @@
 package com.cjm721.overloaded.client.render.tile;
 
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.math.vector.Quaternion;
-import net.minecraft.util.math.vector.Vector3f;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface> {
+public class ItemInterfaceRenderer implements BlockEntityRenderer<TileItemInterface> {
 
-  public ItemInterfaceRenderer(TileEntityRendererDispatcher p_i226006_1_) {
-    super(p_i226006_1_);
-  }
+  public ItemInterfaceRenderer(BlockEntityRenderDispatcher p_i226006_1_) {}
+
 
   @Override
-  public void render(@Nonnull TileItemInterface te, float v,@Nonnull  MatrixStack matrixStack,@Nonnull  IRenderTypeBuffer iRenderTypeBuffer, int combinedLightIn, int combinedOverlayIn) {
+  public void render(@Nonnull TileItemInterface te, float partialTick,PoseStack matrixStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
     ItemStack stack = te.getStoredItem();
 
     if (stack.isEmpty()) return;
@@ -34,11 +28,11 @@ public class ItemInterfaceRenderer extends TileEntityRenderer<TileItemInterface>
 
     matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
-    matrixStack.mulPose(new Quaternion(Vector3f.YN, angle, true));
+//    matrixStack.mulPose(new Quaternion(Vector3f.YN, angle, true));
 
-    RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn,0, matrixStack, iRenderTypeBuffer);
-    RenderSystem.disableLighting();
+//    RenderSystem.enableLighting();
+//    Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemCameraTransforms.TransformType.GROUND, combinedLightIn,0, matrixStack, iRenderTypeBuffer);
+//    RenderSystem.disableLighting();
     matrixStack.popPose();
     matrixStack.popPose();
   }

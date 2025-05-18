@@ -1,8 +1,6 @@
 package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.network.container.InstantFurnaceContainer;
-import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
 import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
@@ -14,37 +12,20 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.inventory.container.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.LockableTileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.common.util.NonNullFunction;
-import net.neoforged.items.CapabilityItemHandler;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
 public class TileInstantFurnace extends BaseContainerBlockEntity implements IDataUpdate {
 
   @Nonnull private final FurnaceProcessor processingStorage;
-  @Nonnull private final LazyOptional<FurnaceProcessor> capability;
+//  @Nonnull private final LazyOptional<FurnaceProcessor> capability;
 
   public TileInstantFurnace(BlockPos pos, BlockState blockState) {
     super(ModTiles.instantFurnace, pos, blockState);
 
     processingStorage = new FurnaceProcessor(this::getLevel, Integer.MAX_VALUE, 9, this);
-    capability = LazyOptional.of(() -> processingStorage);
+//    capability = LazyOptional.of(() -> processingStorage);
   }
 
   @Override
@@ -67,33 +48,33 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
   protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
     return new InstantFurnaceContainer(id, playerInventory, this);
   }
-
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-    if ( cap == ENERGY) {
-      return capability.cast();
-    }
-
-    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-      if (side == null) {
-        side = Direction.NORTH;
-      }
-      switch (side) {
-        case UP:
-          return capability.lazyMap(FurnaceProcessor::inputIItemHandler).cast();
-        case NORTH:
-        case EAST:
-        case SOUTH:
-        case WEST:
-          return capability.cast();
-        case DOWN:
-          return capability.lazyMap(FurnaceProcessor::outputIItemHandler).cast();
-      }
-    }
-
-    return super.getCapability(cap, side);
-  }
+//
+//  @Nonnull
+//  @Override
+//  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+//    if ( cap == ENERGY) {
+//      return capability.cast();
+//    }
+//
+//    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+//      if (side == null) {
+//        side = Direction.NORTH;
+//      }
+//      switch (side) {
+//        case UP:
+//          return capability.lazyMap(FurnaceProcessor::inputIItemHandler).cast();
+//        case NORTH:
+//        case EAST:
+//        case SOUTH:
+//        case WEST:
+//          return capability.cast();
+//        case DOWN:
+//          return capability.lazyMap(FurnaceProcessor::outputIItemHandler).cast();
+//      }
+//    }
+//
+//    return super.getCapability(cap, side);
+//  }
 
   @Override
   public int getContainerSize() {
@@ -139,20 +120,20 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
     throw new RuntimeException("clear is called");
   }
 
-  @Override
-  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-    super.load(state, compound);
-    if (compound.contains("Processor")) {
-      processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
-    }
-  }
-
-  @Override
-  @Nonnull
-  public CompoundNBT save(CompoundNBT compound) {
-    compound.put("Processor", processingStorage.serializeNBT());
-    return super.save(compound);
-  }
+//  @Override
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
+//    super.load(state, compound);
+//    if (compound.contains("Processor")) {
+//      processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
+//    }
+//  }
+//
+////  @Override
+//  @Nonnull
+//  public CompoundTag save(CompoundTag compound) {
+//    compound.put("Processor", processingStorage.serializeNBT());
+//    return super.save(compound);
+//  }
 
   @Override
   public void dataUpdated() {

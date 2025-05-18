@@ -1,9 +1,7 @@
 package com.cjm721.overloaded.util;
 
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.ListNBT;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -12,22 +10,21 @@ import java.util.List;
 public class NBTHelper {
 
   @Nonnull
-  public static ListNBT serializeItems(List<ItemStack> list) {
-    ListNBT listnbt = new ListNBT();
-
+  public static ListTag serializeItems(List<ItemStack> list) {
+    ListTag listnbt = new ListTag();
     for (ItemStack stack : list) {
-      listnbt.add(stack.serializeNBT());
+//      listnbt.add(stack.save());
     }
 
     return listnbt;
   }
 
   @Nonnull
-  public static List<ItemStack> deserializeItems(ListNBT tags) {
+  public static List<ItemStack> deserializeItems(ListTag tags) {
     List<ItemStack> toReturn = new ArrayList<>();
-    for (INBT tag : tags) {
-      toReturn.add(ItemStack.of(((CompoundNBT) tag)));
-    }
+//    for (INBT tag : tags) {
+//      toReturn.add(ItemStack.of(((CompoundNBT) tag)));
+//    }
 
     return toReturn;
   }

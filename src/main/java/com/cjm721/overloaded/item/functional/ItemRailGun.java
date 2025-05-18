@@ -15,12 +15,9 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
@@ -44,7 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 import static net.neoforged.versions.forge.ForgeVersion.MOD_ID;
 
@@ -62,7 +59,7 @@ public class ItemRailGun extends PowerModItem {
   public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
     stack
-        .getCapability(GENERIC_DATA_STORAGE)
+        .getCapability(GENERIC_DATA_STORAGE_ITEM)
         .ifPresent(
             cap -> {
               cap.suggestUpdate();
@@ -163,7 +160,7 @@ public class ItemRailGun extends PowerModItem {
         opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
 
     LazyOptional<IGenericDataStorage> opSettingCapability =
-        itemStack.getCapability(GENERIC_DATA_STORAGE);
+        itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
     if (!opSettingCapability.isPresent()) {
       Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
       return;
@@ -217,7 +214,7 @@ public class ItemRailGun extends PowerModItem {
       return;
     }
 
-    LazyOptional<IGenericDataStorage> opCap = itemStack.getCapability(GENERIC_DATA_STORAGE);
+    LazyOptional<IGenericDataStorage> opCap = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
 
     if (!opCap.isPresent()) {
       Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
