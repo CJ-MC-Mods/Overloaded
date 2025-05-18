@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 
 public class LongItemStorage
-    implements IItemHandler, IHyperHandlerItem, INBTSerializable<CompoundNBT> {
+    implements IItemHandler, IHyperHandlerItem, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private LongItemStack longItemStack;
@@ -86,8 +86,8 @@ public class LongItemStorage
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     if (!longItemStack.getItemStack().isEmpty()) {
       ItemStack stack = longItemStack.getItemStack();
       stack.setCount(1);
@@ -99,9 +99,9 @@ public class LongItemStorage
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT compound) {
+  public void deserializeNBT(CompoundTag compound) {
     ItemStack storedItem =
-        compound.contains("Item") ? ItemStack.of((CompoundNBT) compound.get("Item")) : null;
+        compound.contains("Item") ? ItemStack.of((CompoundTag) compound.get("Item")) : null;
     if (storedItem != null) {
       long storedAmount = compound.contains("Count") ? compound.getLong("Count") : 0L;
       longItemStack = new LongItemStack(storedItem, storedAmount);

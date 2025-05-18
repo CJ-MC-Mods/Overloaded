@@ -93,13 +93,13 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 //
 //    @Nullable
 //    @Override
-//    public CompoundNBT getShareTag(ItemStack stack) {
+//    public CompoundTag getShareTag(ItemStack stack) {
 //        return stack.getTag();
 //    }
 //
 //    @Nullable
 //    @Override
-//    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+//    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 //        return new CapabilityContainer()
 //                .addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
 //    }
@@ -107,7 +107,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 //    Collection<ICapabilityProvider> collectCapabilities(
 //            @Nonnull Collection<ICapabilityProvider> collection,
 //            ItemStack stack,
-//            @Nullable CompoundNBT nbt) {
+//            @Nullable CompoundTag nbt) {
 //        collection.add(new IntEnergyWrapper(stack));
 //
 //        return collection;

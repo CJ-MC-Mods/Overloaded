@@ -41,7 +41,7 @@ public class CapabilityGenericDataStorage {
 //              Capability<IGenericDataStorage> capability,
 //              IGenericDataStorage instance,
 //              Direction side) {
-//            CompoundNBT tagCompound = new CompoundNBT();
+//            CompoundTag tagCompound = new CompoundTag();
 //            Map<String, Integer> integers = instance.getIntegerMap();
 //            Map<String, Boolean> booleans = instance.getBooleanMap();
 //            Map<String, Float> floats = instance.getFloatMap();
@@ -72,9 +72,9 @@ public class CapabilityGenericDataStorage {
 //              IGenericDataStorage instance,
 //              Direction side,
 //              INBT nbt) {
-//            if (!(nbt instanceof CompoundNBT)) return;
+//            if (!(nbt instanceof CompoundTag)) return;
 //
-//            CompoundNBT tagCompound = ((CompoundNBT) nbt);
+//            CompoundTag tagCompound = ((CompoundTag) nbt);
 //            Map<String, Integer> integers = instance.getIntegerMap();
 //            Map<String, Boolean> booleans = instance.getBooleanMap();
 //            Map<String, Float> floats = instance.getFloatMap();

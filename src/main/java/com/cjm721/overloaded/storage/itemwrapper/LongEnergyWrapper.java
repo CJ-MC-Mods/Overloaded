@@ -26,15 +26,15 @@ public class LongEnergyWrapper
   public LongEnergyWrapper(ItemStack stack) {
     this.stack = stack;
 
-    CompoundNBT tagCompound = this.stack.getTag();
+    CompoundTag tagCompound = this.stack.getTag();
     if (tagCompound == null) {
-      tagCompound = new CompoundNBT();
+      tagCompound = new CompoundTag();
     }
 
     if (!tagCompound.contains("EnergyStorage")) {
       LongEnergyStorage storage = new LongEnergyStorage(this);
 
-      CompoundNBT storageTag = storage.serializeNBT();
+      CompoundTag storageTag = storage.serializeNBT();
       tagCompound.put("EnergyStorage", storageTag);
       this.stack.setTag(tagCompound);
     }
@@ -120,7 +120,7 @@ public class LongEnergyWrapper
 
   @Nonnull
   private LongEnergyStorage getStorage() {
-    CompoundNBT compound = stack.getTag().getCompound("LongEnergyStorage");
+    CompoundTag compound = stack.getTag().getCompound("LongEnergyStorage");
 
     LongEnergyStorage storage = new LongEnergyStorage(this);
     storage.deserializeNBT(compound);

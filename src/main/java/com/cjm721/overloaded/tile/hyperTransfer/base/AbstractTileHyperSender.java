@@ -37,7 +37,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   @Override
   @Nonnull
-  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+  public CompoundTag save(@Nonnull CompoundTag compound) {
     super.save(compound);
 
     if (partnerBlockPos != null) {
@@ -51,7 +51,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
   }
 
   @Override
-  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
     super.load(state, compound);
 
     if (compound.contains("X")) {

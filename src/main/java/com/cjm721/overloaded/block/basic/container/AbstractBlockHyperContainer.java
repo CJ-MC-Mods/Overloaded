@@ -24,7 +24,7 @@ abstract class AbstractBlockHyperContainer extends ModBlockTile {
 //        if (stack != null && stack.getAmount() != 0) {
 //            ItemStack toDrop = new ItemStack(this, 1);
 //
-//            CompoundNBT compound = new CompoundNBT();
+//            CompoundTag compound = new CompoundTag();
 //            world.getTileEntity(pos).write(compound);
 //
 //            toDrop.put(compound);

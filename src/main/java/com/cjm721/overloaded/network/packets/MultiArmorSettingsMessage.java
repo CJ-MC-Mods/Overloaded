@@ -2,8 +2,9 @@ package com.cjm721.overloaded.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public class MultiArmorSettingsMessage {
+public class MultiArmorSettingsMessage implements CustomPacketPayload {
 
   public float flightSpeed;
   public float groundSpeed;
@@ -61,5 +62,10 @@ public class MultiArmorSettingsMessage {
     buf.writeBoolean(message.removeHarmful);
     buf.writeBoolean(message.air);
     buf.writeBoolean(message.extinguish);
+  }
+
+  @Override
+  public Type<? extends CustomPacketPayload> type() {
+    return null;
   }
 }

@@ -20,14 +20,14 @@ public class TilePlayerInterface extends BlockEntity {
 
 //  @Override
 //  @Nonnull
-//  public CompoundNBT getUpdateTag() {
-//    return save(new CompoundNBT());
+//  public CompoundTag getUpdateTag() {
+//    return save(new CompoundTag());
 //  }
 //
 //  @Nullable
 //  @Override
 //  public SUpdateTileEntityPacket getUpdatePacket() {
-//    CompoundNBT tag = new CompoundNBT();
+//    CompoundTag tag = new CompoundTag();
 //    save(tag);
 //
 //    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
@@ -39,7 +39,7 @@ public class TilePlayerInterface extends BlockEntity {
 //  }
 //
 //  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
 //    if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
 //
 //    super.load(state, compound);
@@ -47,7 +47,7 @@ public class TilePlayerInterface extends BlockEntity {
 //
 //  @Override
 //  @Nonnull
-//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//  public CompoundTag save(@Nonnull CompoundTag compound) {
 //    if (placer != null) compound.putString("Placer", placer.toString());
 //
 //    return super.save(compound);

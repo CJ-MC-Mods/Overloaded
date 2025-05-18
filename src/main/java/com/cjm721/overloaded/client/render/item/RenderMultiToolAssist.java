@@ -1,46 +1,47 @@
-//package com.cjm721.overloaded.client.render.item;
-//
-//import com.cjm721.overloaded.config.OverloadedConfig;
-//import com.cjm721.overloaded.item.ModItems;
-//import com.cjm721.overloaded.util.AssistMode;
-//import com.cjm721.overloaded.util.BlockItemUseContextPublic;
-//import com.mojang.blaze3d.platform.GlStateManager;
-//import com.mojang.blaze3d.systems.RenderSystem;
-//import com.mojang.blaze3d.vertex.IVertexBuilder;
-//import net.minecraft.world.level.block.state.BlockState;
-//import net.minecraft.world.level.block.Blocks;
-//import net.minecraft.client.Minecraft;
-//import net.minecraft.client.entity.player.ClientPlayerEntity;
-//import net.minecraft.client.renderer.ActiveRenderInfo;
-//import net.minecraft.client.renderer.RenderState;
-//import net.minecraft.client.renderer.RenderType;
-//import net.minecraft.client.renderer.model.IBakedModel;
-//import net.minecraft.client.renderer.model.ModelResourceLocation;
-//import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-//import net.minecraft.client.renderer.vertex.VertexFormat;
-//import net.minecraft.world.entity.player.Player;
-//import net.minecraft.world.item.BlockItem;
-//import net.minecraft.world.item.ItemStack;
-//import net.minecraft.world.InteractionHand;
-//import net.minecraft.core.BlockPos;
-//import net.minecraft.util.math.BlockRayTraceResult;
-//import net.minecraft.util.math.RayTraceResult;
-//import net.minecraft.util.text.StringTextComponent;
-//import net.neoforged.api.distmarker.Dist;
-//import net.neoforged.client.event.InputEvent;
-//import net.neoforged.client.event.RenderWorldLastEvent;
-//import net.neoforged.bus.api.SubscribeEvent;
-//import net.neoforged.fml.common.Mod;
-//
-//import javax.annotation.Nonnull;
-//
-//import static com.cjm721.overloaded.Overloaded.MODID;
-//
-//import net.minecraft.client.renderer.RenderType.State;
-//
-//@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-//public class RenderMultiToolAssist {
-//
+package com.cjm721.overloaded.client.render.item;
+
+import com.cjm721.overloaded.config.OverloadedConfig;
+import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.util.AssistMode;
+import com.cjm721.overloaded.util.BlockItemUseContextPublic;
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.RenderState;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.StringTextComponent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.client.event.InputEvent;
+import net.neoforged.client.event.RenderWorldLastEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+
+import javax.annotation.Nonnull;
+
+import static com.cjm721.overloaded.Overloaded.MODID;
+
+import net.minecraft.client.renderer.RenderType.State;
+
+@EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = EventBusSubscriber.Bus.GAME)
+public class RenderMultiToolAssist {
+
 //  @SubscribeEvent
 //  public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
 //    ClientPlayerEntity player = Minecraft.getInstance().player;
@@ -55,32 +56,32 @@
 //      }
 //    }
 //  }
-//
-//  private static void changeHelpMode(int dwheel) {
-//    AssistMode[] values = AssistMode.values();
-//    int mode =
-//        (OverloadedConfig.INSTANCE.multiToolConfig.assistMode + Integer.signum(dwheel))
-//            % values.length;
-//    if (mode < 0) mode += values.length;
-//
-//    OverloadedConfig.INSTANCE.multiToolConfig.assistMode = mode;
-//  }
-//
-//  @Nonnull
-//  public static AssistMode getAssistMode() {
-//    AssistMode[] values = AssistMode.values();
-//    int mode = OverloadedConfig.INSTANCE.multiToolConfig.assistMode;
-//
-//    for (AssistMode assistMode : values) {
-//      if (assistMode.getMode() == mode) {
-//        return assistMode;
-//      }
-//    }
-//    // Invalid Config Entry so causing an update;
-//    changeHelpMode(0);
-//    return AssistMode.NONE;
-//  }
-//
+
+  private static void changeHelpMode(int dwheel) {
+    AssistMode[] values = AssistMode.values();
+    int mode =
+        (OverloadedConfig.INSTANCE.multiToolConfig.assistMode + Integer.signum(dwheel))
+            % values.length;
+    if (mode < 0) mode += values.length;
+
+    OverloadedConfig.INSTANCE.multiToolConfig.assistMode = mode;
+  }
+
+  @Nonnull
+  public static AssistMode getAssistMode() {
+    AssistMode[] values = AssistMode.values();
+    int mode = OverloadedConfig.INSTANCE.multiToolConfig.assistMode;
+
+    for (AssistMode assistMode : values) {
+      if (assistMode.getMode() == mode) {
+        return assistMode;
+      }
+    }
+    // Invalid Config Entry so causing an update;
+    changeHelpMode(0);
+    return AssistMode.NONE;
+  }
+
 //  @SubscribeEvent
 //  public static void renderWorldLastEvent(RenderWorldLastEvent event) {
 //    float partialTick = Minecraft.getInstance().getFrameTime();
@@ -188,4 +189,4 @@
 //          }, RenderSystem::disableBlend)).createCompositeState(true));
 //    }
 //  }
-//}
+}

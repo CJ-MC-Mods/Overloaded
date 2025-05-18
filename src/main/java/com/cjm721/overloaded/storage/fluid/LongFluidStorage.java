@@ -18,7 +18,7 @@ import static com.cjm721.overloaded.util.NumberUtil.addToMax;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class LongFluidStorage
-    implements IFluidHandler, IHyperHandlerFluid, INBTSerializable<CompoundNBT> {
+    implements IFluidHandler, IHyperHandlerFluid, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private LongFluidStack storedFluid;
@@ -70,10 +70,10 @@ public class LongFluidStorage
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT compound) {
+  public void deserializeNBT(CompoundTag compound) {
     FluidStack fluidStack =
         compound.contains("Fluid")
-            ? FluidStack.loadFluidStackFromNBT((CompoundNBT) compound.get("Fluid"))
+            ? FluidStack.loadFluidStackFromNBT((CompoundTag) compound.get("Fluid"))
             : null;
     long amount = compound.contains("Count") ? compound.getLong("Count") : 0L;
 
@@ -82,10 +82,10 @@ public class LongFluidStorage
 
   @Override
   @Nonnull
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     if (storedFluid.fluidStack != null) {
-      CompoundNBT tag = new CompoundNBT();
+      CompoundTag tag = new CompoundTag();
       storedFluid.fluidStack.writeToNBT(tag);
       compound.put("Fluid", tag);
       compound.putLong("Count", storedFluid.amount);

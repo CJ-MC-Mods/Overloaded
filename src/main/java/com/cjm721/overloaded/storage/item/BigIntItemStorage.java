@@ -11,7 +11,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
 
-public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<CompoundNBT> {
+public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private BigIntItemStack storedItem;
@@ -27,10 +27,10 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT compound) {
+  public void deserializeNBT(CompoundTag compound) {
     ItemStack itemStack =
         compound.contains("Stack")
-            ? ItemStack.of((CompoundNBT) compound.get("Stack"))
+            ? ItemStack.of((CompoundTag) compound.get("Stack"))
             : ItemStack.EMPTY;
 
     BigInteger amount =
@@ -42,10 +42,10 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     if (storedItem.itemStack != ItemStack.EMPTY) {
-      CompoundNBT tag = new CompoundNBT();
+      CompoundTag tag = new CompoundTag();
       storedItem.itemStack.save(tag);
       compound.put("Stack", tag);
       compound.putByteArray("Count", storedItem.amount.toByteArray());

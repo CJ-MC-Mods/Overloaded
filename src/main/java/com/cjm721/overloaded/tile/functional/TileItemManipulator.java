@@ -45,9 +45,9 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
   }
 
   @Override
-  public void load(@Nonnull BlockState state, CompoundNBT compound) {
+  public void load(@Nonnull BlockState state, CompoundTag compound) {
     if (compound.contains("Item")) {
-      itemStack.deserializeNBT((CompoundNBT) compound.get("Item"));
+      itemStack.deserializeNBT((CompoundTag) compound.get("Item"));
     }
 
     if (compound.contains("Energy")) {
@@ -58,7 +58,7 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
 
   @Override
   @Nonnull
-  public CompoundNBT save(CompoundNBT compound) {
+  public CompoundTag save(CompoundTag compound) {
     compound.put("Item", itemStack.serializeNBT());
     compound.putInt("Energy", energyStorage.getEnergyStored());
     return super.save(compound);

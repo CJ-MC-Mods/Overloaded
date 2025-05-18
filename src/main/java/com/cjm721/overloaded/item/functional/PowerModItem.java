@@ -1,28 +1,14 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.item.ModItem;
-import com.cjm721.overloaded.storage.builder.CapabilityContainer;
-import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
-import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.minecraft.world.item.TooltipFlag;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
-
-import net.minecraft.world.item.Item.Properties;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 abstract class PowerModItem extends ModItem {
 
@@ -34,59 +20,55 @@ abstract class PowerModItem extends ModItem {
     super(properties.stacksTo(1));
   }
 
-  @OnlyIn(Dist.CLIENT)
   @Override
-  public void appendHoverText(
-      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    stack
-        .getCapability(ENERGY, null)
-        .ifPresent(
-            handler ->
-                tooltip.add(
+  public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+
+                tooltipComponents.add(
                     Component.literal(
                         "Energy Stored: "
-                            + NumberFormat.getInstance().format(handler.getEnergyStored()))));
+                            + NumberFormat.getInstance().format(stack
+                                .getCapability(Capabilities.EnergyStorage.ITEM, null).getEnergyStored()))));
 
-    super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }
 
-  @Override
-  public boolean canBeDepleted() {
-    return false;
-  }
-
-  @Override
-  public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
-    return true;
-  }
-
-  @Override
-  public double getDurabilityForDisplay(ItemStack stack) {
-    return stack
-        .getCapability(ENERGY, null)
-        .map(storage -> 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored())
-        .orElse(1D);
-  }
-
-  @Nullable
-  @Override
-  public CompoundNBT getShareTag(ItemStack stack) {
-    return stack.getTag();
-  }
-
-  @Nullable
-  @Override
-  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
-    return new CapabilityContainer()
-        .addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
-  }
-
-  Collection<ICapabilityProvider> collectCapabilities(
-      @Nonnull Collection<ICapabilityProvider> collection,
-      ItemStack stack,
-      @Nullable CompoundNBT nbt) {
-    collection.add(new IntEnergyWrapper(stack));
-
-    return collection;
-  }
+//  @Override
+//  public boolean canBeDepleted() {
+//    return false;
+//  }
+//
+//  @Override
+//  public boolean showDurabilityBar(ItemStack p_showDurabilityBar_1_) {
+//    return true;
+//  }
+//
+//  @Override
+//  public double getDurabilityForDisplay(ItemStack stack) {
+//    return stack
+//        .getCapability(ENERGY, null)
+//        .map(storage -> 1D - storage.getEnergyStored() / (double) storage.getMaxEnergyStored())
+//        .orElse(1D);
+//  }
+//
+//  @Nullable
+//  @Override
+//  public CompoundTag getShareTag(ItemStack stack) {
+//    return stack.getTag();
+//  }
+//
+//  @Nullable
+//  @Override
+//  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+//    return new CapabilityContainer()
+//        .addCapability(collectCapabilities(new LinkedList<>(), stack, nbt));
+//  }
+//
+//  Collection<ICapabilityProvider> collectCapabilities(
+//      @Nonnull Collection<ICapabilityProvider> collection,
+//      ItemStack stack,
+//      @Nullable CompoundTag nbt) {
+//    collection.add(new IntEnergyWrapper(stack));
+//
+//    return collection;
+//  }
 }

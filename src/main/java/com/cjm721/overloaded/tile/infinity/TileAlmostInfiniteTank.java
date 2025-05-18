@@ -21,18 +21,18 @@ public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidSt
 //
 //  @Override
 //  @Nonnull
-//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//  public CompoundTag save(@Nonnull CompoundTag compound) {
 //    compound = super.save(compound);
 //    compound.put("LongFluidStorage", fluidStorage.serializeNBT());
 //    return compound;
 //  }
 //
 //  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
 //    super.load(state, compound);
 //
 //    if(compound.contains("LongFluidStorage")) {
-//      fluidStorage.deserializeNBT((CompoundNBT) compound.get("LongFluidStorage"));
+//      fluidStorage.deserializeNBT((CompoundTag) compound.get("LongFluidStorage"));
 //    }
 //  }
 

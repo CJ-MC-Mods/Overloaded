@@ -9,7 +9,7 @@ import net.neoforged.common.util.INBTSerializable;
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
 
-public class BigIntEnergyStorage implements IHyperHandlerEnergy, INBTSerializable<CompoundNBT> {
+public class BigIntEnergyStorage implements IHyperHandlerEnergy, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private BigIntEnergyStack energy;
@@ -57,14 +57,14 @@ public class BigIntEnergyStorage implements IHyperHandlerEnergy, INBTSerializabl
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     compound.putByteArray("Count", energy.amount.toByteArray());
     return compound;
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT nbt) {
+  public void deserializeNBT(CompoundTag nbt) {
     energy =
         new BigIntEnergyStack(
             nbt.contains("Count") ? new BigInteger(nbt.getByteArray("Count")) : BigInteger.ZERO);

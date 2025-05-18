@@ -61,7 +61,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 //  public Collection<ICapabilityProvider> collectCapabilities(
 //      @Nonnull Collection<ICapabilityProvider> collection,
 //      ItemStack stack,
-//      @Nullable CompoundNBT nbt) {
+//      @Nullable CompoundTag nbt) {
 //    collection.add(new GenericDataCapabilityProviderWrapper(stack));
 //    return super.collectCapabilities(collection, stack, nbt);
 //  }

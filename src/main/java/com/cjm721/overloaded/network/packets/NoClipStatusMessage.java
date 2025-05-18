@@ -1,8 +1,9 @@
 package com.cjm721.overloaded.network.packets;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
-public class NoClipStatusMessage {
+public class NoClipStatusMessage implements CustomPacketPayload {
 
   public boolean isEnabled() {
     return enabled;
@@ -22,5 +23,10 @@ public class NoClipStatusMessage {
 
   public static void toBytes(NoClipStatusMessage message, PacketBuffer buf) {
     buf.writeBoolean(message.enabled);
+  }
+
+  @Override
+  public Type<? extends CustomPacketPayload> type() {
+    return null;
   }
 }

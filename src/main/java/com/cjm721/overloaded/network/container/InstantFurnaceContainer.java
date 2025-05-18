@@ -123,7 +123,7 @@ public class InstantFurnaceContainer extends ModContainer {
 //    if (!message.getData().isEmpty()) {
 //      for (IContainerListener listener : this.containerListeners) {
 //        if (listener instanceof ServerPlayerEntity) {
-//          Overloaded.proxy.networkWrapper.send(
+//          PacketDistributor.send(
 //              PacketDistributor.PLAYER.with(() -> (ServerPlayerEntity) listener), message);
 //        }
 //      }

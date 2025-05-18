@@ -12,7 +12,7 @@ import java.math.BigInteger;
 
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 
-public class BigIntFluidStorage implements IHyperHandlerFluid, INBTSerializable<CompoundNBT> {
+public class BigIntFluidStorage implements IHyperHandlerFluid, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private BigIntFluidStack storedFluid;
@@ -28,10 +28,10 @@ public class BigIntFluidStorage implements IHyperHandlerFluid, INBTSerializable<
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT compound) {
+  public void deserializeNBT(CompoundTag compound) {
     FluidStack fluidStack =
         compound.contains("Fluid")
-            ? FluidStack.loadFluidStackFromNBT((CompoundNBT) compound.get("Fluid"))
+            ? FluidStack.loadFluidStackFromNBT((CompoundTag) compound.get("Fluid"))
             : null;
     BigInteger amount =
         compound.contains("Count")
@@ -42,10 +42,10 @@ public class BigIntFluidStorage implements IHyperHandlerFluid, INBTSerializable<
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     if (storedFluid.fluidStack != null) {
-      CompoundNBT tag = new CompoundNBT();
+      CompoundTag tag = new CompoundTag();
       storedFluid.fluidStack.writeToNBT(tag);
       compound.put("Fluid", tag);
       compound.putByteArray("Count", storedFluid.amount.toByteArray());

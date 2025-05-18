@@ -1,10 +1,11 @@
 package com.cjm721.overloaded.network.packets;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.core.BlockPos;
 
-public class RightClickBlockMessage {
+public class RightClickBlockMessage implements CustomPacketPayload {
 
   private Direction hitSide;
   private BlockPos pos;
@@ -24,7 +25,7 @@ public class RightClickBlockMessage {
     this.hitZ = hitZ;
   }
 
-  public static RightClickBlockMessage fromBytes(PacketBuffer buf) {
+  public static RightClickBlockMessage fromBytes(ByteBuf buf) {
     int x = buf.readInt();
     int y = buf.readInt();
     int z = buf.readInt();
@@ -38,7 +39,7 @@ public class RightClickBlockMessage {
         buf.readFloat());
   }
 
-  public static void toBytes(RightClickBlockMessage message, PacketBuffer buf) {
+  public static void toBytes(RightClickBlockMessage message, ByteBuf buf) {
     buf.writeInt(message.pos.getX());
     buf.writeInt(message.pos.getY());
     buf.writeInt(message.pos.getZ());
@@ -67,5 +68,10 @@ public class RightClickBlockMessage {
 
   public float getHitZ() {
     return hitZ;
+  }
+
+  @Override
+  public Type<? extends CustomPacketPayload> type() {
+    return null;
   }
 }

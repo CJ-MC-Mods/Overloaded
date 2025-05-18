@@ -72,17 +72,17 @@ public class TileMatterPurifier extends BlockEntity implements ITickableTileEnti
   }
 
   @Override
-  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
     super.load(state, compound);
-//    fluidStorage.readFromNBT((CompoundNBT) compound.get("Fluid"));
+//    fluidStorage.readFromNBT((CompoundTag) compound.get("Fluid"));
     energyStorage =
         new EnergyStorage(compound.getInt("Energy"), Integer.MAX_VALUE, Integer.MAX_VALUE);
   }
 
   @Override
   @Nonnull
-  public CompoundNBT save(CompoundNBT compound) {
-    CompoundNBT fluid = new CompoundNBT();
+  public CompoundTag save(CompoundTag compound) {
+    CompoundTag fluid = new CompoundTag();
 
 //    fluidStorage.writeToNBT(fluid);
 

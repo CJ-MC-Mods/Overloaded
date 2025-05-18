@@ -1,7 +1,6 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
@@ -11,19 +10,17 @@ import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWr
 import com.google.common.primitives.Ints;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.client.event.InputEvent;
@@ -40,7 +37,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 import static net.neoforged.versions.forge.ForgeVersion.MOD_ID;
@@ -56,13 +52,10 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @Override
-  public void appendHoverText(
-      ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    stack
-        .getCapability(GENERIC_DATA_STORAGE_ITEM)
-        .ifPresent(
-            cap -> {
-              cap.suggestUpdate();
+  public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+    @org.jetbrains.annotations.Nullable IGenericDataStorage cap = stack
+            .getCapability(GENERIC_DATA_STORAGE_ITEM);
+    cap.suggestUpdate();
               int energyRequirement =
                   cap.getIntegerMap()
                       .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
@@ -71,21 +64,20 @@ public class ItemRailGun extends PowerModItem {
                       String.format(
                           "Power Usage: %s",
                           NumberFormat.getInstance().format(energyRequirement))));
-            });
 
-    super.appendHoverText(stack, worldIn, tooltip, flagIn);
+    super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-    ModelResourceLocation location =
-        new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
-    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/item/railgun.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+//    ModelResourceLocation location =
+//        new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
+//    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
+//
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/item/railgun.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @Override
@@ -112,10 +104,10 @@ public class ItemRailGun extends PowerModItem {
       if (ray != null) {
         Vector3d moveVev =
             playerIn.getEyePosition(1).subtract(ray.getLocation()).normalize().scale(-1.0);
-        Overloaded.proxy.networkWrapper.sendToServer(
+        PacketDistributor.sendToServer(
             new RailGunFireMessage(ray.getEntity().getId(), moveVev, handIn));
       } else {
-        Overloaded.proxy.networkWrapper.sendToServer(new RailGunFireMessage(0, Vector3d.ZERO, handIn));
+        PacketDistributor.sendToServer(new RailGunFireMessage(0, Vector3d.ZERO, handIn));
       }
     }
 
@@ -136,7 +128,7 @@ public class ItemRailGun extends PowerModItem {
             ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getValue())) {
           powerDelta *= 100;
         }
-        Overloaded.proxy.networkWrapper.sendToServer(new RailGunSettingsMessage(powerDelta));
+        PacketDistributor.sendToServer(new RailGunSettingsMessage(powerDelta));
         event.setCanceled(true);
       }
     }
@@ -201,7 +193,7 @@ public class ItemRailGun extends PowerModItem {
   public Collection<ICapabilityProvider> collectCapabilities(
       @Nonnull Collection<ICapabilityProvider> collection,
       ItemStack stack,
-      @Nullable CompoundNBT nbt) {
+      @Nullable CompoundTag nbt) {
     collection.add(new GenericDataCapabilityProviderWrapper(stack));
 
     return super.collectCapabilities(collection, stack, nbt);

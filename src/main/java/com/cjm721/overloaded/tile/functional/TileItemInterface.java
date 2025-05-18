@@ -22,29 +22,29 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
 
 //  @Override
 //  @Nonnull
-//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//  public CompoundTag save(@Nonnull CompoundTag compound) {
 //    compound.put("StoredItem", storedItem.serializeNBT());
 //
 //    return super.save(compound);
 //  }
 //
 //  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
-//    storedItem = ItemStack.of((CompoundNBT) compound.get("StoredItem"));
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
+//    storedItem = ItemStack.of((CompoundTag) compound.get("StoredItem"));
 //
 //    super.load(state, compound);
 //  }
 //
 //  @Override
 //  @Nonnull
-//  public CompoundNBT getUpdateTag() {
-//    return save(new CompoundNBT());
+//  public CompoundTag getUpdateTag() {
+//    return save(new CompoundTag());
 //  }
 //
 //  @Nullable
 //  @Override
 //  public SUpdateTileEntityPacket getUpdatePacket() {
-//    CompoundNBT tag = new CompoundNBT();
+//    CompoundTag tag = new CompoundTag();
 //    save(tag);
 //
 //    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);

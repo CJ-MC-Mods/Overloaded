@@ -104,7 +104,7 @@ public class ItemEnergyShield extends ModItem {
 //
 //  @Nullable
 //  @Override
-//  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
+//  public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
 //    return new LongEnergyWrapper(stack);
 //  }
 //
@@ -136,12 +136,12 @@ public class ItemEnergyShield extends ModItem {
 
 //  @Nullable
 //  @Override
-//  public CompoundNBT getShareTag(ItemStack stack) {
+//  public CompoundTag getShareTag(ItemStack stack) {
 //    return stack.getTag();
 //  }
 //
 //  @Override
-//  public boolean verifyTagAfterLoad(CompoundNBT nbt) {
+//  public boolean verifyTagAfterLoad(CompoundTag nbt) {
 //    return false;
 //  }
 }

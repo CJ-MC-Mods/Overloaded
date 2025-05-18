@@ -23,7 +23,7 @@ public class CapabilityHyperItem {
 //              Capability<IHyperHandlerItem> capability,
 //              @Nonnull IHyperHandlerItem instance,
 //              Direction side) {
-//            CompoundNBT tag = new CompoundNBT();
+//            CompoundTag tag = new CompoundTag();
 //            LongItemStack stack = instance.status();
 //            if (!stack.getItemStack().isEmpty()) {
 //              tag.putLong("Count", stack.getAmount());
@@ -38,12 +38,12 @@ public class CapabilityHyperItem {
 //              @Nonnull IHyperHandlerItem instance,
 //              Direction side,
 //              @Nonnull INBT nbt) {
-//            CompoundNBT tag = (CompoundNBT) nbt;
+//            CompoundTag tag = (CompoundTag) nbt;
 //
 //            if (tag.contains("Item")) {
 //              LongItemStack stack =
 //                  new LongItemStack(
-//                      ItemStack.of((CompoundNBT) tag.get("Item")), tag.getLong("Count"));
+//                      ItemStack.of((CompoundTag) tag.get("Item")), tag.getLong("Count"));
 //              instance.give(stack, false);
 //            }
 //          }

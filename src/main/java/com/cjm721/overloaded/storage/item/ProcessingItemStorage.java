@@ -10,7 +10,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class ProcessingItemStorage implements IItemHandler, INBTSerializable<CompoundNBT> {
+public class ProcessingItemStorage implements IItemHandler, INBTSerializable<CompoundTag> {
 
   private final int inputSlots, outputSlots;
   @Nonnull private final IDataUpdate dataUpdate;
@@ -91,10 +91,10 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT storage = new CompoundNBT();
-    CompoundNBT inputNBT = new CompoundNBT();
-    CompoundNBT outputNBT = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag storage = new CompoundTag();
+    CompoundTag inputNBT = new CompoundTag();
+    CompoundTag outputNBT = new CompoundTag();
     ItemStackHelper.saveAllItems(inputNBT, input);
     ItemStackHelper.saveAllItems(outputNBT, output);
     storage.put("Input", inputNBT);
@@ -103,7 +103,7 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT nbt) {
+  public void deserializeNBT(CompoundTag nbt) {
     if (nbt.contains("Input")) {
       ItemStackHelper.loadAllItems(nbt.getCompound("Input"), input);
     }

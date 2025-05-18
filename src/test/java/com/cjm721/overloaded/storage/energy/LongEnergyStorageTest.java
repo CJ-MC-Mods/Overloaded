@@ -115,7 +115,7 @@ public class LongEnergyStorageTest {
 
     @Test
     public void deserializeNBT_normalValues() {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         tag.putLong("Count",  1000L);
 
         storage.deserializeNBT(tag);
@@ -125,11 +125,11 @@ public class LongEnergyStorageTest {
 
     @Test
     public void serializeNBT_normalValues() {
-        CompoundNBT tag = new CompoundNBT();
+        CompoundTag tag = new CompoundTag();
         tag.putLong("Count",  1000L);
         storage.deserializeNBT(tag);
 
-        CompoundNBT serializedTag = storage.serializeNBT();
+        CompoundTag serializedTag = storage.serializeNBT();
 
         assertThat(serializedTag).isEqualTo(tag);
     }

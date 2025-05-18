@@ -24,7 +24,7 @@ public class KeyBindPressedHandler
             .enqueueWork(
                 () -> {
                   boolean result = ArmorEventHandler.toggleNoClip(player);
-                  Overloaded.proxy.networkWrapper.send(
+                  PacketDistributor.send(
                       PacketDistributor.PLAYER.with(() -> player), new NoClipStatusMessage(result));
                 });
 

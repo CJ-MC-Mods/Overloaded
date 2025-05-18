@@ -23,11 +23,11 @@ public class CapabilityHyperFluid {
 //              Capability<IHyperHandlerFluid> capability,
 //              @Nonnull IHyperHandlerFluid instance,
 //              Direction side) {
-//            CompoundNBT tag = new CompoundNBT();
+//            CompoundTag tag = new CompoundTag();
 //            LongFluidStack stack = instance.status();
 //            if (stack.fluidStack != null) {
 //              tag.putLong("Count", stack.amount);
-//              CompoundNBT subTag = new CompoundNBT();
+//              CompoundTag subTag = new CompoundTag();
 //              stack.fluidStack.writeToNBT(subTag);
 //              tag.put("Fluid", tag);
 //            }
@@ -40,12 +40,12 @@ public class CapabilityHyperFluid {
 //              @Nonnull IHyperHandlerFluid instance,
 //              Direction side,
 //              @Nonnull INBT nbt) {
-//            CompoundNBT tag = (CompoundNBT) nbt;
+//            CompoundTag tag = (CompoundTag) nbt;
 //
 //            if (tag.contains("Item")) {
 //              LongFluidStack stack =
 //                  new LongFluidStack(
-//                      FluidStack.loadFluidStackFromNBT((CompoundNBT) tag.get("Fluid")),
+//                      FluidStack.loadFluidStackFromNBT((CompoundTag) tag.get("Fluid")),
 //                      tag.getLong("Count"));
 //              instance.give(stack, false);
 //            }

@@ -21,17 +21,17 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
 //
 //  @Override
 //  @Nonnull
-//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//  public CompoundTag save(@Nonnull CompoundTag compound) {
 //    compound = super.save(compound);
 //    compound.put("BigIntEnergyStorage", energyStorage.serializeNBT());
 //    return compound;
 //  }
 //
 //  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
 //    super.load(state, compound);
 //    if(compound.contains("BigIntEnergyStorage")) {
-//      energyStorage.deserializeNBT((CompoundNBT) compound.get("BigIntEnergyStorage"));
+//      energyStorage.deserializeNBT((CompoundTag) compound.get("BigIntEnergyStorage"));
 //    }
 //  }
 //

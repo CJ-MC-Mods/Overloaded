@@ -23,9 +23,9 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
   public IntEnergyWrapper(@Nonnull ItemStack stack) {
     this.stack = stack;
 
-    CompoundNBT tagCompound = this.stack.getTag();
+    CompoundTag tagCompound = this.stack.getTag();
     if (tagCompound == null) {
-      tagCompound = new CompoundNBT();
+      tagCompound = new CompoundTag();
       this.stack.setTag(tagCompound);
     }
   }
@@ -98,7 +98,7 @@ public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, ID
               "Something has changed private internal state in an invalid way. Resetting State.",
           new IllegalStateException(
               "private internal state changed. Stack's Tag Compound is null"));
-      stack.setTag(new CompoundNBT());
+      stack.setTag(new CompoundTag());
     }
     int energy = stack.getTag().getInt("IntEnergyStorage");
 

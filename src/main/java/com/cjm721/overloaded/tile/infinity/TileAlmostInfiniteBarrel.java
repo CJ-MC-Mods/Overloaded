@@ -21,18 +21,18 @@ public class TileAlmostInfiniteBarrel extends AbstractTileHyperStorage<LongItemS
 //
 //  @Override
 //  @Nonnull
-//  public CompoundNBT save(@Nonnull CompoundNBT compound) {
+//  public CompoundTag save(@Nonnull CompoundTag compound) {
 //    compound = super.save(compound);
 //    compound.put("LongItemStorage", itemStorage.serializeNBT());
 //    return compound;
 //  }
 //
 //  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundNBT compound) {
+//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
 //    super.load(state, compound);
 //
 //    if(compound.contains("LongItemStorage")) {
-//      itemStorage.deserializeNBT((CompoundNBT) compound.get("LongItemStorage"));
+//      itemStorage.deserializeNBT((CompoundTag) compound.get("LongItemStorage"));
 //    }
 //  }
 //

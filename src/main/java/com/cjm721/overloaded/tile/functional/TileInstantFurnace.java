@@ -124,7 +124,7 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
 //  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
 //    super.load(state, compound);
 //    if (compound.contains("Processor")) {
-//      processingStorage.deserializeNBT((CompoundNBT) compound.get("Processor"));
+//      processingStorage.deserializeNBT((CompoundTag) compound.get("Processor"));
 //    }
 //  }
 //

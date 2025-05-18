@@ -76,7 +76,7 @@
 ////                          this.removeHarmfulEnabled.getBooleanState(),
 ////                          this.giveAirEnabled.getBooleanState(),
 ////                          this.extinguishEnabled.getBooleanState());
-////                  Overloaded.proxy.networkWrapper.sendToServer(message);
+////                  PacketDistributor.sendToServer(message);
 ////                  this.minecraft.setScreen(null);
 ////                }));
 ////        addButton(

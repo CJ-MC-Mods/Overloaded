@@ -10,7 +10,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import javax.annotation.Nonnull;
 
 public class LongEnergyStorage
-    implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<CompoundNBT> {
+    implements IEnergyStorage, IHyperHandlerEnergy, INBTSerializable<CompoundTag> {
 
   @Nonnull private final IDataUpdate dataUpdate;
   @Nonnull private LongEnergyStack energy;
@@ -21,14 +21,14 @@ public class LongEnergyStorage
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    CompoundNBT compound = new CompoundNBT();
+  public CompoundTag serializeNBT() {
+    CompoundTag compound = new CompoundTag();
     compound.putLong("Count", energy.amount);
     return compound;
   }
 
   @Override
-  public void deserializeNBT(@Nonnull CompoundNBT compound) {
+  public void deserializeNBT(@Nonnull CompoundTag compound) {
     energy = new LongEnergyStack(compound.contains("Count") ? compound.getLong("Count") : 0L);
   }
 
