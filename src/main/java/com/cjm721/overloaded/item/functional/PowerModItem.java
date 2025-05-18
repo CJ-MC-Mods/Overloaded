@@ -4,14 +4,14 @@ import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.storage.builder.CapabilityContainer;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 abstract class PowerModItem extends ModItem {
 
@@ -43,7 +43,7 @@ abstract class PowerModItem extends ModItem {
         .ifPresent(
             handler ->
                 tooltip.add(
-                    new StringTextComponent(
+                    Component.literal(
                         "Energy Stored: "
                             + NumberFormat.getInstance().format(handler.getEnergyStored()))));
 

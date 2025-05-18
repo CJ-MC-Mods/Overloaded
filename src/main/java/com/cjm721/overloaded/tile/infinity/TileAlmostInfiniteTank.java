@@ -3,25 +3,26 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.capabilities.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+import static net.neoforged.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
 public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidStorage> implements IDataUpdate {
 
   @Nonnull private final LongFluidStorage fluidStorage;
   @Nonnull private final LazyOptional<?> capability;
 
-  public TileAlmostInfiniteTank() {
-    super(ModTiles.almostInfiniteTank);
+  public TileAlmostInfiniteTank(BlockPos pos, BlockState state) {
+    super(ModTiles.almostInfiniteTank pos,state);
     fluidStorage = new LongFluidStorage(this);
     capability = LazyOptional.of(() -> fluidStorage);
   }

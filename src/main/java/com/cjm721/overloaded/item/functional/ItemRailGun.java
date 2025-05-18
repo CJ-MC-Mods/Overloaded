@@ -15,10 +15,10 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,14 +27,14 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.client.event.InputEvent;
+import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,14 +45,15 @@ import java.util.Map;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
-import static net.minecraftforge.versions.forge.ForgeVersion.MOD_ID;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.versions.forge.ForgeVersion.MOD_ID;
 
 public class ItemRailGun extends PowerModItem {
 
   @Nonnull private static final String RAILGUN_POWER_KEY = "railgun.power";
 
-  public ItemRailGun() {
+  public ItemRailGun(Properties properties) {
+    super(properties);
     setRegistryName("railgun");
     //    setTranslationKey("railgun");
   }
@@ -69,7 +70,7 @@ public class ItemRailGun extends PowerModItem {
                   cap.getIntegerMap()
                       .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
               tooltip.add(
-                  new StringTextComponent(
+                  Component.literal(
                       String.format(
                           "Power Usage: %s",
                           NumberFormat.getInstance().format(energyRequirement))));
@@ -121,7 +122,7 @@ public class ItemRailGun extends PowerModItem {
       }
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+    return new ActionResult<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   @SubscribeEvent
@@ -178,7 +179,7 @@ public class ItemRailGun extends PowerModItem {
             .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
 
     if (energy.getEnergyStored() < energyRequired) {
-      player.displayClientMessage(new StringTextComponent("Not enough power to fire."), true);
+      player.displayClientMessage(Component.literal("Not enough power to fire."), true);
       return;
     }
 
@@ -188,7 +189,7 @@ public class ItemRailGun extends PowerModItem {
     if (entity == null || !entity.isAlive()) {
       return;
     } else if (player.distanceTo(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
-      player.displayClientMessage(new StringTextComponent("Target out of range."), true);
+      player.displayClientMessage(Component.literal("Target out of range."), true);
     } else if (entity.hurt(
         DamageSource.playerAttack(player),
         (float) (OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted))) {
@@ -238,7 +239,7 @@ public class ItemRailGun extends PowerModItem {
     cap.suggestSave();
 
     player.displayClientMessage(
-        new StringTextComponent("Power usage set to: " + NumberFormat.getInstance().format(power)),
+        Component.literal("Power usage set to: " + NumberFormat.getInstance().format(power)),
         true);
   }
 

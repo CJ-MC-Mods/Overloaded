@@ -9,13 +9,13 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -24,10 +24,10 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,11 +35,12 @@ import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.util.WorldUtil.rayTraceWithEntities;
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
 public class ItemRayGun extends PowerModItem {
 
-  public ItemRayGun() {
+  public ItemRayGun(Properties properties) {
+    super(properties);
     setRegistryName("ray_gun");
     //        setTranslationKey("ray_gun");
   }
@@ -48,7 +49,7 @@ public class ItemRayGun extends PowerModItem {
   @Override
   public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    tooltip.add(new StringTextComponent("The Little Zapper").withStyle(TextFormatting.ITALIC));
+    tooltip.add(Component.literal("The Little Zapper").withStyle(TextFormatting.ITALIC));
     super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
@@ -70,7 +71,7 @@ public class ItemRayGun extends PowerModItem {
   public ActionResult<ItemStack> use(
       World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
     if (!worldIn.isClientSide)
-      new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+      new ActionResult<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
 
     RayTraceResult ray =
         rayTraceWithEntities(
@@ -84,7 +85,7 @@ public class ItemRayGun extends PowerModItem {
       Overloaded.proxy.networkWrapper.sendToServer(new RayGunMessage(ray.getLocation()));
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+    return new ActionResult<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   public void handleMessage(ServerPlayerEntity player, RayGunMessage message) {
@@ -103,14 +104,14 @@ public class ItemRayGun extends PowerModItem {
 
     if (energy.getEnergyStored() < OverloadedConfig
         .INSTANCE.rayGun.energyPerShot) {
-      player.displayClientMessage(new StringTextComponent("Not enough power to fire."), true);
+      player.displayClientMessage(Component.literal("Not enough power to fire."), true);
       return;
     }
 
     Vector3d eyePos = player.getEyePosition(1);
 
     if (eyePos.distanceTo(message.vector) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
-      player.displayClientMessage(new StringTextComponent("Target out of range."), true);
+      player.displayClientMessage(Component.literal("Target out of range."), true);
       return;
     }
 
@@ -123,7 +124,7 @@ public class ItemRayGun extends PowerModItem {
                 RayTraceContext.FluidMode.NONE,
                 player));
     if (sanityCheckVec.getType() != RayTraceResult.Type.MISS) {
-      player.displayClientMessage(new StringTextComponent("Target no longer in sight."), true);
+      player.displayClientMessage(Component.literal("Target no longer in sight."), true);
       return;
     }
 

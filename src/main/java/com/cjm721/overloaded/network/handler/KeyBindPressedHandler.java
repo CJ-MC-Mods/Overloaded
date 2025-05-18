@@ -5,8 +5,8 @@ import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.neoforged.fml.network.NetworkEvent;
+import net.neoforged.fml.network.PacketDistributor;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;

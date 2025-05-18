@@ -3,93 +3,93 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.block.ModBlock;
 import com.cjm721.overloaded.block.ModBlockContainer;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.level.block.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockInstantFurnace extends ModBlockContainer {
-  private static final DirectionProperty FACING = HorizontalBlock.FACING;
+  private static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
   public BlockInstantFurnace() {
     super(ModBlock.getDefaultProperties());
     this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
-    setRegistryName("instant_furnace");
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
-    p_206840_1_.add(FACING);
-    super.createBlockStateDefinition(p_206840_1_);
+  protected MapCodec<? extends BaseEntityBlock> codec() {
+    return null;
+  }
+
+  @Override
+  protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
+    builder.add(FACING);
+    super.createBlockStateDefinition(builder);
+  }
+
+
+  @Override
+  protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    if(level.isClientSide) {
+      player.openMenu(state.getMenuProvider(level, pos));
+    }
+    return InteractionResult.SUCCESS;
   }
 
   @Override
   @Nonnull
-  public ActionResultType use(
-      BlockState state,
-      World worldIn,
-      BlockPos pos,
-      PlayerEntity player,
-      Hand handIn,
-      BlockRayTraceResult hit) {
-    player.openMenu(state.getMenuProvider(worldIn, pos));
-    return ActionResultType.SUCCESS;
-  }
-
-  @Override
-  @Nonnull
-  public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
+  public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
     return this.defaultBlockState().setValue(FACING, p_196258_1_.getHorizontalDirection().getOpposite());
-  }
-
-  @Nonnull
-  @Override
-  public BlockRenderType getRenderShape(BlockState state) {
-    return BlockRenderType.MODEL;
   }
 
   @Nullable
   @Override
-  public TileEntity newBlockEntity(IBlockReader worldIn) {
-    return new TileInstantFurnace();
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileInstantFurnace(pos, state);
   }
 
   @Override
-  public void onRemove(BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if(oldState.getBlock() != newState.getBlock()) {
-      TileEntity te = world.getBlockEntity(pos);
+  public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
+    if(oldState.is(newState.getBlock())) {
+      BlockEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TileInstantFurnace) {
-        InventoryHelper.dropContents(world, pos, ((TileInstantFurnace) te));
+        if (world instanceof ServerLevel) {
+          Containers.dropContents(world, pos, ((TileInstantFurnace) te));
+        }
+        super.onRemove(oldState, world, pos, newState, isMoving);
+        world.invalidateCapabilities(pos);
+      } else {
+        super.onRemove(oldState, world, pos, newState, isMoving);
       }
     }
+  }
 
-    super.onRemove(oldState, world, pos, newState, isMoving);
+  @Override
+  protected BlockState rotate(BlockState state, Rotation rot) {
+    return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
   }
 
   @Override
   @Nonnull
-  public BlockState rotate(@Nonnull BlockState state, Rotation p_185499_2_) {
-    return state.setValue(FACING, p_185499_2_.rotate(state.getValue(FACING)));
-  }
-
-  @Override
-  @Nonnull
-  public BlockState mirror(@Nonnull BlockState state, Mirror p_185471_2_) {
-    return state.rotate(p_185471_2_.getRotation(state.getValue(FACING)));
+  public BlockState mirror(@Nonnull BlockState state, Mirror mirror) {
+    return state.rotate(mirror.getRotation(state.getValue(FACING)));
   }
 }

@@ -1,23 +1,23 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class ResolutionConfig implements ConfigSectionHandler {
   public int blockResolution;
-  private ForgeConfigSpec.IntValue blockResolutionSpec;
+  private ModConfigSpec.IntValue blockResolutionSpec;
 
   public int itemResolution;
-  private ForgeConfigSpec.IntValue itemResolutionSpec;
+  private ModConfigSpec.IntValue itemResolutionSpec;
 
   public int multiArmorResolution;
-  private ForgeConfigSpec.IntValue multiArmorResolutionSpec;
+  private ModConfigSpec.IntValue multiArmorResolutionSpec;
 
   public boolean multiArmorFancyModel;
-  private ForgeConfigSpec.BooleanValue multiArmorFancyModelSpec;
+  private ModConfigSpec.BooleanValue multiArmorFancyModelSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.CLIENT) {
       return;
     }

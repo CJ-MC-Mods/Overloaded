@@ -2,24 +2,19 @@ package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperReceiver;
 import com.cjm721.overloaded.tile.hyperTransfer.TileHyperFluidReceiver;
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
   public BlockHyperFluidReceiver() {
     super(getDefaultProperties());
-    setRegistryName("hyper_fluid_receiver");
   }
 
   @Override
@@ -29,18 +24,17 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
   }
 
   @Override
-  @Nonnull
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileHyperFluidReceiver();
+  public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileHyperFluidReceiver(pos, state);
   }
 
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-    super.registerModel();
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/hyper_fluid_receiver.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+//    super.registerModel();
+//
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/hyper_fluid_receiver.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

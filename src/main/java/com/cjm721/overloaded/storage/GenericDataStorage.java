@@ -1,12 +1,13 @@
 package com.cjm721.overloaded.storage;
 
 import com.google.common.collect.Maps;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.UnknownNullability;
+
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,7 +17,7 @@ import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GE
 
 public class GenericDataStorage
     implements IGenericDataStorage,
-        INBTSerializable<CompoundNBT>,
+        INBTSerializable<CompoundTag>,
         Capability.IStorage<IGenericDataStorage> {
 
   private final Map<String, Integer> integerMap;
@@ -56,20 +57,20 @@ public class GenericDataStorage
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
+  public CompoundTag serializeNBT() {
     return writeNBT(GENERIC_DATA_STORAGE, this, null);
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT tagCompound) {
+  public void deserializeNBT(CompoundTag tagCompound) {
     readNBT(GENERIC_DATA_STORAGE, this, null, tagCompound);
   }
 
   @Nullable
   @Override
-  public CompoundNBT writeNBT(
+  public CompoundTag writeNBT(
       Capability<IGenericDataStorage> capability, IGenericDataStorage instance, Direction side) {
-    CompoundNBT tagCompound = new CompoundNBT();
+    CompoundTag tagCompound = new CompoundTag();
     Map<String, Integer> integers = instance.getIntegerMap();
     Map<String, Boolean> booleans = instance.getBooleanMap();
     Map<String, Float> floats = instance.getFloatMap();
@@ -99,10 +100,10 @@ public class GenericDataStorage
       Capability<IGenericDataStorage> capability,
       IGenericDataStorage instance,
       Direction side,
-      INBT nbt) {
-    if (!(nbt instanceof CompoundNBT)) return;
+      Tag nbt) {
+    if (!(nbt instanceof CompoundTag)) return;
 
-    CompoundNBT tagCompound = ((CompoundNBT) nbt);
+    CompoundTag tagCompound = ((CompoundTag) nbt);
     Map<String, Integer> integers = instance.getIntegerMap();
     Map<String, Boolean> booleans = instance.getBooleanMap();
     Map<String, Float> floats = instance.getFloatMap();

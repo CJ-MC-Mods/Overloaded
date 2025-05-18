@@ -1,45 +1,28 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TileItemManipulator;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nullable;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
-
-public class BlockItemManipulator extends AbstractModBlockFacing {
+public class BlockItemManipulator extends AbstractModBlockFacing implements EntityBlock {
   public BlockItemManipulator() {
     super(getDefaultProperties());
-    setRegistryName("item_manipulator");
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
   }
 
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
-    //   ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/item_manipulator.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+//    ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), null);
+//    //   ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/item_manipulator.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
   //    @Override
@@ -59,10 +42,10 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
   //        return getDefaultState().withProperty(FACING, Direction.byIndex(meta));
   //    }
 
-  @Nullable
+
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileItemManipulator(); // .setFacing(Direction.byIndex(meta));
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileItemManipulator(pos, state); // .setFacing(Direction.byIndex(meta));
   }
 
   //    @Override
@@ -72,17 +55,17 @@ public class BlockItemManipulator extends AbstractModBlockFacing {
   // Direction.getDirectionFromEntityLiving(pos,placer)
   //        super.onBlockPlacedBy(world, pos, state, entity, stack);
   //    }
-
-  private Direction getFront(LivingEntity placer) {
-    Vector3d lookVec = placer.getLookAngle();
-    return Direction.getNearest((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
-  }
+//
+//  private Direction getFront(LivingEntity placer) {
+//    Vector3d lookVec = placer.getLookAngle();
+//    return Direction.getNearest((float) lookVec.x, (float) lookVec.y, (float) lookVec.z);
+//  }
 
   @Override
   public void onRemove(
-      BlockState oldState, World world, BlockPos pos, BlockState newState, boolean isMoving) {
+      BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
     if (oldState.getBlock() != newState.getBlock()) {
-      TileEntity te = world.getBlockEntity(pos);
+      BlockEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TileItemManipulator) {
         ((TileItemManipulator) te).breakBlock();

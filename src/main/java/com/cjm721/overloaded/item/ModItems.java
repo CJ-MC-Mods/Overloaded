@@ -12,30 +12,31 @@ import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.util.IModRegistrable;
-import net.minecraft.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.item.Item;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.cjm721.overloaded.Overloaded.ITEMS;
+
 public class ModItems {
-  public static ModItem linkingCard;
-  public static ItemMultiTool multiTool;
 
-  public static ItemEnergyShield energyShield;
-  public static ItemAmountSelector amountSelector;
-  public static ItemRayGun rayGun;
-  public static ItemRailGun railgun;
-
-  private static ModItem energyCore;
-  private static ModItem itemCore;
-  private static ModItem fluidCore;
-
-  public static ItemMultiHelmet customHelmet;
-  public static ItemMultiChestplate customChestplate;
-  public static ItemMultiLeggings customLeggins;
-  public static ItemMultiBoots customBoots;
+  public static final DeferredItem<Item> linkingCard = ITEMS.registerItem("linking_card", ItemLinkingCard::new);
+  public static DeferredItem<ItemMultiTool> multiTool = ITEMS.registerItem("multi_tool", ItemMultiTool::new);
+  public static DeferredItem<ItemEnergyShield> energyShield = ITEMS.registerItem("energy_shield", ItemEnergyShield::new);
+  public static DeferredItem<ItemAmountSelector> amountSelector = ITEMS.registerItem("amount_selector", ItemAmountSelector::new);
+  public static DeferredItem<ItemRayGun> rayGun = ITEMS.registerItem("ray_gun", ItemRayGun::new);
+  public static DeferredItem<ItemRailGun> railgun = ITEMS.registerItem("railgun", ItemRailGun::new);
+  public static DeferredItem<ItemEnergyCore> energyCore = ITEMS.registerItem("energy_core", ItemEnergyCore::new);
+  public static DeferredItem<ItemItemCore> itemCore = ITEMS.registerItem("item_core", ItemItemCore::new);
+  public static DeferredItem<ItemFluidCore> fluidCore = ITEMS.registerItem("fluid_core", ItemFluidCore::new);
+  public static DeferredItem<ItemMultiHelmet> customHelmet = ITEMS.registerItem("multi_helmet", ItemMultiHelmet::new);
+  public static DeferredItem<ItemMultiChestplate> customChestplate = ITEMS.registerItem("multi_chestplate", ItemMultiChestplate::new);
+  public static DeferredItem<ItemMultiLeggings> customLeggins = ITEMS.registerItem("multi_leggings", ItemMultiLeggings::new);
+  public static DeferredItem<ItemMultiBoots> customBoots = ITEMS.registerItem("multi_boots", ItemMultiBoots::new);
 
   private static final List<IModRegistrable> registerList = new LinkedList<>();
 
@@ -43,31 +44,6 @@ public class ModItems {
 
   public static void addToSecondaryInit(IModRegistrable item) {
     registerList.add(item);
-  }
-
-  public static void init() {
-    linkingCard = registerItem(new ItemLinkingCard());
-    multiTool = registerItem(new ItemMultiTool());
-
-    energyCore = registerItem(new ItemEnergyCore());
-    itemCore = registerItem(new ItemItemCore());
-    fluidCore = registerItem(new ItemFluidCore());
-
-    customHelmet = registerItem(new ItemMultiHelmet());
-    customChestplate = registerItem(new ItemMultiChestplate());
-    customLeggins = registerItem(new ItemMultiLeggings());
-    customBoots = registerItem(new ItemMultiBoots());
-    settingsEditor = registerItem(new ItemSettingEditor());
-    rayGun = registerItem(new ItemRayGun());
-    railgun = registerItem(new ItemRailGun());
-
-    if (OverloadedConfig.INSTANCE.developmentConfig.wipStuff) {
-      //            energyShield = registerItem(new ItemEnergyShield());
-      //            amountSelector = registerItem(new ItemAmountSelector());
-      for (int i = 0; i < 10; i++) {
-        registerItem(new InDevItem("in_dev_item_" + i));
-      }
-    }
   }
 
   @OnlyIn(Dist.CLIENT)

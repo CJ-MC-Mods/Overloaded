@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.stacks.intint;
 
 import com.cjm721.overloaded.storage.IHyperType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;

@@ -1,18 +1,18 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class PurifierConfig implements ConfigSectionHandler {
 
   public int energyPerOperation;
-  private ForgeConfigSpec.IntValue energyPerOperationSpec;
+  private ModConfigSpec.IntValue energyPerOperationSpec;
 
   public int energyPerHardness;
-  private ForgeConfigSpec.IntValue energyPerHardnessSpec;
+  private ModConfigSpec.IntValue energyPerHardnessSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.SERVER) {
       return;
     }

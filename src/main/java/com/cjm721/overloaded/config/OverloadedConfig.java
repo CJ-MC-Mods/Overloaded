@@ -3,21 +3,22 @@ package com.cjm721.overloaded.config;
 import com.cjm721.overloaded.Overloaded;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Overloaded.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Overloaded.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class OverloadedConfig {
 
   @Nonnull
   public static final OverloadedConfig INSTANCE = new OverloadedConfig();
 
-  private final Map<ModConfig.Type, ForgeConfigSpec> configSpecs = Maps.newConcurrentMap();
+  private final Map<ModConfig.Type, ModConfigSpec> configSpecs = Maps.newConcurrentMap();
 
   public final MultiToolConfig multiToolConfig;
   public final MultiArmorConfig multiArmorConfig;
@@ -57,21 +58,16 @@ public class OverloadedConfig {
 
 
   @SubscribeEvent
-  public static void onLoading(ModConfig.Loading loading) {
+  public static void onLoading(ModConfigEvent loading) {
     INSTANCE.updateConfigs();
   }
 
-  @SubscribeEvent
-  public static void onConfigReloading(ModConfig.Reloading configReloading) {
-    INSTANCE.updateConfigs();
-  }
-
-  public ForgeConfigSpec getConfig(ModConfig.Type type) {
-    ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+  public ModConfigSpec getConfig(ModConfig.Type type) {
+    ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
     configsSections.forEach(c -> c.appendToBuilder(type, builder));
 
-    ForgeConfigSpec spec = builder.build();
+    ModConfigSpec spec = builder.build();
     configSpecs.put(type, spec);
     return spec;
   }

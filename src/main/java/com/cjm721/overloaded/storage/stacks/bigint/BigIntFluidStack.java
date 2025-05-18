@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.stacks.bigint;
 
 import com.cjm721.overloaded.storage.IHyperType;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 import java.math.BigInteger;

@@ -9,7 +9,7 @@ import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,16 +18,16 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3i;
@@ -36,20 +36,20 @@ import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolType;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.neoforged;
+import net.neoforged.common.ToolType;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.event.entity.EntityJoinWorldEvent;
+import net.neoforged.event.entity.player.PlayerInteractEvent;
+import net.neoforged.event.world.BlockEvent;
+import net.neoforged.eventbus.api.Event;
+import net.neoforged.eventbus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.fml.common.Mod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,19 +60,18 @@ import java.util.UUID;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
 import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemMultiTool extends PowerModItem {
 
-  public ItemMultiTool() {
+  public ItemMultiTool(Properties properties) {
     super(
-        new Properties()
+        properties
             .addToolType(ToolType.AXE, Integer.MAX_VALUE)
             .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
             .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
-    setRegistryName("multi_tool");
   }
 
   private static double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {
@@ -129,7 +128,7 @@ public class ItemMultiTool extends PowerModItem {
     }
 
     BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(worldIn, blockPos, state, player);
-    MinecraftForge.EVENT_BUS.post(event);
+    neoforged.EVENT_BUS.post(event);
 
     if (event.isCanceled()) {
       return BlockBreakResult.FAIL_REMOVE;
@@ -172,7 +171,7 @@ public class ItemMultiTool extends PowerModItem {
       itemStack.setTag(tag);
       ITextComponent component = stackToPlace.getDisplayName();
       player.displayClientMessage(
-          new StringTextComponent("Bound tool to ").append(component), true);
+          Component.literal("Bound tool to ").append(component), true);
     } else {
       LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
       if (!opEnergy.isPresent()) {
@@ -193,17 +192,17 @@ public class ItemMultiTool extends PowerModItem {
       switch (breakAndUseEnergy(world, pos, energy, player, efficiency, unbreaking)) {
         case FAIL_REMOVE:
           player.displayClientMessage(
-              new StringTextComponent("Unable to break block, reason unknown"), true);
+              Component.literal("Unable to break block, reason unknown"), true);
           break;
         case FAIL_ENERGY:
           player.displayClientMessage(
-              new StringTextComponent("Unable to break block, not enough energy"), true);
+              Component.literal("Unable to break block, not enough energy"), true);
           break;
         case FAIL_UNBREAKABLE:
-          player.displayClientMessage(new StringTextComponent("Block is unbreakable"), true);
+          player.displayClientMessage(Component.literal("Block is unbreakable"), true);
           break;
         case FAIL_RANGE:
-          player.displayClientMessage(new StringTextComponent("Block is out of range."), true);
+          player.displayClientMessage(Component.literal("Block is out of range."), true);
           break;
         case SUCCESS:
           break;
@@ -243,7 +242,7 @@ public class ItemMultiTool extends PowerModItem {
   @Override
   public void appendHoverText(
       ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-    tooltip.add(new StringTextComponent("Assist Mode: " + getAssistMode().getName()));
+    tooltip.add(Component.literal("Assist Mode: " + getAssistMode().getName()));
     super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }
 
@@ -320,13 +319,13 @@ public class ItemMultiTool extends PowerModItem {
     ItemStack blockStack = getSelectedBlockItemStack(multiTool);
 
     if (blockStack.isEmpty()) {
-      player.displayClientMessage(new StringTextComponent("No block type selected to place."), true);
+      player.displayClientMessage(Component.literal("No block type selected to place."), true);
       return;
     }
 
     if (!(blockStack.getItem() instanceof BlockItem)) {
       player.displayClientMessage(
-          new StringTextComponent("No valid block type selected to place."), true);
+          Component.literal("No valid block type selected to place."), true);
       return;
     }
 
@@ -345,16 +344,16 @@ public class ItemMultiTool extends PowerModItem {
     switch (placeBlock(
         blockStack, player, worldIn, newPosition, sideHit, energy, hitX, hitY, hitZ)) {
       case FAIL_PREREQUISITE:
-        player.displayClientMessage(new StringTextComponent("Do not have the required items"), true);
+        player.displayClientMessage(Component.literal("Do not have the required items"), true);
         return;
       case FAIL_DENY:
-        player.displayClientMessage(new StringTextComponent("Unable to place blocks"), true);
+        player.displayClientMessage(Component.literal("Unable to place blocks"), true);
         return;
       case FAIL_RANGE:
-        player.displayClientMessage(new StringTextComponent("To far away"), true);
+        player.displayClientMessage(Component.literal("To far away"), true);
         return;
       case FAIL_ENERGY:
-        player.displayClientMessage(new StringTextComponent("Not enough energy"), true);
+        player.displayClientMessage(Component.literal("Not enough energy"), true);
         return;
       case SUCCESS:
         // Ok Continue

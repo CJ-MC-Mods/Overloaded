@@ -1,51 +1,41 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.UsernameCache;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.UsernameCache;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-import static com.cjm721.overloaded.Overloaded.MODID;
-
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BlockPlayerInterface extends ModBlockTile {
 
   public BlockPlayerInterface() {
-    super(Properties.of(Material.GLASS).strength(3).dynamicShape().noOcclusion());
-    setRegistryName("player_interface");
+    super(Properties.ofFullCopy(Blocks.GLASS).strength(3).dynamicShape().noOcclusion());
   }
 
-  @Nullable
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TilePlayerInterface();
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TilePlayerInterface(pos,state);
   }
 
   @Override
   public void setPlacedBy(
-      World world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity entity, @Nonnull ItemStack stack) {
+          Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity entity, @Nonnull ItemStack stack) {
     ((TilePlayerInterface) world.getBlockEntity(pos)).setPlacer(entity);
 
     super.setPlacedBy(world, pos, state, entity, stack);
@@ -56,40 +46,33 @@ public class BlockPlayerInterface extends ModBlockTile {
   public void registerModel() {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
     // ModelResourceLocation(getRegistryName(), null));
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/player_interface.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/player_interface.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
+
   @Override
-  @Nonnull
-  public ActionResultType use(
-      @Nonnull BlockState state,
-      World world,
-      @Nonnull BlockPos pos,
-      @Nonnull PlayerEntity player,
-      @Nonnull Hand hand,
-      @Nonnull BlockRayTraceResult rayTraceResult) {
-    if (!world.isClientSide && hand == Hand.MAIN_HAND) {
-      TileEntity te = world.getBlockEntity(pos);
+  protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    if (!world.isClientSide && hand == InteractionHand.MAIN_HAND) {
+      BlockEntity te = world.getBlockEntity(pos);
 
       if (te instanceof TilePlayerInterface) {
         UUID placer = ((TilePlayerInterface) te).getPlacer();
 
         if (placer == null) {
-          player.sendMessage(
-              new StringTextComponent("Not bound to anyone..... ghosts placed this."), player.getUUID());
+          player.displayClientMessage(Component.literal("Not bound to anyone..... ghosts placed this."),false);
         } else {
           String username = UsernameCache.getLastKnownUsername(placer);
-          player.sendMessage(
-              new StringTextComponent(
-                  "Bound to player: " + (username == null ? placer.toString() : username)), player.getUUID());
+          player.displayClientMessage(
+                  Component.literal(
+                  "Bound to player: " + (username == null ? placer.toString() : username)), false);
         }
       }
-      return ActionResultType.SUCCESS;
+      return InteractionResult.SUCCESS;
     }
 
-    return super.use(state, world, pos, player, hand, rayTraceResult);
+    return super.useItemOn(stack,state, world, pos, player, hand, hitResult);
   }
 
   @Override

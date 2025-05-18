@@ -1,29 +1,30 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
-public class TileItemInterface extends TileEntity implements IItemHandler {
+public class TileItemInterface extends BlockEntity implements IItemHandler {
 
   private ItemStack storedItem;
 
-  public TileItemInterface() {
-    super(ModTiles.itemInterface);
+  public TileItemInterface(BlockPos pos, BlockState blockState) {
+    super(ModTiles.itemInterface, pos, blockState);
     storedItem = ItemStack.EMPTY;
   }
 

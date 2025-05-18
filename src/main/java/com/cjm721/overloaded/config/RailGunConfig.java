@@ -1,30 +1,30 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class RailGunConfig implements ConfigSectionHandler {
 
   public int minEnergy;
-  private ForgeConfigSpec.IntValue minEngerySpec;
+  private ModConfigSpec.IntValue minEngerySpec;
 
   public int maxEnergy;
-  private ForgeConfigSpec.IntValue maxEnergySpec;
+  private ModConfigSpec.IntValue maxEnergySpec;
 
   public int stepEnergy;
-  private ForgeConfigSpec.IntValue stepEnergySpec;
+  private ModConfigSpec.IntValue stepEnergySpec;
 
   public int maxRange;
-  private ForgeConfigSpec.IntValue maxRangeSpec;
+  private ModConfigSpec.IntValue maxRangeSpec;
 
   public double damagePerRF;
-  private ForgeConfigSpec.DoubleValue damagePerRFSpec;
+  private ModConfigSpec.DoubleValue damagePerRFSpec;
 
   public double knockbackPerRF;
-  private ForgeConfigSpec.DoubleValue knockbackPerRFSpec;
+  private ModConfigSpec.DoubleValue knockbackPerRFSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.SERVER) {
       return;
     }

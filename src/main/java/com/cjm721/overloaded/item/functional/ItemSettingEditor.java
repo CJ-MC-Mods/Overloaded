@@ -5,21 +5,21 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.network.OverloadedGuiHandler;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemSettingEditor extends ModItem {
 
@@ -36,7 +36,7 @@ public class ItemSettingEditor extends ModItem {
       OverloadedGuiHandler.openMultiArmorGUI();
     }
 
-    return new ActionResult<>(ActionResultType.SUCCESS, playerIn.getItemInHand(handIn));
+    return new ActionResult<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
   }
 
   @OnlyIn(Dist.CLIENT)

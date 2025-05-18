@@ -3,11 +3,12 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.energy.BigIntEnergyStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,8 +20,8 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
   @Nonnull private final BigIntEnergyStorage energyStorage;
   @Nonnull private final LazyOptional<?> capability;
 
-  public TileTrueInfiniteCapacitor() {
-    super(ModTiles.trueInfiniteCapacitor);
+  public TileTrueInfiniteCapacitor(BlockPos pos, BlockState state) {
+    super(ModTiles.trueInfiniteCapacitor pos,state);
     energyStorage = new BigIntEnergyStorage(this);
     capability = LazyOptional.of(() -> energyStorage);
   }

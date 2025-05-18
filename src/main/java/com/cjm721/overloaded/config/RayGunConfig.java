@@ -1,17 +1,17 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class RayGunConfig implements ConfigSectionHandler {
   public int energyPerShot;
-  private ForgeConfigSpec.IntValue energyPerShotSpec;
+  private ModConfigSpec.IntValue energyPerShotSpec;
 
   public int maxRange;
-  private ForgeConfigSpec.IntValue maxRangeSpec;
+  private ModConfigSpec.IntValue maxRangeSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.SERVER) {
       return;
     }

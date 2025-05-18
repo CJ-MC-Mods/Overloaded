@@ -4,12 +4,14 @@ import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperRe
 import com.cjm721.overloaded.tile.hyperTransfer.TileHyperEnergyReceiver;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
@@ -19,7 +21,6 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
   public BlockHyperEnergyReceiver() {
     super(getDefaultProperties());
-    setRegistryName("hyper_energy_receiver");
   }
 
   @Override
@@ -29,18 +30,17 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
   }
 
   @Override
-  @Nonnull
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileHyperEnergyReceiver();
+  public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileHyperEnergyReceiver(pos, state);
   }
 
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-    super.registerModel();
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/hyper_energy_receiver.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+//    super.registerModel();
+//
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/hyper_energy_receiver.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

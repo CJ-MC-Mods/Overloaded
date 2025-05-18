@@ -2,25 +2,26 @@ package com.cjm721.overloaded.tile.hyperTransfer.base;
 
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IHyperHandler<T>>
-    extends TileEntity implements ITickableTileEntity {
+    extends BlockEntity implements ITickableTileEntity {
 
   private int delayTicks;
 
@@ -29,8 +30,8 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   private final Capability<H> capability;
 
-  protected AbstractTileHyperSender(TileEntityType<?> type, Capability<H> capability) {
-    super(type);
+  protected AbstractTileHyperSender(BlockEntityType<?> type, Capability<H> capability,BlockPos pos, BlockState state) {
+    super(type, pos,state);
     this.capability = capability;
   }
 
@@ -81,9 +82,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   @Nullable
   private AbstractTileHyperReceiver<T, H> findPartner() {
-    World world = this.getLevel().getServer().getLevel(partnerWorldID);
+    Level world = this.getLevel().getServer().getLevel(partnerWorldID);
     if (world != null && world.hasChunkAt(partnerBlockPos)) {
-      TileEntity partnerTE = world.getBlockEntity(partnerBlockPos);
+      BlockEntity partnerTE = world.getBlockEntity(partnerBlockPos);
 
       if (partnerTE == null || !isCorrectPartnerType(partnerTE)) {
         this.partnerBlockPos = null;
@@ -143,7 +144,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
   @Nonnull
   protected abstract T generate(long amount);
 
-  protected abstract boolean isCorrectPartnerType(TileEntity te);
+  protected abstract boolean isCorrectPartnerType(BlockEntity te);
 
   public void setPartnerInfo(String registryLocation, BlockPos partnerPos) {
     this.partnerWorldID = RegistryKey.create(Registry.DIMENSION_REGISTRY, ResourceLocation.tryParse(registryLocation));

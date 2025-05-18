@@ -1,12 +1,20 @@
 package com.cjm721.overloaded.network.packets;
 
-import net.minecraft.network.PacketBuffer;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerDataMessage {
+import static com.cjm721.overloaded.Overloaded.MODID;
+
+public class ContainerDataMessage implements CustomPacketPayload {
+
+  public static final CustomPacketPayload.Type<ContainerDataMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(MODID, "container_data"));
 
   public final int container;
   private final List<ContainerData> data;
@@ -26,25 +34,45 @@ public class ContainerDataMessage {
     return data;
   }
 
-  public static ContainerDataMessage fromBytes(@Nonnull PacketBuffer buf) {
-    ContainerDataMessage data = new ContainerDataMessage(buf.readInt());
+  public static final StreamCodec<ByteBuf, ContainerDataMessage> STREAM_CODEC = new StreamCodec<ByteBuf, ContainerDataMessage>() {
+    @Override
+    public ContainerDataMessage decode(ByteBuf buffer) {
+      ContainerDataMessage data = new ContainerDataMessage(buffer.readInt());
 
-    int size = buf.readInt();
+      int size = buffer.readInt();
 
-    for (int i = 0; i < size; i++) {
-      data.addData(buf.readInt(), buf.readInt());
+      for (int i = 0; i < size; i++) {
+        data.addData(buffer.readInt(), buffer.readInt());
+      }
+
+      return data;
     }
 
-    return data;
+    @Override
+    public void encode(ByteBuf buffer, ContainerDataMessage message) {
+      buffer.writeInt(message.container);
+      buffer.writeInt(message.data.size());
+      for (ContainerData data : message.data) {
+        buffer.writeInt(data.index);
+        buffer.writeInt(data.value);
+      }
+    }
+  };
+
+
+  @Override
+  public Type<? extends CustomPacketPayload> type() {
+    return TYPE;
   }
 
-  public static void toBytes(ContainerDataMessage message, @Nonnull PacketBuffer buf) {
-    buf.writeInt(message.container);
-    buf.writeInt(message.data.size());
-    for (ContainerData data : message.data) {
-      buf.writeInt(data.index);
-      buf.writeInt(data.value);
-    }
+  @Override
+  public ClientboundCustomPayloadPacket toVanillaClientbound() {
+    return CustomPacketPayload.super.toVanillaClientbound();
+  }
+
+  @Override
+  public ServerboundCustomPayloadPacket toVanillaServerbound() {
+    return CustomPacketPayload.super.toVanillaServerbound();
   }
 
   public static class ContainerData {

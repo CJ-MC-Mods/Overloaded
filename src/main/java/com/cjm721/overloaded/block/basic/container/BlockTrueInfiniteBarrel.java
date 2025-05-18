@@ -2,33 +2,29 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntItemStack;
 import com.cjm721.overloaded.tile.infinity.TileTrueInfiniteBarrel;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteBarrel extends AbstractBlockHyperContainer {
 
   public BlockTrueInfiniteBarrel() {
     super(getDefaultProperties());
-    setRegistryName("true_infinite_barrel");
   }
 
   @Override
-  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+  protected void sendPlayerStatus(Level world, BlockPos pos, Player player) {
     BigIntItemStack stack =
         ((TileTrueInfiniteBarrel) world.getBlockEntity(pos)).getStorage().bigStatus();
 
     if (stack.itemStack.isEmpty()) {
-      player.displayClientMessage(new StringTextComponent("Item: EMPTY"), false);
+      player.displayClientMessage(Component.literal("Item: EMPTY"), false);
     } else {
       player.displayClientMessage(
-          new StringTextComponent("Item: ")
+          Component.literal("Item: ")
               .append(stack.itemStack.getDisplayName())
               .append(
                   String.format(
@@ -37,10 +33,9 @@ public class BlockTrueInfiniteBarrel extends AbstractBlockHyperContainer {
     }
   }
 
-  @Nullable
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileTrueInfiniteBarrel();
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileTrueInfiniteBarrel(pos,state);
   }
 
   @Override

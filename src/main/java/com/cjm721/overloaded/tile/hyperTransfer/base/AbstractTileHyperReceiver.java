@@ -2,20 +2,22 @@ package com.cjm721.overloaded.tile.hyperTransfer.base;
 
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H extends IHyperHandler<Type>> extends TileEntity {
+public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H extends IHyperHandler<Type>> extends BlockEntity {
 
     private final Capability<H> capability;
 
-    protected AbstractTileHyperReceiver(TileEntityType<?> type, Capability<H> capability) {
-        super(type);
+    protected AbstractTileHyperReceiver(BlockEntityType<?> type, Capability<H> capability, BlockPos pos, BlockState state) {
+        super(type, pos, state);
         this.capability = capability;
     }
 

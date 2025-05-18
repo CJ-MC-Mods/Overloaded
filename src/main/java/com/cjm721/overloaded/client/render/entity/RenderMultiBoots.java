@@ -4,7 +4,7 @@ import com.cjm721.overloaded.Overloaded;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class RenderMultiBoots extends AbstractRenderMultiArmor {
 

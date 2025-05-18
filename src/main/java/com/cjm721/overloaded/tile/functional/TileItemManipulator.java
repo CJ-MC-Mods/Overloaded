@@ -2,31 +2,32 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.FakePlayer;
+import net.neoforged.common.util.FakePlayerFactory;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.energy.EnergyStorage;
+import net.neoforged.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
-public class TileItemManipulator extends TileEntity implements ITickableTileEntity {
+public class TileItemManipulator extends BlockEntity implements ITickableTileEntity {
 
   private static final GameProfile FAKEPLAYER =
       new GameProfile(
@@ -37,8 +38,8 @@ public class TileItemManipulator extends TileEntity implements ITickableTileEnti
   private WeakReference<FakePlayer> player;
   private Direction facing;
 
-  public TileItemManipulator() {
-    super(ModTiles.itemManipulator);
+  public TileItemManipulator(BlockPos pos, BlockState blockState) {
+    super(ModTiles.itemManipulator, pos, blockState);
     itemStack = new ItemStackHandler();
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
   }

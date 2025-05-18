@@ -2,33 +2,29 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntFluidStack;
 import com.cjm721.overloaded.tile.infinity.TileTrueInfiniteTank;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
 
   public BlockTrueInfiniteTank() {
     super(getDefaultProperties());
-    setRegistryName("true_infinite_tank");
   }
 
   @Override
-  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+  protected void sendPlayerStatus(Level world, BlockPos pos, Player player) {
     BigIntFluidStack storedFluid =
         ((TileTrueInfiniteTank) world.getBlockEntity(pos)).getStorage().bigStatus();
     if (storedFluid == null || storedFluid.fluidStack == null) {
-      player.displayClientMessage(new StringTextComponent("Fluid: EMPTY"), false);
+      player.displayClientMessage(Component.literal("Fluid: EMPTY"), false);
     } else {
       player.displayClientMessage(
-          new StringTextComponent("Fluid: ")
-              .append(storedFluid.fluidStack.getDisplayName())
+          Component.literal("Fluid: ")
+              .append(storedFluid.fluidStack.getHoverName())
               .append(
                   String.format(
                       " Amount: %,d Bits: %,d",
@@ -37,10 +33,9 @@ public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
     }
   }
 
-  @Nullable
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileTrueInfiniteTank();
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileTrueInfiniteTank(pos, state);
   }
 
   @Override

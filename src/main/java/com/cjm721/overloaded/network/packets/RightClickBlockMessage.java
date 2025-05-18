@@ -2,7 +2,7 @@ package com.cjm721.overloaded.network.packets;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public class RightClickBlockMessage {
 

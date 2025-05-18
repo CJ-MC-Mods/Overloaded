@@ -1,29 +1,32 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
+import net.minecraft.core.BlockPos;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.registries.ObjectHolder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+import static net.neoforged.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
 
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
-public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler {
+public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandler {
 
   @ObjectHolder("minecraft:water")
   private static Fluid WATER;
 
-  public TileInfiniteWaterSource() {
-    super(ModTiles.infiniteWaterSource);
+  public TileInfiniteWaterSource(BlockPos pos, BlockState blockState) {
+    
+    super(ModTiles.infiniteWaterSource, pos, blockState);
   }
 
   @Nonnull
@@ -31,6 +34,9 @@ public class TileInfiniteWaterSource extends TileEntity implements IFluidHandler
   public FluidStack drain(int maxDrain, FluidAction fluidAction) {
     return new FluidStack(WATER, maxDrain);
   }
+
+  get
+
 
   @Override
   @Nonnull

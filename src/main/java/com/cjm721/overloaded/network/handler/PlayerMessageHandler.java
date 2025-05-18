@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.network.handler;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.neoforged.fml.network.NetworkEvent;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;

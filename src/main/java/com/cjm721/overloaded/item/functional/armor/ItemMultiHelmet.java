@@ -10,16 +10,18 @@ import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWr
 import com.google.common.primitives.Floats;
 import net.minecraft.client.renderer.entity.model.BipedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,8 +34,8 @@ import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Da
 
 public class ItemMultiHelmet extends AbstractMultiArmor {
 
-  public ItemMultiHelmet() {
-    super(EquipmentSlotType.HEAD);
+  public ItemMultiHelmet(Item.Properties properties) {
+    super(ArmorType.HELMET, properties);
 
     setRegistryName("multi_helmet");
   }

@@ -3,42 +3,42 @@ package com.cjm721.overloaded.util;
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.play.server.SChangeBlockPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.BlockSnapshot;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.ForgeHooks;
+import net.neoforged.common.neoforged;
+import net.neoforged.common.util.BlockSnapshot;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.event.world.BlockEvent;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class PlayerInteractionUtil {
 
   public static boolean tryHarvestBlock(ServerPlayerEntity player, ServerWorld world, BlockPos pos) {
     int exp =
-        net.minecraftforge.common.ForgeHooks.onBlockBreakEvent(
+        net.neoforged.common.ForgeHooks.onBlockBreakEvent(
             world, player.gameMode.getGameModeForPlayer(), player, pos);
     if (exp == -1) {
       return false;
@@ -119,7 +119,7 @@ public class PlayerInteractionUtil {
         blockSnapshot.getWorld().getBlockState(blockSnapshot.getPos().relative(facing.getOpposite()));
     BlockEvent.EntityPlaceEvent event =
         new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
-    MinecraftForge.EVENT_BUS.post(event);
+    neoforged.EVENT_BUS.post(event);
 
     if (event.isCanceled()) {
       return BlockPlaceResult.FAIL_DENY;
@@ -165,7 +165,7 @@ public class PlayerInteractionUtil {
                 newPosition,
                 false));
 
-    ActionResultType result = ForgeHooks.onPlaceItemIntoWorld(context);
+    InteractionResult result = ForgeHooks.onPlaceItemIntoWorld(context);
 
     switch (result) {
       case CONSUME:

@@ -2,11 +2,11 @@ package com.cjm721.overloaded.client.render.dynamic.general;
 
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.client.resource.BlockResourcePack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.client.event.TextureStitchEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;

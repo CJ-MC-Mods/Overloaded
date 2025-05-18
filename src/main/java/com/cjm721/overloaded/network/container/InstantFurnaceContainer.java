@@ -6,39 +6,39 @@ import com.cjm721.overloaded.network.packets.ContainerDataMessage;
 import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.util.ContainerUtil;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.container.FurnaceResultSlot;
 import net.minecraft.inventory.container.IContainerListener;
 import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.IWorldPosCallable;
 import net.minecraft.util.IntReferenceHolder;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.fml.network.PacketDistributor;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class InstantFurnaceContainer extends ModContainer {
 
-  private final PlayerInventory playerInventory;
+  private final Inventory playerInventory;
   private final TileInstantFurnace instanceFurnace;
   private final IntReferenceHolder power;
   private final IntReferenceHolder maxPower;
 
-  public InstantFurnaceContainer(int id, PlayerInventory playerInventory) {
+  public InstantFurnaceContainer(int id, Inventory playerInventory) {
     this(id, playerInventory, new TileInstantFurnace());
     this.instanceFurnace.setLevelAndPosition(playerInventory.player.level, playerInventory.player.blockPosition());
   }
 
   public InstantFurnaceContainer(
-      int id, PlayerInventory playerInventory, TileInstantFurnace instanceFurnace) {
+      int id, Inventory playerInventory, TileInstantFurnace instanceFurnace) {
     super(ModContainers.INSTANT_FURNACE, id);
     this.playerInventory = playerInventory;
     this.instanceFurnace = instanceFurnace;

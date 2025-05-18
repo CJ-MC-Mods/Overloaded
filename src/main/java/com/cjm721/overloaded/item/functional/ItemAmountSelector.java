@@ -2,12 +2,12 @@ package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.item.ModItem;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemAmountSelector extends ModItem {
 
-  protected ItemAmountSelector() {
-    super(new Properties().stacksTo(1));
+  protected ItemAmountSelector(Properties properties) {
+    super(properties.stacksTo(1));
   }
 
   @Override

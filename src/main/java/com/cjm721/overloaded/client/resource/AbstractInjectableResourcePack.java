@@ -4,9 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.FallbackResourceManager;
 import net.minecraft.resources.IResourcePack;
 import net.minecraft.resources.SimpleReloadableResourceManager;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.common.ObfuscationReflectionHelper;
 
 import java.util.List;
 import java.util.Map;

@@ -1,69 +1,69 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class MultiArmorConfig implements ConfigSectionHandler {
 
   public int baseCost;
-  private ForgeConfigSpec.IntValue baseCostSpec;
+  private ModConfigSpec.IntValue baseCostSpec;
 
   public double damageMultiplier;
-  private ForgeConfigSpec.DoubleValue damageMultiplierSpec;
+  private ModConfigSpec.DoubleValue damageMultiplierSpec;
 
   public double absoluteDamageMultiplier;
-  private ForgeConfigSpec.DoubleValue absoluteDamageMultiplierSpec;
+  private ModConfigSpec.DoubleValue absoluteDamageMultiplierSpec;
 
   public double unblockableMultiplier;
-  private ForgeConfigSpec.DoubleValue unblockableMultiplierSpec;
+  private ModConfigSpec.DoubleValue unblockableMultiplierSpec;
 
   public int maxFoodLevel;
-  private ForgeConfigSpec.IntValue maxFoodLevelSpec;
+  private ModConfigSpec.IntValue maxFoodLevelSpec;
 
   public double maxSaturationLevel;
-  private ForgeConfigSpec.DoubleValue maxSaturationLevelSpec;
+  private ModConfigSpec.DoubleValue maxSaturationLevelSpec;
 
   public int costPerFood;
-  private ForgeConfigSpec.IntValue costPerFoodSpec;
+  private ModConfigSpec.IntValue costPerFoodSpec;
 
   public double costPerSaturation;
-  private ForgeConfigSpec.DoubleValue costPerSaturationSpec;
+  private ModConfigSpec.DoubleValue costPerSaturationSpec;
 
   public int removeEffect;
-  private ForgeConfigSpec.IntValue removeEffectSpec;
+  private ModConfigSpec.IntValue removeEffectSpec;
 
   public int costPerHealth;
-  private ForgeConfigSpec.IntValue costPerHealthSpec;
+  private ModConfigSpec.IntValue costPerHealthSpec;
 
   public int extinguishCost;
-  private ForgeConfigSpec.IntValue extinguishCostSpec;
+  private ModConfigSpec.IntValue extinguishCostSpec;
 
   public int costPerAir;
-  private ForgeConfigSpec.IntValue costPerAirSpec;
+  private ModConfigSpec.IntValue costPerAirSpec;
 
   public int noClipEnergyPerTick;
-  private ForgeConfigSpec.IntValue noClipEnergyPerTickSpec;
+  private ModConfigSpec.IntValue noClipEnergyPerTickSpec;
 
   public double maxFlightSpeed;
-  private ForgeConfigSpec.DoubleValue maxFlightSpeedSpec;
+  private ModConfigSpec.DoubleValue maxFlightSpeedSpec;
 
   public int energyPerTickFlying;
-  private ForgeConfigSpec.IntValue energyPerTickFlyingSpec;
+  private ModConfigSpec.IntValue energyPerTickFlyingSpec;
 
   public double energyMultiplierPerFlightSpeed;
-  private ForgeConfigSpec.DoubleValue energyMultiplierPerFlightSpeedSpec;
+  private ModConfigSpec.DoubleValue energyMultiplierPerFlightSpeedSpec;
 
   public double maxGroundSpeed;
-  private ForgeConfigSpec.DoubleValue maxGroundSpeedSpec;
+  private ModConfigSpec.DoubleValue maxGroundSpeedSpec;
 
   public double energyPerBlockWalked;
-  private ForgeConfigSpec.DoubleValue energyPerBlockWalkedSpec;
+  private ModConfigSpec.DoubleValue energyPerBlockWalkedSpec;
 
   public double energyMultiplierPerGroundSpeed;
-  private ForgeConfigSpec.DoubleValue energyMultiplierPerGroundSpeedSpec;
+  private ModConfigSpec.DoubleValue energyMultiplierPerGroundSpeedSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.SERVER) {
       return;
     }

@@ -1,11 +1,11 @@
 modLoader="javafml" #mandatory
-loaderVersion="[30,)" #mandatory (26 is current forge version)
+loaderVersion="${loader_version_range}" #mandatory
 issueTrackerURL="https://github.com/CJ-MC-Mods/Overloaded/issues"
 license="All rights reserved"
 [[mods]]
     modId="overloaded"
     namespace="overloaded"
-    version="${file.jarVersion}"
+    version="${mod_version}"
     displayName="Overloaded"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/overloaded"
     logoFile="logo.png"
@@ -17,8 +17,15 @@ license="All rights reserved"
     Almost all balance values can be configured.
     '''
     [[dependencies.overloaded]] #optional
-        modId="forge" #mandatory
-        mandatory=true #mandatory
-        versionRange="[30,)" #mandatory
+        modId="neoforge" #mandatory
+        type="required" #mandatory
+        versionRange="${neo_version_range}" #mandatory
+        ordering="NONE"
+        side="BOTH"
+    [[dependencies.${mod_id}]]
+        modId="minecraft"
+        type="required"
+        # This version range declares a minimum of the current minecraft version up to but not including the next major version
+        versionRange="${minecraft_version_range}"
         ordering="NONE"
         side="BOTH"

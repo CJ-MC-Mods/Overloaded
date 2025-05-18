@@ -1,37 +1,47 @@
 package com.cjm721.overloaded.tile.functional;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.network.container.InstantFurnaceContainer;
 import com.cjm721.overloaded.storage.crafting.EnergyInventoryBasedRecipeProcessor;
 import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.LockableTileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.util.NonNullFunction;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.common.util.NonNullFunction;
+import net.neoforged.items.CapabilityItemHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
-public class TileInstantFurnace extends LockableTileEntity implements IDataUpdate {
+public class TileInstantFurnace extends BaseContainerBlockEntity implements IDataUpdate {
 
   @Nonnull private final FurnaceProcessor processingStorage;
   @Nonnull private final LazyOptional<FurnaceProcessor> capability;
 
-  public TileInstantFurnace() {
-    super(ModTiles.instantFurnace);
+  public TileInstantFurnace(BlockPos pos, BlockState blockState) {
+    super(ModTiles.instantFurnace, pos, blockState);
 
     processingStorage = new FurnaceProcessor(this::getLevel, Integer.MAX_VALUE, 9, this);
     capability = LazyOptional.of(() -> processingStorage);
@@ -39,13 +49,22 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
 
   @Override
   @Nonnull
-  protected ITextComponent getDefaultName() {
-    return new StringTextComponent("Instant Furnace");
+  protected Component getDefaultName() {
+    return Component.literal("Instant Furnace");
   }
 
   @Override
-  @Nonnull
-  protected Container createMenu(int id, @Nonnull PlayerInventory playerInventory) {
+  protected NonNullList<ItemStack> getItems() {
+    return null;
+  }
+
+  @Override
+  protected void setItems(NonNullList<ItemStack> items) {
+
+  }
+
+  @Override
+  protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
     return new InstantFurnaceContainer(id, playerInventory, this);
   }
 
@@ -88,7 +107,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
 
   @Override
   @Nonnull
-  public ItemStack getItem(int index) {
+  public net.minecraft.world.item.ItemStack getItem(int index) {
     return processingStorage.getStackInSlot(index);
   }
 
@@ -110,7 +129,7 @@ public class TileInstantFurnace extends LockableTileEntity implements IDataUpdat
   }
 
   @Override
-  public boolean stillValid(@Nonnull PlayerEntity player) {
+  public boolean stillValid(@Nonnull Player player) {
     // TODO Do I want to make sure the player is nearby?
     return true;
   }

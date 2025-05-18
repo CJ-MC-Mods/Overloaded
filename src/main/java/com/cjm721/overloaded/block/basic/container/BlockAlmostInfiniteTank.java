@@ -1,106 +1,88 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.Overloaded;
-import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteTank;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-
-import javax.annotation.Nonnull;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
-import static net.minecraftforge.fluids.capability.CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 
 public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
 
   public BlockAlmostInfiniteTank() {
     super(getDefaultProperties());
-    setRegistryName("almost_infinite_tank");
   }
 
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-    ModelResourceLocation location =
-        new ModelResourceLocation(new ResourceLocation(MODID, "almost_infinite_tank"), null);
-    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
-
-    ResizeableTextureGenerator.addToTextureQueue(
-        new ResizeableTextureGenerator.ResizableTexture(
-            new ResourceLocation(MODID, "textures/block/almost_infinite_tank.png"),
-            new ResourceLocation(MODID, "textures/dynamic/blocks/almost_infinite_tank.png"),
-            OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
+//    ModelResourceLocation location =
+//        new ModelResourceLocation(new ResourceLocation(MODID, "almost_infinite_tank"), null);
+//    //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, location);
+//
+//    ResizeableTextureGenerator.addToTextureQueue(
+//        new ResizeableTextureGenerator.ResizableTexture(
+//            new ResourceLocation(MODID, "textures/block/almost_infinite_tank.png"),
+//            new ResourceLocation(MODID, "textures/dynamic/blocks/almost_infinite_tank.png"),
+//            OverloadedConfig.INSTANCE.textureResolutions.blockResolution));
   }
 
   @Override
-  @Nonnull
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileAlmostInfiniteTank();
+  public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileAlmostInfiniteTank(pos,state);
   }
 
   @Override
-  @Nonnull
-  public ActionResultType use(
-      BlockState state,
-      World world,
-      BlockPos pos,
-      PlayerEntity player,
-      Hand handIn,
-      BlockRayTraceResult hit) {
+  protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
     ItemStack heldItem = player.getItemInHand(handIn);
-    if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
+    if (heldItem.isEmpty() && handIn == InteractionHand.MAIN_HAND) {
       if (!world.isClientSide) {
         sendPlayerStatus(world, pos, player);
       }
-      return ActionResultType.SUCCESS;
+      return InteractionResult.SUCCESS;
     } else {
-      TileEntity te = world.getBlockEntity(pos);
+      BlockEntity te = world.getBlockEntity(pos);
       if (te instanceof TileAlmostInfiniteTank) {
-        LazyOptional<IFluidHandler> opHandler = te.getCapability(FLUID_HANDLER_CAPABILITY);
-        if (!opHandler.isPresent()) {
-          Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? " + pos);
+        IFluidHandler opHandler = world.getCapability(Capabilities.FluidHandler.BLOCK, pos, hitResult.getDirection());
+        if (opHandler == null) {
+            Overloaded.logger.warn("Infinite Tank has no HyperFluid Capability? {}", pos);
         } else {
           if (!world.isClientSide) {
             return FluidUtil.interactWithFluidHandler(
                 player,
                 handIn,
-                opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"))) ? ActionResultType.SUCCESS : ActionResultType.FAIL;
+                opHandler) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
           }
-          return ActionResultType.SUCCESS;
+          return InteractionResult.SUCCESS;
         }
       }
     }
-    return ActionResultType.PASS;
+    return InteractionResult.PASS;
   }
 
   @Override
-  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+  protected void sendPlayerStatus(Level world, BlockPos pos, Player player) {
     LongFluidStack storedFluid =
         ((TileAlmostInfiniteTank) world.getBlockEntity(pos)).getStorage().getFluidStack();
     if (storedFluid == null || storedFluid.fluidStack == null) {
-      player.displayClientMessage(new StringTextComponent("Fluid: EMPTY"), false);
+      player.displayClientMessage(Component.literal("Fluid: EMPTY"), false);
     } else {
       player.displayClientMessage(
-          new StringTextComponent("Fluid: ")
-              .append(storedFluid.fluidStack.getDisplayName())
+          Component.literal("Fluid: ")
+              .append(storedFluid.fluidStack.getHoverName())
               .append(String.format(" Amount: %,d", storedFluid.amount)),
           false);
     }

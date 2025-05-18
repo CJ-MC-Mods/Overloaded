@@ -2,38 +2,33 @@ package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntEnergyStack;
 import com.cjm721.overloaded.tile.infinity.TileTrueInfiniteCapacitor;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteCapacitor extends AbstractBlockHyperContainer {
 
   public BlockTrueInfiniteCapacitor() {
     super(getDefaultProperties());
-    setRegistryName("true_infinite_capacitor");
   }
 
   @Override
-  protected void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player) {
+  protected void sendPlayerStatus(Level world, BlockPos pos, Player player) {
     BigIntEnergyStack stack =
         ((TileTrueInfiniteCapacitor) world.getBlockEntity(pos)).getStorage().bigStatus();
 
     player.displayClientMessage(
-        new StringTextComponent(
+        Component.literal(
             String.format("Energy Amount: %,d Bits: %,d", stack.getAmount(), stack.getAmount().bitLength())),
         false);
   }
 
-  @Nullable
   @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileTrueInfiniteCapacitor();
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileTrueInfiniteCapacitor(pos,state);
   }
 
   @Override

@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.storage.stacks.bigint;
 
 import com.cjm721.overloaded.storage.IHyperType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.math.BigInteger;

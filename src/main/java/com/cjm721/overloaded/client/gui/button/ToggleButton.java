@@ -11,15 +11,15 @@ public class ToggleButton extends Button {
   private final String baseText;
 
   public ToggleButton(int x, int y, boolean startingState, @Nonnull String baseText) {
-    super(x, y, 150, 20, new StringTextComponent(baseText), b -> ((ToggleButton)b).toggle());
+    super(x, y, 150, 20, Component.literal(baseText), b -> ((ToggleButton)b).toggle());
     this.baseText = baseText;
     this.booleanState = startingState;
-    this.setMessage(new StringTextComponent(String.format("%s %b", baseText, startingState)));
+    this.setMessage(Component.literal(String.format("%s %b", baseText, startingState)));
   }
 
   public void toggle() {
     booleanState = !booleanState;
-    this.setMessage(new StringTextComponent(String.format("%s %b", baseText, booleanState)));
+    this.setMessage(Component.literal(String.format("%s %b", baseText, booleanState)));
   }
 
   public boolean getBooleanState() {

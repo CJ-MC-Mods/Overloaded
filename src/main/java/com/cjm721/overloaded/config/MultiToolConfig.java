@@ -1,30 +1,30 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class MultiToolConfig implements ConfigSectionHandler {
 
   public int reach;
-  public ForgeConfigSpec.IntValue reachSpec;
+  public ModConfigSpec.IntValue reachSpec;
 
   public int placeBaseCost;
-  public ForgeConfigSpec.IntValue placeBaseCostSpec;
+  public ModConfigSpec.IntValue placeBaseCostSpec;
 
   public int costPerMeterAway;
-  public ForgeConfigSpec.IntValue costPerMeterAwaySpec;
+  public ModConfigSpec.IntValue costPerMeterAwaySpec;
 
   public int breakBaseCost;
-  public ForgeConfigSpec.IntValue breakBaseCostSpec;
+  public ModConfigSpec.IntValue breakBaseCostSpec;
 
   public int breakCostMultiplier;
-  public ForgeConfigSpec.IntValue breakCostMultiplierSpec;
+  public ModConfigSpec.IntValue breakCostMultiplierSpec;
 
   public int assistMode;
-  public ForgeConfigSpec.IntValue assistModeSpec;
+  public ModConfigSpec.IntValue assistModeSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.SERVER) {
       return;
     }

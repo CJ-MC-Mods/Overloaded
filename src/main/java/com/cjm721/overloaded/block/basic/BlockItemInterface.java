@@ -1,42 +1,26 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
-import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import static com.cjm721.overloaded.Overloaded.MODID;
-
-import net.minecraft.block.AbstractBlock.Properties;
-
-public class BlockItemInterface extends ModBlock {
+public class BlockItemInterface extends ModBlock implements EntityBlock {
 
   public BlockItemInterface() {
-    super(Properties.of(Material.GLASS).strength(3).dynamicShape().noOcclusion());
-    setRegistryName("item_interface");
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
+    super(Properties.ofFullCopy(Blocks.GLASS).strength(3).dynamicShape().noOcclusion());
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -44,60 +28,51 @@ public class BlockItemInterface extends ModBlock {
   public void registerModel() {
     //        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new
     // ModelResourceLocation(getRegistryName(), null));
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/item_interface.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
-  }
-
-  @Nullable
-  @Override
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileItemInterface();
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/item_interface.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 
   @Override
-  public void playerWillDestroy(World world,@Nonnull BlockPos pos, BlockState state, PlayerEntity player) {
+  public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileItemInterface(pos,state);
+  }
+
+  @Override
+  public BlockState playerWillDestroy(Level world, BlockPos pos, BlockState state, Player player) {
     ((TileItemInterface) world.getBlockEntity(pos)).breakBlock();
 
-    super.playerWillDestroy(world, pos, state, player);
+    return super.playerWillDestroy(world, pos, state, player);
   }
 
+
   @Override
-  @Nonnull
-  public ActionResultType use(
-      BlockState state,
-      World world,
-      BlockPos pos,
-      PlayerEntity player,
-      Hand hand,
-      BlockRayTraceResult rayTraceResult) {
-    if (world.isClientSide) return ActionResultType.CONSUME;
+  protected InteractionResult useItemOn(ItemStack handStack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    if (world.isClientSide) return InteractionResult.CONSUME;
 
-    if (hand != Hand.MAIN_HAND) return ActionResultType.CONSUME;
+    if (hand != InteractionHand.MAIN_HAND) return InteractionResult.CONSUME;
 
-    TileEntity te = world.getBlockEntity(pos);
+    BlockEntity te = world.getBlockEntity(pos);
 
-    if (!(te instanceof TileItemInterface)) return ActionResultType.CONSUME;
+    if (!(te instanceof TileItemInterface anInterface)) {
+      return InteractionResult.CONSUME;
+    }
 
-    TileItemInterface anInterface = (TileItemInterface) te;
-
-    ItemStack stack = anInterface.getStoredItem();
-    if (stack.isEmpty()) {
-      ItemStack handStack = player.getItemInHand(hand);
-
-      if (handStack.isEmpty()) return ActionResultType.FAIL;
+    ItemStack currentStack = anInterface.getStoredItem();
+    if (currentStack.isEmpty()) {
+      if (handStack.isEmpty()) return InteractionResult.FAIL;
 
       ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
       player.setItemInHand(hand, returnedItem);
     } else {
-      if (!player.getItemInHand(hand).isEmpty()) return ActionResultType.FAIL;
+      if (!player.getItemInHand(hand).isEmpty()) return InteractionResult.FAIL;
 
       ItemStack toSpawn = anInterface.extractItem(0, 1, false);
-      if (toSpawn.isEmpty()) return ActionResultType.FAIL;
+      if (toSpawn.isEmpty()) return InteractionResult.FAIL;
 
-      ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.inventory.selected);
+      ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.getInventory().selected);
     }
-    return ActionResultType.CONSUME;
+    return InteractionResult.CONSUME;
   }
 
   @Override

@@ -8,31 +8,32 @@ import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.neoforged;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import net.neoforged.event.TickEvent;
+import net.neoforged.event.entity.living.LivingAttackEvent;
+import net.neoforged.neoforge.event.AttachCapabilitiesEvent;
+import net.neoforged.event.entity.living.LivingEvent;
+import net.neoforged.event.entity.living.PotionEvent;
+import net.neoforged.eventbus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.LogicalSide;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import javax.annotation.Nonnull;
 import java.util.Iterator;
@@ -43,7 +44,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.DataKeys;
 import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Default;
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
 public class ArmorEventHandler {
 
@@ -63,9 +64,12 @@ public class ArmorEventHandler {
       UUID.fromString("241a8bbe-1660-11eb-adc1-0242ac120002");
 
   @SubscribeEvent
-  public void onPlayerTickEvent(@Nonnull TickEvent.PlayerTickEvent event) {
-    PlayerEntity player = event.player;
-    if (player == null || player.dead) return;
+  public void onPlayerTickEvent(@Nonnull EntityTickEvent.Pre event) {
+    Entity entity = event.getEntity();
+    if (!(entity instanceof Player player)) {
+      return;
+    }
+      if (player == null || player.isDeadOrDying()) return;
 
     IGenericDataStorage playerDataStorage = getPlayerDataStorage(player);
 
@@ -236,7 +240,7 @@ public class ArmorEventHandler {
           OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
           side == LogicalSide.CLIENT)) {
         // If not canceled
-        if(!MinecraftForge.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(player, potion))) {
+        if(!neoforged.EVENT_BUS.post(new PotionEvent.PotionRemoveEvent(player, potion))) {
           potionEffectIterator.remove();
         }
       }
@@ -408,7 +412,7 @@ public class ArmorEventHandler {
     return new GenericDataStorage();
   }
 
-  private boolean isMultiArmorSetEquipped(PlayerEntity player) {
+  private boolean isMultiArmorSetEquipped(Player player) {
     for (ItemStack stack : player.inventory.armor) {
       if (!(stack.getItem() instanceof IMultiArmor)) {
         return false;
@@ -419,7 +423,7 @@ public class ArmorEventHandler {
 
   @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
-  public void onKeyInputEvent(InputEvent.KeyInputEvent event) {
+  public void onKeyInputEvent(InputEvent.Key event) {
     if (((ClientProxy) Overloaded.proxy).noClipKeybind.consumeClick()
         && isMultiArmorSetEquipped(Minecraft.getInstance().player)) {
       Overloaded.proxy.networkWrapper.sendToServer(
@@ -440,7 +444,7 @@ public class ArmorEventHandler {
     }
   }
 
-  public static void setNoClip(PlayerEntity player, boolean enabled) {
+  public static void setNoClip(Player player, boolean enabled) {
     IGenericDataStorage storage = getPlayerDataStorage(player);
 
     final Map<String, Boolean> booleans = storage.getBooleanMap();

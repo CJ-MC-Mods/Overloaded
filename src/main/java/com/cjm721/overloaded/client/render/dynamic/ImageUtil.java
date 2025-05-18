@@ -2,9 +2,9 @@ package com.cjm721.overloaded.client.render.dynamic;
 
 import com.cjm721.overloaded.client.render.dynamic.general.ResizeableTextureGenerator;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import java.awt.geom.AffineTransform;
@@ -31,14 +31,14 @@ public class ImageUtil {
   }
 
   public static InputStream getTextureInputStream(ResourceLocation location) throws IOException {
-    return Minecraft.getInstance().getResourceManager().getResource(location).getInputStream();
+    return Minecraft.getInstance().getResourceManager().getResource(location).get().open();
   }
 
   public static void registerDynamicTexture(@Nonnull ResourceLocation location, int resolution) {
     ResizeableTextureGenerator.addToTextureQueue(
         new ResizeableTextureGenerator.ResizableTexture(
             location,
-            new ResourceLocation(
+            ResourceLocation.tryBuild(
                 location.getNamespace(),
                 location.getPath().replaceFirst("textures", "textures/dynamic")),
             resolution));

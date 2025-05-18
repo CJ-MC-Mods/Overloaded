@@ -1,22 +1,30 @@
 package com.cjm721.overloaded.capabilities;
 
+import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.storage.fluid.IHyperHandlerFluid;
 import com.cjm721.overloaded.storage.fluid.LongFluidStorage;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.capabilities.CapabilityInject;
+import net.neoforged.common.capabilities.CapabilityManager;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nonnull;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
+
 public class CapabilityHyperFluid {
 
-  @CapabilityInject(IHyperHandlerFluid.class)
-  public static Capability<IHyperHandlerFluid> HYPER_FLUID_HANDLER = null;
+  public static BlockCapability<IHyperHandlerFluid, Direction> HYPER_FLUID_HANDLER = BlockCapability.createSided(
+          ResourceLocation.fromNamespaceAndPath(MODID,"hyper_fluid"),
+          IHyperHandlerFluid.class
+  );
 
   public static void register() {
     CapabilityManager.INSTANCE.register(

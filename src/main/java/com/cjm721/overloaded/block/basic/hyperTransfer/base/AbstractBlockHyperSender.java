@@ -2,14 +2,14 @@ package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
 import com.cjm721.overloaded.item.ModItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -26,7 +26,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 
     @Override
     @Nonnull
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public InteractionResult use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (hand == Hand.MAIN_HAND) {
             ItemStack heldItem = player.getItemInHand(hand);
             if (heldItem.isEmpty()) {
@@ -34,9 +34,9 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                 // Should find a cleaner way of showing all of this
                 if (!world.isClientSide) {
                     String message = ((AbstractTileHyperSender) world.getBlockEntity(pos)).getRightClickMessage();
-                    player.displayClientMessage(new StringTextComponent(message), false);
+                    player.displayClientMessage(Component.literal(message), false);
                 }
-              return ActionResultType.SUCCESS;
+              return InteractionResult.SUCCESS;
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
                 CompoundNBT tag = heldItem.getTag();
                 if (tag != null) {
@@ -48,15 +48,15 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 
                         bindToPartner(world, pos, worldID, new BlockPos(x, y, z));
                         if (world.isClientSide) {
-                            player.displayClientMessage(new StringTextComponent("Bound Hyper Nodes"), true);
+                            player.displayClientMessage(Component.literal("Bound Hyper Nodes"), true);
                         }
                     } else {
                         if (world.isClientSide) {
-                            player.displayClientMessage(new StringTextComponent("Incorrect Hyper Node Type to bind."), true);
+                            player.displayClientMessage(Component.literal("Incorrect Hyper Node Type to bind."), true);
                         }
                     }
                 }
-              return ActionResultType.SUCCESS;
+              return InteractionResult.SUCCESS;
             }
         }
 

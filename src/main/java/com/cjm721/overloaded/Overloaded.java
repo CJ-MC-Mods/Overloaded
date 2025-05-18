@@ -4,17 +4,20 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.proxy.CommonProxy;
 import com.cjm721.overloaded.proxy.ServerProxy;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mojang.logging.LogUtils;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.neoforged.fml.DistExecutor;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.fml.ModContainer;
+import org.slf4j.Logger;
 
 @Mod(Overloaded.MODID)
 public class Overloaded {
@@ -22,47 +25,31 @@ public class Overloaded {
   public static Overloaded instance;
 
   public static final String MODID = "overloaded";
-  static final String VERSION = "${mod_version}";
 
   public static final CommonProxy proxy =
       DistExecutor.runForDist(() -> ClientProxy::new, () -> ServerProxy::new);
 
-  public static final Logger logger = LogManager.getLogger();
+  public static final Logger logger = LogUtils.getLogger();
 
-  public Overloaded() {
+  public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
+  public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+  public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+  public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MODID);
+
+  public Overloaded(IEventBus modEventBus, ModContainer modContainer) {
     instance = this;
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
-    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFingerprintException);
-    MinecraftForge.EVENT_BUS.register(OverloadedConfig.INSTANCE);
+    modEventBus.addListener(this::commonSetup);
 
-    ModContainer activeContainer = ModLoadingContext.get().getActiveContainer();
-    ModConfig commonConfig = new ModConfig(
-        ModConfig.Type.COMMON,
-        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.COMMON),
-        activeContainer);
-    activeContainer.addConfig(commonConfig);
-    ModConfig serverConfig = new ModConfig(
-        ModConfig.Type.SERVER,
-        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.SERVER),
-        activeContainer);
-    activeContainer.addConfig(serverConfig);
-    ModConfig clientConfig = new ModConfig(
-        ModConfig.Type.CLIENT,
-        OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.CLIENT),
-        activeContainer);
-    activeContainer.addConfig(clientConfig);
+    NeoForge.EVENT_BUS.register(this);
+
+    modContainer.registerConfig(ModConfig.Type.COMMON, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.COMMON));
+    modContainer.registerConfig(ModConfig.Type.SERVER, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.SERVER));
+    modContainer.registerConfig(ModConfig.Type.CLIENT, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.CLIENT));
 
     proxy.registerEvents();
   }
 
   private void commonSetup(final FMLCommonSetupEvent event) {
     proxy.commonSetup(event);
-  }
-
-  private void onFingerprintException(FMLFingerprintViolationEvent event) {
-    logger.warn(
-        "Invalid fingerprint detected! The file "
-            + event.getSource().getName()
-            + " may have been tampered with. This version will NOT be supported by cjm721!");
   }
 }

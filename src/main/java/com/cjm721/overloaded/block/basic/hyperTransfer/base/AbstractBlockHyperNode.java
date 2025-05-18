@@ -1,25 +1,16 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.block.ModBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.block.EntityBlock;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
-public abstract class AbstractBlockHyperNode extends ModBlock {
+public abstract class AbstractBlockHyperNode extends ModBlock implements EntityBlock {
 
   AbstractBlockHyperNode(@Nonnull Properties materialIn) {
     super(materialIn.noOcclusion());
-  }
-
-  @Override
-  public boolean hasTileEntity(BlockState state) {
-    return true;
   }
 
   @Nonnull

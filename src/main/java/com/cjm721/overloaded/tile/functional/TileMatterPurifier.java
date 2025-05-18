@@ -2,33 +2,34 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.ModTiles;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.energy.EnergyStorage;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
-public class TileMatterPurifier extends TileEntity implements ITickableTileEntity, IItemHandler {
+public class TileMatterPurifier extends BlockEntity implements ITickableTileEntity, IItemHandler {
 
 //  private final FluidTank fluidStorage;
   private EnergyStorage energyStorage;
   private ItemStack stack;
 
-  public TileMatterPurifier() {
-    super(ModTiles.matterPurifier);
+  public TileMatterPurifier(BlockPos pos, BlockState blockState) {
+    super(ModTiles.matterPurifier, pos, blockState);
 //    fluidStorage = new FluidTank(Integer.MAX_VALUE);
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     stack = ItemStack.EMPTY;

@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.storage.energy;
 
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 public class ForgeEnergyZero implements IEnergyStorage {
     @Override

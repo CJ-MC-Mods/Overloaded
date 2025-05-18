@@ -4,8 +4,8 @@ import net.minecraft.client.gui.widget.AbstractSlider;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class GenericSlider extends AbstractSlider {
@@ -17,7 +17,7 @@ public class GenericSlider extends AbstractSlider {
 
   public GenericSlider(
       int x, int y, float minValue, float maxValue, float currentValue, String baseText) {
-    super(x, y, 150, 20,new StringTextComponent(baseText), scaleDown(currentValue, minValue, maxValue));
+    super(x, y, 150, 20,Component.literal(baseText), scaleDown(currentValue, minValue, maxValue));
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.baseText = baseText;
@@ -76,7 +76,7 @@ public class GenericSlider extends AbstractSlider {
   ////    }
   //
   private void resetDisplayString() {
-    this.setMessage(new StringTextComponent(String.format("%s %.2f", baseText, getEffectiveValue())));
+    this.setMessage(Component.literal(String.format("%s %.2f", baseText, getEffectiveValue())));
   }
   //
   public double getEffectiveValue() {

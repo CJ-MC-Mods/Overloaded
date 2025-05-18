@@ -1,26 +1,22 @@
 package com.cjm721.overloaded.block.basic;
 
-import com.cjm721.overloaded.block.ModBlock;
+import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.tile.functional.TileTeamLoader;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
-import javax.annotation.Nullable;
-
-public class BlockTeamLoader extends ModBlock {
+public class BlockTeamLoader extends ModBlockTile {
 
     public BlockTeamLoader() {
         super(getDefaultProperties());
-        setRegistryName("team_loader");
     }
 
     @Override
     public void registerModel() { }
 
-    @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return new TileTeamLoader();
+    public @org.jetbrains.annotations.Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TileTeamLoader(pos,state);
     }
 }

@@ -3,11 +3,12 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.fluid.BigIntFluidStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,8 +20,8 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidSt
   @Nonnull private final BigIntFluidStorage fluidStorage;
   @Nonnull private final LazyOptional<?> capability;
 
-  public TileTrueInfiniteTank() {
-    super(ModTiles.trueInfiniteTank);
+  public TileTrueInfiniteTank(BlockPos pos, BlockState state) {
+    super(ModTiles.trueInfiniteTank pos,state);
     fluidStorage = new BigIntFluidStorage(this);
     capability = LazyOptional.of(() -> fluidStorage);
   }

@@ -2,19 +2,19 @@ package com.cjm721.overloaded.storage.itemwrapper;
 
 import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
 
 public class IntEnergyWrapper implements ICapabilityProvider, IEnergyStorage, IDataUpdate {
 

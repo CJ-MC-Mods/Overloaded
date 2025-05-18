@@ -19,19 +19,19 @@ import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.model.ModelRotation;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.client.event.ModelBakeEvent;
+import net.neoforged.client.event.ModelRegistryEvent;
+import net.neoforged.client.model.ModelLoader;
+import net.neoforged.common.neoforged;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.client.registry.ClientRegistry;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
@@ -61,8 +61,8 @@ public class ClientProxy extends CommonProxy {
     ClientRegistry.registerKeyBinding(noClipKeybind);
     ClientRegistry.registerKeyBinding(railGun100x);
 
-    MinecraftForge.EVENT_BUS.register(new RenderMultiToolAssist());
-    MinecraftForge.EVENT_BUS.register(ModItems.railgun);
+    neoforged.EVENT_BUS.register(new RenderMultiToolAssist());
+    neoforged.EVENT_BUS.register(ModItems.railgun);
   }
 
   public void clientSetup(FMLClientSetupEvent event) {

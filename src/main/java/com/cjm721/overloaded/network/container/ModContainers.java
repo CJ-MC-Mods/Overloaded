@@ -1,9 +1,11 @@
 package com.cjm721.overloaded.network.container;
 
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.MenuType;
 
+import java.util.function.Supplier;
+
+import static com.cjm721.overloaded.Overloaded.MENUS;
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ModContainers {
@@ -12,11 +14,5 @@ public class ModContainers {
     static final String INSTANT_FURNACE = MODID + ":instant_furnace";
   }
 
-  @ObjectHolder(ContainerResourceLocations.INSTANT_FURNACE)
-  public static ContainerType<InstantFurnaceContainer> INSTANT_FURNACE;
-
-
-  public static void init(IForgeRegistry<ContainerType<?>> registry) {
-    registry.register(new ContainerType<>(InstantFurnaceContainer::new).setRegistryName(MODID,"instant_furnace"));
-  }
+  public static final Supplier<MenuType<InstantFurnaceContainer>> INSTANT_FURNACE = MENUS.register("instant_furnace", () -> new MenuType<>(InstantFurnaceContainer::new, FeatureFlags.DEFAULT_FLAGS));
 }

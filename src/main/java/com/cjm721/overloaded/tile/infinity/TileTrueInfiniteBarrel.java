@@ -3,11 +3,12 @@ package com.cjm721.overloaded.tile.infinity;
 import com.cjm721.overloaded.storage.item.BigIntItemStorage;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.block.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,8 +21,8 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
   @Nonnull private final BigIntItemStorage itemStorage;
   @Nonnull private final LazyOptional<?> capability;
 
-  public TileTrueInfiniteBarrel() {
-    super(ModTiles.trueInfiniteBarrel);
+  public TileTrueInfiniteBarrel(BlockPos pos, BlockState state) {
+    super(ModTiles.trueInfiniteBarrel pos,state);
     itemStorage = new BigIntItemStorage(this);
     capability = LazyOptional.of(() -> itemStorage);
   }

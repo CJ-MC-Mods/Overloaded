@@ -18,7 +18,7 @@ public class GuiPositiveFloatTextField extends TextFieldWidget {
       float currentValue,
       float min,
       float max) {
-    super(fontRendererObj, x, y, width, height, new StringTextComponent(""));
+    super(fontRendererObj, x, y, width, height, Component.literal(""));
     this.min = min;
     this.max = max;
     this.setFilter(this::floatValidate);

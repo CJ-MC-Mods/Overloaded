@@ -1,8 +1,8 @@
 package com.cjm721.overloaded.storage.itemwrapper;
 
 import com.cjm721.overloaded.storage.GenericDataCapabilityProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
@@ -16,15 +16,16 @@ public class GenericDataCapabilityProviderWrapper extends GenericDataCapabilityP
   public GenericDataCapabilityProviderWrapper(@Nonnull ItemStack stack) {
     this.stack = stack;
 
-    CompoundNBT itemNBT = this.stack.getTag();
+    CompoundTag itemNBT = this.stack.getTag();
     if (itemNBT == null) {
-      this.stack.setTag(new CompoundNBT());
+      this.stack.
+      this.stack.setTag(new CompoundTag());
     }
   }
 
   @Override
   public void suggestUpdate() {
-    CompoundNBT itemNBT = this.stack.getTag();
+    CompoundTag itemNBT = this.stack.getTag();
 
     if (itemNBT != null && itemNBT.contains(NBT_TAG)) {
       this.readNBT(GENERIC_DATA_STORAGE, this, null, this.stack.getTag().get(NBT_TAG));
@@ -33,10 +34,10 @@ public class GenericDataCapabilityProviderWrapper extends GenericDataCapabilityP
 
   @Override
   public void suggestSave() {
-    CompoundNBT data = this.writeNBT(GENERIC_DATA_STORAGE, this, null);
-    CompoundNBT itemNBT = this.stack.getTag();
+    CompoundTag data = this.writeNBT(GENERIC_DATA_STORAGE, this, null);
+    CompoundTag itemNBT = this.stack.getTag();
     if (itemNBT == null) {
-      itemNBT = new CompoundNBT();
+      itemNBT = new CompoundTag();
       this.stack.setTag(itemNBT);
     }
     this.stack.getTag().put(NBT_TAG, data);

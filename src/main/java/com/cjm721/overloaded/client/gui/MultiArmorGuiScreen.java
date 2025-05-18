@@ -14,12 +14,12 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +43,7 @@ public class MultiArmorGuiScreen extends Screen {
   private ToggleButton extinguishEnabled;
 
   public MultiArmorGuiScreen() {
-    super(new StringTextComponent("The TITLE HOW IS THIS SHOWN"));
+    super(Component.literal("The TITLE HOW IS THIS SHOWN"));
   }
 
   @Override
@@ -65,7 +65,7 @@ public class MultiArmorGuiScreen extends Screen {
     if (!opData.isPresent()) {
       this.minecraft.setScreen(null);
       this.minecraft.player.displayClientMessage(
-          new StringTextComponent("Multi-Helmet not equipped."), true);
+          Component.literal("Multi-Helmet not equipped."), true);
       return;
     }
 
@@ -81,7 +81,7 @@ public class MultiArmorGuiScreen extends Screen {
                 this.height / 4 + 100,
                 150,
                 20,
-                new StringTextComponent("Save"),
+                Component.literal("Save"),
                 b -> {
                   MultiArmorSettingsMessage message =
                       new MultiArmorSettingsMessage(
@@ -103,7 +103,7 @@ public class MultiArmorGuiScreen extends Screen {
                 this.height / 4 + 100,
                 150,
                 20,
-                new StringTextComponent("Cancel"),
+                Component.literal("Cancel"),
                 b -> this.minecraft.setScreen(null)));
 
     float flightSpeedValue = floats.getOrDefault(DataKeys.FLIGHT_SPEED, Default.FLIGHT_SPEED);

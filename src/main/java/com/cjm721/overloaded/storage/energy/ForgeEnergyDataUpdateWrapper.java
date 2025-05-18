@@ -2,7 +2,7 @@ package com.cjm721.overloaded.storage.energy;
 
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.energy.EnergyStorage;
+import net.neoforged.energy.EnergyStorage;
 
 import javax.annotation.Nonnull;
 

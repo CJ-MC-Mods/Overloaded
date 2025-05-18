@@ -1,23 +1,25 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
+import net.minecraft.core.BlockPos;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
-import static net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+import static net.neoforged.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 public class TileEnergyInjectorChest extends AbstractTileEntityFaceable
     implements ITickableTileEntity {
 
-  public TileEnergyInjectorChest() {
-    super(ModTiles.energyInjectorChest);
+  public TileEnergyInjectorChest(BlockPos pos, BlockState blockState) {
+    super(ModTiles.energyInjectorChest, pos, blockState);
   }
 
   /** Like the old updateEntity(), except more generic. */

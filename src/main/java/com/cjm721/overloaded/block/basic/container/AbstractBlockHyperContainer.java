@@ -1,25 +1,22 @@
 package com.cjm721.overloaded.block.basic.container;
 
 import com.cjm721.overloaded.block.ModBlockTile;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nonnull;
-
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.phys.BlockHitResult;
 
 abstract class AbstractBlockHyperContainer extends ModBlockTile {
     AbstractBlockHyperContainer(Properties materialIn) {
         super(materialIn);
     }
 
-    //    @Override
+//    @Override
 //    @Nonnull
 //    public final List<ItemStack> getDrops(BlockState state, ServerWorld world, BlockPos pos, @Nullable TileEntity te, Entity breaker, ItemStack breakingItem) {
 //        IHyperType stack = getHyperStack(world, pos);
@@ -39,19 +36,18 @@ abstract class AbstractBlockHyperContainer extends ModBlockTile {
 
 
     @Override
-    @Nonnull
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(handIn);
-            if (heldItem.isEmpty() && handIn == Hand.MAIN_HAND) {
+            if (heldItem.isEmpty() && handIn == InteractionHand.MAIN_HAND) {
                 sendPlayerStatus(world, pos, player);
-                return ActionResultType.SUCCESS;
+                return InteractionResult.SUCCESS;
             }
         }
-        return super.use(state,world,pos,player, handIn, hit);
+        return super.useItemOn(stack, state,world,pos,player, handIn, hitResult);
     }
 
-    protected abstract void sendPlayerStatus(World world, BlockPos pos, PlayerEntity player);
+    protected abstract void sendPlayerStatus(Level world, BlockPos pos, Player player);
 
 //    @Override
 //    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

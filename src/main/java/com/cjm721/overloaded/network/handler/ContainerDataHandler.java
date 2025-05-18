@@ -3,19 +3,19 @@ package com.cjm721.overloaded.network.handler;
 import com.cjm721.overloaded.network.container.ModContainer;
 import com.cjm721.overloaded.network.packets.ContainerDataMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.network.NetworkDirection;
+import net.neoforged.fml.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public class ContainerDataHandler
-    implements BiConsumer<ContainerDataMessage, Supplier<NetworkEvent.Context>> {
+public class ContainerDataHandler {
 
   @OnlyIn(Dist.CLIENT)
-  private void clientSide(ContainerDataMessage message, Supplier<NetworkEvent.Context> ctx) {
+  public static void clientSide(final ContainerDataMessage message, final IPayloadContext ctx) {
     if (Minecraft.getInstance().player.containerMenu == null
         || Minecraft.getInstance().player.containerMenu.containerId != message.container || !(Minecraft.getInstance().player.containerMenu instanceof ModContainer)) {
       return;
@@ -24,11 +24,10 @@ public class ContainerDataHandler
     ((ModContainer)Minecraft.getInstance().player.containerMenu).accept(message);
   }
 
-  @Override
-  public void accept(ContainerDataMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-    if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
-      clientSide(message, contextSupplier);
-      contextSupplier.get().setPacketHandled(true);
-    }
-  }
+//  public static void accept(final ContainerDataMessage message, final IPayloadContext ctx) {
+//    if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+//      clientSide(message, contextSupplier);
+//      contextSupplier.get().setPacketHandled(true);
+//    }
+//  }
 }

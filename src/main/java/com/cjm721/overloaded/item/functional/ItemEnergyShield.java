@@ -8,24 +8,24 @@ import com.cjm721.overloaded.storage.itemwrapper.LongEnergyWrapper;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseContext;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.common.capabilities.ICapabilityProvider;
+import net.neoforged.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,17 +34,15 @@ import java.util.List;
 import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemEnergyShield extends ModItem {
 
   private final long constantUseCost = 100L;
   private final long initialUseCost = 10000L;
 
-  public ItemEnergyShield() {
-    super(new Properties().stacksTo(1).durability(500));
-    setRegistryName("energy_shield");
-    //        setTranslationKey("energy_shield");
+  public ItemEnergyShield(Properties properties) {
+    super(properties.stacksTo(1).durability(500));
     DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
   }
 
@@ -76,25 +74,25 @@ public class ItemEnergyShield extends ModItem {
 
   @Override
   @Nonnull
-  public ActionResultType useOn(ItemUseContext context) {
+  public InteractionResult useOn(ItemUseContext context) {
     if (!context.getLevel().isClientSide) {
       System.out.println("On Item Use");
       LazyOptional<IHyperHandlerEnergy> opHandler = context.getItemInHand().getCapability(HYPER_ENERGY_HANDLER);
       if(!opHandler.isPresent()) {
         Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + context.getItemInHand().getTag());
-        return ActionResultType.FAIL;
+        return InteractionResult.FAIL;
       }
       IHyperHandlerEnergy handler = opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"));
       LongEnergyStack energy = handler.take(new LongEnergyStack(constantUseCost), true);
       if (energy.amount == constantUseCost) {
         System.out.println("On Item Use Success");
-        return ActionResultType.SUCCESS;
+        return InteractionResult.SUCCESS;
       }
 
-      return ActionResultType.FAIL;
+      return InteractionResult.FAIL;
     }
 
-    return ActionResultType.PASS;
+    return InteractionResult.PASS;
   }
 
   @Override
@@ -116,7 +114,7 @@ public class ItemEnergyShield extends ModItem {
     LazyOptional<IHyperHandlerEnergy> opHandler = itemstack.getCapability(HYPER_ENERGY_HANDLER);
     if(!opHandler.isPresent()) {
       Overloaded.logger.warn("EnergyShield has no HyperEnergy Capability? NBT: " + itemstack.getTag());
-      return new ActionResult<>(ActionResultType.FAIL, itemstack);
+      return new ActionResult<>(InteractionResult.FAIL, itemstack);
     }
 
     IHyperHandlerEnergy handler = opHandler.orElseThrow(() -> new RuntimeException("Impossible Condition"));
@@ -124,10 +122,10 @@ public class ItemEnergyShield extends ModItem {
     LongEnergyStack energy = handler.take(new LongEnergyStack(initialUseCost), true);
     if (energy.amount == initialUseCost) {
       System.out.println("Right click Success");
-      return new ActionResult<>(ActionResultType.SUCCESS, itemstack);
+      return new ActionResult<>(InteractionResult.SUCCESS, itemstack);
     } else {
       System.out.println("Right click FAIL");
-      return new ActionResult<>(ActionResultType.FAIL, itemstack);
+      return new ActionResult<>(InteractionResult.FAIL, itemstack);
     }
   }
 
@@ -146,7 +144,7 @@ public class ItemEnergyShield extends ModItem {
         .ifPresent(
             handler ->
                 tooltip.add(
-                    new StringTextComponent("Energy Stored: " + handler.status().getAmount())));
+                    Component.literal("Energy Stored: " + handler.status().getAmount())));
 
     super.appendHoverText(stack, worldIn, tooltip, flagIn);
   }

@@ -4,10 +4,10 @@ import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.network.NetworkDirection;
+import net.neoforged.fml.network.NetworkEvent;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -24,7 +24,7 @@ public class NoClipUpdateHandler
               Minecraft.getInstance()
                   .player
                   .displayClientMessage(
-                      new StringTextComponent("No Clip: " + message.isEnabled()), true);
+                      Component.literal("No Clip: " + message.isEnabled()), true);
             });
   }
 

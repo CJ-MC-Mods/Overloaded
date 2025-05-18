@@ -4,7 +4,9 @@ import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
@@ -13,8 +15,8 @@ import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENE
 public class TileHyperEnergySender
     extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {
 
-  public TileHyperEnergySender() {
-    super(ModTiles.hyperEnergySender, HYPER_ENERGY_HANDLER);
+  public TileHyperEnergySender(BlockPos pos, BlockState state) {
+    super(ModTiles.hyperEnergySender, HYPER_ENERGY_HANDLER, pos,state);
   }
 
   @Nonnull
@@ -24,7 +26,7 @@ public class TileHyperEnergySender
   }
 
   @Override
-  protected boolean isCorrectPartnerType(TileEntity te) {
+  protected boolean isCorrectPartnerType(BlockEntity te) {
     return te instanceof TileHyperEnergyReceiver;
   }
 }

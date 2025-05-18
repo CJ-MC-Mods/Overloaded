@@ -5,28 +5,26 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItem;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-import net.minecraft.item.Item.Properties;
+import net.minecraft.world.item.Item.Properties;
 
 public class ItemLinkingCard extends ModItem {
 
-  public ItemLinkingCard() {
-    super(new Properties().stacksTo(1));
-    setRegistryName("linking_card");
-    //        setTranslationKey("linking_card");
+  public ItemLinkingCard(Properties properties) {
+    super(properties.stacksTo(1));
   }
 
   @OnlyIn(Dist.CLIENT)
@@ -42,7 +40,7 @@ public class ItemLinkingCard extends ModItem {
       String worldID = tag.getString("WORLD");
 
       tooltip.add(
-          new StringTextComponent(
+          Component.literal(
               String.format("Bound to %s at %s: %d,%d,%d", type, worldID, x, y, z)));
     }
     super.appendHoverText(stack, worldIn, tooltip, flagIn);

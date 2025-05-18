@@ -16,28 +16,40 @@ import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
 import com.cjm721.overloaded.tile.ModTiles;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.common.neoforged;
+import net.neoforged.event.RegistryEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static net.minecraftforge.fml.network.NetworkRegistry.newSimpleChannel;
+import static net.neoforged.fml.network.NetworkRegistry.newSimpleChannel;
 
 public class CommonProxy {
   public SimpleChannel networkWrapper;
 
   public static final List<Block> blocksToRegister = new LinkedList<>();
   public static final List<Item> itemToRegister = new LinkedList<>();
+
+  @SubscribeEvent
+  public static void register(final RegisterPayloadHandlersEvent event) {
+    // Sets the current network version
+    final PayloadRegistrar registrar = event.registrar("1");
+
+    registrar.commonToClient(ContainerDataMessage.TYPE, ContainerDataMessage.STREAM_CODEC, ContainerDataHandler::clientSide);
+  }
 
   public void commonSetup(FMLCommonSetupEvent event) {
     CapabilityHyperItem.register();
@@ -109,14 +121,13 @@ public class CommonProxy {
         ContainerDataMessage::fromBytes,
         new ContainerDataHandler());
 
-    MinecraftForge.EVENT_BUS.register(new ArmorEventHandler());
+    neoforged.EVENT_BUS.register(new ArmorEventHandler());
   }
 
   public void registerEvents() {
     FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Fluid.class, this::registerFluids);
-    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, this::registerBlocks);
     FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, this::registerItems);
-    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(TileEntityType.class, this::registerTileEntity);
+    FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(BlockEntityType.class, this::registerTileEntity);
     FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(ContainerType.class, this::registerContainers);
   }
 
@@ -124,9 +135,6 @@ public class CommonProxy {
     ModFluids.init(event.getRegistry());
   }
 
-  private void registerBlocks(RegistryEvent.Register<Block> event) {
-    ModBlocks.init(event.getRegistry());
-  }
 
   private void registerItems(RegistryEvent.Register<Item> event) {
     ModItems.init();
@@ -134,7 +142,7 @@ public class CommonProxy {
     event.getRegistry().registerAll(itemToRegister.toArray(new Item[0]));
   }
 
-  private void registerTileEntity(RegistryEvent.Register<TileEntityType<?>> event) {
+  private void registerTileEntity(RegistryEvent.Register<BlockEntityType<?>> event) {
     ModTiles.init(event.getRegistry());
   }
 

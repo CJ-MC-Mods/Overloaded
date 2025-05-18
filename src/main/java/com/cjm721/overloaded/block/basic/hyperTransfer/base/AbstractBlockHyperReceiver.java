@@ -1,19 +1,24 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer.base;
 
 import com.cjm721.overloaded.item.ModItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ActionResultType;
+import net.minecraft.util.InteractionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.fml.network.NetworkRegistry;
 
 import javax.annotation.Nonnull;
 
@@ -25,10 +30,9 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
     super(materialIn);
   }
 
+
   @Override
-  @Nonnull
-  public ActionResultType use(@Nonnull BlockState state, @Nonnull World world, @Nonnull BlockPos pos, PlayerEntity player, @Nonnull Hand hand, @Nonnull BlockRayTraceResult rayTraceResult) {
-    ItemStack heldItem = player.getItemInHand(hand);
+  protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
     if (heldItem.getItem().equals(ModItems.linkingCard)) {
       CompoundNBT tag = heldItem.getTag();
       if (tag == null) {
@@ -42,14 +46,14 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
 
       if (world.isClientSide) {
         player.displayClientMessage(
-            new StringTextComponent(
+            Component.literal(
                 String.format("Recorded: World: %s Position: %s", worldId, pos.toShortString())),
             false);
       }
 
-      return ActionResultType.CONSUME;
+      return InteractionResult.CONSUME;
     } else {
-      return super.use(state, world, pos, player, hand, rayTraceResult);
+      return super.useItemOn(heldItem,state, world, pos, player, hand, rayTraceResult);
     }
   }
 

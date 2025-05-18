@@ -1,13 +1,11 @@
 package com.cjm721.overloaded.block;
 
-import net.minecraft.block.ContainerBlock;
+import net.minecraft.world.level.block.BaseEntityBlock;
 
-import net.minecraft.block.AbstractBlock.Properties;
+public abstract class ModBlockContainer extends BaseEntityBlock {
 
-public abstract class ModBlockContainer extends ContainerBlock {
-
-  protected ModBlockContainer(Properties builder) {
-    super(builder);
+  protected ModBlockContainer(Properties  properties) {
+    super(properties);
   }
 
 }

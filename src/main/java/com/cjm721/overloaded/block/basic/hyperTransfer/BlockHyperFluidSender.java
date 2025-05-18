@@ -1,15 +1,18 @@
 package com.cjm721.overloaded.block.basic.hyperTransfer;
 
 import com.cjm721.overloaded.block.basic.hyperTransfer.base.AbstractBlockHyperSender;
+import com.cjm721.overloaded.tile.hyperTransfer.TileHyperEnergySender;
 import com.cjm721.overloaded.tile.hyperTransfer.TileHyperFluidSender;
 import com.cjm721.overloaded.client.render.dynamic.ImageUtil;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
@@ -19,7 +22,6 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
 
   public BlockHyperFluidSender() {
     super(getDefaultProperties());
-    setRegistryName("hyper_fluid_sender");
   }
 
   @Nonnull
@@ -28,19 +30,19 @@ public class BlockHyperFluidSender extends AbstractBlockHyperSender {
     return "Fluid";
   }
 
+
   @Override
-  @Nonnull
-  public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-    return new TileHyperFluidSender();
+  public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    return new TileHyperFluidSender(pos,state);
   }
 
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-    super.registerModel();
-
-    ImageUtil.registerDynamicTexture(
-        new ResourceLocation(MODID, "textures/block/hyper_fluid_sender.png"),
-        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+//    super.registerModel();
+//
+//    ImageUtil.registerDynamicTexture(
+//        new ResourceLocation(MODID, "textures/block/hyper_fluid_sender.png"),
+//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

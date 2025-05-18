@@ -1,15 +1,15 @@
 package com.cjm721.overloaded.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.config.ModConfig;
 
 public class DevelopmentConfig implements ConfigSectionHandler {
 
   public boolean wipStuff;
-  public ForgeConfigSpec.BooleanValue wipStuffSpec;
+  public ModConfigSpec.BooleanValue wipStuffSpec;
 
   @Override
-  public void appendToBuilder(ModConfig.Type type, ForgeConfigSpec.Builder builder) {
+  public void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder) {
     if (type != ModConfig.Type.COMMON) {
       return;
     }

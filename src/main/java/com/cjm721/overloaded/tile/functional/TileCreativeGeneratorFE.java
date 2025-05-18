@@ -2,20 +2,20 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraft.core.BlockPos;
+import net.neoforged.common.capabilities.Capability;
+import net.neoforged.common.util.LazyOptional;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
+import static net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage.BLOCK;
 
-public class TileCreativeGeneratorFE extends TileEntity
-    implements ITickableTileEntity, IEnergyStorage {
+public class TileCreativeGeneratorFE extends BlockEntity
+    implements IEnergyStorage {
 
   public TileCreativeGeneratorFE() {
     super(ModTiles.creativeGeneratorFE);
@@ -31,7 +31,7 @@ public class TileCreativeGeneratorFE extends TileEntity
 
       if (te == null) continue;
 
-      te.getCapability(ENERGY, facing.getOpposite())
+      te.getCapability(BLOCK, facing.getOpposite())
           .ifPresent(s -> s.receiveEnergy(Integer.MAX_VALUE, false));
 //          .ifPresent(s -> s.receiveEnergy(1000000, false));
     }

@@ -1,18 +1,11 @@
 package com.cjm721.overloaded.block;
 
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.EntityBlock;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
-public abstract class ModBlockTile extends ModBlock {
+public abstract class ModBlockTile extends ModBlock implements EntityBlock {
   protected ModBlockTile(@Nonnull Properties properties) {
     super(properties);
-  }
-
-  @Override
-  public final boolean hasTileEntity(BlockState state) {
-    return true;
   }
 }

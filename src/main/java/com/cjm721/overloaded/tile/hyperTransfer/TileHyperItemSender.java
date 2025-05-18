@@ -4,8 +4,10 @@ import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.storage.item.IHyperHandlerItem;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.tile.hyperTransfer.base.AbstractTileHyperSender;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
@@ -14,8 +16,8 @@ import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.HYPER_ITEM_
 /** {@link TileEntity That is able to receive items from a remote source} */
 public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, IHyperHandlerItem> {
 
-  public TileHyperItemSender() {
-    super(ModTiles.hyperItemSender, HYPER_ITEM_HANDLER);
+  public TileHyperItemSender(BlockPos pos, BlockState state) {
+    super(ModTiles.hyperItemSender, HYPER_ITEM_HANDLER, pos,state);
   }
 
   @Override
@@ -25,7 +27,7 @@ public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, 
   }
 
   @Override
-  protected boolean isCorrectPartnerType(TileEntity te) {
+  protected boolean isCorrectPartnerType(BlockEntity te) {
     return te instanceof TileHyperItemReceiver;
   }
 }
