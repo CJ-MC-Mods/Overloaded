@@ -2,6 +2,7 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,17 +17,17 @@ public class TileCreativeGeneratorFE extends BlockEntity
     super(ModTiles.creativeGeneratorFE.get(), pos, state);
   }
 
-  public void tick() {
-    if (getLevel().isClientSide) return;
+  public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState blockState, T t) {
+    if (level.isClientSide) return;
 
-    BlockPos pos = this.getBlockPos();
     for (Direction facing : Direction.values()) {
-      IEnergyStorage cap = level.getCapability(BLOCK, pos.offset(facing.getNormal()), facing);
+      IEnergyStorage cap = level.getCapability(BLOCK, pos.offset(facing.getNormal()), facing.getOpposite());
 
       if (cap == null) continue;
       cap.receiveEnergy(Integer.MAX_VALUE, false);
     }
   }
+
 
   /**
    * Adds energy to the fluidStorage. Returns quantity of energy that was accepted.
