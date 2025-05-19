@@ -5,7 +5,6 @@ import com.cjm721.overloaded.tile.functional.TilePlayerInterface;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +26,8 @@ import java.util.UUID;
 public class BlockPlayerInterface extends ModBlockTile {
 
   public BlockPlayerInterface(Properties properties) {
-    super(properties.sound(SoundType.GLASS).strength(3).dynamicShape().noOcclusion());
+    super(properties.sound(SoundType.GLASS).strength(3).dynamicShape().noOcclusion()
+            .isViewBlocking((s,b,p)-> false));
   }
 
   @Override

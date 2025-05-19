@@ -41,4 +41,10 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
         }
         return stack;
     }
+
+    @Override
+    public boolean isValidBlockState(BlockState p_353131_) {
+        // TODO What is this supose to check
+        return true;
+    }
 }

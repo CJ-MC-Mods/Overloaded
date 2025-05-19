@@ -1,8 +1,14 @@
 package com.cjm721.overloaded.proxy;
 
+import com.cjm721.overloaded.block.ModBlocks;
+import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -36,15 +42,16 @@ public class ClientProxy {
 //    EVENT_BUS.register(ModItems.railgun);
   }
 
-  public void clientSetup(FMLClientSetupEvent event) {
+  @SubscribeEvent
+  public static void clientSetup(FMLClientSetupEvent event) {
 //    ClientRegistry.bindTileEntityRenderer(ModTiles.itemInterface, ItemInterfaceRenderer::new);
-//
+    BlockEntityRenderers.register(ModTiles.itemInterface.get(), new ItemInterfaceRenderer.Provider());
 //    ClientRegistry.bindTileEntityRenderer(ModTiles.playerInterface, PlayerInterfaceRenderer::new);
 //
 //    ScreenManager.register(ModContainers.INSTANT_FURNACE, InstantFurnaceScreen::new);
 //
-//    RenderTypeLookup.setRenderLayer(ModBlocks.itemInterface, RenderType.translucent());
-//    RenderTypeLookup.setRenderLayer(ModBlocks.playerInterface, RenderType.translucent());
+    ItemBlockRenderTypes.setRenderLayer(ModBlocks.itemInterface.get(), RenderType.translucent());
+    ItemBlockRenderTypes.setRenderLayer(ModBlocks.playerInterface.get(), RenderType.translucent());
   }
 
   private void registerModels(ModelEvent.RegisterAdditional event) {
