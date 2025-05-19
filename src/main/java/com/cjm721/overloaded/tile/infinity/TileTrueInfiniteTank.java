@@ -14,7 +14,7 @@ public class TileTrueInfiniteTank extends AbstractTileHyperStorage<BigIntFluidSt
 //  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteTank(BlockPos pos, BlockState state) {
-    super(ModTiles.trueInfiniteTank, pos,state);
+    super(ModTiles.trueInfiniteTank.get(), pos,state);
     fluidStorage = new BigIntFluidStorage(this);
 //    capability = LazyOptional.of(() -> fluidStorage);
   }

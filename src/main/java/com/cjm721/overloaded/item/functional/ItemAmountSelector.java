@@ -6,7 +6,7 @@ import net.minecraft.world.item.Item.Properties;
 
 public class ItemAmountSelector extends ModItem {
 
-  protected ItemAmountSelector(Properties properties) {
+  public ItemAmountSelector(Properties properties) {
     super(properties.stacksTo(1));
   }
 

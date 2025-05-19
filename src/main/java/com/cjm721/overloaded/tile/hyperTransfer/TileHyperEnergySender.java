@@ -16,7 +16,7 @@ public class TileHyperEnergySender
     extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {
 
   public TileHyperEnergySender(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperEnergySender, HYPER_ENERGY_HANDLER, pos,state);
+    super(ModTiles.hyperEnergySender.get(), HYPER_ENERGY_HANDLER, pos,state);
   }
 
   @Nonnull

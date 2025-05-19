@@ -59,7 +59,7 @@ public class ItemRayGun extends PowerModItem {
     if (!worldIn.isClientSide)
       return InteractionResult.SUCCESS;
 
-    BlockHitResult ray =
+    HitResult ray =
         rayTraceWithEntities(
             worldIn,
             playerIn.getEyePosition(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks()),
@@ -74,9 +74,9 @@ public class ItemRayGun extends PowerModItem {
     return InteractionResult.SUCCESS;
   }
 
-  public void handleMessage(ServerPlayer player, RayGunMessage message) {
+  public static void handleMessage(ServerPlayer player, RayGunMessage message) {
     ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-    if (itemStack.getItem() != this) {
+    if (itemStack.getItem() instanceof ItemRayGun) {
       return;
     }
 

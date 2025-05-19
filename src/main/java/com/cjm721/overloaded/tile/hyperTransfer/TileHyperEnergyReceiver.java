@@ -13,6 +13,6 @@ public class TileHyperEnergyReceiver
     extends AbstractTileHyperReceiver<LongEnergyStack, IHyperHandlerEnergy> {
 
   public TileHyperEnergyReceiver(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperEnergyReceiver, HYPER_ENERGY_HANDLER, pos,state);
+    super(ModTiles.hyperEnergyReceiver.get(), HYPER_ENERGY_HANDLER, pos,state);
   }
 }

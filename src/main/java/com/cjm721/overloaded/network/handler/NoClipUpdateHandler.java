@@ -3,21 +3,20 @@ package com.cjm721.overloaded.network.handler;
 import com.cjm721.overloaded.item.functional.armor.ArmorEventHandler;
 import com.cjm721.overloaded.network.packets.NoClipStatusMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketFlow;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.network.NetworkDirection;
-import net.neoforged.fml.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public class NoClipUpdateHandler
-    implements BiConsumer<NoClipStatusMessage, Supplier<NetworkEvent.Context>> {
+public class NoClipUpdateHandler {
 
   @OnlyIn(Dist.CLIENT)
-  private void clientSide(NoClipStatusMessage message, Supplier<NetworkEvent.Context> ctx) {
-    ctx.get()
+  private static void clientSide(NoClipStatusMessage message, IPayloadContext ctx) {
+    ctx
         .enqueueWork(
             () -> {
               ArmorEventHandler.setNoClip(Minecraft.getInstance().player, message.isEnabled());
@@ -28,11 +27,9 @@ public class NoClipUpdateHandler
             });
   }
 
-  @Override
-  public void accept(NoClipStatusMessage message, Supplier<NetworkEvent.Context> ctx) {
-    if (ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+  public static void accept(NoClipStatusMessage message, IPayloadContext ctx) {
+    if (ctx.flow() == PacketFlow.CLIENTBOUND) {
       clientSide(message, ctx);
     }
-    ctx.get().setPacketHandled(true);
   }
 }

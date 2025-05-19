@@ -5,6 +5,7 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.MultiArmorSettingsMessage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import com.google.common.primitives.Floats;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -48,14 +49,14 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 //        OverloadedConfig.INSTANCE.textureResolutions.multiArmorResolution);
   }
 //
-//  public void updateSettings(
-//      ServerPlayerEntity ServerPlayerEntity, MultiArmorSettingsMessage message) {
-//    for (ItemStack itemStack : ServerPlayerEntity.getArmorSlots()) {
-//      if (itemStack.getItem() == this) {
-//        updateSettings(itemStack, message);
-//      }
-//    }
-//  }
+  public static void updateSettings(
+          ServerPlayer player, MultiArmorSettingsMessage message) {
+    for (ItemStack itemStack : player.getArmorSlots()) {
+      if (itemStack.getItem() instanceof ItemMultiHelmet) {
+        updateSettings(itemStack, message);
+      }
+    }
+  }
 //
 //  @Override
 //  public Collection<ICapabilityProvider> collectCapabilities(
@@ -66,7 +67,7 @@ public class ItemMultiHelmet extends AbstractMultiArmor {
 //    return super.collectCapabilities(collection, stack, nbt);
 //  }
 
-  private void updateSettings(ItemStack itemStack, MultiArmorSettingsMessage message) {
+  private static void updateSettings(ItemStack itemStack, MultiArmorSettingsMessage message) {
     IGenericDataStorage opSettings = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
     if (opSettings == null) {
       Overloaded.logger.warn("MultiHelmet has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());

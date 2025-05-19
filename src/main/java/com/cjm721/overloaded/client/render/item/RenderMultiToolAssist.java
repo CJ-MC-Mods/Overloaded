@@ -2,60 +2,38 @@ package com.cjm721.overloaded.client.render.item;
 
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.util.AssistMode;
-import com.cjm721.overloaded.util.BlockItemUseContextPublic;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.RenderState;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.model.IBakedModel;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.client.event.InputEvent;
-import net.neoforged.client.event.RenderWorldLastEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.InputEvent;
 
 import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-import net.minecraft.client.renderer.RenderType.State;
-
 @EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = EventBusSubscriber.Bus.GAME)
 public class RenderMultiToolAssist {
 
-//  @SubscribeEvent
-//  public static void onMouseEvent(InputEvent.MouseScrollEvent event) {
-//    ClientPlayerEntity player = Minecraft.getInstance().player;
-//
-//    if (event.getScrollDelta() != 0 && player != null && player.isShiftKeyDown()) {
-//      ItemStack stack = player.getMainHandItem();
-//      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() == ModItems.multiTool) {
-//        changeHelpMode((int) Math.round(event.getScrollDelta()));
-//        player.displayClientMessage(
-//            Component.literal("Assist Mode: " + getAssistMode().getName()), true);
-//        event.setCanceled(true);
-//      }
-//    }
-//  }
+  @SubscribeEvent
+  public static void onMouseEvent(InputEvent.MouseScrollingEvent event) {
+    LocalPlayer player = Minecraft.getInstance().player;
+
+    if (event.getScrollDeltaX() != 0 && player != null && player.isShiftKeyDown()) {
+      ItemStack stack = player.getMainHandItem();
+      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() instanceof ItemMultiTool) {
+        changeHelpMode((int) Math.round(event.getScrollDeltaX()));
+        player.displayClientMessage(
+            Component.literal("Assist Mode: " + getAssistMode().getName()), true);
+        event.setCanceled(true);
+      }
+    }
+  }
 
   private static void changeHelpMode(int dwheel) {
     AssistMode[] values = AssistMode.values();

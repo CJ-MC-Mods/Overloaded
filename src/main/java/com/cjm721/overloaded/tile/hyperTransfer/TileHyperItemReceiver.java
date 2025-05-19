@@ -13,6 +13,6 @@ public class TileHyperItemReceiver
     extends AbstractTileHyperReceiver<LongItemStack, IHyperHandlerItem> {
 
   public TileHyperItemReceiver(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperItemReceiver, HYPER_ITEM_HANDLER, pos,state);
+    super(ModTiles.hyperItemReceiver.get(), HYPER_ITEM_HANDLER, pos,state);
   }
 }

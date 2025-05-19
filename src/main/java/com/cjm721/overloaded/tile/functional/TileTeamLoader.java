@@ -7,6 +7,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class TileTeamLoader extends BlockEntity {
   public TileTeamLoader(BlockPos pos, BlockState blockState) {
-    super(ModTiles.teamLoader, pos, blockState);
+    super(ModTiles.teamLoader.get(), pos, blockState);
   }
 }

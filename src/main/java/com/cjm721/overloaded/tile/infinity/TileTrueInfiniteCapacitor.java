@@ -14,7 +14,7 @@ public class TileTrueInfiniteCapacitor extends AbstractTileHyperStorage<BigIntEn
 //  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteCapacitor(BlockPos pos, BlockState state) {
-    super(ModTiles.trueInfiniteCapacitor, pos,state);
+    super(ModTiles.trueInfiniteCapacitor.get(), pos,state);
     energyStorage = new BigIntEnergyStorage(this);
 //    capability = LazyOptional.of(() -> energyStorage);
   }

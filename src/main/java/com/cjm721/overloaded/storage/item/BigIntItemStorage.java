@@ -3,9 +3,11 @@ package com.cjm721.overloaded.storage.item;
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntItemStack;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
@@ -27,10 +29,10 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
   }
 
   @Override
-  public void deserializeNBT(CompoundTag compound) {
+  public void deserializeNBT(HolderLookup.Provider provider,CompoundTag compound) {
     ItemStack itemStack =
         compound.contains("Stack")
-            ? ItemStack.of((CompoundTag) compound.get("Stack"))
+            ? ItemStack.parse(provider, compound.get("Stack")).orElse(ItemStack.EMPTY)
             : ItemStack.EMPTY;
 
     BigInteger amount =
@@ -42,11 +44,11 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
     CompoundTag compound = new CompoundTag();
     if (storedItem.itemStack != ItemStack.EMPTY) {
-      CompoundTag tag = new CompoundTag();
-      storedItem.itemStack.save(tag);
+      Tag tag =
+      storedItem.itemStack.save(provider);
       compound.put("Stack", tag);
       compound.putByteArray("Count", storedItem.amount.toByteArray());
     }
@@ -90,7 +92,7 @@ public class BigIntItemStorage implements IHyperHandlerItem, INBTSerializable<Co
       return LongItemStack.EMPTY_STACK;
     }
 
-    if (ItemHandlerHelper.canItemStacksStack(storedItem.itemStack, stack.getItemStack())) {
+    if (ItemStack.isSameItemSameComponents(storedItem.itemStack, stack.getItemStack())) {
       if (doAction) {
         storedItem.amount = storedItem.amount.add(BigInteger.valueOf(stack.getAmount()));
         dataUpdate.dataUpdated();

@@ -6,29 +6,36 @@ import com.cjm721.overloaded.network.packets.RailGunFireMessage;
 import com.cjm721.overloaded.network.packets.RailGunSettingsMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
-import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
 import com.google.common.primitives.Ints;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.client.event.InputEvent;
-import net.neoforged.common.capabilities.ICapabilityProvider;
-import net.neoforged.common.util.LazyOptional;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,8 +45,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
-import static net.neoforged.versions.forge.ForgeVersion.MOD_ID;
+import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.MOD_ID;
 
 public class ItemRailGun extends PowerModItem {
 
@@ -47,8 +53,6 @@ public class ItemRailGun extends PowerModItem {
 
   public ItemRailGun(Properties properties) {
     super(properties);
-    setRegistryName("railgun");
-    //    setTranslationKey("railgun");
   }
 
   @Override
@@ -59,7 +63,7 @@ public class ItemRailGun extends PowerModItem {
               int energyRequirement =
                   cap.getIntegerMap()
                       .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
-              tooltip.add(
+    tooltipComponents.add(
                   Component.literal(
                       String.format(
                           "Power Usage: %s",
@@ -81,20 +85,17 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @Override
-  @Nonnull
-  @OnlyIn(Dist.CLIENT)
-  public ActionResult<ItemStack> use(
-      World worldIn, @Nonnull PlayerEntity playerIn, @Nonnull Hand handIn) {
+  public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
     if (worldIn.isClientSide) {
       int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
-      Vector3d vec3d = playerIn.getEyePosition(Minecraft.getInstance().getFrameTime());
-      Vector3d vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getFrameTime());
-      Vector3d vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
+      Vec3 vec3d = playerIn.getEyePosition(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+      Vec3 vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+      Vec3 vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
-      AxisAlignedBB axisalignedbb =
+      AABB axisalignedbb =
           playerIn.getBoundingBox().expandTowards(vec3d1.scale(distance)).inflate(1.0D, 1.0D, 1.0D);
-      EntityRayTraceResult ray =
-          ProjectileHelper.getEntityHitResult(
+      EntityHitResult ray =
+          ProjectileUtil.getEntityHitResult(
               playerIn,
               vec3d,
               vec3d2,
@@ -102,30 +103,30 @@ public class ItemRailGun extends PowerModItem {
               (p_215312_0_) -> !p_215312_0_.isSpectator() && p_215312_0_.isPickable(),
               distance * distance);
       if (ray != null) {
-        Vector3d moveVev =
+        Vec3 moveVev =
             playerIn.getEyePosition(1).subtract(ray.getLocation()).normalize().scale(-1.0);
         PacketDistributor.sendToServer(
             new RailGunFireMessage(ray.getEntity().getId(), moveVev, handIn));
       } else {
-        PacketDistributor.sendToServer(new RailGunFireMessage(0, Vector3d.ZERO, handIn));
+        PacketDistributor.sendToServer(new RailGunFireMessage(0, Vec3.ZERO, handIn));
       }
     }
 
-    return new ActionResult<>(InteractionResult.SUCCESS, playerIn.getItemInHand(handIn));
+    return InteractionResult.SUCCESS;
   }
 
   @SubscribeEvent
-  public void onMouseEvent(InputEvent.MouseScrollEvent event) {
-    ClientPlayerEntity player = Minecraft.getInstance().player;
-    if (event.getScrollDelta() != 0 && player != null && player.isShiftKeyDown()) {
+  public void onMouseEvent(InputEvent.MouseScrollingEvent event) {
+    LocalPlayer player = Minecraft.getInstance().player;
+    if (event.getScrollDeltaX() != 0 && player != null && player.isShiftKeyDown()) {
       ItemStack stack = player.getMainHandItem();
       if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() == this) {
         int powerDelta =
-            Long.signum(Math.round(event.getScrollDelta()))
+            Long.signum(Math.round(event.getScrollDeltaX()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
-        if (InputMappings.isKeyDown(
+        if (InputConstants.isKeyDown(
             Minecraft.getInstance().getWindow().getWindow(),
-            ((ClientProxy) Overloaded.proxy).railGun100x.getKey().getValue())) {
+            ClientProxy.railGun100x.getKey().getValue())) {
           powerDelta *= 100;
         }
         PacketDistributor.sendToServer(new RailGunSettingsMessage(powerDelta));
@@ -134,88 +135,82 @@ public class ItemRailGun extends PowerModItem {
     }
   }
 
-  public void handleFireMessage(
-      @Nonnull ServerPlayerEntity player, @Nonnull RailGunFireMessage message) {
+  public static void handleFireMessage(
+          @Nonnull ServerPlayer player, @Nonnull RailGunFireMessage message) {
     ItemStack itemStack = player.getItemInHand(message.hand);
-    if (itemStack.getItem() != this) {
+    if (itemStack.getItem() instanceof ItemRailGun) {
       return;
     }
 
-    LazyOptional<IEnergyStorage> opEnergy = itemStack.getCapability(ENERGY);
+    IEnergyStorage opEnergy = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
 
-    if (!opEnergy.isPresent()) {
-      Overloaded.logger.warn("RailGun has no Energy Capability? NBT: " + itemStack.getTag());
+    if (opEnergy == null) {
+      Overloaded.logger.warn("RailGun has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-    IEnergyStorage energy =
-        opEnergy.orElseThrow(() -> new RuntimeException("Impossible Condition"));
-
-    LazyOptional<IGenericDataStorage> opSettingCapability =
+      IGenericDataStorage opSettingCapability =
         itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
-    if (!opSettingCapability.isPresent()) {
-      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
+    if (opSettingCapability ==null) {
+      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-    IGenericDataStorage settingCapability =
-        opSettingCapability.orElseThrow(() -> new RuntimeException("Impossible Condition"));
-
-    settingCapability.suggestUpdate();
+      opSettingCapability.suggestUpdate();
     int energyRequired =
-        settingCapability
+        opSettingCapability
             .getIntegerMap()
             .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
 
-    if (energy.getEnergyStored() < energyRequired) {
+    if (opEnergy.getEnergyStored() < energyRequired) {
       player.displayClientMessage(Component.literal("Not enough power to fire."), true);
       return;
     }
 
-    int energyExtracted = energy.extractEnergy(energyRequired, false);
+    int energyExtracted = opEnergy.extractEnergy(energyRequired, false);
 
-    @Nullable Entity entity = player.level.getEntity(message.id);
+    @Nullable Entity entity = player.level().getEntity(message.id);
+    double amount = OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted;
     if (entity == null || !entity.isAlive()) {
       return;
     } else if (player.distanceTo(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
       player.displayClientMessage(Component.literal("Target out of range."), true);
-    } else if (entity.hurt(
-        DamageSource.playerAttack(player),
-        (float) (OverloadedConfig.INSTANCE.railGun.damagePerRF * energyExtracted))) {
-      Vector3d knockback =
+    } else if (entity.hurtServer(
+            (ServerLevel) player.level(),
+            new DamageSource(player.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(Tags.DamageTypes.IS_PHYSICAL).get(Math.round((float)amount)),entity,player),
+        (float) (amount))) {
+      Vec3 knockback =
           message.moveVector.scale(
               energyExtracted * OverloadedConfig.INSTANCE.railGun.knockbackPerRF);
       entity.push(knockback.x, knockback.y, knockback.z);
     }
   }
+//
+//  @Override
+//  public Collection<ICapabilityProvider> collectCapabilities(
+//      @Nonnull Collection<ICapabilityProvider> collection,
+//      ItemStack stack,
+//      @Nullable CompoundTag nbt) {
+//    collection.add(new GenericDataCapabilityProviderWrapper(stack));
+//
+//    return super.collectCapabilities(collection, stack, nbt);
+//  }
 
-  @Override
-  public Collection<ICapabilityProvider> collectCapabilities(
-      @Nonnull Collection<ICapabilityProvider> collection,
-      ItemStack stack,
-      @Nullable CompoundTag nbt) {
-    collection.add(new GenericDataCapabilityProviderWrapper(stack));
-
-    return super.collectCapabilities(collection, stack, nbt);
-  }
-
-  public void handleSettingsMessage(
-      @Nonnull ServerPlayerEntity player, @Nonnull RailGunSettingsMessage message) {
-    ItemStack itemStack = player.getItemInHand(Hand.MAIN_HAND);
-    if (itemStack.getItem() != this) {
+  public static void handleSettingsMessage(
+          @Nonnull ServerPlayer player, @Nonnull RailGunSettingsMessage message) {
+    ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
+    if (!(itemStack.getItem() instanceof ItemRailGun)) {
       return;
     }
 
-    LazyOptional<IGenericDataStorage> opCap = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
+    IGenericDataStorage opCap = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
 
-    if (!opCap.isPresent()) {
-      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getTag());
+    if (opCap == null) {
+      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-    IGenericDataStorage cap = opCap.orElseThrow(() -> new RuntimeException("Impossible Condition"));
-
-    Map<String, Integer> integerMap = cap.getIntegerMap();
+    Map<String, Integer> integerMap = opCap.getIntegerMap();
 
     int power = integerMap.getOrDefault(RAILGUN_POWER_KEY, 0) + message.powerDelta;
     power =
@@ -225,16 +220,16 @@ public class ItemRailGun extends PowerModItem {
             OverloadedConfig.INSTANCE.railGun.maxEnergy);
 
     integerMap.put(RAILGUN_POWER_KEY, power);
-    cap.suggestSave();
+    opCap.suggestSave();
 
     player.displayClientMessage(
         Component.literal("Power usage set to: " + NumberFormat.getInstance().format(power)),
         true);
   }
 
-  @Mod.EventBusSubscriber(
+  @EventBusSubscriber(
       value = Dist.CLIENT,
       modid = MOD_ID,
-      bus = Mod.EventBusSubscriber.Bus.FORGE)
+      bus = EventBusSubscriber.Bus.GAME)
   private static class ClientSideEvents {}
 }

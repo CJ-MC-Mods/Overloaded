@@ -16,7 +16,7 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
   private ItemStack storedItem;
 
   public TileItemInterface(BlockPos pos, BlockState blockState) {
-    super(ModTiles.itemInterface, pos, blockState);
+    super(ModTiles.itemInterface.get(), pos, blockState);
     storedItem = ItemStack.EMPTY;
   }
 

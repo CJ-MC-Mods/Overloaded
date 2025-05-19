@@ -5,12 +5,7 @@ import com.cjm721.overloaded.network.packets.ContainerDataMessage;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.network.NetworkDirection;
-import net.neoforged.fml.network.NetworkEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
-
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 public class ContainerDataHandler {
 

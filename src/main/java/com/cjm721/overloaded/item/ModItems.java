@@ -1,7 +1,5 @@
 package com.cjm721.overloaded.item;
 
-import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.item.basic.InDevItem;
 import com.cjm721.overloaded.item.crafting.ItemEnergyCore;
 import com.cjm721.overloaded.item.crafting.ItemFluidCore;
 import com.cjm721.overloaded.item.crafting.ItemItemCore;
@@ -49,12 +47,5 @@ public class ModItems {
   @OnlyIn(Dist.CLIENT)
   public static void registerModels() {
     for (IModRegistrable item : registerList) item.registerModel();
-  }
-
-  private static <T extends Item> T registerItem(T item) {
-    CommonProxy.itemToRegister.add(item);
-    if (item instanceof IModRegistrable) ModItems.addToSecondaryInit((IModRegistrable) item);
-
-    return item;
   }
 }

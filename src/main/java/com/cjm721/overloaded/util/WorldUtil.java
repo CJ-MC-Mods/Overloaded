@@ -5,16 +5,17 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 
 public class WorldUtil {
 
-  public static BlockHitResult rayTraceWithEntities(
+  public static HitResult rayTraceWithEntities(
       @Nonnull Level world,
       @Nonnull Vec3 startingLocation,
       @Nonnull Vec3 direction,
@@ -71,11 +72,11 @@ public class WorldUtil {
             && !entity1.noPhysics) {
             AABB axisalignedbb = entity1.getBoundingBox().inflate(0.30000001192092896D);
             world.getEntities(entity,axisalignedbb);
-                    boolean intercept =
-                        axisalignedbb.intersects(startingLocation, endingLocation);
-                    if (intercept != null && intercept.hitVec != null) {
+                    Optional<Vec3> intercept =
+                        axisalignedbb.clip(startingLocation, endingLocation);
+                    if (intercept.isPresent()) {
                       double currentEntityDistance =
-                        startingLocation.squareDistanceTo(intercept.hitVec);
+                        startingLocation.distanceToSqr(intercept.get());
 
                       if (currentEntityDistance < smallestEntityDistance || smallestEntityDistance
            == 0.0D) {
@@ -87,13 +88,11 @@ public class WorldUtil {
       }
 
       if (entity != null) {
-                RayTraceResult intercept = boundingBox.calculateIntercept(startingLocation,
-         endingLocation);
+                Optional<Vec3> intercept = boundingBox.clip(startingLocation, endingLocation);
 
-                if (intercept != null) {
-                  Vec3d hitVec = intercept.hitVec;
-                  return new RayTraceResult(entity, hitVec == null ? new Vec3d(0.5, 0.5, 0.5) :
-         hitVec);
+                if (intercept.isPresent()) {
+                  Vec3 hitVec = intercept.get();
+                  return new EntityHitResult(entity, hitVec);
                 }
       }
     }

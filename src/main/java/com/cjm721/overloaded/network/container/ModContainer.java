@@ -1,8 +1,6 @@
 package com.cjm721.overloaded.network.container;
 
 import com.cjm721.overloaded.network.packets.ContainerDataMessage;
-import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
@@ -18,7 +16,7 @@ public abstract class ModContainer extends AbstractContainerMenu implements Cons
   @Override
   public void accept(ContainerDataMessage message) {
     for (ContainerDataMessage.ContainerData data : message.getData()) {
-      this.slots.get(data.index).set(data.value);
+//      this.slots.get(data.index).set();
     }
   }
 }

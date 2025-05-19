@@ -3,8 +3,10 @@ package com.cjm721.overloaded.storage.energy;
 import com.cjm721.overloaded.storage.stacks.bigint.BigIntEnergyStack;
 import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.util.IDataUpdate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import javax.annotation.Nonnull;
 import java.math.BigInteger;
@@ -57,16 +59,16 @@ public class BigIntEnergyStorage implements IHyperHandlerEnergy, INBTSerializabl
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
     CompoundTag compound = new CompoundTag();
     compound.putByteArray("Count", energy.amount.toByteArray());
     return compound;
   }
 
   @Override
-  public void deserializeNBT(CompoundTag nbt) {
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
     energy =
-        new BigIntEnergyStack(
-            nbt.contains("Count") ? new BigInteger(nbt.getByteArray("Count")) : BigInteger.ZERO);
+            new BigIntEnergyStack(
+                    nbt.contains("Count") ? new BigInteger(nbt.getByteArray("Count")) : BigInteger.ZERO);
   }
 }

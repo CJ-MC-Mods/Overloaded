@@ -6,6 +6,8 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
@@ -16,25 +18,14 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 import static net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
 
 @OnlyIn(Dist.CLIENT)
-public class ClientProxy extends CommonProxy {
+@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+public class ClientProxy {
 
-  public KeyMapping noClipKeybind;
-  public KeyMapping railGun100x;
+  public static KeyMapping noClipKeybind;
+  public static KeyMapping railGun100x;
 
-  @Override
-  public void registerEvents() {
-    super.registerEvents();
-
-//    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerModels);
-//    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::modelBakeEvent);
-//
-//    FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
-//    FMLJavaModLoadingContext.get().getModEventBus().register(new ResizeableTextureGenerator());
-  }
-
-  @Override
-  public void commonSetup(FMLCommonSetupEvent event) {
-    super.commonSetup(event);
+  @SubscribeEvent
+  public static void commonSetup(FMLCommonSetupEvent event) {
 
     noClipKeybind = new KeyMapping("overloaded.key.noclip", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "overloaded.cat.key");
     railGun100x = new KeyMapping("overloaded.key.railgun100x", KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL, "overloaded.cat.key");
@@ -42,7 +33,7 @@ public class ClientProxy extends CommonProxy {
 //    ClientRegistry.registerKeyBinding(railGun100x);
 
 //    EVENT_BUS.register(new RenderMultiToolAssist());
-    EVENT_BUS.register(ModItems.railgun);
+//    EVENT_BUS.register(ModItems.railgun);
   }
 
   public void clientSetup(FMLClientSetupEvent event) {

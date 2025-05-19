@@ -1,31 +1,29 @@
 package com.cjm721.overloaded.storage;
 
-import net.minecraft.util.Direction;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.capabilities.ICapabilityProvider;
-import net.neoforged.common.util.LazyOptional;
+
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 
-public class GenericDataCapabilityProvider extends GenericDataStorage
-    implements ICapabilityProvider {
-
-  public GenericDataCapabilityProvider() {}
-
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction Direction) {
-    // Defensive Hack because some reason addTooltip data is being called before mod even initiated.
-    if (capability == null) {
-      return LazyOptional.empty();
-    }
-    if (capability == GENERIC_DATA_STORAGE_ITEM) {
-      return LazyOptional.of(() -> this).cast();
-    }
-    return LazyOptional.empty();
-  }
-}
+//public class GenericDataCapabilityProvider extends GenericDataStorage
+//    implements ICapabilityProvider {
+//
+//  public GenericDataCapabilityProvider() {}
+//
+//  @Nonnull
+//  @Override
+//  public <T> LazyOptional<T> getCapability(
+//      @Nonnull Capability<T> capability, @Nullable Direction Direction) {
+//    // Defensive Hack because some reason addTooltip data is being called before mod even initiated.
+//    if (capability == null) {
+//      return LazyOptional.empty();
+//    }
+//    if (capability == GENERIC_DATA_STORAGE_ITEM) {
+//      return LazyOptional.of(() -> this).cast();
+//    }
+//    return LazyOptional.empty();
+//  }
+//}

@@ -15,7 +15,7 @@ public class TileTrueInfiniteBarrel extends AbstractTileHyperStorage<BigIntItemS
 //  @Nonnull private final LazyOptional<?> capability;
 
   public TileTrueInfiniteBarrel(BlockPos pos, BlockState state) {
-    super(ModTiles.trueInfiniteBarrel, pos,state);
+    super(ModTiles.trueInfiniteBarrel.get(), pos,state);
     itemStorage = new BigIntItemStorage(this);
 //    capability = LazyOptional.of(() -> itemStorage);
   }

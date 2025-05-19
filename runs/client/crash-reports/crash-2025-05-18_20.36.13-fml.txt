@@ -1,0 +1,114 @@
+---- Minecraft Crash Report ----
+// Uh... Did I do that?
+
+Time: 2025-05-18 20:36:13
+Description: Mod loading failures have occurred; consult the issue messages for more details
+
+net.neoforged.neoforge.logging.CrashReportExtender$ModLoadingCrashException: Mod loading has failed
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Render thread
+Stacktrace:
+	at MC-BOOTSTRAP/com.google.common@33.3.1-jre/com.google.common.base.Preconditions.checkState(Preconditions.java:513) ~[guava-33.3.1-jre.jar%23134!/:?] {}
+-- Mod loading issue for: overloaded --
+Details:
+	Mod file: /C:/Users/CJ/Documents/GitHub/Overloaded/build/resources/main/
+	Failure message: Overloaded (overloaded) encountered an error while dispatching the net.neoforged.fml.event.config.ModConfigEvent$Loading event
+		java.lang.IllegalStateException: Cannot get config value before config is loaded.
+	Mod version: 0.0.99
+	Mod issues URL: https://github.com/CJ-MC-Mods/Overloaded/issues
+	Exception message: java.lang.IllegalStateException: Cannot get config value before config is loaded.
+Stacktrace:
+	at MC-BOOTSTRAP/com.google.common@33.3.1-jre/com.google.common.base.Preconditions.checkState(Preconditions.java:513) ~[guava-33.3.1-jre.jar%23134!/:?] {}
+	at TRANSFORMER/neoforge@21.4.136/net.neoforged.neoforge.common.ModConfigSpec$ConfigValue.getRaw(ModConfigSpec.java:1235) ~[neoforge-21.4.136.jar%23222!/:?] {re:classloading}
+	at TRANSFORMER/neoforge@21.4.136/net.neoforged.neoforge.common.ModConfigSpec$ConfigValue.get(ModConfigSpec.java:1222) ~[neoforge-21.4.136.jar%23222!/:?] {re:classloading}
+	at TRANSFORMER/overloaded@0.0.99/com.cjm721.overloaded.config.MultiToolConfig.update(MultiToolConfig.java:70) ~[%23223!/:?] {re:classloading}
+	at MC-BOOTSTRAP/com.google.common@33.3.1-jre/com.google.common.collect.ImmutableList.forEach(ImmutableList.java:423) ~[guava-33.3.1-jre.jar%23134!/:?] {}
+	at TRANSFORMER/overloaded@0.0.99/com.cjm721.overloaded.config.OverloadedConfig.updateConfigs(OverloadedConfig.java:76) ~[%23223!/:?] {re:classloading}
+	at TRANSFORMER/overloaded@0.0.99/com.cjm721.overloaded.config.OverloadedConfig.onLoading(OverloadedConfig.java:62) ~[%23223!/:?] {re:classloading}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:350) ~[bus-8.0.2.jar%23181!/:?] {}
+	at MC-BOOTSTRAP/net.neoforged.bus/net.neoforged.bus.EventBus.post(EventBus.java:315) ~[bus-8.0.2.jar%23181!/:?] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.ModContainer.acceptEvent(ModContainer.java:158) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ModConfig.setConfig(ModConfig.java:79) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ConfigTracker.loadConfig(ConfigTracker.java:197) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ConfigTracker.openConfig(ConfigTracker.java:140) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ConfigTracker.lambda$loadConfigs$2(ConfigTracker.java:124) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75) ~[?:?] {}
+	at java.base/java.util.Collections$SynchronizedCollection.forEach(Collections.java:2351) ~[?:?] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ConfigTracker.loadConfigs(ConfigTracker.java:124) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at MC-BOOTSTRAP/fml_loader@6.0.11/net.neoforged.fml.config.ConfigTracker.loadConfigs(ConfigTracker.java:119) ~[loader-6.0.11.jar%23177!/:6.0] {}
+	at TRANSFORMER/neoforge@21.4.136/net.neoforged.neoforge.internal.CommonModLoader.lambda$begin$1(CommonModLoader.java:62) ~[neoforge-21.4.136.jar%23222!/:?] {re:classloading}
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[?:?] {}
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[?:?] {}
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[?:?] {}
+
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21.4
+	Minecraft Version ID: 1.21.4
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 21.0.5, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 166491272 bytes (158 MiB) / 503316480 bytes (480 MiB) up to 16953376768 bytes (16168 MiB)
+	CPUs: 32
+	Processor Vendor: AuthenticAMD
+	Processor Name: AMD Ryzen 9 7950X3D 16-Core Processor          
+	Identifier: AuthenticAMD Family 25 Model 97 Stepping 2
+	Microarchitecture: Zen 3
+	Frequency (GHz): 4.20
+	Number of physical packages: 1
+	Number of physical CPUs: 16
+	Number of logical CPUs: 32
+	Graphics card #0 name: AMD Radeon(TM) Graphics
+	Graphics card #0 vendor: Advanced Micro Devices, Inc.
+	Graphics card #0 VRAM (MiB): 512.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 31.0.24002.92
+	Graphics card #1 name: NVIDIA GeForce RTX 3080 Ti
+	Graphics card #1 vendor: NVIDIA
+	Graphics card #1 VRAM (MiB): 12288.00
+	Graphics card #1 deviceId: VideoController2
+	Graphics card #1 versionInfo: 32.0.15.7628
+	Memory slot #0 capacity (MiB): 32768.00
+	Memory slot #0 clockSpeed (GHz): 4.80
+	Memory slot #0 type: DDR5
+	Memory slot #1 capacity (MiB): 32768.00
+	Memory slot #1 clockSpeed (GHz): 4.80
+	Memory slot #1 type: DDR5
+	Virtual memory max (MiB): 133456.83
+	Virtual memory used (MiB): 131611.50
+	Swap memory total (MiB): 68805.20
+	Swap memory used (MiB): 4914.96
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 1782392.38, total: 3814482.00
+	Space in storage for workdir (MiB): available: 1782392.38, total: 3814482.00
+	JVM Flags: 2 total; -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump
+	ModLauncher: 11.0.4+main.d2e20e43
+	ModLauncher launch target: neoforgeclientdev
+	ModLauncher services: 
+		sponge-mixin-0.15.2+mixin.0.8.7.jar mixin PLUGINSERVICE 
+		loader-6.0.11.jar slf4jfixer PLUGINSERVICE 
+		loader-6.0.11.jar runtime_enum_extender PLUGINSERVICE 
+		at-modlauncher-11.0.1.jar accesstransformer PLUGINSERVICE 
+		loader-6.0.11.jar runtimedistcleaner PLUGINSERVICE 
+		modlauncher-11.0.4.jar mixin TRANSFORMATIONSERVICE 
+		modlauncher-11.0.4.jar fml TRANSFORMATIONSERVICE 
+	FML Language Providers: 
+		javafml@6.0
+		lowcodefml@6.0
+		minecraft@6.0
+	Mod List: 
+		neoforge-21.4.136.jar                             |Minecraft                     |minecraft                     |1.21.4              |Manifest: NOSIGNATURE
+		neoforge-21.4.136.jar                             |NeoForge                      |neoforge                      |21.4.136            |Manifest: NOSIGNATURE
+		main                                              |Overloaded                    |overloaded                    |0.0.99              |Manifest: NOSIGNATURE
+	Crash Report UUID: 24a79f33-e575-4f68-8e90-77eb0049ad35
+	FML: 6.0.11
+	NeoForge: 21.4.136

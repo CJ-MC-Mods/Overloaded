@@ -17,7 +17,7 @@ import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.HYPER_ITEM_
 public class TileHyperItemSender extends AbstractTileHyperSender<LongItemStack, IHyperHandlerItem> {
 
   public TileHyperItemSender(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperItemSender, HYPER_ITEM_HANDLER, pos,state);
+    super(ModTiles.hyperItemSender.get(), HYPER_ITEM_HANDLER, pos,state);
   }
 
   @Override

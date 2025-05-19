@@ -17,7 +17,7 @@ public class BlockCreativeGenerator extends ModBlockTile {
 
   @Override
   public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-    return new TileCreativeGeneratorFE();
+    return new TileCreativeGeneratorFE(pos,state);
   }
 
   @OnlyIn(Dist.CLIENT)

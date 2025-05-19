@@ -14,7 +14,7 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
 
   public TileInfiniteWaterSource(BlockPos pos, BlockState blockState) {
     
-    super(ModTiles.infiniteWaterSource, pos, blockState);
+    super(ModTiles.infiniteWaterSource.get(), pos, blockState);
   }
 
   @Nonnull

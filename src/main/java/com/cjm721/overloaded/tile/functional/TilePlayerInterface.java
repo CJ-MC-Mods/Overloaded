@@ -15,7 +15,7 @@ public class TilePlayerInterface extends BlockEntity {
   private UUID placer;
 
   public TilePlayerInterface(BlockPos pos, BlockState blockState) {
-    super(ModTiles.playerInterface, pos, blockState);
+    super(ModTiles.playerInterface.get(), pos, blockState);
   }
 
 //  @Override

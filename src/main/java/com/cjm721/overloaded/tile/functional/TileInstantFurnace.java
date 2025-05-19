@@ -22,7 +22,7 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
 //  @Nonnull private final LazyOptional<FurnaceProcessor> capability;
 
   public TileInstantFurnace(BlockPos pos, BlockState blockState) {
-    super(ModTiles.instantFurnace, pos, blockState);
+    super(ModTiles.instantFurnace.get(), pos, blockState);
 
     processingStorage = new FurnaceProcessor(this::getLevel, Integer.MAX_VALUE, 9, this);
 //    capability = LazyOptional.of(() -> processingStorage);
@@ -46,7 +46,7 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
 
   @Override
   protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
-    return new InstantFurnaceContainer(id, playerInventory, this);
+    return new InstantFurnaceContainer(id, playerInventory);
   }
 //
 //  @Nonnull

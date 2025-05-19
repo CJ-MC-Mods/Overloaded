@@ -225,7 +225,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
-//      return ItemStackHelper.removeItem(
+//      return ContainerHelper.removeItem(
 //          slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
     ItemStack toReturn;

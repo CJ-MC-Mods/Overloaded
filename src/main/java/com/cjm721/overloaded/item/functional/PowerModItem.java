@@ -27,7 +27,7 @@ abstract class PowerModItem extends ModItem {
                     Component.literal(
                         "Energy Stored: "
                             + NumberFormat.getInstance().format(stack
-                                .getCapability(Capabilities.EnergyStorage.ITEM, null).getEnergyStored()))));
+                                .getCapability(Capabilities.EnergyStorage.ITEM, null).getEnergyStored())));
 
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }

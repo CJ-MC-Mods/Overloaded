@@ -3,31 +3,27 @@ package com.cjm721.overloaded.tile.functional;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.server.ServerWorld;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.FakePlayer;
-import net.neoforged.common.util.FakePlayerFactory;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.energy.EnergyStorage;
-import net.neoforged.items.ItemStackHandler;
+import net.neoforged.neoforge.common.util.FakePlayer;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.energy.EnergyStorage;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.UUID;
 
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
-import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-
-public class TileItemManipulator extends BlockEntity implements ITickableTileEntity {
+public class TileItemManipulator extends BlockEntity {
 
   private static final GameProfile FAKEPLAYER =
       new GameProfile(
@@ -39,15 +35,15 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
   private Direction facing;
 
   public TileItemManipulator(BlockPos pos, BlockState blockState) {
-    super(ModTiles.itemManipulator, pos, blockState);
+    super(ModTiles.itemManipulator.get(), pos, blockState);
     itemStack = new ItemStackHandler();
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
   }
 
   @Override
-  public void load(@Nonnull BlockState state, CompoundTag compound) {
+  protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
     if (compound.contains("Item")) {
-      itemStack.deserializeNBT((CompoundTag) compound.get("Item"));
+      itemStack.deserializeNBT(registries, (CompoundTag) compound.get("Item"));
     }
 
     if (compound.contains("Energy")) {
@@ -57,14 +53,12 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
   }
 
   @Override
-  @Nonnull
-  public CompoundTag save(CompoundTag compound) {
-    compound.put("Item", itemStack.serializeNBT());
+  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+    compound.put("Item", itemStack.serializeNBT(registries));
     compound.putInt("Energy", energyStorage.getEnergyStored());
-    return super.save(compound);
+    super.saveAdditional(compound, registries);
   }
 
-  @Override
   public void tick() {
     if (this.getLevel().isClientSide) {
       return;
@@ -75,7 +69,7 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
 
     FakePlayer player = getPlayer();
 
-    BlockPos.Mutable blockPos = this.getBlockPos().mutable();
+    BlockPos.MutableBlockPos blockPos = this.getBlockPos().mutable();
     //        for (int i = 0; i < player.interactionManager.getBlockReachDistance(); i++) {
     //            if (!this.getWorld().isAirBlock(blockPos.move(this.facing))) {
     //                EnumActionResult result = currentItem.getItem().onItemUse(player, getWorld(),
@@ -91,15 +85,6 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
     //        }
   }
 
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction facing) {
-    if (capability == ENERGY) return LazyOptional.of(() -> energyStorage).cast();
-    if (capability == ITEM_HANDLER_CAPABILITY) return LazyOptional.of(() -> itemStack).cast();
-    return super.getCapability(capability, facing);
-  }
-
   public TileItemManipulator setFacing(Direction facing) {
     this.facing = facing;
 
@@ -108,11 +93,11 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
 
   private FakePlayer getPlayer() {
     if (this.player == null || this.player.get() == null) {
-      FakePlayer fakePlayer = FakePlayerFactory.get((ServerWorld) this.getLevel(), FAKEPLAYER);
+      FakePlayer fakePlayer = FakePlayerFactory.get((ServerLevel) this.getLevel(), FAKEPLAYER);
       this.player = new WeakReference<>(fakePlayer);
       fakePlayer.moveTo(
           this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), 0f, 0f);
-      fakePlayer.inventory.clearContent();
+      fakePlayer.getInventory().clearContent();
     }
 
     return this.player.get();
@@ -121,7 +106,7 @@ public class TileItemManipulator extends BlockEntity implements ITickableTileEnt
   public void breakBlock() {
     ItemStack storedItem = itemStack.getStackInSlot(0);
     if (!storedItem.isEmpty()) {
-      InventoryHelper.dropItemStack(
+      Containers.dropItemStack(
           this.getLevel(), getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(), storedItem);
     }
   }

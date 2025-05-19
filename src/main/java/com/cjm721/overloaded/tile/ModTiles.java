@@ -4,14 +4,11 @@ import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.tile.functional.*;
 import com.cjm721.overloaded.tile.hyperTransfer.*;
 import com.cjm721.overloaded.tile.infinity.*;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.registries.IForgeRegistry;
-import net.neoforged.registries.ObjectHolder;
 
 import java.util.function.Supplier;
 
+import static com.cjm721.overloaded.Overloaded.BLOCK_ENTITY_TYPES;
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class ModTiles {
@@ -41,179 +38,26 @@ public class ModTiles {
     static final String trueInfiniteTank = MODID + ":true_infinite_tank";
   }
 
-  @ObjectHolder(TileResourceLocations.creativeGeneratorFE)
-  public static BlockEntityType<?> creativeGeneratorFE;
-
-  @ObjectHolder(TileResourceLocations.energyExtractor)
-  public static BlockEntityType<?> energyExtractor;
-
-  @ObjectHolder(TileResourceLocations.energyInjectorChest)
-  public static BlockEntityType<?> energyInjectorChest;
-
-  @ObjectHolder(TileResourceLocations.infiniteWaterSource)
-  public static BlockEntityType<?> infiniteWaterSource;
-
-  @ObjectHolder(TileResourceLocations.itemInterface)
-  public static BlockEntityType<TileItemInterface> itemInterface;
-
-  @ObjectHolder(TileResourceLocations.itemManipulator)
-  public static BlockEntityType<?> itemManipulator;
-
-  @ObjectHolder(TileResourceLocations.matterPurifier)
-  public static BlockEntityType<?> matterPurifier;
-
-  @ObjectHolder(TileResourceLocations.playerInterface)
-  public static BlockEntityType<TilePlayerInterface> playerInterface;
-
-  @ObjectHolder(TileResourceLocations.teamLoader)
-  public static BlockEntityType<?> teamLoader;
-
-  @ObjectHolder(TileResourceLocations.instantFurnace)
-  public static BlockEntityType<?> instantFurnace;
-
-  @ObjectHolder(TileResourceLocations.hyperItemReceiver)
-  public static BlockEntityType<?> hyperItemReceiver;
-
-  @ObjectHolder(TileResourceLocations.hyperItemSender)
-  public static BlockEntityType<?> hyperItemSender;
-
-  @ObjectHolder(TileResourceLocations.almostInfiniteBarrel)
-  public static BlockEntityType<?> almostInfiniteBarrel;
-
-  @ObjectHolder(TileResourceLocations.trueInfiniteBarrel)
-  public static BlockEntityType<?> trueInfiniteBarrel;
-
-  @ObjectHolder(TileResourceLocations.hyperEnergyReceiver)
-  public static BlockEntityType<?> hyperEnergyReceiver;
-
-  @ObjectHolder(TileResourceLocations.hyperEnergySender)
-  public static BlockEntityType<?> hyperEnergySender;
-
-  @ObjectHolder(TileResourceLocations.almostInfiniteCapacitor)
-  public static BlockEntityType<?> almostInfiniteCapacitor;
-
-  @ObjectHolder(TileResourceLocations.trueInfiniteCapacitor)
-  public static BlockEntityType<?> trueInfiniteCapacitor;
-
-  @ObjectHolder(TileResourceLocations.hyperFluidReceiver)
-  public static BlockEntityType<?> hyperFluidReceiver;
-
-  @ObjectHolder(TileResourceLocations.hyperFluidSender)
-  public static BlockEntityType<?> hyperFluidSender;
-
-  @ObjectHolder(TileResourceLocations.almostInfiniteTank)
-  public static BlockEntityType<?> almostInfiniteTank;
-
-  @ObjectHolder(TileResourceLocations.trueInfiniteTank)
-  public static BlockEntityType<?> trueInfiniteTank;
-
-  public static void init(IForgeRegistry<BlockEntityType<?>> registry) {
-    registry.register(
-        build(
-            TileCreativeGeneratorFE::new,
-            ModBlocks.creativeGenerator,
-            TileResourceLocations.creativeGeneratorFE));
-    registry.register(
-        build(
-            TileEnergyExtractor::new,
-            ModBlocks.energyExtractor,
-            TileResourceLocations.energyExtractor));
-//    registry.register(
-//        build(
-//            TileEnergyInjectorChest::new,
-//            ModBlocks.energyInjectorChest,
-//            TileResourceLocations.energyInjectorChest));
-    registry.register(
-        build(
-            TileInfiniteWaterSource::new,
-            ModBlocks.infiniteWaterSource,
-            TileResourceLocations.infiniteWaterSource));
-    registry.register(
-        build(
-            TileItemInterface::new, ModBlocks.itemInterface, TileResourceLocations.itemInterface));
-//    registry.register(
-//        build(
-//            TileItemManipulator::new,
-//            ModBlocks.itemManipulator,
-//            TileResourceLocations.itemManipulator));
-//    registry.register(
-//        build(
-//            TileMatterPurifier::new,
-//            ModBlocks.matterPurifier,
-//            TileResourceLocations.matterPurifier));
-    registry.register(
-        build(
-            TilePlayerInterface::new,
-            ModBlocks.playerInterface,
-            TileResourceLocations.playerInterface));
-//    registry.register(
-//        build(TileTeamLoader::new, ModBlocks.teamLoader, TileResourceLocations.teamLoader));
-
-    registry.register(
-        build(
-            TileInstantFurnace::new,
-            ModBlocks.instantFurnace,
-            TileResourceLocations.instantFurnace));
-    registry.register(
-        build(
-            TileHyperItemReceiver::new,
-            ModBlocks.hyperItemReceiver,
-            TileResourceLocations.hyperItemReceiver));
-    registry.register(
-        build(
-            TileHyperItemSender::new,
-            ModBlocks.hyperItemSender,
-            TileResourceLocations.hyperItemSender));
-    registry.register(
-        build(
-            TileAlmostInfiniteBarrel::new,
-            ModBlocks.almostInfiniteBarrel,
-            TileResourceLocations.almostInfiniteBarrel));
-    registry.register(
-        build(
-            TileTrueInfiniteBarrel::new,
-            ModBlocks.trueInfiniteBarrel,
-            TileResourceLocations.trueInfiniteBarrel));
-    registry.register(
-        build(
-            TileHyperEnergyReceiver::new,
-            ModBlocks.hyperEnergyReceiver,
-            TileResourceLocations.hyperEnergyReceiver));
-    registry.register(
-        build(
-            TileHyperEnergySender::new,
-            ModBlocks.hyperEnergySender,
-            TileResourceLocations.hyperEnergySender));
-    registry.register(
-        build(
-            TileAlmostInfiniteCapacitor::new,
-            ModBlocks.almostInfiniteCapacitor,
-            TileResourceLocations.almostInfiniteCapacitor));
-    registry.register(
-        build(
-            TileTrueInfiniteCapacitor::new,
-            ModBlocks.trueInfiniteCapacitor,
-            TileResourceLocations.trueInfiniteCapacitor));
-    registry.register(
-        build(
-            TileHyperFluidReceiver::new,
-            ModBlocks.hyperFluidReceiver,
-            TileResourceLocations.hyperFluidReceiver));
-    registry.register(
-        build(
-            TileHyperFluidSender::new,
-            ModBlocks.hyperFluidSender,
-            TileResourceLocations.hyperFluidSender));
-    registry.register(
-        build(TileAlmostInfiniteTank::new, ModBlocks.almostInfiniteTank, TileResourceLocations.almostInfiniteTank));
-    registry.register(
-        build(
-            TileTrueInfiniteTank::new,
-            ModBlocks.trueInfiniteTank,
-            TileResourceLocations.trueInfiniteTank));
-  }
-
-  private static BlockEntityType build(Supplier<BlockEntity> e, Block block, String name) {
-    return BlockEntityType.Builder.of(e, block).build(null).setRegistryName(name);
-  }
+  public static final Supplier<BlockEntityType<TileCreativeGeneratorFE>> creativeGeneratorFE = BLOCK_ENTITY_TYPES.register(TileResourceLocations.creativeGeneratorFE, () -> new BlockEntityType<>(TileCreativeGeneratorFE::new,ModBlocks.creativeGenerator.get()));
+  public static final Supplier<BlockEntityType<TileEnergyExtractor>> energyExtractor = BLOCK_ENTITY_TYPES.register(TileResourceLocations.energyExtractor, () -> new BlockEntityType<>(TileEnergyExtractor::new,ModBlocks.energyExtractor.get()));
+  public static final Supplier<BlockEntityType<TileEnergyInjectorChest>> energyInjectorChest = BLOCK_ENTITY_TYPES.register(TileResourceLocations.energyInjectorChest, () -> new BlockEntityType<>(TileEnergyInjectorChest::new,ModBlocks.energyInjectorChest.get()));
+  public static final Supplier<BlockEntityType<TileInfiniteWaterSource>> infiniteWaterSource = BLOCK_ENTITY_TYPES.register(TileResourceLocations.infiniteWaterSource, () -> new BlockEntityType<>(TileInfiniteWaterSource::new,ModBlocks.infiniteWaterSource.get()));
+  public static final Supplier<BlockEntityType<TileItemInterface>> itemInterface = BLOCK_ENTITY_TYPES.register(TileResourceLocations.itemInterface, () -> new BlockEntityType<>(TileItemInterface::new,ModBlocks.itemInterface.get()));
+  public static final Supplier<BlockEntityType<TileItemManipulator>> itemManipulator = BLOCK_ENTITY_TYPES.register(TileResourceLocations.itemManipulator, () -> new BlockEntityType<>(TileItemManipulator::new,ModBlocks.itemManipulator.get()));
+  public static final Supplier<BlockEntityType<TileMatterPurifier>> matterPurifier = BLOCK_ENTITY_TYPES.register(TileResourceLocations.matterPurifier, () -> new BlockEntityType<>(TileMatterPurifier::new,ModBlocks.matterPurifier.get()));
+  public static final Supplier<BlockEntityType<TilePlayerInterface>> playerInterface = BLOCK_ENTITY_TYPES.register(TileResourceLocations.playerInterface, () -> new BlockEntityType<>(TilePlayerInterface::new,ModBlocks.playerInterface.get()));
+  public static final Supplier<BlockEntityType<TileTeamLoader>> teamLoader = BLOCK_ENTITY_TYPES.register(TileResourceLocations.teamLoader, () -> new BlockEntityType<>(TileTeamLoader::new,ModBlocks.teamLoader.get()));
+  public static final Supplier<BlockEntityType<TileInstantFurnace>> instantFurnace = BLOCK_ENTITY_TYPES.register(TileResourceLocations.instantFurnace, () -> new BlockEntityType<>(TileInstantFurnace::new,ModBlocks.instantFurnace.get()));
+  public static final Supplier<BlockEntityType<TileHyperItemReceiver>> hyperItemReceiver = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperItemReceiver, () -> new BlockEntityType<>(TileHyperItemReceiver::new,ModBlocks.hyperItemReceiver.get()));
+  public static final Supplier<BlockEntityType<TileHyperItemSender>> hyperItemSender = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperItemSender, () -> new BlockEntityType<>(TileHyperItemSender::new,ModBlocks.hyperItemSender.get()));
+  public static final Supplier<BlockEntityType<TileAlmostInfiniteBarrel>> almostInfiniteBarrel = BLOCK_ENTITY_TYPES.register(TileResourceLocations.almostInfiniteBarrel, () -> new BlockEntityType<>(TileAlmostInfiniteBarrel::new,ModBlocks.almostInfiniteBarrel.get()));
+  public static final Supplier<BlockEntityType<TileTrueInfiniteBarrel>> trueInfiniteBarrel = BLOCK_ENTITY_TYPES.register(TileResourceLocations.trueInfiniteBarrel, () -> new BlockEntityType<>(TileTrueInfiniteBarrel::new,ModBlocks.trueInfiniteBarrel.get()));
+  public static final Supplier<BlockEntityType<TileHyperEnergyReceiver>> hyperEnergyReceiver = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperEnergyReceiver, () -> new BlockEntityType<>(TileHyperEnergyReceiver::new,ModBlocks.hyperEnergyReceiver.get()));
+  public static final Supplier<BlockEntityType<TileHyperEnergySender>> hyperEnergySender = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperEnergySender, () -> new BlockEntityType<>(TileHyperEnergySender::new,ModBlocks.hyperEnergySender.get()));
+  public static final Supplier<BlockEntityType<TileAlmostInfiniteCapacitor>> almostInfiniteCapacitor = BLOCK_ENTITY_TYPES.register(TileResourceLocations.almostInfiniteCapacitor, () -> new BlockEntityType<>(TileAlmostInfiniteCapacitor::new,ModBlocks.almostInfiniteCapacitor.get()));
+  public static final Supplier<BlockEntityType<TileTrueInfiniteCapacitor>> trueInfiniteCapacitor = BLOCK_ENTITY_TYPES.register(TileResourceLocations.trueInfiniteCapacitor, () -> new BlockEntityType<>(TileTrueInfiniteCapacitor::new,ModBlocks.trueInfiniteCapacitor.get()));
+  public static final Supplier<BlockEntityType<TileHyperFluidReceiver>> hyperFluidReceiver = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperFluidReceiver, () -> new BlockEntityType<>(TileHyperFluidReceiver::new,ModBlocks.hyperFluidReceiver.get()));
+  public static final Supplier<BlockEntityType<TileHyperFluidSender>> hyperFluidSender = BLOCK_ENTITY_TYPES.register(TileResourceLocations.hyperFluidSender, () -> new BlockEntityType<>(TileHyperFluidSender::new,ModBlocks.hyperFluidSender.get()));
+  public static final Supplier<BlockEntityType<TileAlmostInfiniteTank>> almostInfiniteTank = BLOCK_ENTITY_TYPES.register(TileResourceLocations.almostInfiniteTank, () -> new BlockEntityType<>(TileAlmostInfiniteTank::new,ModBlocks.almostInfiniteTank.get()));
+  public static final Supplier<BlockEntityType<TileTrueInfiniteTank>> trueInfiniteTank = BLOCK_ENTITY_TYPES.register(TileResourceLocations.trueInfiniteTank, () -> new BlockEntityType<>(TileTrueInfiniteTank::new,ModBlocks.trueInfiniteTank.get()));
 }

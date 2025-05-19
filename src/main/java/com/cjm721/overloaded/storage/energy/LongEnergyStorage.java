@@ -3,8 +3,9 @@ package com.cjm721.overloaded.storage.energy;
 import com.cjm721.overloaded.storage.stacks.intint.LongEnergyStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
 import javax.annotation.Nonnull;
@@ -20,15 +21,16 @@ public class LongEnergyStorage
     this.dataUpdate = dataUpdate;
   }
 
+
   @Override
-  public CompoundTag serializeNBT() {
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
     CompoundTag compound = new CompoundTag();
     compound.putLong("Count", energy.amount);
     return compound;
   }
 
   @Override
-  public void deserializeNBT(@Nonnull CompoundTag compound) {
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compound) {
     energy = new LongEnergyStack(compound.contains("Count") ? compound.getLong("Count") : 0L);
   }
 

@@ -4,11 +4,11 @@ import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.storage.stacks.intint.LongItemStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
@@ -86,12 +86,12 @@ public class LongItemStorage
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
     CompoundTag compound = new CompoundTag();
     if (!longItemStack.getItemStack().isEmpty()) {
       ItemStack stack = longItemStack.getItemStack();
       stack.setCount(1);
-      compound.put("Item", stack.serializeNBT());
+      compound.put("Item", stack.save(provider));
       compound.putLong("Count", longItemStack.getAmount());
     }
 
@@ -99,9 +99,9 @@ public class LongItemStorage
   }
 
   @Override
-  public void deserializeNBT(CompoundTag compound) {
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compound) {
     ItemStack storedItem =
-        compound.contains("Item") ? ItemStack.of((CompoundTag) compound.get("Item")) : null;
+        compound.contains("Item") ? ItemStack.parse(provider, compound.get("Item")).orElse(null) : null;
     if (storedItem != null) {
       long storedAmount = compound.contains("Count") ? compound.getLong("Count") : 0L;
       longItemStack = new LongItemStack(storedItem, storedAmount);
@@ -125,7 +125,7 @@ public class LongItemStorage
       return LongItemStack.EMPTY_STACK;
     }
 
-    if (ItemHandlerHelper.canItemStacksStack(longItemStack.getItemStack(), stack.getItemStack())) {
+    if (ItemStack.isSameItemSameComponents(longItemStack.getItemStack(), stack.getItemStack())) {
       NumberUtil.AddReturn<Long> result = addToMax(longItemStack.getAmount(), stack.getAmount());
       if (doAction) {
         longItemStack.setAmount(result.result);

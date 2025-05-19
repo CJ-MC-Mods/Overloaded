@@ -14,7 +14,7 @@ public class TileAlmostInfiniteTank extends AbstractTileHyperStorage<LongFluidSt
 //  @Nonnull private final LazyOptional<?> capability;
 
   public TileAlmostInfiniteTank(BlockPos pos, BlockState state) {
-    super(ModTiles.almostInfiniteTank, pos,state);
+    super(ModTiles.almostInfiniteTank.get(), pos,state);
     fluidStorage = new LongFluidStorage(this);
 //    capability = LazyOptional.of(() -> fluidStorage);
   }

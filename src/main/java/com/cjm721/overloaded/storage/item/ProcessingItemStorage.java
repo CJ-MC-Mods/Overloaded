@@ -1,11 +1,12 @@
 package com.cjm721.overloaded.storage.item;
 
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.NonNullList;
-import net.neoforged.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
@@ -64,7 +65,7 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
-      return ItemStackHelper.removeItem(
+      return ContainerHelper.removeItem(
           slot < inputSlots ? input : output, slot < inputSlots ? slot : slot - inputSlots, amount);
     }
     ItemStack toReturn =
@@ -91,25 +92,26 @@ public class ProcessingItemStorage implements IItemHandler, INBTSerializable<Com
   }
 
   @Override
-  public CompoundTag serializeNBT() {
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
+
     CompoundTag storage = new CompoundTag();
     CompoundTag inputNBT = new CompoundTag();
     CompoundTag outputNBT = new CompoundTag();
-    ItemStackHelper.saveAllItems(inputNBT, input);
-    ItemStackHelper.saveAllItems(outputNBT, output);
+    ContainerHelper.saveAllItems(inputNBT, input, provider);
+    ContainerHelper.saveAllItems(outputNBT, output,provider);
     storage.put("Input", inputNBT);
     storage.put("Output", outputNBT);
     return storage;
   }
 
   @Override
-  public void deserializeNBT(CompoundTag nbt) {
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
     if (nbt.contains("Input")) {
-      ItemStackHelper.loadAllItems(nbt.getCompound("Input"), input);
+      ContainerHelper.loadAllItems(nbt.getCompound("Input"), input, provider);
     }
 
     if (nbt.contains("Output")) {
-      ItemStackHelper.loadAllItems(nbt.getCompound("Output"), output);
+      ContainerHelper.loadAllItems(nbt.getCompound("Output"), output, provider);
     }
   }
 }

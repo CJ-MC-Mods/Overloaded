@@ -35,7 +35,7 @@ public class FastItemStackQueue implements IItemHandler {
       return ItemStack.EMPTY;
     }
 
-    if (ItemHandlerHelper.canItemStacksStack(storage[slot], stack)) {
+    if (ItemStack.isSameItemSameComponents(storage[slot], stack)) {
       int newInternalCount = Math.min(storage[slot].getCount() + stack.getCount(), stack.getMaxStackSize());
       int returnCount = newInternalCount - storage[slot].getCount() - stack.getCount();
       if (!simulate) {
@@ -85,6 +85,6 @@ public class FastItemStackQueue implements IItemHandler {
 
   @Override
   public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-    return storage[slot] == null || ItemHandlerHelper.canItemStacksStack(storage[slot], stack);
+    return storage[slot] == null || ItemStack.isSameItemSameComponents(storage[slot], stack);
   }
 }

@@ -8,17 +8,18 @@ import com.cjm721.overloaded.network.packets.RightClickBlockMessage;
 import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
-import net.minecraft.core.Vec3i;
+import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -26,49 +27,33 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3i;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.common.util.LazyOptional;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-import net.neoforged.event.entity.EntityJoinWorldEvent;
-import net.neoforged.event.entity.player.PlayerInteractEvent;
-import net.neoforged.eventbus.api.Event;
-import net.neoforged.eventbus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static com.cjm721.overloaded.util.BlockPlaceResult.FAIL_DENY;
+import static com.cjm721.overloaded.client.render.item.RenderMultiToolAssist.getAssistMode;
+import static com.cjm721.overloaded.util.PlayerInteractionUtil.placeBlock;
 import static net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
+import static net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.*;
 
 public class ItemMultiTool extends PowerModItem {
 
@@ -164,17 +149,17 @@ public class ItemMultiTool extends PowerModItem {
     player.startUsingItem(InteractionHand.MAIN_HAND);
 
     if (player.isShiftKeyDown()) {
-      CompoundTag tag = itemStack.getTag();
-      if (tag == null) {
+      CompoundTag tag = (CompoundTag) itemStack.save(player.registryAccess());
+      if (tag instanceof CompoundTag) {
         tag = new CompoundTag();
       }
       BlockState state = world.getBlockState(pos);
       Item item = Item.byBlock(state.getBlock());
       ItemStack stackToPlace = new ItemStack(() -> item, 1);
       CompoundTag blockTag = new CompoundTag();
-      stackToPlace.save(blockTag);
+      stackToPlace.save(player.registryAccess(),blockTag);
       tag.put("Item", blockTag);
-      itemStack.setTag(tag);
+//      itemStack.setTag(tag);
       Component component = stackToPlace.getDisplayName();
       player.displayClientMessage(
           Component.literal("Bound tool to ").append(component), true);
@@ -308,7 +293,7 @@ public class ItemMultiTool extends PowerModItem {
    return InteractionResult.SUCCESS;
   }
 
-  public void rightClickWithItem(
+  public static void rightClickWithItem(
       @Nonnull ServerPlayer player, RightClickBlockMessage message) {
     BlockPos pos = message.getPos();
     Direction sideHit = message.getHitSide();
@@ -319,11 +304,11 @@ public class ItemMultiTool extends PowerModItem {
     ServerLevel worldIn = (ServerLevel) player.level();
     ItemStack multiTool = player.getMainHandItem();
 
-    if (multiTool.getItem() != this) {
+    if (!(multiTool.getItem() instanceof ItemMultiTool)) {
       return;
     }
 
-    ItemStack blockStack = getSelectedBlockItemStack(multiTool);
+    ItemStack blockStack = getSelectedBlockItemStack(worldIn.registryAccess(), multiTool);
 
     if (blockStack.isEmpty()) {
       player.displayClientMessage(Component.literal("No block type selected to place."), true);
@@ -338,7 +323,7 @@ public class ItemMultiTool extends PowerModItem {
 
     IEnergyStorage opEnergy = multiTool.getCapability(Capabilities.EnergyStorage.ITEM);
     if (opEnergy == null) {
-      Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + multiTool.getTag());
+      Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + multiTool.save(player.registryAccess()));
       return;
     }
 
@@ -418,44 +403,43 @@ public class ItemMultiTool extends PowerModItem {
   }
 
   @Override
-  public boolean canAttackBlock(
-      @Nonnull BlockState p_195938_1_, @Nonnull World p_195938_2_, @Nonnull BlockPos p_195938_3_, PlayerEntity p_195938_4_) {
-    return !p_195938_4_.isShiftKeyDown();
+  public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
+    return !player.isCrouching();
   }
 
   @Nonnull
-  public ItemStack getSelectedBlockItemStack(ItemStack multiTool) {
-    CompoundTag tagCompound = multiTool.getTag();
+  public static ItemStack getSelectedBlockItemStack(RegistryAccess registryAccess, ItemStack multiTool) {
+    Tag tag = multiTool.save(registryAccess);
 
-    if (tagCompound == null || !tagCompound.contains("Item")) {
+    if (tag == null || !(tag instanceof  CompoundTag tagCompound) || !tagCompound.contains("Item")) {
       return ItemStack.EMPTY;
     }
 
     CompoundTag itemTag = tagCompound.getCompound("Item");
-    return ItemStack.of(itemTag);
+    return ItemStack.parse(registryAccess,itemTag).orElse(ItemStack.EMPTY);
   }
 
-  @Override
+//  @Override
   public boolean canHarvestBlock(ItemStack stack, BlockState state) {
     return true;
   }
 
-  @Override
-  @Nonnull
-  public ITextComponent getName(@Nonnull ItemStack stack) {
-    ITextComponent text = super.getName(stack);
-    text.getStyle().applyFormat(TextFormatting.GOLD);
-    return text;
-  }
+//  @Override
+//  @Nonnull
+//  public ITextComponent getName(@Nonnull ItemStack stack) {
+//    ITextComponent text = super.getName(stack);
+//    text.getStyle().applyFormat(TextFormatting.GOLD);
+//    return text;
+//  }
 
-  @Mod.EventBusSubscriber(
+  @EventBusSubscriber(
       value = Dist.CLIENT,
       modid = MODID,
-      bus = Mod.EventBusSubscriber.Bus.FORGE)
+      bus = EventBusSubscriber.Bus.GAME)
   public static class ClientSideEvents {
     @SubscribeEvent
-    public static void leftClickBlock(@Nonnull PlayerInteractEvent.LeftClickBlock event) {
-      if (!Objects.equals(getUUID(event.getEntity()),getUUID(Minecraft.getInstance().player))) {
+    public static void leftClickBlock(@Nonnull LeftClickBlock event) {
+      if (event.getEntity().is(Minecraft.getInstance().player)) {
         return;
       }
 
@@ -465,27 +449,19 @@ public class ItemMultiTool extends PowerModItem {
       }
     }
 
-    @Nullable
-    private static UUID getUUID(@Nullable Entity entity) {
-      if(entity == null)
-        return null;
-
-      return entity.getUUID();
-    }
-
     @SubscribeEvent
-    public static void leftClickEmpty(@Nonnull PlayerInteractEvent.LeftClickEmpty event) {
+    public static void leftClickEmpty(@Nonnull LeftClickEmpty event) {
       if (event.getSide() == LogicalSide.SERVER
           || event.getEntity() != Minecraft.getInstance().player) return;
 
       ItemStack stack = event.getItemStack();
 
       if (stack.getItem().equals(ModItems.multiTool)) {
-        PlayerEntity entityLiving = (PlayerEntity) event.getEntity();
-        BlockRayTraceResult result =
+        Player entityLiving = event.getEntity();
+        BlockHitResult result =
             PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-                entityLiving, Minecraft.getInstance().getFrameTime());
-        if (result.getType() != RayTraceResult.Type.MISS)
+                entityLiving, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+        if (result.getType() != HitResult.Type.MISS)
           leftClickOnBlockClient(result.getBlockPos()); // result.getHitVec()
       }
     }
@@ -500,16 +476,16 @@ public class ItemMultiTool extends PowerModItem {
     static UUID uuid;
 
     @SubscribeEvent(priority = EventPriority.LOW)
-    public static void teleportDrops(@Nonnull EntityJoinWorldEvent event) {
+    public static void teleportDrops(@Nonnull EntityJoinLevelEvent event) {
       if (!enabled ||
-          event.getWorld().isClientSide() ||
+          event.getLevel().isClientSide() ||
           !event.getEntity().blockPosition().equals(pos) ||
           !(event.getEntity() instanceof ItemEntity) ||
           uuid == null) {
         return;
       }
 
-      PlayerEntity player = event.getWorld().getPlayerByUUID(uuid);
+      Player player = event.getLevel().getPlayerByUUID(uuid);
       if (player == null) {
         return;
       }
@@ -520,7 +496,6 @@ public class ItemMultiTool extends PowerModItem {
 
       if (!itemEntity.isAlive()) {
         event.setCanceled(true);
-        event.setResult(Event.Result.ALLOW);
       }
     }
   }

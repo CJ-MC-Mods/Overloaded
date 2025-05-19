@@ -11,15 +11,15 @@ import javax.annotation.Nonnull;
 public class InstantFurnaceContainer extends ModContainer {
 
   private final Inventory playerInventory;
-  private final TileInstantFurnace instanceFurnace;
+//  private final TileInstantFurnace instanceFurnace;
 //  private final IntReferenceHolder power;
 //  private final IntReferenceHolder maxPower;
 
   public InstantFurnaceContainer(
-      int id, Inventory playerInventory, TileInstantFurnace instanceFurnace) {
+      int id, Inventory playerInventory) {
     super(ModContainers.INSTANT_FURNACE.get(), id);
     this.playerInventory = playerInventory;
-    this.instanceFurnace = instanceFurnace;
+//    this.instanceFurnace = instanceFurnace;
 //    this.power =
 //        new IntReferenceHolder() {
 //

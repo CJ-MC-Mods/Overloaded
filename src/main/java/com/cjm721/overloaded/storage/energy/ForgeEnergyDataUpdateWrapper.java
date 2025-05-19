@@ -1,8 +1,7 @@
 package com.cjm721.overloaded.storage.energy;
 
 import com.cjm721.overloaded.util.IDataUpdate;
-import net.minecraft.util.math.MathHelper;
-import net.neoforged.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.EnergyStorage;
 
 import javax.annotation.Nonnull;
 
@@ -38,7 +37,7 @@ public class ForgeEnergyDataUpdateWrapper extends EnergyStorage {
   }
 
   public ForgeEnergyDataUpdateWrapper setEnergy(int amount) {
-    this.energy = MathHelper.clamp(amount, 0, this.capacity);
+    this.energy = Math.clamp(amount, 0, this.capacity);
 
     return this;
   }

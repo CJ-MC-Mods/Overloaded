@@ -4,7 +4,6 @@ import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.network.packets.KeyBindPressedMessage;
 import com.cjm721.overloaded.proxy.ClientProxy;
-import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.IGenericDataStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerPlayer;
@@ -142,9 +141,9 @@ public class ArmorEventHandler {
 //    }
   }
 
-  private void disableGroundSpeed(Player player, LogicalSide side) {
-    player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).removeModifier(groundSpeedAttribute);
-  }
+//  private void disableGroundSpeed(Player player, LogicalSide side) {
+//    player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED).removeModifier(groundSpeedAttribute);
+//  }
 
   private void disableNoClip(Player player, IGenericDataStorage dataStorage) {
     player.noPhysics = false;
@@ -394,18 +393,18 @@ public class ArmorEventHandler {
     return player.getCapability(GENERIC_DATA_STORAGE_ENTITY);
   }
 
-  @Nonnull
-  private static IGenericDataStorage getHelmetDataStorage(Player player) {
-    for (ItemStack stack : player.getInventory().armor) {
-      if (stack.getItem() instanceof ItemMultiHelmet) {
-        IGenericDataStorage cap =
-            stack.getCapability(GENERIC_DATA_STORAGE_ITEM);
-        cap.suggestUpdate();
-        return cap;
-      }
-    }
-    return new GenericDataStorage();
-  }
+//  @Nonnull
+//  private static IGenericDataStorage getHelmetDataStorage(Player player) {
+//    for (ItemStack stack : player.getInventory().armor) {
+//      if (stack.getItem() instanceof ItemMultiHelmet) {
+//        IGenericDataStorage cap =
+//            stack.getCapability(GENERIC_DATA_STORAGE_ITEM);
+//        cap.suggestUpdate();
+//        return cap;
+//      }
+//    }
+//    return new GenericDataStorage();
+//  }
 
   private boolean isMultiArmorSetEquipped(Player player) {
     for (ItemStack stack : player.getInventory().armor) {
@@ -419,7 +418,7 @@ public class ArmorEventHandler {
   @OnlyIn(Dist.CLIENT)
   @SubscribeEvent
   public void onKeyInputEvent(InputEvent.Key event) {
-    if (((ClientProxy) Overloaded.proxy).noClipKeybind.consumeClick()
+    if (ClientProxy.noClipKeybind.consumeClick()
         && isMultiArmorSetEquipped(Minecraft.getInstance().player)) {
       PacketDistributor.sendToServer(
           new KeyBindPressedMessage(KeyBindPressedMessage.KeyBind.NO_CLIP));

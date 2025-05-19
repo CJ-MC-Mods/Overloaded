@@ -1,12 +1,13 @@
 package com.cjm721.overloaded.storage.fluid;
 
-import com.cjm721.overloaded.Overloaded;
 import com.cjm721.overloaded.storage.stacks.intint.LongFluidStack;
 import com.cjm721.overloaded.util.IDataUpdate;
 import com.cjm721.overloaded.util.NumberUtil;
-import net.minecraft.fluid.Fluids;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.neoforged.common.util.INBTSerializable;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
@@ -14,8 +15,6 @@ import javax.annotation.Nonnull;
 
 import static com.cjm721.overloaded.util.FluidUtil.fluidsAreEqual;
 import static com.cjm721.overloaded.util.NumberUtil.addToMax;
-
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class LongFluidStorage
     implements IFluidHandler, IHyperHandlerFluid, INBTSerializable<CompoundTag> {
@@ -70,10 +69,10 @@ public class LongFluidStorage
   }
 
   @Override
-  public void deserializeNBT(CompoundTag compound) {
+  public void deserializeNBT(HolderLookup.Provider provider, CompoundTag compound) {
     FluidStack fluidStack =
         compound.contains("Fluid")
-            ? FluidStack.loadFluidStackFromNBT((CompoundTag) compound.get("Fluid"))
+            ? FluidStack.parse(provider, compound.get("Fluid")).orElse(null)
             : null;
     long amount = compound.contains("Count") ? compound.getLong("Count") : 0L;
 
@@ -82,11 +81,10 @@ public class LongFluidStorage
 
   @Override
   @Nonnull
-  public CompoundTag serializeNBT() {
+  public CompoundTag serializeNBT(HolderLookup.Provider provider) {
     CompoundTag compound = new CompoundTag();
     if (storedFluid.fluidStack != null) {
-      CompoundTag tag = new CompoundTag();
-      storedFluid.fluidStack.writeToNBT(tag);
+      Tag tag = storedFluid.fluidStack.save(provider);
       compound.put("Fluid", tag);
       compound.putLong("Count", storedFluid.amount);
     }

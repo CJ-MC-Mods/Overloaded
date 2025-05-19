@@ -3,39 +3,30 @@ package com.cjm721.overloaded.tile.functional;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.Direction;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.LazyOptional;
-import net.neoforged.energy.EnergyStorage;
+import net.neoforged.neoforge.energy.EnergyStorage;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import static net.neoforged.energy.CapabilityEnergy.ENERGY;
-import static net.neoforged.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-
-public class TileMatterPurifier extends BlockEntity implements ITickableTileEntity, IItemHandler {
+public class TileMatterPurifier extends BlockEntity implements IItemHandler {
 
 //  private final FluidTank fluidStorage;
   private EnergyStorage energyStorage;
   private ItemStack stack;
 
   public TileMatterPurifier(BlockPos pos, BlockState blockState) {
-    super(ModTiles.matterPurifier, pos, blockState);
+    super(ModTiles.matterPurifier.get(), pos, blockState);
 //    fluidStorage = new FluidTank(Integer.MAX_VALUE);
     energyStorage = new EnergyStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
     stack = ItemStack.EMPTY;
   }
 
-  @Override
   public void tick() {
     if (this.getLevel().isClientSide) {
       return;
@@ -72,35 +63,22 @@ public class TileMatterPurifier extends BlockEntity implements ITickableTileEnti
   }
 
   @Override
-  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
-    super.load(state, compound);
+  protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
 //    fluidStorage.readFromNBT((CompoundTag) compound.get("Fluid"));
     energyStorage =
         new EnergyStorage(compound.getInt("Energy"), Integer.MAX_VALUE, Integer.MAX_VALUE);
+    super.loadAdditional(compound, registries);
   }
 
   @Override
-  @Nonnull
-  public CompoundTag save(CompoundTag compound) {
+  protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
     CompoundTag fluid = new CompoundTag();
 
 //    fluidStorage.writeToNBT(fluid);
 
     compound.put("Fluid", fluid);
     compound.putInt("Energy", energyStorage.getEnergyStored());
-
-    return super.save(compound);
-  }
-
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(
-      @Nonnull Capability<T> capability, @Nullable Direction facing) {
-//    if (capability == FLUID_HANDLER_CAPABILITY) return LazyOptional.of(() -> fluidStorage).cast();
-    if (capability == ENERGY) return LazyOptional.of(() -> energyStorage).cast();
-    if (capability == ITEM_HANDLER_CAPABILITY) return LazyOptional.of(() -> this).cast();
-
-    return super.getCapability(capability, facing);
+    super.saveAdditional(compound, registries);
   }
 
   @Override
@@ -123,7 +101,7 @@ public class TileMatterPurifier extends BlockEntity implements ITickableTileEnti
       return ItemStack.EMPTY;
     }
 
-    if (ItemHandlerHelper.canItemStacksStack(this.stack, stack)) {
+    if (ItemStack.isSameItemSameComponents(this.stack, stack)) {
       int maxSize = this.stack.getMaxStackSize();
       int toTake = Math.min(maxSize - this.stack.getCount(), stack.getCount());
 

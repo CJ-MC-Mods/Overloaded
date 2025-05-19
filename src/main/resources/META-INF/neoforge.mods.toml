@@ -16,16 +16,16 @@ license="All rights reserved"
 
     Almost all balance values can be configured.
     '''
-    [[dependencies.overloaded]] #optional
-        modId="neoforge" #mandatory
-        type="required" #mandatory
-        versionRange="${neo_version_range}" #mandatory
-        ordering="NONE"
-        side="BOTH"
-    [[dependencies.${mod_id}]]
-        modId="minecraft"
-        type="required"
-        # This version range declares a minimum of the current minecraft version up to but not including the next major version
-        versionRange="${minecraft_version_range}"
-        ordering="NONE"
-        side="BOTH"
+#    [[dependencies.overloaded]] #optional
+#        modId="neoforge" #mandatory
+#        type="required" #mandatory
+#        versionRange="${neo_version_range}" #mandatory
+#        ordering="NONE"
+#        side="BOTH"
+#    [[dependencies.overloaded]]
+#        modId="minecraft"
+#        type="required"
+#        # This version range declares a minimum of the current minecraft version up to but not including the next major version
+#        versionRange="${minecraft_version_range}"
+#        ordering="NONE"
+#        side="BOTH"

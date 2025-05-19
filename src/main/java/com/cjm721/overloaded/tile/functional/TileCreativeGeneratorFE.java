@@ -1,49 +1,31 @@
 package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
-import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.util.Direction;
 import net.minecraft.core.BlockPos;
-import net.neoforged.common.capabilities.Capability;
-import net.neoforged.common.util.LazyOptional;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.energy.IEnergyStorage;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import static net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage.BLOCK;
 
 public class TileCreativeGeneratorFE extends BlockEntity
     implements IEnergyStorage {
 
-  public TileCreativeGeneratorFE() {
-    super(ModTiles.creativeGeneratorFE);
+  public TileCreativeGeneratorFE(BlockPos pos, BlockState state) {
+    super(ModTiles.creativeGeneratorFE.get(), pos, state);
   }
 
-  @Override
   public void tick() {
     if (getLevel().isClientSide) return;
 
     BlockPos pos = this.getBlockPos();
     for (Direction facing : Direction.values()) {
-      TileEntity te = level.getBlockEntity(pos.offset(facing.getNormal()));
+      IEnergyStorage cap = level.getCapability(BLOCK, pos.offset(facing.getUnitVec3i()), facing);
 
-      if (te == null) continue;
-
-      te.getCapability(BLOCK, facing.getOpposite())
-          .ifPresent(s -> s.receiveEnergy(Integer.MAX_VALUE, false));
-//          .ifPresent(s -> s.receiveEnergy(1000000, false));
+      if (cap == null) continue;
+      cap.receiveEnergy(Integer.MAX_VALUE, false);
     }
-  }
-
-  @Nonnull
-  @Override
-  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-    if (cap == ENERGY) {
-      cap.orEmpty(cap, LazyOptional.of(() -> (T) this));
-    }
-    return super.getCapability(cap, side);
   }
 
   /**

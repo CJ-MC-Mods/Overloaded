@@ -1,13 +1,12 @@
 package com.cjm721.overloaded.network.handler;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.neoforged.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
-public class PlayerMessageHandler<T> implements BiConsumer<T, Supplier<NetworkEvent.Context>> {
+public class PlayerMessageHandler<T> implements BiConsumer<T, IPayloadContext> {
 
   private final IPlayerMessageMethod<T> method;
 
@@ -16,14 +15,13 @@ public class PlayerMessageHandler<T> implements BiConsumer<T, Supplier<NetworkEv
   }
 
   @Override
-  public void accept(T message, Supplier<NetworkEvent.Context> ctx) {
-    ServerPlayerEntity player = ctx.get().getSender();
+  public void accept(T message, IPayloadContext ctx) {
+    ServerPlayer player = (ServerPlayer) ctx.player();
 
     if (player == null) {
       return;
     }
 
-    ctx.get().enqueueWork(() -> method.handleMessage(player, message));
-    ctx.get().setPacketHandled(true);
+    ctx.enqueueWork(() -> method.handleMessage(player, message));
   }
 }
