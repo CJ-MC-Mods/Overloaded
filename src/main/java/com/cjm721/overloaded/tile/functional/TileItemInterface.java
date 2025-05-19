@@ -2,6 +2,7 @@ package com.cjm721.overloaded.tile.functional;
 
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,14 +42,14 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
   protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
     super.loadAdditional(compound, registries);
     Tag itemTag = compound.get("StoredItem");
-    if (itemTag != null)
-    {
+    if (itemTag != null) {
       storedItem = ItemStack.parse(registries, itemTag).orElse(ItemStack.EMPTY);
-    }else{
+    } else {
       storedItem = ItemStack.EMPTY;
     }
   }
-//
+
+  //
 
   @Override
   public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
@@ -57,16 +60,16 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
 
   @Override
   public @Nullable Packet<ClientGamePacketListener> getUpdatePacket() {
-//    super.getUpdatePacket().;
-//      CompoundTag tag = new CompoundTag();
-//    saveAdditional(tag, this.getLevel().registryAccess());
+    //    super.getUpdatePacket().;
+    //      CompoundTag tag = new CompoundTag();
+    //    saveAdditional(tag, this.getLevel().registryAccess());
 
     return ClientboundBlockEntityDataPacket.create(this);
   }
 
-
   @Override
-  public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
+  public void onDataPacket(
+      Connection net, ClientboundBlockEntityDataPacket pkt, HolderLookup.Provider lookupProvider) {
     super.onDataPacket(net, pkt, lookupProvider);
     this.loadAdditional(pkt.getTag(), lookupProvider);
   }
@@ -146,20 +149,16 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
     return true;
   }
 
-//  @Nonnull
-//  @Override
-//  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-//    if ((side == Direction.UP || side == Direction.DOWN) && cap == ITEM_HANDLER_CAPABILITY) {
-//      return ITEM_HANDLER_CAPABILITY
-//          .orEmpty(ITEM_HANDLER_CAPABILITY, LazyOptional.of(() -> this))
-//          .cast();
-//    }
-//
-//    LazyOptional<T> t = storedItem.getCapability(cap, side);
-//
-//    if (t.isPresent()) return t;
-//    return super.getCapability(cap, side);
-//  }
+  public IItemHandler getItemCapability(@Nullable Direction side) {
+    if (side == Direction.UP || side == Direction.DOWN) {
+      return this;
+    }
+    return storedItem.getCapability(Capabilities.ItemHandler.ITEM);
+  }
+
+  //  public BlockCapability<?,?> getProxy() {
+  //
+  //  }
 
   public ItemStack getStoredItem() {
     return storedItem;
@@ -170,6 +169,10 @@ public class TileItemInterface extends BlockEntity implements IItemHandler {
       this.getLevel()
           .addFreshEntity(
               new ItemEntity(
-                  this.getLevel(), getBlockPos().getX(), getBlockPos().getY(), getBlockPos().getZ(), storedItem));
+                  this.getLevel(),
+                  getBlockPos().getX(),
+                  getBlockPos().getY(),
+                  getBlockPos().getZ(),
+                  storedItem));
   }
 }

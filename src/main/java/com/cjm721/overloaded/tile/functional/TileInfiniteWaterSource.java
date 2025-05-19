@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandler {
 
   public TileInfiniteWaterSource(BlockPos pos, BlockState blockState) {
-    
+
     super(ModTiles.infiniteWaterSource.get(), pos, blockState);
   }
 
@@ -22,17 +22,6 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
   public FluidStack drain(int maxDrain, FluidAction fluidAction) {
     return new FluidStack(Fluids.WATER, maxDrain);
   }
-
-
-//  @Override
-//  @Nonnull
-//  public <T> LazyOptional<T> getCapability(
-//      @Nonnull Capability<T> capability, @Nullable Direction facing) {
-//    if (capability == FLUID_HANDLER_CAPABILITY) {
-//      return LazyOptional.of(() -> this).cast();
-//    }
-//    return super.getCapability(capability, facing);
-//  }
 
   @Override
   public int getTanks() {
@@ -66,7 +55,7 @@ public class TileInfiniteWaterSource extends BlockEntity implements IFluidHandle
   @Nonnull
   @Override
   public FluidStack drain(FluidStack resource, FluidAction action) {
-    if(!isFluidValid(0, resource)) {
+    if (!isFluidValid(0, resource)) {
       return FluidStack.EMPTY;
     }
     return new FluidStack(Fluids.WATER, resource.getAmount());

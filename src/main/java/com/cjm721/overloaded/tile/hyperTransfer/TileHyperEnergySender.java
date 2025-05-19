@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.BLOCK_HYPER_ENERGY_HANDLER;
 
 public class TileHyperEnergySender
     extends AbstractTileHyperSender<LongEnergyStack, IHyperHandlerEnergy> {
 
   public TileHyperEnergySender(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperEnergySender.get(), HYPER_ENERGY_HANDLER, pos,state);
+    super(ModTiles.hyperEnergySender.get(), BLOCK_HYPER_ENERGY_HANDLER, pos,state);
   }
 
   @Nonnull

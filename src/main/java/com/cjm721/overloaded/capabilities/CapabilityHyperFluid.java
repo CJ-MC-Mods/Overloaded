@@ -9,7 +9,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class CapabilityHyperFluid {
 
-  public static BlockCapability<IHyperHandlerFluid, Direction> HYPER_FLUID_HANDLER = BlockCapability.createSided(
+  public static BlockCapability<IHyperHandlerFluid, Direction> BLOCK_HYPER_FLUID_HANDLER = BlockCapability.createSided(
           ResourceLocation.fromNamespaceAndPath(MODID,"hyper_fluid"),
           IHyperHandlerFluid.class
   );

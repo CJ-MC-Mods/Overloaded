@@ -5,6 +5,7 @@ import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -13,19 +14,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
 public class TileInstantFurnace extends BaseContainerBlockEntity implements IDataUpdate {
 
   @Nonnull private final FurnaceProcessor processingStorage;
-//  @Nonnull private final LazyOptional<FurnaceProcessor> capability;
 
   public TileInstantFurnace(BlockPos pos, BlockState blockState) {
     super(ModTiles.instantFurnace.get(), pos, blockState);
 
     processingStorage = new FurnaceProcessor(this::getLevel, Integer.MAX_VALUE, 9, this);
-//    capability = LazyOptional.of(() -> processingStorage);
   }
 
   @Override
@@ -40,41 +40,24 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
   }
 
   @Override
-  protected void setItems(NonNullList<ItemStack> items) {
-
-  }
+  protected void setItems(NonNullList<ItemStack> items) {}
 
   @Override
   protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
     return new InstantFurnaceContainer(id, playerInventory);
   }
-//
-//  @Nonnull
-//  @Override
-//  public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-//    if ( cap == ENERGY) {
-//      return capability.cast();
-//    }
-//
-//    if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-//      if (side == null) {
-//        side = Direction.NORTH;
-//      }
-//      switch (side) {
-//        case UP:
-//          return capability.lazyMap(FurnaceProcessor::inputIItemHandler).cast();
-//        case NORTH:
-//        case EAST:
-//        case SOUTH:
-//        case WEST:
-//          return capability.cast();
-//        case DOWN:
-//          return capability.lazyMap(FurnaceProcessor::outputIItemHandler).cast();
-//      }
-//    }
-//
-//    return super.getCapability(cap, side);
-//  }
+
+  public FurnaceProcessor getProcessingStorage() {
+    return processingStorage;
+  }
+
+  public static IItemHandler getItemCapability(TileInstantFurnace entity, Direction side) {
+    return switch (side) {
+      case UP -> entity.processingStorage.inputIItemHandler();
+      case DOWN -> entity.processingStorage.outputIItemHandler();
+      default -> entity.processingStorage;
+    };
+  }
 
   @Override
   public int getContainerSize() {
@@ -120,20 +103,20 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
     throw new RuntimeException("clear is called");
   }
 
-//  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
-//    super.load(state, compound);
-//    if (compound.contains("Processor")) {
-//      processingStorage.deserializeNBT((CompoundTag) compound.get("Processor"));
-//    }
-//  }
-//
-////  @Override
-//  @Nonnull
-//  public CompoundTag save(CompoundTag compound) {
-//    compound.put("Processor", processingStorage.serializeNBT());
-//    return super.save(compound);
-//  }
+  //  @Override
+  //  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
+  //    super.load(state, compound);
+  //    if (compound.contains("Processor")) {
+  //      processingStorage.deserializeNBT((CompoundTag) compound.get("Processor"));
+  //    }
+  //  }
+  //
+  ////  @Override
+  //  @Nonnull
+  //  public CompoundTag save(CompoundTag compound) {
+  //    compound.put("Processor", processingStorage.serializeNBT());
+  //    return super.save(compound);
+  //  }
 
   @Override
   public void dataUpdated() {

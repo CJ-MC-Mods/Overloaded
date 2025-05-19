@@ -5,11 +5,13 @@ import com.cjm721.overloaded.storage.energy.IHyperHandlerEnergy;
 import com.cjm721.overloaded.tile.ModTiles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
-import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.HYPER_ENERGY_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.BLOCK_HYPER_ENERGY_HANDLER;
 import static net.neoforged.neoforge.capabilities.Capabilities.EnergyStorage.BLOCK;
 
 public class TileEnergyExtractor extends AbstractTileEntityFaceable {
@@ -18,32 +20,35 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable {
     super(ModTiles.energyExtractor.get(), pos, blockState);
   }
 
-  public void tick() {
-    if (getLevel().isClientSide) {
+
+
+
+  public static <T extends BlockEntity> void tick(Level level, BlockPos me, BlockState blockState, T t) {
+  if (level.isClientSide) {
       return;
     }
 
-    BlockPos me = this.getBlockPos();
-    BlockEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getNormal()));
+    Direction facing = blockState.getValue(BlockStateProperties.FACING);
+    BlockEntity frontTE = level.getBlockEntity(me.offset(facing.getNormal()));
 
     if (frontTE == null) {
       return;
     }
 
-    IHyperHandlerEnergy optionalStorage = getLevel().getCapability(HYPER_ENERGY_HANDLER, frontTE.getBlockPos(), getFacing().getOpposite());
+    IHyperHandlerEnergy optionalStorage = level.getCapability(BLOCK_HYPER_ENERGY_HANDLER, frontTE.getBlockPos(), facing.getOpposite());
 
     if (optionalStorage == null) {
       return;
     }
 
-      for (Direction facing : Direction.values()) {
-      if (facing == getFacing()) continue;
+      for (Direction direction : Direction.values()) {
+      if (direction == facing) continue;
 
-      BlockEntity te = level.getBlockEntity(me.offset(facing.getNormal()));
+      BlockEntity te = level.getBlockEntity(me.offset(direction.getNormal()));
       if (te == null) continue;
 
       IEnergyStorage optionalReceiver =
-              level.getCapability(BLOCK, te.getBlockPos(), facing.getOpposite());
+              level.getCapability(BLOCK, te.getBlockPos(), direction.getOpposite());
 
       if (optionalReceiver == null)
         return;

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TilePlayerInterface extends BlockEntity {
@@ -18,61 +19,69 @@ public class TilePlayerInterface extends BlockEntity {
     super(ModTiles.playerInterface.get(), pos, blockState);
   }
 
-//  @Override
-//  @Nonnull
-//  public CompoundTag getUpdateTag() {
-//    return save(new CompoundTag());
-//  }
-//
-//  @Nullable
-//  @Override
-//  public SUpdateTileEntityPacket getUpdatePacket() {
-//    CompoundTag tag = new CompoundTag();
-//    save(tag);
-//
-//    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
-//  }
-//
-//  @Override
-//  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-//    this.load(this.getBlockState(), pkt.getTag());
-//  }
-//
-//  @Override
-//  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
-//    if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
-//
-//    super.load(state, compound);
-//  }
-//
-//  @Override
-//  @Nonnull
-//  public CompoundTag save(@Nonnull CompoundTag compound) {
-//    if (placer != null) compound.putString("Placer", placer.toString());
-//
-//    return super.save(compound);
-//  }
+  //  @Override
+  //  @Nonnull
+  //  public CompoundTag getUpdateTag() {
+  //    return save(new CompoundTag());
+  //  }
+  //
+  //  @Nullable
+  //  @Override
+  //  public SUpdateTileEntityPacket getUpdatePacket() {
+  //    CompoundTag tag = new CompoundTag();
+  //    save(tag);
+  //
+  //    return new SUpdateTileEntityPacket(getBlockPos(), 1, tag);
+  //  }
+  //
+  //  @Override
+  //  public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+  //    this.load(this.getBlockState(), pkt.getTag());
+  //  }
+  //
+  //  @Override
+  //  public void load(@Nonnull BlockState state, @Nonnull CompoundTag compound) {
+  //    if (compound.contains("Placer")) placer = UUID.fromString(compound.getString("Placer"));
+  //
+  //    super.load(state, compound);
+  //  }
+  //
+  //  @Override
+  //  @Nonnull
+  //  public CompoundTag save(@Nonnull CompoundTag compound) {
+  //    if (placer != null) compound.putString("Placer", placer.toString());
+  //
+  //    return super.save(compound);
+  //  }
 
   public void setPlacer(@Nonnull LivingEntity placer) {
     if (placer instanceof Player) this.placer = placer.getUUID();
   }
 
-//  @Nonnull
-//  @Override
-//  public <T> LazyOptional<T> getCapability(
-//          @Nonnull Capability<T> capability, @Nullable Direction facing) {
-//    if (this.placer != null) {
-//      PlayerEntity player = this.getLevel().getPlayerByUUID(this.placer);
-//
-//      if (player != null) {
-//        return player.getCapability(capability, facing);
-//      }
-//    }
-//
-//    return super.getCapability(capability, facing);
-//  }
+  //  @Nonnull
+  //  @Override
+  //  public <T> LazyOptional<T> getCapability(
+  //          @Nonnull Capability<T> capability, @Nullable Direction facing) {
+  //    if (this.placer != null) {
+  //      PlayerEntity player = this.getLevel().getPlayerByUUID(this.placer);
+  //
+  //      if (player != null) {
+  //        return player.getCapability(capability, facing);
+  //      }
+  //    }
+  //
+  //    return super.getCapability(capability, facing);
+  //  }
 
   public UUID getPlacer() {
     return placer;
+  }
+
+  public Optional<Player> getPlayer() {
+    if (this.placer != null) {
+      Player player = this.getLevel().getPlayerByUUID(this.placer);
+      return Optional.ofNullable(player);
+    }
+    return Optional.empty();
   }
 }

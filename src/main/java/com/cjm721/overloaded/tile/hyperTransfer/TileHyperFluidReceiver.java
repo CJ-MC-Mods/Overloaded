@@ -12,6 +12,6 @@ public class TileHyperFluidReceiver
     extends AbstractTileHyperReceiver<LongFluidStack, IHyperHandlerFluid> {
 
   public TileHyperFluidReceiver(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperFluidReceiver.get(), CapabilityHyperFluid.HYPER_FLUID_HANDLER, pos,state);
+    super(ModTiles.hyperFluidReceiver.get(), CapabilityHyperFluid.BLOCK_HYPER_FLUID_HANDLER, pos,state);
   }
 }

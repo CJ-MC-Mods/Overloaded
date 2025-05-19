@@ -9,7 +9,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class CapabilityHyperItem {
 
-  public static BlockCapability<IHyperHandlerItem, Direction> HYPER_ITEM_HANDLER = BlockCapability.createSided(
+  public static BlockCapability<IHyperHandlerItem, Direction> BLOCK_HYPER_ITEM_HANDLER = BlockCapability.createSided(
           ResourceLocation.fromNamespaceAndPath(MODID,"hyper_item"),
           IHyperHandlerItem.class
   );;

@@ -9,7 +9,7 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class CapabilityHyperEnergy {
 
-  public static BlockCapability<IHyperHandlerEnergy, Direction> HYPER_ENERGY_HANDLER = BlockCapability.createSided(
+  public static BlockCapability<IHyperHandlerEnergy, Direction> BLOCK_HYPER_ENERGY_HANDLER = BlockCapability.createSided(
           ResourceLocation.fromNamespaceAndPath(MODID,"hyper_energy"),
           IHyperHandlerEnergy.class
   );

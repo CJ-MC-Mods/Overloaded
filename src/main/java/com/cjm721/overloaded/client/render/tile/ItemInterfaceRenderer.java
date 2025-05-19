@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 
 import javax.annotation.Nonnull;
@@ -34,7 +35,8 @@ public class ItemInterfaceRenderer implements BlockEntityRenderer<TileItemInterf
     matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
     // TODO add back spinning
-//    matrixStack.mulPose(new Quaternionf(0.0, (double)angle, 0.0, 0.0));
+//    matrixStack.rotateAround(new Quaternionf(new AxisAngle4f((float)angle,0.0f,0.0f,0.0f)),0.0f,0.5f,1.0f);
+//    matrixStack.mulPose();
 
 //    RenderSystem.enableLighting();
     Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLight,packedOverlay, matrixStack, bufferSource, te.getLevel(), 0);

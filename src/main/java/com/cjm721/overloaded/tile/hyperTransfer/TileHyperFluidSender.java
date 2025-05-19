@@ -10,13 +10,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-import static com.cjm721.overloaded.capabilities.CapabilityHyperFluid.HYPER_FLUID_HANDLER;
+import static com.cjm721.overloaded.capabilities.CapabilityHyperFluid.BLOCK_HYPER_FLUID_HANDLER;
 
 public class TileHyperFluidSender
     extends AbstractTileHyperSender<LongFluidStack, IHyperHandlerFluid> {
 
   public TileHyperFluidSender(BlockPos pos, BlockState state) {
-    super(ModTiles.hyperFluidSender.get(), HYPER_FLUID_HANDLER, pos,state);
+    super(ModTiles.hyperFluidSender.get(), BLOCK_HYPER_FLUID_HANDLER, pos,state);
   }
 
   @Override
