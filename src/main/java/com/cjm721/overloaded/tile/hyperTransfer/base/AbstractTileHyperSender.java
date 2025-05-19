@@ -93,7 +93,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   private void send(@Nonnull AbstractTileHyperReceiver<T, H> partner) {
     for (Direction side : Direction.values()) {
-      BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getUnitVec3i()));
+      BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getNormal()));
 
       if (te == null) {
         continue;

@@ -8,7 +8,7 @@ import com.google.common.primitives.Floats;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.ArmorItem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
@@ -20,7 +20,7 @@ import static com.cjm721.overloaded.item.functional.armor.MultiArmorConstants.Da
 public class ItemMultiHelmet extends AbstractMultiArmor {
 
   public ItemMultiHelmet(Item.Properties properties) {
-    super(ArmorType.HELMET, properties);
+    super(ArmorItem.Type.HELMET, properties);
   }
 
 //  @Nullable

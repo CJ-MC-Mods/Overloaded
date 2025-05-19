@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -34,13 +35,11 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -84,12 +83,13 @@ public class ItemRailGun extends PowerModItem {
 //        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
+
   @Override
-  public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
+  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
     if (worldIn.isClientSide) {
       int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
-      Vec3 vec3d = playerIn.getEyePosition(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
-      Vec3 vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+      Vec3 vec3d = playerIn.getEyePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
+      Vec3 vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
       Vec3 vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
       AABB axisalignedbb =
@@ -112,7 +112,7 @@ public class ItemRailGun extends PowerModItem {
       }
     }
 
-    return InteractionResult.SUCCESS;
+    return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
   }
 
   @SubscribeEvent
@@ -175,8 +175,7 @@ public class ItemRailGun extends PowerModItem {
       return;
     } else if (player.distanceTo(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
       player.displayClientMessage(Component.literal("Target out of range."), true);
-    } else if (entity.hurtServer(
-            (ServerLevel) player.level(),
+    } else if (entity.hurt(
             new DamageSource(player.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(Tags.DamageTypes.IS_PHYSICAL).get(Math.round((float)amount)),entity,player),
         (float) (amount))) {
       Vec3 knockback =

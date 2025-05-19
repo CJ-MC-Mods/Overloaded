@@ -1,13 +1,12 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 public class ItemMultiChestplate extends AbstractMultiArmor {
 
   public ItemMultiChestplate(Properties properties) {
-    super(ArmorType.CHESTPLATE,  properties);
+    super(Type.CHESTPLATE,  properties);
 
     //        setTranslationKey("multi_chestplate");
   }

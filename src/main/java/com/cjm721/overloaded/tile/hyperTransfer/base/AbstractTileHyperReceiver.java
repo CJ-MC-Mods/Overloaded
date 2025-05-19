@@ -23,7 +23,7 @@ public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H exten
     @Nonnull
     public Type receive(@Nonnull Type stack) {
         for (Direction side : Direction.values()) {
-            BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getUnitVec3i()));
+            BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getNormal()));
 
             if (te == null) {
                 continue;

@@ -1,13 +1,13 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.ArmorItem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 public class ItemMultiBoots extends AbstractMultiArmor {
 
   public ItemMultiBoots(Properties properties) {
-    super(ArmorType.BOOTS, properties);
+    super(ArmorItem.Type.BOOTS, properties);
   }
 
   @OnlyIn(Dist.CLIENT)

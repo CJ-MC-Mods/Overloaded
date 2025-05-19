@@ -1,7 +1,7 @@
 package com.cjm721.overloaded.item.functional;
 
 import com.cjm721.overloaded.item.ModItem;
-import net.minecraft.core.dispenser.EquipmentDispenseItemBehavior;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.neoforged.api.distmarker.Dist;
@@ -16,7 +16,7 @@ public class ItemEnergyShield extends ModItem {
 
   public ItemEnergyShield(Properties properties) {
     super(properties.stacksTo(1).durability(500));
-    DispenserBlock.registerBehavior(this, EquipmentDispenseItemBehavior.INSTANCE);
+    DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
   }
 
   @OnlyIn(Dist.CLIENT)

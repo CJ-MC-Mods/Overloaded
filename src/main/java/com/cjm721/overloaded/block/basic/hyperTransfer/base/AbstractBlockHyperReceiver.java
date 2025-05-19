@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -23,7 +24,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
 
 
   @Override
-  protected InteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+  protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
     if (heldItem.getItem().equals(ModItems.linkingCard)) {
       CompoundTag tag = null;//heldItem.save();
       if (tag == null) {
@@ -42,7 +43,7 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
             false);
       }
 
-      return InteractionResult.CONSUME;
+      return ItemInteractionResult.CONSUME;
     } else {
       return super.useItemOn(heldItem,state, world, pos, player, hand, rayTraceResult);
     }

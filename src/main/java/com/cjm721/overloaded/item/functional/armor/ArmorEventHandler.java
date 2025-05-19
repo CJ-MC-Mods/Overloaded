@@ -20,6 +20,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
@@ -232,7 +233,7 @@ public class ArmorEventHandler {
           OverloadedConfig.INSTANCE.multiArmorConfig.removeEffect,
           side == LogicalSide.CLIENT)) {
         // If not canceled
-        if(!EVENT_BUS.post(new MobEffectEvent.Remove(player, effect.getEffect())).isCanceled()) {
+        if(!EVENT_BUS.post(new MobEffectEvent.Remove(player, effect.getEffect(), null)).isCanceled()) {
           potionEffectIterator.remove();
         }
       }

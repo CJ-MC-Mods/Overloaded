@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -55,15 +56,15 @@ public class ItemRayGun extends PowerModItem {
   }
 
   @Override
-  public InteractionResult use(Level worldIn, Player playerIn, InteractionHand handIn) {
+  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
     if (!worldIn.isClientSide)
-      return InteractionResult.SUCCESS;
+      return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 
     HitResult ray =
         rayTraceWithEntities(
             worldIn,
-            playerIn.getEyePosition(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks()),
-            playerIn.getViewVector(Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks()),
+            playerIn.getEyePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks()),
+            playerIn.getViewVector(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks()),
             playerIn,
             OverloadedConfig.INSTANCE.railGun.maxRange);
 
@@ -71,7 +72,7 @@ public class ItemRayGun extends PowerModItem {
       PacketDistributor.sendToServer(new RayGunMessage(ray.getLocation()));
     }
 
-    return InteractionResult.SUCCESS;
+    return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
   }
 
   public static void handleMessage(ServerPlayer player, RayGunMessage message) {

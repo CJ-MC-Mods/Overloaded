@@ -178,7 +178,7 @@ public class ItemMultiTool extends PowerModItem {
       CommonSideEvents.uuid = player.getUUID();
 
       IEnergyStorage energy = opEnergy;
-      Registry<Enchantment> registry = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+      HolderLookup.RegistryLookup<Enchantment> registry = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
       int efficiency = itemStack.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY));
       int unbreaking = itemStack.getEnchantmentLevel(registry.getOrThrow(Enchantments.UNBREAKING));
       switch (breakAndUseEnergy(world, pos, energy, player, efficiency, unbreaking)) {
@@ -242,7 +242,7 @@ public class ItemMultiTool extends PowerModItem {
     IEnergyStorage storage = stack.getCapability(Capabilities.EnergyStorage.ITEM, null);
 
     if (storage != null) {
-      Registry<Enchantment> registry = worldIn.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+      HolderLookup.RegistryLookup<Enchantment> registry = worldIn.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
       int efficiency = stack.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY));
       int unbreaking = stack.getEnchantmentLevel(registry.getOrThrow(Enchantments.UNBREAKING));
       float breakCost =
@@ -279,7 +279,7 @@ public class ItemMultiTool extends PowerModItem {
    if (context.getLevel().isClientSide) {
      BlockHitResult result =
           PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-              context.getPlayer(), Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+              context.getPlayer(), Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
       if (result.getType() == HitResult.Type.BLOCK) {
         PacketDistributor.sendToServer(
             new RightClickBlockMessage(
@@ -327,7 +327,7 @@ public class ItemMultiTool extends PowerModItem {
       return;
     }
 
-    Vec3i sideVector = sideHit.getUnitVec3i();
+    Vec3i sideVector = sideHit.getNormal();
     BlockPos.MutableBlockPos newPosition = pos.offset(sideVector).mutable();
 
     switch (placeBlock(
@@ -460,7 +460,7 @@ public class ItemMultiTool extends PowerModItem {
         Player entityLiving = event.getEntity();
         BlockHitResult result =
             PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-                entityLiving, Minecraft.getInstance().getDeltaTracker().getGameTimeDeltaTicks());
+                entityLiving, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
         if (result.getType() != HitResult.Type.MISS)
           leftClickOnBlockClient(result.getBlockPos()); // result.getHitVec()
       }

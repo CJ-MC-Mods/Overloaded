@@ -32,7 +32,7 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable {
         }
 
         BlockPos me = this.getBlockPos();
-        BlockEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getUnitVec3i()));
+        BlockEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getNormal()));
 
         @Nullable IEnergyStorage storage = getLevel()
                 .getCapability(BLOCK, frontTE.getBlockPos(), getFacing().getOpposite());
@@ -43,7 +43,7 @@ public class TileEnergyInjectorChest extends AbstractTileEntityFaceable {
 
             if (facing == getFacing()) continue;
 
-            BlockEntity te = level.getBlockEntity(me.offset(facing.getUnitVec3i()));
+            BlockEntity te = level.getBlockEntity(me.offset(facing.getNormal()));
 
             @Nullable IItemHandler inventory = level.getCapability(Capabilities.ItemHandler.BLOCK, te.getBlockPos(), facing.getOpposite());
             for (int i = 0; i < inventory.getSlots(); i++) {

@@ -6,6 +6,7 @@ import com.cjm721.overloaded.tile.infinity.TileAlmostInfiniteTank;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
@@ -46,13 +47,13 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
   }
 
   @Override
-  protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
+  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
     ItemStack heldItem = player.getItemInHand(handIn);
     if (heldItem.isEmpty() && handIn == InteractionHand.MAIN_HAND) {
       if (!world.isClientSide) {
         sendPlayerStatus(world, pos, player);
       }
-      return InteractionResult.SUCCESS;
+      return ItemInteractionResult.SUCCESS;
     } else {
       BlockEntity te = world.getBlockEntity(pos);
       if (te instanceof TileAlmostInfiniteTank) {
@@ -64,13 +65,13 @@ public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
             return FluidUtil.interactWithFluidHandler(
                 player,
                 handIn,
-                opHandler) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+                opHandler) ? ItemInteractionResult.SUCCESS : ItemInteractionResult.FAIL;
           }
-          return InteractionResult.SUCCESS;
+          return ItemInteractionResult.SUCCESS;
         }
       }
     }
-    return InteractionResult.PASS;
+    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }
 
   @Override

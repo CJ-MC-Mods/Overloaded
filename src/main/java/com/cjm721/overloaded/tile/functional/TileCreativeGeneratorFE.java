@@ -21,7 +21,7 @@ public class TileCreativeGeneratorFE extends BlockEntity
 
     BlockPos pos = this.getBlockPos();
     for (Direction facing : Direction.values()) {
-      IEnergyStorage cap = level.getCapability(BLOCK, pos.offset(facing.getUnitVec3i()), facing);
+      IEnergyStorage cap = level.getCapability(BLOCK, pos.offset(facing.getNormal()), facing);
 
       if (cap == null) continue;
       cap.receiveEnergy(Integer.MAX_VALUE, false);

@@ -1,13 +1,13 @@
 package com.cjm721.overloaded.item.functional.armor;
 
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.ArmorItem;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 public class ItemMultiLeggings extends AbstractMultiArmor {
 
   public ItemMultiLeggings(Properties  properties) {
-    super(ArmorType.LEGGINGS,  properties);
+    super(ArmorItem.Type.LEGGINGS,  properties);
   }
 
   @OnlyIn(Dist.CLIENT)

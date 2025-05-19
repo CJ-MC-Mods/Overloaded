@@ -24,7 +24,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable {
     }
 
     BlockPos me = this.getBlockPos();
-    BlockEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getUnitVec3i()));
+    BlockEntity frontTE = getLevel().getBlockEntity(me.offset(getFacing().getNormal()));
 
     if (frontTE == null) {
       return;
@@ -39,7 +39,7 @@ public class TileEnergyExtractor extends AbstractTileEntityFaceable {
       for (Direction facing : Direction.values()) {
       if (facing == getFacing()) continue;
 
-      BlockEntity te = level.getBlockEntity(me.offset(facing.getUnitVec3i()));
+      BlockEntity te = level.getBlockEntity(me.offset(facing.getNormal()));
       if (te == null) continue;
 
       IEnergyStorage optionalReceiver =

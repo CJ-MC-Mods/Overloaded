@@ -5,6 +5,7 @@ import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +22,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
     }
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (hand == InteractionHand.MAIN_HAND) {
             ItemStack heldItem = player.getItemInHand(hand);
             if (heldItem.isEmpty()) {
@@ -31,7 +32,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
                     String message = ((AbstractTileHyperSender) world.getBlockEntity(pos)).getRightClickMessage();
                     player.displayClientMessage(Component.literal(message), false);
                 }
-              return InteractionResult.SUCCESS;
+              return ItemInteractionResult.SUCCESS;
             } else if (heldItem.getItem().equals(ModItems.linkingCard)) {
 //                CompoundTag tag = heldItem.getTag();
 //                if (tag != null) {
@@ -51,7 +52,7 @@ public abstract class AbstractBlockHyperSender extends AbstractBlockHyperNode {
 //                        }
 //                    }
 //                }
-              return InteractionResult.SUCCESS;
+              return ItemInteractionResult.SUCCESS;
             }
         }
 

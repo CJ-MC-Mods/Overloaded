@@ -78,7 +78,7 @@ public final class ModBlocks {
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> block, Supplier<BlockBehaviour.Properties> properties) {
         logger.atInfo().log("QWER CALLED");
         ResourceKey<Block> blockResourceKey = ResourceKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(MODID,name));
-        DeferredBlock<T> defBlock = BLOCKS.register(name, () -> block.apply(properties.get().setId(blockResourceKey)));
+        DeferredBlock<T> defBlock = BLOCKS.register(name, () -> block.apply(properties.get()));
         ModItems.ITEMS.registerSimpleBlockItem(defBlock);
         return defBlock;
     }

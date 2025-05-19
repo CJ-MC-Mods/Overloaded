@@ -4,7 +4,8 @@ import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.core.dispenser.EquipmentDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -13,11 +14,11 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.equipment.ArmorMaterial;
-import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentAssets;
+import net.minecraft.world.item.ArmorMaterial;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import javax.annotation.Nonnull;
 import java.text.NumberFormat;
@@ -26,6 +27,9 @@ import java.util.*;
 import static com.cjm721.overloaded.Overloaded.MODID;
 
 abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
+
+    public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, MODID);
+
     private static final UUID[] ARMOR_MODIFIERS =
             new UUID[]{
                     UUID.fromString("d5764ecb-e212-448f-a472-bb0c41fbccc9"),
@@ -33,22 +37,22 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
                     UUID.fromString("7148eab4-7390-43f6-a675-9931750dbde3"),
                     UUID.fromString("7a1424b3-faca-4026-b104-9b3c81bdddee")
             };
-    private static final ArmorMaterial pureMatter =
-            new ArmorMaterial(-1,
-                    Util.make(new EnumMap<>(ArmorType.class), map -> {
-                        map.put(ArmorType.BOOTS, 100);
-                        map.put(ArmorType.LEGGINGS, 100);
-                        map.put(ArmorType.CHESTPLATE, 100);
-                        map.put(ArmorType.HELMET, 100);
-                        map.put(ArmorType.BODY, 100);
+    public static final Holder<ArmorMaterial> pureMatter =
+            ARMOR_MATERIALS.register("multi_armor", () -> new ArmorMaterial(
+                    Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+                        map.put(ArmorItem.Type.BOOTS, 100);
+                        map.put(ArmorItem.Type.LEGGINGS, 100);
+                        map.put(ArmorItem.Type.CHESTPLATE, 100);
+                        map.put(ArmorItem.Type.HELMET, 100);
+                        map.put(ArmorItem.Type.BODY, 100);
                     }), 100,
                     SoundEvents.ARMOR_EQUIP_GENERIC,
+                    () -> Ingredient.of(),
+                    List.of(),
                     100,
-                    100,
-                    null,
-                    ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(MODID, "multi_armor")));
+100));
 
-    AbstractMultiArmor(ArmorType equipmentSlot, Properties properties) {
+    AbstractMultiArmor(ArmorItem.Type equipmentSlot, Properties properties) {
         super(
                 pureMatter,
                 equipmentSlot,
@@ -56,10 +60,9 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
                         .durability(-1)
                         .stacksTo(1)
                         .rarity(Rarity.EPIC)
-                        .fireResistant()
-                        .setNoCombineRepair());
+                        .fireResistant());
 
-        net.minecraft.world.level.block.DispenserBlock.registerBehavior(this, EquipmentDispenseItemBehavior.INSTANCE);
+        net.minecraft.world.level.block.DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
         ModItems.addToSecondaryInit(this);
     }
 

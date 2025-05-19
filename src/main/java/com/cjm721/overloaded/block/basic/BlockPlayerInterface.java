@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -54,7 +55,7 @@ public class BlockPlayerInterface extends ModBlockTile {
 
 
   @Override
-  protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
     if (!world.isClientSide && hand == InteractionHand.MAIN_HAND) {
       BlockEntity te = world.getBlockEntity(pos);
 
@@ -70,7 +71,7 @@ public class BlockPlayerInterface extends ModBlockTile {
                   "Bound to player: " + (username == null ? placer.toString() : username)), false);
         }
       }
-      return InteractionResult.SUCCESS;
+      return ItemInteractionResult.SUCCESS;
     }
 
     return super.useItemOn(stack,state, world, pos, player, hand, hitResult);

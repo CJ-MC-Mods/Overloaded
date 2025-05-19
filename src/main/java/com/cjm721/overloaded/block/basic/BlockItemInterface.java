@@ -5,9 +5,9 @@ import com.cjm721.overloaded.tile.functional.TileItemInterface;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -48,32 +48,32 @@ public class BlockItemInterface extends ModBlock implements EntityBlock {
 
 
   @Override
-  protected InteractionResult useItemOn(ItemStack handStack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-    if (world.isClientSide) return InteractionResult.CONSUME;
+  protected ItemInteractionResult useItemOn(ItemStack handStack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    if (world.isClientSide) return ItemInteractionResult.CONSUME;
 
-    if (hand != InteractionHand.MAIN_HAND) return InteractionResult.CONSUME;
+    if (hand != InteractionHand.MAIN_HAND) return ItemInteractionResult.CONSUME;
 
     BlockEntity te = world.getBlockEntity(pos);
 
     if (!(te instanceof TileItemInterface anInterface)) {
-      return InteractionResult.CONSUME;
+      return ItemInteractionResult.CONSUME;
     }
 
     ItemStack currentStack = anInterface.getStoredItem();
     if (currentStack.isEmpty()) {
-      if (handStack.isEmpty()) return InteractionResult.FAIL;
+      if (handStack.isEmpty()) return ItemInteractionResult.FAIL;
 
       ItemStack returnedItem = anInterface.insertItem(0, handStack, false);
       player.setItemInHand(hand, returnedItem);
     } else {
-      if (!player.getItemInHand(hand).isEmpty()) return InteractionResult.FAIL;
+      if (!player.getItemInHand(hand).isEmpty()) return ItemInteractionResult.FAIL;
 
       ItemStack toSpawn = anInterface.extractItem(0, 1, false);
-      if (toSpawn.isEmpty()) return InteractionResult.FAIL;
+      if (toSpawn.isEmpty()) return ItemInteractionResult.FAIL;
 
       ItemHandlerHelper.giveItemToPlayer(player, toSpawn, player.getInventory().selected);
     }
-    return InteractionResult.CONSUME;
+    return ItemInteractionResult.CONSUME;
   }
 
   @Override

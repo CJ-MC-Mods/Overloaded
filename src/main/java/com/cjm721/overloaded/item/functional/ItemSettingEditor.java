@@ -3,8 +3,10 @@ package com.cjm721.overloaded.item.functional;
 import com.cjm721.overloaded.item.ModItem;
 import com.cjm721.overloaded.network.OverloadedGuiHandler;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -16,12 +18,12 @@ public class ItemSettingEditor extends ModItem {
   }
 
   @Override
-  public InteractionResult use(Level worldIn, Player player, InteractionHand hand) {
+  public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
     if (worldIn.isClientSide) {
       OverloadedGuiHandler.openMultiArmorGUI();
     }
 
-    return InteractionResult.SUCCESS;
+    return InteractionResultHolder.success(player.getItemInHand(hand));
   }
 
   @OnlyIn(Dist.CLIENT)

@@ -4,6 +4,7 @@ import com.cjm721.overloaded.block.ModBlockTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,12 +37,12 @@ abstract class AbstractBlockHyperContainer extends ModBlockTile {
 
 
     @Override
-    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level world, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hitResult) {
         if (!world.isClientSide) {
             ItemStack heldItem = player.getItemInHand(handIn);
             if (heldItem.isEmpty() && handIn == InteractionHand.MAIN_HAND) {
                 sendPlayerStatus(world, pos, player);
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
         return super.useItemOn(stack, state,world,pos,player, handIn, hitResult);

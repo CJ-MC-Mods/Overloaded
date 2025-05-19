@@ -3,6 +3,7 @@ package com.cjm721.overloaded.proxy;
 import com.cjm721.overloaded.item.ModItems;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -65,13 +66,13 @@ public class ClientProxy {
   }
 
   private void modelBakeEvent(ModelEvent.RegisterAdditional event) {
-    bakeModelAndPut(
-        ResourceLocation.fromNamespaceAndPath(MODID, "block/remove_preview"),
+    bakeModelAndPut(ModelResourceLocation.standalone(
+        ResourceLocation.fromNamespaceAndPath(MODID, "block/remove_preview")),
         event);
   }
 
   private static void bakeModelAndPut(
-          ResourceLocation raw, ModelEvent.RegisterAdditional event) {
+          ModelResourceLocation raw, ModelEvent.RegisterAdditional event) {
     event.register(raw);
 
 //        IBakedModel bakedModel =

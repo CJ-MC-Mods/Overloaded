@@ -6,6 +6,7 @@ import com.cjm721.overloaded.tile.functional.TileInfiniteWaterSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -42,7 +43,7 @@ public class BlockInfiniteWaterSource extends ModBlock implements EntityBlock {
 
   @Override
   @Nonnull
-  public InteractionResult useItemOn(
+  public ItemInteractionResult useItemOn(
           ItemStack heldItem,
       BlockState state,
       Level world,
@@ -62,14 +63,14 @@ public class BlockInfiniteWaterSource extends ModBlock implements EntityBlock {
                     player,
                     handIn,
                     opHandler)
-                ? InteractionResult.CONSUME
-                : InteractionResult.FAIL;
+                ? ItemInteractionResult.CONSUME
+                : ItemInteractionResult.FAIL;
           }
-          return InteractionResult.CONSUME;
+          return ItemInteractionResult.CONSUME;
         }
       }
     }
-    return InteractionResult.PASS;
+    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }
 
   @Override

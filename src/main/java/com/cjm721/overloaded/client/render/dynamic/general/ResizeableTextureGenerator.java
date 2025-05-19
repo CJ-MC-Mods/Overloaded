@@ -5,7 +5,6 @@
 //import net.minecraft.resources.ResourceLocation;
 //import net.neoforged.api.distmarker.Dist;
 //import net.neoforged.api.distmarker.OnlyIn;
-//import net.neoforged.client.event.TextureStitchEvent;
 //import net.neoforged.bus.api.SubscribeEvent;
 //
 //import javax.annotation.Nonnull;
@@ -68,7 +67,7 @@
 //    String path = location.getPath();
 //
 //    if (path.startsWith("textures/")) {
-//      return new ResourceLocation(location.getNamespace(), path.substring(9).replace(".png", ""));
+//      return ResourceLocation.fromNamespaceAndPath(location.getNamespace(), path.substring(9).replace(".png", ""));
 //    }
 //    return location;
 //  }

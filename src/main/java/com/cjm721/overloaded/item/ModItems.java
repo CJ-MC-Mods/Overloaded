@@ -62,6 +62,6 @@ public class ModItems {
 
   private static <T extends Item> DeferredItem<T> registerItem(String name, Function<Item.Properties, T> item, Supplier<Item.Properties> properties) {
     ResourceKey<Item> itemResourceKey = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(MODID,name));
-    return ITEMS.register(name, () -> item.apply(properties.get().setId(itemResourceKey)));
+    return ITEMS.register(name, () -> item.apply(properties.get()));
   }
 }
