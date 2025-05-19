@@ -18,7 +18,9 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.ArmorMaterial;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.text.NumberFormat;
@@ -26,7 +28,7 @@ import java.util.*;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
 
-abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
+public abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
 
     public static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, MODID);
 
@@ -50,7 +52,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
                     () -> Ingredient.of(),
                     List.of(),
                     100,
-100));
+                    100));
 
     AbstractMultiArmor(ArmorItem.Type equipmentSlot, Properties properties) {
         super(
@@ -68,12 +70,15 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.add(
-                Component.literal(
-                        "Energy Stored: "
-                                + NumberFormat.getInstance().format(stack
-                                .getCapability(Capabilities.EnergyStorage.ITEM).getEnergyStored())));
-        super.appendHoverText(stack, context,tooltipComponents,tooltipFlag);
+        @Nullable IEnergyStorage energy = stack
+                .getCapability(Capabilities.EnergyStorage.ITEM);
+        if (energy != null) {
+            tooltipComponents.add(
+                    Component.literal(
+                            "Energy Stored: "
+                                    + NumberFormat.getInstance().format(energy.getEnergyStored())));
+        }
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.text.NumberFormat;
 import java.util.List;
 
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.Nullable;
 
 abstract class PowerModItem extends ModItem {
 
@@ -23,11 +25,13 @@ abstract class PowerModItem extends ModItem {
   @Override
   public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
 
+    @Nullable IEnergyStorage energy = stack
+            .getCapability(Capabilities.EnergyStorage.ITEM, null);
+    if (energy != null)
                 tooltipComponents.add(
                     Component.literal(
                         "Energy Stored: "
-                            + NumberFormat.getInstance().format(stack
-                                .getCapability(Capabilities.EnergyStorage.ITEM, null).getEnergyStored())));
+                            + NumberFormat.getInstance().format(energy.getEnergyStored())));
 
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }

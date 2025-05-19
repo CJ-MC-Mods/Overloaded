@@ -23,10 +23,7 @@ public class OverloadedItemGroups {
             .icon(() -> new ItemStack(ModBlocks.creativeGenerator.get()))
             //Add your items to the tab.
             .displayItems((params, output) -> {
-
-                output.accept(ModItems.amountSelector.get());
-                // Accepts an ItemLike. This assumes that MY_BLOCK has a corresponding item.
-                output.accept(ModBlocks.creativeGenerator.get());
+                ModItems.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
             })
             .build()
     );

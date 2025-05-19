@@ -58,15 +58,17 @@ public class ItemRailGun extends PowerModItem {
   public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
     @org.jetbrains.annotations.Nullable IGenericDataStorage cap = stack
             .getCapability(GENERIC_DATA_STORAGE_ITEM);
-    cap.suggestUpdate();
-              int energyRequirement =
-                  cap.getIntegerMap()
+    if(cap != null) {
+      cap.suggestUpdate();
+      int energyRequirement =
+              cap.getIntegerMap()
                       .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
-    tooltipComponents.add(
-                  Component.literal(
+      tooltipComponents.add(
+              Component.literal(
                       String.format(
-                          "Power Usage: %s",
-                          NumberFormat.getInstance().format(energyRequirement))));
+                              "Power Usage: %s",
+                              NumberFormat.getInstance().format(energyRequirement))));
+    }
 
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }

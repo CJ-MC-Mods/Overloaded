@@ -14,6 +14,8 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.slf4j.Logger;
 
+import static com.cjm721.overloaded.item.functional.armor.AbstractMultiArmor.ARMOR_MATERIALS;
+
 @Mod(Overloaded.MODID)
 public class Overloaded {
 
@@ -44,6 +46,7 @@ public class Overloaded {
     OverloadedItemGroups.CREATIVE_MODE_TABS.register(modEventBus);
     ModContainers.MENUS.register(modEventBus);
     ModTiles.BLOCK_ENTITY_TYPES.register(modEventBus);
+    ARMOR_MATERIALS.register(modEventBus);
 
 //    proxy.registerEvents();
   }
