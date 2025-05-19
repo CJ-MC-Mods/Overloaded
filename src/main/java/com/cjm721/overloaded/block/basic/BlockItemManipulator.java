@@ -10,8 +10,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockItemManipulator extends AbstractModBlockFacing implements EntityBlock {
-  public BlockItemManipulator() {
-    super(getDefaultProperties());
+  public BlockItemManipulator(Properties properties) {
+    super(properties);
   }
 
   @Override

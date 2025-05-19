@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 
 public class BlockHyperEnergySender extends AbstractBlockHyperSender {
 
-  public BlockHyperEnergySender() {
-    super(getDefaultProperties());
+  public BlockHyperEnergySender(Properties properties) {
+    super(properties);
   }
 
   @Override

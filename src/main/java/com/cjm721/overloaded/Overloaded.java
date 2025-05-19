@@ -1,23 +1,17 @@
 package com.cjm721.overloaded;
 
+import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.OverloadedConfig;
-import com.cjm721.overloaded.proxy.ClientProxy;
+import com.cjm721.overloaded.item.ModItems;
+import com.cjm721.overloaded.network.container.ModContainers;
 import com.cjm721.overloaded.proxy.CommonProxy;
-import com.cjm721.overloaded.proxy.ServerProxy;
+import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.logging.LogUtils;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
 @Mod(Overloaded.MODID)
@@ -27,16 +21,7 @@ public class Overloaded {
 
   public static final String MODID = "overloaded";
 
-  public static CommonProxy proxy;
-
   public static final Logger logger = LogUtils.getLogger();
-
-  public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
-  public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
-  public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
-  public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MODID);
-  public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-          DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
 
 
   public Overloaded(IEventBus modEventBus, ModContainer modContainer) {
@@ -54,10 +39,17 @@ public class Overloaded {
     modContainer.registerConfig(ModConfig.Type.SERVER, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.SERVER));
     modContainer.registerConfig(ModConfig.Type.CLIENT, OverloadedConfig.INSTANCE.getConfig(ModConfig.Type.CLIENT));
 
+    ModBlocks.BLOCKS.register(modEventBus);
+    ModItems.ITEMS.register(modEventBus);
+    OverloadedItemGroups.CREATIVE_MODE_TABS.register(modEventBus);
+    ModContainers.MENUS.register(modEventBus);
+    ModTiles.BLOCK_ENTITY_TYPES.register(modEventBus);
+
 //    proxy.registerEvents();
   }
 
   private void commonSetup(final FMLCommonSetupEvent event) {
+    logger.atInfo().log("AVC Entries: {}}", ModBlocks.BLOCKS.getEntries());
 //    proxy.commonSetup(event);
   }
 }

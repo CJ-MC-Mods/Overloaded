@@ -11,8 +11,8 @@ import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteTank extends AbstractBlockHyperContainer {
 
-  public BlockTrueInfiniteTank() {
-    super(getDefaultProperties());
+  public BlockTrueInfiniteTank(Properties properties) {
+    super(properties);
   }
 
   @Override

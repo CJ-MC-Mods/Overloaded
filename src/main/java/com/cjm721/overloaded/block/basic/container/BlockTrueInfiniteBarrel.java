@@ -11,8 +11,8 @@ import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteBarrel extends AbstractBlockHyperContainer {
 
-  public BlockTrueInfiniteBarrel() {
-    super(getDefaultProperties());
+  public BlockTrueInfiniteBarrel(Properties properties) {
+    super(properties);
   }
 
   @Override

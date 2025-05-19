@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockAlmostInfiniteTank extends AbstractBlockHyperContainer {
 
-  public BlockAlmostInfiniteTank() {
-    super(getDefaultProperties());
+  public BlockAlmostInfiniteTank(Properties properties) {
+    super(properties);
   }
 
   @OnlyIn(Dist.CLIENT)

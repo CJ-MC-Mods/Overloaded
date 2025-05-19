@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 
 public class BlockHyperItemReceiver extends AbstractBlockHyperReceiver {
 
-  public BlockHyperItemReceiver() {
-    super(getDefaultProperties());
+  public BlockHyperItemReceiver(Properties properties) {
+    super(properties);
   }
 
   @Override

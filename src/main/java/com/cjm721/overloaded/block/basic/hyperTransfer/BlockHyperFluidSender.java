@@ -13,8 +13,8 @@ import javax.annotation.Nonnull;
 
 public class BlockHyperFluidSender extends AbstractBlockHyperSender {
 
-  public BlockHyperFluidSender() {
-    super(getDefaultProperties());
+  public BlockHyperFluidSender(Properties properties) {
+    super(properties);
   }
 
   @Nonnull

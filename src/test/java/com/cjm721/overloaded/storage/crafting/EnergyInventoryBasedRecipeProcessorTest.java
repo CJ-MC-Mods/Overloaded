@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.storage.crafting;
 
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.crafting.Recipe;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +20,20 @@ public class EnergyInventoryBasedRecipeProcessorTest {
 
   @Before
   public void setup() {
-    processor = new EnergyInventoryBasedRecipeProcessor(null,null,0,MAX_SLOTS, () -> {}) {
+    processor = new EnergyInventoryBasedRecipeProcessor(null, 0, MAX_SLOTS, () -> {
+    }) {
       @Override
-      int energyCostPerRecipeOperation(IRecipe recipe) {
+      public Tag serializeNBT(HolderLookup.Provider provider) {
+        return null;
+      }
+
+      @Override
+      public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {
+
+      }
+
+      @Override
+      int energyCostPerRecipeOperation(Recipe recipe) {
         return 0;
       }
     };

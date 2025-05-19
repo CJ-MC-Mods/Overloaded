@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 
 public class BlockHyperItemSender extends AbstractBlockHyperSender {
 
-  public BlockHyperItemSender() {
-    super(getDefaultProperties());
+  public BlockHyperItemSender(Properties properties) {
+    super(properties);
   }
 
   @Override

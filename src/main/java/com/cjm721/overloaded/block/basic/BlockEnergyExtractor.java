@@ -10,8 +10,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockEnergyExtractor extends AbstractModBlockFacing implements EntityBlock  {
 
-  public BlockEnergyExtractor() {
-    super(getDefaultProperties());
+  public BlockEnergyExtractor(Properties properties) {
+    super(properties);
   }
 
   @Override

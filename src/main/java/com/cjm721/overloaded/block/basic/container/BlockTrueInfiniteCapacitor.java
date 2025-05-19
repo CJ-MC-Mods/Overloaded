@@ -11,8 +11,8 @@ import net.minecraft.core.BlockPos;
 
 public class BlockTrueInfiniteCapacitor extends AbstractBlockHyperContainer {
 
-  public BlockTrueInfiniteCapacitor() {
-    super(getDefaultProperties());
+  public BlockTrueInfiniteCapacitor(Properties properties) {
+    super(properties);
   }
 
   @Override

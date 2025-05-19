@@ -10,8 +10,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockEnergyInjectorChest extends AbstractModBlockFacing implements EntityBlock {
 
-  public BlockEnergyInjectorChest() {
-    super(getDefaultProperties());
+  public BlockEnergyInjectorChest(Properties properties) {
+    super(properties);
   }
 
   @OnlyIn(Dist.CLIENT)

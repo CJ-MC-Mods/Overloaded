@@ -15,7 +15,6 @@ import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
-import static net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
 
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)

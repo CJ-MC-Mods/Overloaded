@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,8 +20,8 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 public class BlockItemInterface extends ModBlock implements EntityBlock {
 
-  public BlockItemInterface() {
-    super(Properties.ofFullCopy(Blocks.GLASS).strength(3).dynamicShape().noOcclusion());
+  public BlockItemInterface(Properties properties) {
+    super(properties.sound(SoundType.GLASS).strength(3).dynamicShape().noOcclusion());
   }
 
   @OnlyIn(Dist.CLIENT)

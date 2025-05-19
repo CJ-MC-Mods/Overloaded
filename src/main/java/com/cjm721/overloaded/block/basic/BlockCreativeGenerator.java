@@ -3,16 +3,21 @@ package com.cjm721.overloaded.block.basic;
 import com.cjm721.overloaded.block.ModBlockTile;
 import com.cjm721.overloaded.tile.functional.TileCreativeGeneratorFE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
+
 public class BlockCreativeGenerator extends ModBlockTile {
 
-  public BlockCreativeGenerator() {
-    super(getDefaultProperties().noOcclusion());
+  public BlockCreativeGenerator(Properties properties) {
+    super(properties.noOcclusion());
   }
 
   @Override

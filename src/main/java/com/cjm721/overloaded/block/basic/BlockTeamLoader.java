@@ -8,8 +8,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class BlockTeamLoader extends ModBlockTile {
 
-    public BlockTeamLoader() {
-        super(getDefaultProperties());
+    public BlockTeamLoader(Properties properties) {
+        super(properties);
     }
 
     @Override

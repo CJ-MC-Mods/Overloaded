@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,8 +25,8 @@ import java.util.UUID;
 
 public class BlockPlayerInterface extends ModBlockTile {
 
-  public BlockPlayerInterface() {
-    super(Properties.ofFullCopy(Blocks.GLASS).strength(3).dynamicShape().noOcclusion());
+  public BlockPlayerInterface(Properties properties) {
+    super(properties.sound(SoundType.GLASS).strength(3).dynamicShape().noOcclusion());
   }
 
   @Override

@@ -24,8 +24,8 @@ import javax.annotation.Nonnull;
 
 public class BlockInfiniteWaterSource extends ModBlock implements EntityBlock {
 
-  public BlockInfiniteWaterSource() {
-    super(getDefaultProperties().noOcclusion());
+  public BlockInfiniteWaterSource(Properties properties) {
+    super(properties.noOcclusion());
   }
 
   @OnlyIn(Dist.CLIENT)

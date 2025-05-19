@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockAlmostInfiniteCapacitor extends AbstractBlockHyperContainer {
 
-  public BlockAlmostInfiniteCapacitor() {
-    super(ModBlock.getDefaultProperties());
+  public BlockAlmostInfiniteCapacitor(Properties properties) {
+    super(properties);
   }
 
   @Override

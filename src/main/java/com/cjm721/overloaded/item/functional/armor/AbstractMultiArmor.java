@@ -6,6 +6,8 @@ import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.EquipmentDispenseItemBehavior;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -14,11 +16,14 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.neoforged.neoforge.capabilities.Capabilities;
 
 import javax.annotation.Nonnull;
 import java.text.NumberFormat;
 import java.util.*;
+
+import static com.cjm721.overloaded.Overloaded.MODID;
 
 abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, IMultiArmor {
     private static final UUID[] ARMOR_MODIFIERS =
@@ -41,7 +46,7 @@ abstract class AbstractMultiArmor extends ArmorItem implements IModRegistrable, 
                     100,
                     100,
                     null,
-                    null);
+                    ResourceKey.create(EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(MODID, "multi_armor")));
 
     AbstractMultiArmor(ArmorType equipmentSlot, Properties properties) {
         super(

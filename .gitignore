@@ -86,6 +86,7 @@ gradle-app.setting
 
 # Forge / Minecraft
 /run/
+/runs/
 /runServer/
 /classes/
 Overloaded.iml

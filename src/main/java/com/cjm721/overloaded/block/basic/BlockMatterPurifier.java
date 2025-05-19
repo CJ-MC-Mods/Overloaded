@@ -10,8 +10,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockMatterPurifier extends ModBlockTile {
 
-  public BlockMatterPurifier() {
-    super(getDefaultProperties());
+  public BlockMatterPurifier(Properties properties) {
+    super(properties);
   }
 
   @OnlyIn(Dist.CLIENT)

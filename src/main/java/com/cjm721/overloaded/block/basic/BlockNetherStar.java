@@ -1,14 +1,14 @@
 package com.cjm721.overloaded.block.basic;
 
 import com.cjm721.overloaded.block.ModBlock;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockNetherStar extends ModBlock {
 
-  public BlockNetherStar() {
-    super(Properties.ofFullCopy(Blocks.IRON_BLOCK).strength(16384));
+  public BlockNetherStar(Properties properties) {
+    super(properties.sound(SoundType.METAL).strength(16384));
   }
 
   @OnlyIn(Dist.CLIENT)

@@ -14,8 +14,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class BlockAlmostInfiniteBarrel extends AbstractBlockHyperContainer {
 
-  public BlockAlmostInfiniteBarrel() {
-    super(ModBlock.getDefaultProperties());
+  public BlockAlmostInfiniteBarrel(Properties properties) {
+    super(properties);
   }
 
   @OnlyIn(Dist.CLIENT)

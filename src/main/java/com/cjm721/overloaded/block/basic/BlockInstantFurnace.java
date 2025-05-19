@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 public class BlockInstantFurnace extends ModBlockContainer {
   private static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 
-  public BlockInstantFurnace() {
-    super(ModBlock.getDefaultProperties());
+  public BlockInstantFurnace(Properties properties) {
+    super(properties);
     this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
   }
 
