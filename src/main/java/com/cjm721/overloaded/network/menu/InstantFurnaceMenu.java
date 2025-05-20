@@ -1,11 +1,9 @@
 package com.cjm721.overloaded.network.menu;
 
 import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.FurnaceResultSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.SlotItemHandler;
@@ -52,13 +50,7 @@ public class InstantFurnaceMenu extends ModMenu {
 
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
-        this.addSlot(
-            new FurnaceResultSlot(
-                playerInventory.player,
-                new SimpleContainer(18),
-                slotCount++,
-                116 + j * 18,
-                20 + i * 18));
+        this.addSlot(new SlotItemHandler(processor, slotCount++, 116 + j * 18, 20 + i * 18));
       }
     }
 
@@ -75,12 +67,6 @@ public class InstantFurnaceMenu extends ModMenu {
     this.addDataSlot(power).set(getPowerFromTE());
     this.addDataSlot(maxPower).set(getMaxPowerFromTE());
   }
-
-  //  @Override
-  //  @Nonnull
-  //  public ItemStack quickMoveStack(Player playerIn, int index) {
-  //    return ContainerUtil.transferStackInSlot(playerIn, index, this);
-  //  }
 
   @Override
   public ItemStack quickMoveStack(Player player, int index) {

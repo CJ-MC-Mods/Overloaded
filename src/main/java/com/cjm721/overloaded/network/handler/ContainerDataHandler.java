@@ -17,7 +17,7 @@ public class ContainerDataHandler {
       return;
     }
 
-    ((ModMenu) Minecraft.getInstance().player.containerMenu).accept(message);
+    //    ((ModMenu) Minecraft.getInstance().player.containerMenu).accept(message);
   }
 
   //  public static void accept(final ContainerDataMessage message, final IPayloadContext ctx) {

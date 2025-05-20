@@ -3,6 +3,7 @@ package com.cjm721.overloaded.storage.crafting;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -236,8 +237,8 @@ public abstract class EnergyInventoryBasedRecipeProcessor
   @Override
   public ItemStack extractItem(int slot, int amount, boolean simulate) {
     if (!simulate) {
-      //      return ContainerHelper.removeItem(
-      //          slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
+      return ContainerHelper.removeItem(
+          slot < slots ? input : output, slot < slots ? slot : slot - slots, amount);
     }
     ItemStack toReturn;
     if (slot < slots) {
