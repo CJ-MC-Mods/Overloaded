@@ -3,9 +3,8 @@ package com.cjm721.overloaded.storage.crafting;
 import com.cjm721.overloaded.util.IDataUpdate;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.energy.IEnergyStorage;
@@ -16,21 +15,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
-    implements IItemHandlerModifiable, IEnergyStorage, INBTSerializable<CompoundTag> {
+// TODO Re-Generic this again
+public abstract class EnergyInventoryBasedRecipeProcessor
+    implements IItemHandlerModifiable, IEnergyStorage {
 
   //  private final T recipeType;
   private final Supplier<Level> worldSupplier;
   private final int maxEnergy;
   private final int slots;
   @Nonnull private final IDataUpdate dataUpdate;
+  //  private final T recipeType;
 
   @Nonnull private List<ItemStack> input;
   @Nonnull private List<ItemStack> output;
   private int currentEnergy;
 
   EnergyInventoryBasedRecipeProcessor(
+      //      T recipeType,
       Supplier<Level> worldSupplier, int maxEnergy, int slots, @Nonnull IDataUpdate dataUpdate) {
+    //    this.recipeType = recipeType;
     this.worldSupplier = worldSupplier;
     this.maxEnergy = maxEnergy;
     this.slots = slots;
@@ -46,7 +49,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
     int energyReceived = Math.min(maxEnergy - currentEnergy, maxReceive);
     if (!simulate) {
       currentEnergy += energyReceived;
-      //      tryProcessRecipes(!isOnServer());
+      tryProcessRecipes(!isOnServer());
     }
     return energyReceived;
   }
@@ -144,7 +147,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
       }
     }
 
-    //    tryProcessRecipes(!isOnServer());
+    tryProcessRecipes(!isOnServer());
     return toReturn;
   }
 
@@ -158,7 +161,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
     ItemStack returnStack = insertItem(input, slot, stack, simulate);
 
     if (!simulate && slot < slots && stack.getCount() != returnStack.getCount()) {
-      //      tryProcessRecipes(!isOnServer());
+      tryProcessRecipes(!isOnServer());
     }
     return returnStack;
   }
@@ -255,7 +258,7 @@ public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
     if (!simulate && toReturn.getCount() != 0) {
       if (slot >= slots) {
         // Output was modified, may be able to process more items now
-        //        tryProcessRecipes(!isOnServer());
+        tryProcessRecipes(!isOnServer());
       }
       dataUpdate.dataUpdated();
     }
@@ -299,85 +302,90 @@ public abstract class EnergyInventoryBasedRecipeProcessor<T extends Recipe<?>>
   //    currentEnergy = nbt.getInt("Energy");
   //  }
   //
-  //  public void setCurrentEnergy(int energy) {
-  //    this.currentEnergy = energy;
-  //  }
-  //
-  //  private boolean isOnServer() {
-  //    return worldSupplier != null && worldSupplier.get() != null &&
-  // !worldSupplier.get().isClientSide;
-  //  }
-  //
-  //  private void tryProcessRecipes(boolean simulate) {
-  //    for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
-  //      ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i), simulate);
-  //
-  //      if (!simulate) {
-  //        if (leftOvers.isEmpty()) {
-  //          input.remove(i);
-  //        } else {
-  //          input.set(i, leftOvers);
-  //        }
-  //      }
-  //    }
-  //
-  //    this.dataUpdate.dataUpdated();
-  //  }
+  public void setCurrentEnergy(int energy) {
+    this.currentEnergy = energy;
+  }
 
-  //  private List<T> getRecipe(Inventory inventory) {
-  //    return this.worldSupplier
-  //        .get()
-  //        .getRecipeManager()
-  //        .getRecipesFor(recipeType, inventory, this.worldSupplier.get());
-  //  }
+  private boolean isOnServer() {
+    return worldSupplier != null
+        && worldSupplier.get() != null
+        && !worldSupplier.get().isClientSide;
+  }
 
-  //  private ItemStack processRecipeAndStoreOutput(ItemStack stack, boolean simulate) {
-  //    Inventory inventory = new Inventory(stack.copy());
-  //
-  //    List<T> recipesForInput = getRecipe(inventory);
-  //
-  //    if (recipesForInput.isEmpty()) {
-  //      return inventory.getItem(0);
-  //    }
-  //
-  //    T recipe = recipesForInput.get(0);
-  //
-  //    ItemStack result;
-  //    while (!inventory.getItem(0).isEmpty()
-  //        && !(result = recipe.assemble(inventory)).isEmpty()) {
-  //      int energyCost = energyCostPerRecipeOperation(recipe);
-  //      if (energyCost != this.extractEnergy(energyCost, true)) {
-  //        break;
-  //      }
-  //
-  //      ItemStack outputLeftOvers = insertItem(output, result, true);
-  //
-  //      // TODO incorporate: recipe.getRemainingItems(inventory)
-  //
-  //      if (!outputLeftOvers.isEmpty()) {
-  //        break;
-  //      }
-  //      insertItem(output, result, simulate);
-  //      this.extractEnergy(energyCost, simulate);
-  //      int deduct = recipe.getIngredients().get(0).getItems()[0].getCount();
-  //      inventory.getItem(0).shrink(deduct);
-  //    }
-  //
-  //    return inventory.getItem(0);
-  //    //    NonNullList<ItemStack> leftOvers = recipe.getRemainingItems(inventory);
-  //    //
-  //    //    if (leftOvers.isEmpty() || leftOvers.stream().allMatch(ItemStack::isEmpty)) {
-  //    //      return ItemStack.EMPTY;
-  //    //    }
-  //    //    if (leftOvers.size() > 1) {
-  //    //      Overloaded.logger.warn(
-  //    //          "Deleting Item due to to many recipe leftovers. Items: "
-  //    //              + leftOvers.subList(1, leftOvers.size() - 1).stream()
-  //    //              .map(ItemStack::toString)
-  //    //              .collect(Collectors.joining(",")));
-  //    //    }
-  //    //    return leftOvers.get(0);
-  //  }
+  private void tryProcessRecipes(boolean simulate) {
+    if (!isOnServer()) {
+      return;
+    }
+    for (int i = Math.min(slots, input.size()) - 1; i >= 0; i--) {
+      ItemStack leftOvers = processRecipeAndStoreOutput(input.get(i), simulate);
 
-  abstract int energyCostPerRecipeOperation(T recipe);
+      if (!simulate) {
+        if (leftOvers.isEmpty()) {
+          input.remove(i);
+        } else {
+          input.set(i, leftOvers);
+        }
+      }
+    }
+
+    this.dataUpdate.dataUpdated();
+  }
+
+  private List<RecipeHolder<SmeltingRecipe>> getRecipe(SingleRecipeInput inventory) {
+    return this.worldSupplier
+        .get()
+        .getRecipeManager()
+        .getRecipesFor(RecipeType.SMELTING, inventory, this.worldSupplier.get());
+  }
+
+  private ItemStack processRecipeAndStoreOutput(ItemStack stack, boolean simulate) {
+    SingleRecipeInput inventory = new SingleRecipeInput(stack.copy());
+
+    List<RecipeHolder<SmeltingRecipe>> recipesForInput = getRecipe(inventory);
+
+    if (recipesForInput.isEmpty()) {
+      return inventory.getItem(0);
+    }
+
+    RecipeHolder<SmeltingRecipe> recipe = recipesForInput.get(0);
+
+    ItemStack result;
+    while (!inventory.getItem(0).isEmpty()
+        && !(result = recipe.value().assemble(inventory, worldSupplier.get().registryAccess()))
+            .isEmpty()) {
+      int energyCost = energyCostPerRecipeOperation(recipe);
+      if (energyCost != this.extractEnergy(energyCost, true)) {
+        break;
+      }
+
+      ItemStack outputLeftOvers = insertItem(output, result, true);
+
+      // TODO incorporate: recipe.getRemainingItems(inventory)
+
+      if (!outputLeftOvers.isEmpty()) {
+        break;
+      }
+      insertItem(output, result, simulate);
+      this.extractEnergy(energyCost, simulate);
+      int deduct = recipe.value().getIngredients().get(0).getItems()[0].getCount();
+      inventory.getItem(0).shrink(deduct);
+    }
+
+    return inventory.getItem(0);
+    //    NonNullList<ItemStack> leftOvers = recipe.getRemainingItems(inventory);
+    //
+    //    if (leftOvers.isEmpty() || leftOvers.stream().allMatch(ItemStack::isEmpty)) {
+    //      return ItemStack.EMPTY;
+    //    }
+    //    if (leftOvers.size() > 1) {
+    //      Overloaded.logger.warn(
+    //          "Deleting Item due to to many recipe leftovers. Items: "
+    //              + leftOvers.subList(1, leftOvers.size() - 1).stream()
+    //              .map(ItemStack::toString)
+    //              .collect(Collectors.joining(",")));
+    //    }
+    //    return leftOvers.get(0);
+  }
+
+  abstract int energyCostPerRecipeOperation(RecipeHolder<SmeltingRecipe> recipe);
 }

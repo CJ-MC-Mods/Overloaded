@@ -15,6 +15,10 @@ public class ModMenus {
     static final String INSTANT_FURNACE = MODID + ":instant_furnace";
   }
 
-  public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MODID);
-  public static final Supplier<MenuType<InstantFurnaceMenu>> INSTANT_FURNACE = MENUS.register("instant_furnace", () -> new MenuType<>(InstantFurnaceMenu::new, FeatureFlags.DEFAULT_FLAGS));
+  public static final DeferredRegister<MenuType<?>> MENUS =
+      DeferredRegister.create(Registries.MENU, MODID);
+  public static final Supplier<MenuType<InstantFurnaceMenu>> INSTANT_FURNACE =
+      MENUS.register(
+          "instant_furnace",
+          () -> new MenuType<>(InstantFurnaceMenu::new, FeatureFlags.DEFAULT_FLAGS));
 }
