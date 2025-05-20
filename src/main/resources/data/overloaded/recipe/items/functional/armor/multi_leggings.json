@@ -1,0 +1,19 @@
+{
+  "result": {
+    "id": "overloaded:multi_leggings"
+  },
+  "pattern": [
+    "NEN",
+    "N N",
+    "N N"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": {
+      "item": "overloaded:nether_star_block"
+    },
+    "E": {
+      "item": "overloaded:energy_core"
+    }
+  }
+}

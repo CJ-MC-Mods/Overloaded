@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "nether_star",
+  "ingredients": [
+    {
+      "item": "overloaded:nether_star_block"
+    }
+  ],
+  "result": {
+    "id": "minecraft:nether_star",
+    "count": 9
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "result": {
+    "id": "overloaded:energy_core"
+  },
+  "pattern": [
+    "NNN",
+    "NRN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "tag": "c:storage_blocks/redstone"
+    },
+    "N": {
+      "item": "overloaded:nether_star_block"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "NNN",
+    "NFN",
+    "NNN"
+  ],
+  "key": {
+    "N": {
+      "item": "overloaded:nether_star_block"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "id": "overloaded:instant_furnace"
+  }
+}

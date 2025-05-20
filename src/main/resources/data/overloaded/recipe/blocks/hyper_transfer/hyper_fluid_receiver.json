@@ -1,0 +1,22 @@
+{
+  "result": {
+    "id": "overloaded:hyper_fluid_receiver"
+  },
+  "pattern": [
+    "IRI",
+    "RNR",
+    "IRI"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "R": {
+      "item": "minecraft:bucket"
+    },
+    "N": {
+      "item": "overloaded:nether_star_block"
+    }
+  }
+}

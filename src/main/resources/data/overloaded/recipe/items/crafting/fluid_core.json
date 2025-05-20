@@ -1,0 +1,19 @@
+{
+  "result": {
+    "id": "overloaded:fluid_core"
+  },
+  "pattern": [
+    "NNN",
+    "NRN",
+    "NNN"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "tag": "c:storage_blocks/iron"
+    },
+    "N": {
+      "item": "overloaded:nether_star_block"
+    }
+  }
+}

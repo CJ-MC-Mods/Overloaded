@@ -1,0 +1,28 @@
+{
+  "result": {
+    "id": "overloaded:multi_tool"
+  },
+  "pattern": [
+    "NI ",
+    "IES",
+    " SB"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "I": {
+      "tag": "c:ingots/iron"
+    },
+    "E": {
+      "item": "overloaded:energy_core"
+    },
+    "S": {
+      "item": "overloaded:nether_star_block"
+    },
+    "B": {
+      "tag": "c:storage_blocks/iron"
+    }
+  }
+}

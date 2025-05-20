@@ -2,7 +2,8 @@ package com.cjm721.overloaded.storage.crafting;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,28 +21,26 @@ public class EnergyInventoryBasedRecipeProcessorTest {
 
   @Before
   public void setup() {
-    processor = new EnergyInventoryBasedRecipeProcessor(null, 0, MAX_SLOTS, () -> {
-    }) {
-      @Override
-      public Tag serializeNBT(HolderLookup.Provider provider) {
-        return null;
-      }
+    processor =
+        new EnergyInventoryBasedRecipeProcessor(null, 0, MAX_SLOTS, () -> {}) {
+          @Override
+          public Tag serializeNBT(HolderLookup.Provider provider) {
+            return null;
+          }
 
-      @Override
-      public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {
+          @Override
+          public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {}
 
-      }
-
-      @Override
-      int energyCostPerRecipeOperation(Recipe recipe) {
-        return 0;
-      }
-    };
+          @Override
+          int energyCostPerRecipeOperation(RecipeHolder<SmeltingRecipe> recipe) {
+            return 0;
+          }
+        };
   }
 
   @Test
   public void getSlotLimit_thoughAllSlots() {
-    for(int i = 0; i < processor.getSlots(); i++) {
+    for (int i = 0; i < processor.getSlots(); i++) {
       assertThat(processor.getSlotLimit(i)).isEqualTo(VANILLA_MAX_SLOT_MAGIC);
     }
   }
