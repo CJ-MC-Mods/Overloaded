@@ -84,18 +84,15 @@ public class InstantFurnaceMenu extends ModMenu {
 
   @Override
   public ItemStack quickMoveStack(Player player, int index) {
-    ItemStack stack = ItemStack.EMPTY;
     Slot slot = this.slots.get(index);
 
-    if (slot != null && slot.hasItem()) {
+    if (slot.hasItem()) {
       ItemStack stackInSlot = slot.getItem();
-      stack = stackInSlot.copy();
 
       int containerSize = this.slots.size() - this.playerInventory.getContainerSize();
 
-      // If the slot is in the container (not the player's inventory)
+      // If the slot is in the container -> Move to player's inventory
       if (index < containerSize) {
-        // Try to move the item into the player's inventory
         if (!this.moveItemStackTo(stackInSlot, containerSize, this.slots.size(), true)) {
           return ItemStack.EMPTY;
         }
@@ -104,21 +101,10 @@ public class InstantFurnaceMenu extends ModMenu {
       else if (!this.moveItemStackTo(stackInSlot, 0, containerSize, false)) {
         return ItemStack.EMPTY;
       }
-
-      if (stackInSlot.isEmpty()) {
-        slot.set(ItemStack.EMPTY);
-      } else {
-        slot.setChanged();
-      }
-
-      if (stackInSlot.getCount() == stack.getCount()) {
-        return ItemStack.EMPTY;
-      }
-
       slot.onTake(player, stackInSlot);
     }
 
-    return stack;
+    return ItemStack.EMPTY;
   }
 
   @Override
