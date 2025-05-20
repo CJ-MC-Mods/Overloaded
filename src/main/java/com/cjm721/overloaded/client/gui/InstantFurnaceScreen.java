@@ -49,7 +49,8 @@ public class InstantFurnaceScreen extends AbstractContainerScreen<InstantFurnace
 
     String text = String.format("%,.2f%%", percent * 100);
 
-    matrixStack.drawString(this.font, text, this.leftPos + 100, this.topPos + 80, 0xFFFFFF);
+    matrixStack.drawString(
+        this.font, text, this.leftPos + 90 - this.font.width(text) / 2, this.topPos + 80, 0xFFFFFF);
     //    this.font.drawInBatch(text,this.leftPos + this.imageWidth / 2.0f - this.font.width(text) /
     // 2.0f,this.topPos + 80,
     //            0);
