@@ -19,13 +19,16 @@ public class ProductionConfig implements ConfigSectionHandler {
     energyPerCookTimeSpec =
         builder
             .comment("Energy per cook time to use to smelt items. [Default: 10]")
-            .defineInRange("energyPerCookTime",10,0,Integer.MAX_VALUE);
+            .defineInRange("energyPerCookTime", 10, 0, Integer.MAX_VALUE);
 
     builder.pop();
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
     energyPerCookTime = energyPerCookTimeSpec.get();
   }
 }

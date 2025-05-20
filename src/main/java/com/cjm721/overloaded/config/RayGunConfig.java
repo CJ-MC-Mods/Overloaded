@@ -32,7 +32,11 @@ public class RayGunConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
+
     energyPerShot = energyPerShotSpec.get();
     maxRange = maxRangeSpec.get();
   }

@@ -64,7 +64,10 @@ public class RailGunConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
     minEnergy = minEngerySpec.get();
     maxEnergy = maxEnergySpec.get();
     stepEnergy = stepEnergySpec.get();

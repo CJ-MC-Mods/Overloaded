@@ -34,7 +34,10 @@ public class SpecialConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.COMMON) {
+      return;
+    }
     noClipRenderFix = noClipRenderFixSpec.get();
     infinityBarrelAdditionalSlot = infinityBarrelAdditionalSlotSpec.get();
   }

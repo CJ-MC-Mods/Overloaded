@@ -40,13 +40,17 @@ public class ResolutionConfig implements ConfigSectionHandler {
             .defineInRange("multiArmorResolution", 256, 1, Integer.MAX_VALUE);
 
     multiArmorFancyModelSpec =
-        builder.comment("To use the fancy armor model or not. [Default: false]")
-        .define("multiArmorFancyModel", false);
+        builder
+            .comment("To use the fancy armor model or not. [Default: false]")
+            .define("multiArmorFancyModel", false);
     builder.pop();
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.CLIENT) {
+      return;
+    }
     blockResolution = blockResolutionSpec.get();
     itemResolution = itemResolutionSpec.get();
     multiArmorResolution = multiArmorResolutionSpec.get();

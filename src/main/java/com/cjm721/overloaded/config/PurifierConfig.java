@@ -33,7 +33,10 @@ public class PurifierConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
     energyPerOperation = energyPerOperationSpec.get();
     energyPerHardness = energyPerHardnessSpec.get();
   }

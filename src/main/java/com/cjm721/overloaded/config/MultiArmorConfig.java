@@ -173,7 +173,10 @@ public class MultiArmorConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
     baseCost = baseCostSpec.get();
     damageMultiplier = damageMultiplierSpec.get();
     absoluteDamageMultiplier = absoluteDamageMultiplierSpec.get();

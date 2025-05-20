@@ -5,5 +5,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 public interface ConfigSectionHandler {
   void appendToBuilder(ModConfig.Type type, ModConfigSpec.Builder builder);
-  void update();
+
+  void update(ModConfig.Type type);
 }

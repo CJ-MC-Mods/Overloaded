@@ -66,7 +66,10 @@ public class MultiToolConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.SERVER) {
+      return;
+    }
     reach = reachSpec.get();
     placeBaseCost = placeBaseCostSpec.get();
     costPerMeterAway = costPerMeterAwaySpec.get();

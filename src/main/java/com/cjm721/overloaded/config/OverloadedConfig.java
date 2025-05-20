@@ -15,8 +15,7 @@ import java.util.Map;
 @EventBusSubscriber(modid = Overloaded.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class OverloadedConfig {
 
-  @Nonnull
-  public static final OverloadedConfig INSTANCE = new OverloadedConfig();
+  @Nonnull public static final OverloadedConfig INSTANCE = new OverloadedConfig();
 
   private final Map<ModConfig.Type, ModConfigSpec> configSpecs = Maps.newConcurrentMap();
 
@@ -56,15 +55,14 @@ public class OverloadedConfig {
             productionConfig);
   }
 
-
   @SubscribeEvent
   public static void onLoading(ModConfigEvent.Loading loading) {
-//    INSTANCE.updateConfigs();
+    INSTANCE.updateConfigs(loading.getConfig().getType());
   }
 
   @SubscribeEvent
   public static void onLoading(ModConfigEvent.Reloading loading) {
-    INSTANCE.updateConfigs();
+    INSTANCE.updateConfigs(loading.getConfig().getType());
   }
 
   public ModConfigSpec getConfig(ModConfig.Type type) {
@@ -77,7 +75,7 @@ public class OverloadedConfig {
     return spec;
   }
 
-  private void updateConfigs() {
-    configsSections.forEach(ConfigSectionHandler::update);
+  private void updateConfigs(ModConfig.Type type) {
+    configsSections.forEach(cs -> cs.update(type));
   }
 }

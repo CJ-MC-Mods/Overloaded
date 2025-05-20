@@ -26,7 +26,10 @@ public class DevelopmentConfig implements ConfigSectionHandler {
   }
 
   @Override
-  public void update() {
+  public void update(ModConfig.Type type) {
+    if (type != ModConfig.Type.COMMON) {
+      return;
+    }
     wipStuff = wipStuffSpec.get();
   }
 }
