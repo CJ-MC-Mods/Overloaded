@@ -1,6 +1,6 @@
 package com.cjm721.overloaded.tile.functional;
 
-import com.cjm721.overloaded.network.container.InstantFurnaceContainer;
+import com.cjm721.overloaded.network.menu.InstantFurnaceMenu;
 import com.cjm721.overloaded.storage.crafting.FurnaceProcessor;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.util.IDataUpdate;
@@ -37,7 +37,7 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
 
   @Override
   protected NonNullList<ItemStack> getItems() {
-    return null;
+    return processingStorage.getItemsForMenu();
   }
 
   @Override
@@ -45,7 +45,7 @@ public class TileInstantFurnace extends BaseContainerBlockEntity implements IDat
 
   @Override
   protected AbstractContainerMenu createMenu(int id, Inventory playerInventory) {
-    return new InstantFurnaceContainer(id, playerInventory);
+    return new InstantFurnaceMenu(id, playerInventory);
   }
 
   public @NotNull FurnaceProcessor getProcessingStorage() {

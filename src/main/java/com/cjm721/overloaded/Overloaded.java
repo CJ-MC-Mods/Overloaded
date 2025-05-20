@@ -3,7 +3,7 @@ package com.cjm721.overloaded;
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.config.OverloadedConfig;
 import com.cjm721.overloaded.item.ModItems;
-import com.cjm721.overloaded.network.container.ModContainers;
+import com.cjm721.overloaded.network.menu.ModMenus;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
@@ -39,7 +39,7 @@ public class Overloaded {
     ModBlocks.BLOCKS.register(modEventBus);
     ModItems.ITEMS.register(modEventBus);
     OverloadedItemGroups.CREATIVE_MODE_TABS.register(modEventBus);
-    ModContainers.MENUS.register(modEventBus);
+    ModMenus.MENUS.register(modEventBus);
     ModTiles.BLOCK_ENTITY_TYPES.register(modEventBus);
     ARMOR_MATERIALS.register(modEventBus);
     DATA_COMPONENTS.register(modEventBus);
