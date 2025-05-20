@@ -38,7 +38,10 @@ public class ItemRayGun extends PowerModItem {
   @OnlyIn(Dist.CLIENT)
   @Override
   public void appendHoverText(
-      ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+      ItemStack stack,
+      TooltipContext context,
+      List<Component> tooltipComponents,
+      TooltipFlag tooltipFlag) {
     tooltipComponents.add(Component.literal("The Little Zapper").withStyle(ChatFormatting.ITALIC));
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }
@@ -46,17 +49,18 @@ public class ItemRayGun extends PowerModItem {
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-//    ModelResourceLocation location =
-//        new ModelResourceLocation(new ResourceLocation(MODID, "ray_gun"), null);
-//    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/item/ray_gun.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+    //    ModelResourceLocation location =
+    //        new ModelResourceLocation(new ResourceLocation(MODID, "ray_gun"), null);
+    //    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/item/ray_gun.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+  public InteractionResultHolder<ItemStack> use(
+      Level worldIn, Player playerIn, InteractionHand handIn) {
     if (!worldIn.isClientSide)
       return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 
@@ -77,19 +81,19 @@ public class ItemRayGun extends PowerModItem {
 
   public static void handleMessage(ServerPlayer player, RayGunMessage message) {
     ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-    if (itemStack.getItem() instanceof ItemRayGun) {
+    if (!(itemStack.getItem() instanceof ItemRayGun)) {
       return;
     }
 
     IEnergyStorage opEnergy = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
 
     if (opEnergy == null) {
-      Overloaded.logger.warn("Railgun has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
+      Overloaded.logger.warn(
+          "Railgun has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-    if (opEnergy.getEnergyStored() < OverloadedConfig
-        .INSTANCE.rayGun.energyPerShot) {
+    if (opEnergy.getEnergyStored() < OverloadedConfig.INSTANCE.rayGun.energyPerShot) {
       player.displayClientMessage(Component.literal("Not enough power to fire."), true);
       return;
     }
@@ -102,21 +106,24 @@ public class ItemRayGun extends PowerModItem {
     }
 
     BlockHitResult sanityCheckVec =
-        player.level().clip(
-            new ClipContext(
-                eyePos,
-                message.vector,
+        player
+            .level()
+            .clip(
+                new ClipContext(
+                    eyePos,
+                    message.vector,
                     ClipContext.Block.COLLIDER,
                     ClipContext.Fluid.NONE,
-                player));
+                    player));
     if (sanityCheckVec.getType() != HitResult.Type.MISS) {
       player.displayClientMessage(Component.literal("Target no longer in sight."), true);
       return;
     }
 
     opEnergy.extractEnergy(OverloadedConfig.INSTANCE.rayGun.energyPerShot, false);
-    LightningBolt entity = new LightningBolt(net.minecraft.world.entity.EntityType.LIGHTNING_BOLT, player.level());
-    entity.moveTo(message.vector.x, message.vector.y, message.vector.z, 0,0);
+    LightningBolt entity =
+        new LightningBolt(net.minecraft.world.entity.EntityType.LIGHTNING_BOLT, player.level());
+    entity.moveTo(message.vector.x, message.vector.y, message.vector.z, 0, 0);
     player.level().addFreshEntity(entity);
   }
 }

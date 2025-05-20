@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -43,9 +44,10 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 
+import static com.cjm721.overloaded.Overloaded.MODID;
 import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
-import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.MOD_ID;
 
+@EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.GAME)
 public class ItemRailGun extends PowerModItem {
 
   @Nonnull private static final String RAILGUN_POWER_KEY = "railgun.power";
@@ -55,19 +57,22 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-    @org.jetbrains.annotations.Nullable IGenericDataStorage cap = stack
-            .getCapability(GENERIC_DATA_STORAGE_ITEM);
-    if(cap != null) {
+  public void appendHoverText(
+      ItemStack stack,
+      TooltipContext context,
+      List<Component> tooltipComponents,
+      TooltipFlag tooltipFlag) {
+    @org.jetbrains.annotations.Nullable
+    IGenericDataStorage cap = stack.getCapability(GENERIC_DATA_STORAGE_ITEM);
+    if (cap != null) {
       cap.suggestUpdate();
       int energyRequirement =
-              cap.getIntegerMap()
-                      .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
+          cap.getIntegerMap()
+              .getOrDefault(RAILGUN_POWER_KEY, OverloadedConfig.INSTANCE.railGun.minEnergy);
       tooltipComponents.add(
-              Component.literal(
-                      String.format(
-                              "Power Usage: %s",
-                              NumberFormat.getInstance().format(energyRequirement))));
+          Component.literal(
+              String.format(
+                  "Power Usage: %s", NumberFormat.getInstance().format(energyRequirement))));
     }
 
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
@@ -76,22 +81,24 @@ public class ItemRailGun extends PowerModItem {
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-//    ModelResourceLocation location =
-//        new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
-//    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/item/railgun.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+    //    ModelResourceLocation location =
+    //        new ModelResourceLocation(new ResourceLocation(MODID, "railgun"), null);
+    //    //    ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/item/railgun.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
-
   @Override
-  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
+  public InteractionResultHolder<ItemStack> use(
+      Level worldIn, Player playerIn, InteractionHand handIn) {
     if (worldIn.isClientSide) {
       int distance = OverloadedConfig.INSTANCE.railGun.maxRange;
-      Vec3 vec3d = playerIn.getEyePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
-      Vec3 vec3d1 = playerIn.getViewVector(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
+      Vec3 vec3d =
+          playerIn.getEyePosition(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
+      Vec3 vec3d1 =
+          playerIn.getViewVector(Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
       Vec3 vec3d2 = vec3d.add(vec3d1.x * distance, vec3d1.y * distance, vec3d1.z * distance);
       float f = 1.0F;
       AABB axisalignedbb =
@@ -118,11 +125,11 @@ public class ItemRailGun extends PowerModItem {
   }
 
   @SubscribeEvent
-  public void onMouseEvent(InputEvent.MouseScrollingEvent event) {
+  public static void onMouseEvent(InputEvent.MouseScrollingEvent event) {
     LocalPlayer player = Minecraft.getInstance().player;
     if (event.getScrollDeltaX() != 0 && player != null && player.isShiftKeyDown()) {
       ItemStack stack = player.getMainHandItem();
-      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() == this) {
+      if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() instanceof ItemRailGun) {
         int powerDelta =
             Long.signum(Math.round(event.getScrollDeltaX()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
@@ -138,27 +145,28 @@ public class ItemRailGun extends PowerModItem {
   }
 
   public static void handleFireMessage(
-          @Nonnull ServerPlayer player, @Nonnull RailGunFireMessage message) {
+      @Nonnull ServerPlayer player, @Nonnull RailGunFireMessage message) {
     ItemStack itemStack = player.getItemInHand(message.hand);
-    if (itemStack.getItem() instanceof ItemRailGun) {
+    if (!(itemStack.getItem() instanceof ItemRailGun)) {
       return;
     }
 
     IEnergyStorage opEnergy = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
 
     if (opEnergy == null) {
-      Overloaded.logger.warn("RailGun has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
+      Overloaded.logger.warn(
+          "RailGun has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-      IGenericDataStorage opSettingCapability =
-        itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
-    if (opSettingCapability ==null) {
-      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
+    IGenericDataStorage opSettingCapability = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
+    if (opSettingCapability == null) {
+      Overloaded.logger.warn(
+          "RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
-      opSettingCapability.suggestUpdate();
+    opSettingCapability.suggestUpdate();
     int energyRequired =
         opSettingCapability
             .getIntegerMap()
@@ -178,7 +186,14 @@ public class ItemRailGun extends PowerModItem {
     } else if (player.distanceTo(entity) > OverloadedConfig.INSTANCE.rayGun.maxRange) {
       player.displayClientMessage(Component.literal("Target out of range."), true);
     } else if (entity.hurt(
-            new DamageSource(player.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(Tags.DamageTypes.IS_PHYSICAL).get(Math.round((float)amount)),entity,player),
+        new DamageSource(
+            player
+                .registryAccess()
+                .lookupOrThrow(Registries.DAMAGE_TYPE)
+                .getOrThrow(Tags.DamageTypes.IS_PHYSICAL)
+                .get(Math.round((float) amount)),
+            entity,
+            player),
         (float) (amount))) {
       Vec3 knockback =
           message.moveVector.scale(
@@ -186,19 +201,20 @@ public class ItemRailGun extends PowerModItem {
       entity.push(knockback.x, knockback.y, knockback.z);
     }
   }
-//
-//  @Override
-//  public Collection<ICapabilityProvider> collectCapabilities(
-//      @Nonnull Collection<ICapabilityProvider> collection,
-//      ItemStack stack,
-//      @Nullable CompoundTag nbt) {
-//    collection.add(new GenericDataCapabilityProviderWrapper(stack));
-//
-//    return super.collectCapabilities(collection, stack, nbt);
-//  }
+
+  //
+  //  @Override
+  //  public Collection<ICapabilityProvider> collectCapabilities(
+  //      @Nonnull Collection<ICapabilityProvider> collection,
+  //      ItemStack stack,
+  //      @Nullable CompoundTag nbt) {
+  //    collection.add(new GenericDataCapabilityProviderWrapper(stack));
+  //
+  //    return super.collectCapabilities(collection, stack, nbt);
+  //  }
 
   public static void handleSettingsMessage(
-          @Nonnull ServerPlayer player, @Nonnull RailGunSettingsMessage message) {
+      @Nonnull ServerPlayer player, @Nonnull RailGunSettingsMessage message) {
     ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
     if (!(itemStack.getItem() instanceof ItemRailGun)) {
       return;
@@ -207,7 +223,8 @@ public class ItemRailGun extends PowerModItem {
     IGenericDataStorage opCap = itemStack.getCapability(GENERIC_DATA_STORAGE_ITEM);
 
     if (opCap == null) {
-      Overloaded.logger.warn("RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
+      Overloaded.logger.warn(
+          "RailGun has no GenericData Capability? NBT: " + itemStack.getAttributeModifiers());
       return;
     }
 
@@ -224,13 +241,9 @@ public class ItemRailGun extends PowerModItem {
     opCap.suggestSave();
 
     player.displayClientMessage(
-        Component.literal("Power usage set to: " + NumberFormat.getInstance().format(power)),
-        true);
+        Component.literal("Power usage set to: " + NumberFormat.getInstance().format(power)), true);
   }
 
-  @EventBusSubscriber(
-      value = Dist.CLIENT,
-      modid = MOD_ID,
-      bus = EventBusSubscriber.Bus.GAME)
-  private static class ClientSideEvents {}
+  //  @EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = EventBusSubscriber.Bus.GAME)
+  //  private static class ClientSideEvents {}
 }
