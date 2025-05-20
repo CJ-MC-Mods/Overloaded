@@ -1,6 +1,8 @@
 package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.item.ModItem;
+import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.item.functional.ItemMultiTool;
 import com.cjm721.overloaded.item.functional.ItemRailGun;
 import com.cjm721.overloaded.item.functional.ItemRayGun;
@@ -10,10 +12,10 @@ import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
+import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
 import com.cjm721.overloaded.tile.functional.TileItemInterface;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -132,10 +134,20 @@ public class CommonProxy {
         Capabilities.ItemHandler.BLOCK,
         ModTiles.itemInterface.get(),
         TileItemInterface::getItemCapability);
+
+    event.registerItem(
+        Capabilities.EnergyStorage.ITEM,
+        (item, voidContext) -> new IntEnergyWrapper(item),
+        ModItems.customHelmet.get(),
+        ModItems.customChestplate.get(),
+        ModItems.customLeggins.get(),
+        ModItems.customBoots.get(),
+        ModItems.railgun.get(),
+        ModItems.rayGun.get());
   }
 
   @SubscribeEvent(priority = EventPriority.LOWEST)
-  public static void registerProxyCapabilties(RegisterCapabilitiesEvent event) {
+  public static void registerProxyCapabilities(RegisterCapabilitiesEvent event) {
     List<ItemCapability<?, ?>> itemCaps = ItemCapability.getAll();
     for (BlockCapability<?, ?> cap : BlockCapability.getAllProxyable()) {
       Optional<ItemCapability<?, ?>> itemCap =
