@@ -10,8 +10,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 
@@ -22,25 +24,49 @@ public class ItemInterfaceRenderer implements BlockEntityRenderer<TileItemInterf
 
   public ItemInterfaceRenderer(BlockEntityRenderDispatcher p_i226006_1_) {}
 
-
   @Override
-  public void render(@Nonnull TileItemInterface te, float partialTick,PoseStack matrixStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
-    ItemStack stack = te.getStoredItem();
+  public void render(
+      @Nonnull TileItemInterface te,
+      float partialTick,
+      PoseStack matrixStack,
+      MultiBufferSource bufferSource,
+      int packedLight,
+      int packedOverlay) {
+    renderItem(te.getStoredItem(), te, matrixStack, bufferSource, packedLight, packedOverlay);
+  }
 
+  public static void renderItem(
+      @NotNull ItemStack stack,
+      BlockEntity te,
+      PoseStack matrixStack,
+      MultiBufferSource bufferSource,
+      int packedLight,
+      int packedOverlay) {
     if (stack.isEmpty()) return;
 
     matrixStack.pushPose();
-    matrixStack.translate(0.5,0.32,0.5);
+    matrixStack.translate(0.5, 0.32, 0.5);
 
     matrixStack.pushPose();
     long angle = (System.currentTimeMillis() / 10) % 360;
     // TODO add back spinning
-//    matrixStack.rotateAround(new Quaternionf(new AxisAngle4f((float)angle,0.0f,0.0f,0.0f)),0.0f,0.5f,1.0f);
-//    matrixStack.mulPose();
+    //    matrixStack.rotateAround(new Quaternionf(new
+    // AxisAngle4f((float)angle,0.0f,0.0f,0.0f)),0.0f,0.5f,1.0f);
+    //    matrixStack.mulPose();
 
-//    RenderSystem.enableLighting();
-    Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemDisplayContext.GROUND, packedLight,packedOverlay, matrixStack, bufferSource, te.getLevel(), 0);
-  //  RenderSystem.disableLighting();
+    //    RenderSystem.enableLighting();
+    Minecraft.getInstance()
+        .getItemRenderer()
+        .renderStatic(
+            stack,
+            ItemDisplayContext.GROUND,
+            packedLight,
+            packedOverlay,
+            matrixStack,
+            bufferSource,
+            te.getLevel(),
+            0);
+    //  RenderSystem.disableLighting();
     matrixStack.popPose();
     matrixStack.popPose();
   }

@@ -2,6 +2,7 @@ package com.cjm721.overloaded.proxy;
 
 import com.cjm721.overloaded.block.ModBlocks;
 import com.cjm721.overloaded.client.render.tile.ItemInterfaceRenderer;
+import com.cjm721.overloaded.client.render.tile.PlayerInterfaceRenderer;
 import com.cjm721.overloaded.item.ModItems;
 import com.cjm721.overloaded.network.menu.ModMenus;
 import com.cjm721.overloaded.client.gui.InstantFurnaceScreen;
@@ -62,6 +63,8 @@ public class ClientProxy {
     //    ClientRegistry.bindTileEntityRenderer(ModTiles.itemInterface, ItemInterfaceRenderer::new);
     BlockEntityRenderers.register(
         ModTiles.itemInterface.get(), new ItemInterfaceRenderer.Provider());
+    BlockEntityRenderers.register(
+        ModTiles.playerInterface.get(), new PlayerInterfaceRenderer.Provider());
     //    ClientRegistry.bindTileEntityRenderer(ModTiles.playerInterface,
     // PlayerInterfaceRenderer::new);
     //
