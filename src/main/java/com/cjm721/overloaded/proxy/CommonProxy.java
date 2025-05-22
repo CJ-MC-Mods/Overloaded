@@ -12,6 +12,8 @@ import com.cjm721.overloaded.network.handler.KeyBindPressedHandler;
 import com.cjm721.overloaded.network.handler.NoClipUpdateHandler;
 import com.cjm721.overloaded.network.handler.PlayerMessageHandler;
 import com.cjm721.overloaded.network.packets.*;
+import com.cjm721.overloaded.storage.GenericDataStorage;
+import com.cjm721.overloaded.storage.itemwrapper.GenericDataCapabilityProviderWrapper;
 import com.cjm721.overloaded.storage.itemwrapper.IntEnergyWrapper;
 import com.cjm721.overloaded.tile.ModTiles;
 import com.cjm721.overloaded.tile.functional.TileInstantFurnace;
@@ -27,6 +29,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import java.util.List;
 import java.util.Optional;
 
+import static com.cjm721.overloaded.capabilities.CapabilityGenericDataStorage.GENERIC_DATA_STORAGE_ITEM;
 import static com.cjm721.overloaded.capabilities.CapabilityHyperEnergy.BLOCK_HYPER_ENERGY_HANDLER;
 import static com.cjm721.overloaded.capabilities.CapabilityHyperFluid.BLOCK_HYPER_FLUID_HANDLER;
 import static com.cjm721.overloaded.capabilities.CapabilityHyperItem.BLOCK_HYPER_ITEM_HANDLER;
@@ -144,6 +147,12 @@ public class CommonProxy {
         ModItems.customBoots.get(),
         ModItems.railgun.get(),
         ModItems.rayGun.get());
+
+    event.registerItem(
+        GENERIC_DATA_STORAGE_ITEM,
+        (item, voidContext) -> new GenericDataCapabilityProviderWrapper(item),
+        ModItems.customHelmet.get(),
+        ModItems.railgun.get());
   }
 
   @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -208,9 +217,6 @@ public class CommonProxy {
   }
 
   //  public void commonSetup(FMLCommonSetupEvent event) {
-  //    CapabilityHyperItem.register();
-  //    CapabilityHyperEnergy.register();
-  //    CapabilityHyperFluid.register();
   //    CapabilityGenericDataStorage.register();
   //
   //    neoforged.EVENT_BUS.register(new ArmorEventHandler());

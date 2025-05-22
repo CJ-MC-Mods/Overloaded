@@ -18,6 +18,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -127,11 +129,11 @@ public class ItemRailGun extends PowerModItem {
   @SubscribeEvent
   public static void onMouseEvent(InputEvent.MouseScrollingEvent event) {
     LocalPlayer player = Minecraft.getInstance().player;
-    if (event.getScrollDeltaX() != 0 && player != null && player.isShiftKeyDown()) {
+    if (event.getScrollDeltaY() != 0 && player != null && player.isCrouching()) {
       ItemStack stack = player.getMainHandItem();
       if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() instanceof ItemRailGun) {
         int powerDelta =
-            Long.signum(Math.round(event.getScrollDeltaX()))
+            Long.signum(Math.round(event.getScrollDeltaY()))
                 * OverloadedConfig.INSTANCE.railGun.stepEnergy;
         if (InputConstants.isKeyDown(
             Minecraft.getInstance().getWindow().getWindow(),
@@ -190,28 +192,16 @@ public class ItemRailGun extends PowerModItem {
             player
                 .registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE)
-                .getOrThrow(Tags.DamageTypes.IS_PHYSICAL)
-                .get(Math.round((float) amount)),
+                .getOrThrow(DamageTypes.GENERIC),
             entity,
             player),
         (float) (amount))) {
       Vec3 knockback =
           message.moveVector.scale(
               energyExtracted * OverloadedConfig.INSTANCE.railGun.knockbackPerRF);
-      entity.push(knockback.x, knockback.y, knockback.z);
+      entity.push(Math.min(knockback.x, 25), Math.min(knockback.y, 25), Math.min(knockback.z, 25));
     }
   }
-
-  //
-  //  @Override
-  //  public Collection<ICapabilityProvider> collectCapabilities(
-  //      @Nonnull Collection<ICapabilityProvider> collection,
-  //      ItemStack stack,
-  //      @Nullable CompoundTag nbt) {
-  //    collection.add(new GenericDataCapabilityProviderWrapper(stack));
-  //
-  //    return super.collectCapabilities(collection, stack, nbt);
-  //  }
 
   public static void handleSettingsMessage(
       @Nonnull ServerPlayer player, @Nonnull RailGunSettingsMessage message) {

@@ -12,89 +12,18 @@ import static com.cjm721.overloaded.Overloaded.MODID;
 
 public class CapabilityGenericDataStorage {
 
-  private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
-//  private static final Supplier<AttachmentType<IGenericDataStorage>> GENERIC_DATA = ATTACHMENT_TYPES.register(
-//          "handler", () -> AttachmentType.serializable(() -> new GenericDataStorage()).build()
-//  );
+  private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
+      DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, MODID);
+  //  private static final Supplier<AttachmentType<IGenericDataStorage>> GENERIC_DATA =
+  // ATTACHMENT_TYPES.register(
+  //          "handler", () -> AttachmentType.serializable(() -> new GenericDataStorage()).build()
+  //  );
 
-  public static ItemCapability<IGenericDataStorage, Void> GENERIC_DATA_STORAGE_ITEM = ItemCapability.createVoid(
-          ResourceLocation.fromNamespaceAndPath(MODID,"generic_data"),
-          IGenericDataStorage.class
-  );
+  public static ItemCapability<IGenericDataStorage, Void> GENERIC_DATA_STORAGE_ITEM =
+      ItemCapability.createVoid(
+          ResourceLocation.fromNamespaceAndPath(MODID, "generic_data"), IGenericDataStorage.class);
 
-  public static EntityCapability<IGenericDataStorage, Void> GENERIC_DATA_STORAGE_ENTITY = EntityCapability.createVoid(
-          ResourceLocation.fromNamespaceAndPath(MODID,"generic_data"),
-          IGenericDataStorage.class
-  );
-
-
-//  public static void register() {
-//    CapabilityManager.INSTANCE.register(
-//        IGenericDataStorage.class,
-//        new Capability.IStorage<IGenericDataStorage>() {
-//          @Nullable
-//          @Override
-//          public INBT writeNBT(
-//              Capability<IGenericDataStorage> capability,
-//              IGenericDataStorage instance,
-//              Direction side) {
-//            CompoundTag tagCompound = new CompoundTag();
-//            Map<String, Integer> integers = instance.getIntegerMap();
-//            Map<String, Boolean> booleans = instance.getBooleanMap();
-//            Map<String, Float> floats = instance.getFloatMap();
-//            Map<String, Double> doubles = instance.getDoubleMap();
-//
-//            for (String key : integers.keySet()) {
-//              tagCompound.putInt(key, integers.get(key));
-//            }
-//
-//            for (String key : booleans.keySet()) {
-//              tagCompound.putBoolean(key, booleans.get(key));
-//            }
-//
-//            for (String key : floats.keySet()) {
-//              tagCompound.putFloat(key, floats.get(key));
-//            }
-//
-//            for (String key : doubles.keySet()) {
-//              tagCompound.putDouble(key, doubles.get(key));
-//            }
-//
-//            return tagCompound;
-//          }
-//
-//          @Override
-//          public void readNBT(
-//              Capability<IGenericDataStorage> capability,
-//              IGenericDataStorage instance,
-//              Direction side,
-//              INBT nbt) {
-//            if (!(nbt instanceof CompoundTag)) return;
-//
-//            CompoundTag tagCompound = ((CompoundTag) nbt);
-//            Map<String, Integer> integers = instance.getIntegerMap();
-//            Map<String, Boolean> booleans = instance.getBooleanMap();
-//            Map<String, Float> floats = instance.getFloatMap();
-//            Map<String, Double> doubles = instance.getDoubleMap();
-//
-//            for (String key : tagCompound.getAllKeys()) {
-//              switch (tagCompound.getTagType(key)) {
-//                case Constants.NBT.TAG_INT:
-//                  integers.put(key, tagCompound.getInt(key));
-//                  break;
-//                case Constants.NBT.TAG_BYTE:
-//                  booleans.put(key, tagCompound.getBoolean(key));
-//                  break;
-//                case Constants.NBT.TAG_FLOAT:
-//                  floats.put(key, tagCompound.getFloat(key));
-//                  break;
-//                case Constants.NBT.TAG_DOUBLE:
-//                  doubles.put(key, tagCompound.getDouble(key));
-//                  break;
-//              }
-//            }
-//          }
-//        },
-//        GenericDataStorage::new);
-//  }
+  public static EntityCapability<IGenericDataStorage, Void> GENERIC_DATA_STORAGE_ENTITY =
+      EntityCapability.createVoid(
+          ResourceLocation.fromNamespaceAndPath(MODID, "generic_data"), IGenericDataStorage.class);
 }

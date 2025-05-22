@@ -9,6 +9,7 @@ import com.cjm721.overloaded.item.functional.armor.ItemMultiBoots;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiChestplate;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiHelmet;
 import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
+import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.EnergyStored;
 import com.cjm721.overloaded.util.IModRegistrable;
 import net.minecraft.core.component.DataComponentType;
@@ -76,6 +77,16 @@ public class ModItems {
                       .persistent(EnergyStored.CODEC)
                       // The codec to read/write the data across the network
                       .networkSynchronized(EnergyStored.STREAM_CODEC));
+
+  public static final DeferredHolder<
+          DataComponentType<?>, DataComponentType<GenericDataStorage.GenericData>>
+      GENERIC_DATA =
+          DATA_COMPONENTS.registerComponentType(
+              "generic_data",
+              genericDataBuilder ->
+                  genericDataBuilder
+                      .persistent(GenericDataStorage.CODEC)
+                      .networkSynchronized(GenericDataStorage.STREAM_CODEC));
 
   public static void addToSecondaryInit(IModRegistrable item) {
     registerList.add(item);
