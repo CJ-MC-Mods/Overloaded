@@ -9,7 +9,6 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ContainerDataHandler {
 
-  @OnlyIn(Dist.CLIENT)
   public static void clientSide(final ContainerDataMessage message, final IPayloadContext ctx) {
     if (Minecraft.getInstance().player.containerMenu == null
         || Minecraft.getInstance().player.containerMenu.containerId != message.container

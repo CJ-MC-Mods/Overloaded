@@ -42,6 +42,7 @@ import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.LogicalSide;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -477,6 +478,27 @@ public class ItemMultiTool extends PowerModItem {
     static ResourceKey<Level> world;
     static BlockPos pos;
     static UUID uuid;
+
+    //    @SubscribeEvent(priority = EventPriority.LOW)
+    //    public static void blocksDropped(@Nonnull BlockDropsEvent event) {
+    //      if (!enabled
+    //          || event.getLevel().isClientSide()
+    //          || !event.getPos().equals(pos)
+    //          || uuid == null) {
+    //        return;
+    //      }
+    //
+    //      Player player = event.getLevel().getPlayerByUUID(uuid);
+    //      if (player == null) {
+    //        return;
+    //      }
+    //
+    //      event.getDrops().forEach(itemEntity -> itemEntity.playerTouch(player));
+    //      event.getDrops().get(0).getItem().
+    //      //      if (!itemEntity.isAlive()) {
+    //      //        event.setCanceled(true);
+    //      //      }
+    //    }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void teleportDrops(@Nonnull EntityJoinLevelEvent event) {
