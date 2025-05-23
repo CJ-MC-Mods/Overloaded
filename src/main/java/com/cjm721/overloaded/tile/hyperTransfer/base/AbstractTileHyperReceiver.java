@@ -11,40 +11,39 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractTileHyperReceiver<Type extends IHyperType, H extends IHyperHandler<Type>> extends BlockEntity {
+public abstract class AbstractTileHyperReceiver<
+        Type extends IHyperType, H extends IHyperHandler<Type>>
+    extends BlockEntity {
 
-    private final BlockCapability<H, Direction> capability;
+  private final BlockCapability<H, Direction> capability;
 
-    protected AbstractTileHyperReceiver(BlockEntityType<?> type, BlockCapability<H, Direction> capability, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-        this.capability = capability;
+  protected AbstractTileHyperReceiver(
+      BlockEntityType<?> type,
+      BlockCapability<H, Direction> capability,
+      BlockPos pos,
+      BlockState state) {
+    super(type, pos, state);
+    this.capability = capability;
+  }
+
+  @Nonnull
+  public Type receive(@Nonnull Type stack) {
+    for (Direction side : Direction.values()) {
+      BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getNormal()));
+
+      if (te == null) {
+        continue;
+      }
+
+      H cap = level.getCapability(capability, te.getBlockPos(), side.getOpposite());
+
+      if (cap == null) {
+        continue;
+      }
+      stack = cap.give(stack, true);
+
+      if (stack.getAmount().longValue() == 0L) return stack;
     }
-
-    @Nonnull
-    public Type receive(@Nonnull Type stack) {
-        for (Direction side : Direction.values()) {
-            BlockEntity te = this.getLevel().getBlockEntity(this.getBlockPos().offset(side.getNormal()));
-
-            if (te == null) {
-                continue;
-            }
-
-            H cap = level.getCapability(capability, te.getBlockPos(), side.getOpposite());
-
-            if (cap == null) {
-                continue;
-            }
-            stack = cap.give(stack, true);
-
-            if (stack.getAmount().longValue() == 0L)
-                return stack;
-        }
-        return stack;
-    }
-
-    @Override
-    public boolean isValidBlockState(BlockState p_353131_) {
-        // TODO What is this supose to check
-        return true;
-    }
+    return stack;
+  }
 }

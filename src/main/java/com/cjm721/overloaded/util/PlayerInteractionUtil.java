@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -40,11 +41,13 @@ import static net.neoforged.neoforge.common.NeoForge.EVENT_BUS;
 public class PlayerInteractionUtil {
 
   public static boolean tryHarvestBlock(ServerPlayer player, ServerLevel world, BlockPos pos) {
-    net.neoforged.neoforge.event.level.BlockEvent.BreakEvent exp = CommonHooks.fireBlockBreak(
+    net.neoforged.neoforge.event.level.BlockEvent.BreakEvent exp =
+        CommonHooks.fireBlockBreak(
             world, player.gameMode.getGameModeForPlayer(), player, pos, world.getBlockState(pos));
     if (exp.isCanceled()) {
       return false;
     } else {
+      ItemStack itemstack1 = player.getMainHandItem();
       BlockState iblockstate = world.getBlockState(pos);
       BlockEntity tileentity = world.getBlockEntity(pos);
       Block block = iblockstate.getBlock();
@@ -58,16 +61,16 @@ public class PlayerInteractionUtil {
         boolean flag1;
 
         if (player.getAbilities().instabuild) {
-          flag1 = removeBlock(world, pos, player, false);
+          flag1 = removeBlock(world, pos, player, itemstack1);
           player.connection.send(new ClientboundBlockUpdatePacket(world, pos));
         } else {
-          ItemStack itemstack1 = player.getMainHandItem();
+
           ItemStack itemstack2 = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
           boolean flag = iblockstate.canHarvestBlock(world, pos, player);
 
           itemstack1.mineBlock(world, iblockstate, pos, player);
 
-          flag1 = removeBlock(world, pos, player, flag);
+          flag1 = removeBlock(world, pos, player, itemstack1);
           if (flag1 && flag) {
             iblockstate
                 .getBlock()
@@ -76,32 +79,29 @@ public class PlayerInteractionUtil {
         }
 
         // Drop experience
-//        if (!player.isCreative() && flag1 && exp > 0) {
-//          iblockstate.getBlock().popExperience(world, player.blockPosition(), exp);
-//        }
+        //        if (!player.isCreative() && flag1 && exp > 0) {
+        //          iblockstate.getBlock().popExperience(world, player.blockPosition(), exp);
+        //        }
         return flag1;
       }
     }
   }
 
   private static boolean removeBlock(
-          Level world, BlockPos pos, Player player, boolean canHarvest) {
-//    BlockState iblockstate = world.getBlockState(pos);
-//    BlockState flag =
-//        iblockstate.getBlock().playerWillDestroy(world, pos,iblockstate, player);
-//
-//    world.destroyBlock()
-//    if (flag) {
-//      iblockstate.getBlock().destroy(world, pos, iblockstate);
-//    }
-//
-//    return flag;
-    return false;
+      Level world, BlockPos pos, Player player, ItemStack itemstack) {
+    BlockState iblockstate = world.getBlockState(pos);
+    boolean flag = iblockstate.getBlock().canEntityDestroy(iblockstate, world, pos, player);
+
+    if (flag) {
+      iblockstate.getBlock().playerDestroy(world, player, pos, iblockstate, null, itemstack);
+    }
+
+    return flag;
   }
-//
+
   @Nonnull
   public static BlockPlaceResult placeBlock(
-      @Nonnull ItemStack searchStack,
+      @Nonnull Item searchStack,
       @Nonnull ServerPlayer player,
       @Nonnull Level worldIn,
       @Nonnull BlockPos newPosition,
@@ -112,15 +112,16 @@ public class PlayerInteractionUtil {
       float hitZ) {
 
     // Can we place a block at this Pos
-    BlockItem itemBlock = ((BlockItem) searchStack.getItem());
-//    if (worldIn.loadedAndEntityCanStandOn(newPosition, player)) {
-//      return BlockPlaceResult.FAIL_DENY;
-//    }
+    BlockItem itemBlock = ((BlockItem) searchStack);
+    if (worldIn.loadedAndEntityCanStandOn(newPosition, player)) {
+      return BlockPlaceResult.FAIL_DENY;
+    }
 
-    BlockSnapshot blockSnapshot =
-        BlockSnapshot.create(worldIn.dimension(), worldIn, newPosition);
+    BlockSnapshot blockSnapshot = BlockSnapshot.create(worldIn.dimension(), worldIn, newPosition);
     BlockState placedAgainst =
-        blockSnapshot.getLevel().getBlockState(blockSnapshot.getPos().relative(facing.getOpposite()));
+        blockSnapshot
+            .getLevel()
+            .getBlockState(blockSnapshot.getPos().relative(facing.getOpposite()));
     BlockEvent.EntityPlaceEvent event =
         new BlockEvent.EntityPlaceEvent(blockSnapshot, placedAgainst, player);
     EVENT_BUS.post(event);
@@ -138,14 +139,9 @@ public class PlayerInteractionUtil {
         && (cost > Integer.MAX_VALUE || cost < 0 || energy.getEnergyStored() < cost))
       return BlockPlaceResult.FAIL_ENERGY;
 
-    IItemHandler opInventory =
-        player.getCapability(Capabilities.ItemHandler.ENTITY);
-    if (opInventory == null) {
-        Overloaded.logger.warn("Player has no ItemHandler Capability? NBT: {}", player.serializeNBT(player.registryAccess()));
-      return BlockPlaceResult.FAIL_PREREQUISITE;
-    }
+    IItemHandler opInventory = player.getCapability(Capabilities.ItemHandler.ENTITY);
 
-      int foundStackSlot = findItemStackSlot(searchStack, opInventory);
+    int foundStackSlot = findItemStackSlot(searchStack, opInventory);
     if (foundStackSlot == -1) {
       return BlockPlaceResult.FAIL_PREREQUISITE;
     }
@@ -171,32 +167,32 @@ public class PlayerInteractionUtil {
 
     if (result.consumesAction()) {
       SoundType soundtype =
-              worldIn
-                      .getBlockState(newPosition)
-                      .getBlock()
-                      .getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
+          worldIn
+              .getBlockState(newPosition)
+              .getBlock()
+              .getSoundType(worldIn.getBlockState(newPosition), worldIn, newPosition, player);
       worldIn.playSound(
-              null,
-              newPosition,
-              soundtype.getPlaceSound(),
-              SoundSource.BLOCKS,
-              (soundtype.getVolume() + 1.0F) / 2.0F,
-              soundtype.getPitch() * 0.8F);
+          null,
+          newPosition,
+          soundtype.getPlaceSound(),
+          SoundSource.BLOCKS,
+          (soundtype.getVolume() + 1.0F) / 2.0F,
+          soundtype.getPitch() * 0.8F);
       if (!player.getAbilities().instabuild) {
         energy.extractEnergy((int) cost, false);
       }
       return BlockPlaceResult.SUCCESS;
-    }else{
-        opInventory.insertItem(foundStackSlot, foundStack, player.getAbilities().instabuild);
-        return BlockPlaceResult.FAIL_DENY;
+    } else {
+      opInventory.insertItem(foundStackSlot, foundStack, player.getAbilities().instabuild);
+      return BlockPlaceResult.FAIL_DENY;
     }
   }
 
-  private static int findItemStackSlot(@Nonnull ItemStack item, @Nonnull IItemHandler inventory) {
+  private static int findItemStackSlot(@Nonnull Item item, @Nonnull IItemHandler inventory) {
     int size = inventory.getSlots();
     for (int i = 0; i < size; i++) {
       ItemStack stack = inventory.getStackInSlot(i);
-      if (!stack.isEmpty() && ItemStack.isSameItem(stack, item)) {
+      if (!stack.isEmpty() && stack.is(item)) {
         return i;
       }
     }
@@ -206,8 +202,7 @@ public class PlayerInteractionUtil {
 
   @Nonnull
   @OnlyIn(Dist.CLIENT)
-  public static BlockHitResult getBlockPlayerLookingAtClient(
-      Player player, float partialTicks) {
+  public static BlockHitResult getBlockPlayerLookingAtClient(Player player, float partialTicks) {
     return player
         .getCommandSenderWorld()
         .clip(
@@ -217,8 +212,8 @@ public class PlayerInteractionUtil {
                     .getViewVector(partialTicks)
                     .scale(OverloadedConfig.INSTANCE.multiToolConfig.reach)
                     .add(player.getEyePosition(partialTicks)),
-                    ClipContext.Block.COLLIDER,
-                    ClipContext.Fluid.NONE,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
                 player));
   }
 }

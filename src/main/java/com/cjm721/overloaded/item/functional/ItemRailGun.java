@@ -129,7 +129,7 @@ public class ItemRailGun extends PowerModItem {
   @SubscribeEvent
   public static void onMouseEvent(InputEvent.MouseScrollingEvent event) {
     LocalPlayer player = Minecraft.getInstance().player;
-    if (event.getScrollDeltaY() != 0 && player != null && player.isCrouching()) {
+    if (event.getScrollDeltaY() != 0 && player != null && player.isShiftKeyDown()) {
       ItemStack stack = player.getMainHandItem();
       if (player.isShiftKeyDown() && !stack.isEmpty() && stack.getItem() instanceof ItemRailGun) {
         int powerDelta =
@@ -193,8 +193,9 @@ public class ItemRailGun extends PowerModItem {
                 .registryAccess()
                 .lookupOrThrow(Registries.DAMAGE_TYPE)
                 .getOrThrow(DamageTypes.GENERIC),
-            entity,
-            player),
+            null,
+            player,
+            player.getEyePosition()),
         (float) (amount))) {
       Vec3 knockback =
           message.moveVector.scale(

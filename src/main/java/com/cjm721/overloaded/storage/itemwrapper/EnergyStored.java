@@ -13,7 +13,6 @@ public record EnergyStored(int energy) {
               instance
                   .group(Codec.INT.fieldOf("energy").forGetter(EnergyStored::energy))
                   .apply(instance, EnergyStored::new));
-
   public static final StreamCodec<ByteBuf, EnergyStored> STREAM_CODEC =
       StreamCodec.composite(ByteBufCodecs.INT, EnergyStored::energy, EnergyStored::new);
 }

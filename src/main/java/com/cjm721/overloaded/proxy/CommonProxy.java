@@ -145,6 +145,7 @@ public class CommonProxy {
         ModItems.customChestplate.get(),
         ModItems.customLeggins.get(),
         ModItems.customBoots.get(),
+        ModItems.multiTool.get(),
         ModItems.railgun.get(),
         ModItems.rayGun.get());
 

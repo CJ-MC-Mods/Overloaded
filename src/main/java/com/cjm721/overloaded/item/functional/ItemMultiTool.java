@@ -9,15 +9,15 @@ import com.cjm721.overloaded.util.BlockBreakResult;
 import com.cjm721.overloaded.util.BlockPlaceResult;
 import com.cjm721.overloaded.util.PlayerInteractionUtil;
 import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
@@ -47,6 +47,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.cjm721.overloaded.Overloaded.MODID;
@@ -58,11 +59,10 @@ import static net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.*;
 public class ItemMultiTool extends PowerModItem {
 
   public ItemMultiTool(Properties properties) {
-    super(
-        properties);
-//            .addToolType(ToolType.AXE, Integer.MAX_VALUE)
-//            .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
-//            .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
+    super(properties);
+    //            .addToolType(ToolType.AXE, Integer.MAX_VALUE)
+    //            .addToolType(ToolType.PICKAXE, Integer.MAX_VALUE)
+    //            .addToolType(ToolType.SHOVEL, Integer.MAX_VALUE));
   }
 
   private static double getDistance(@Nonnull LivingEntity entityLiving, @Nonnull BlockPos pos) {
@@ -79,7 +79,9 @@ public class ItemMultiTool extends PowerModItem {
             + distance);
   }
 
-  /** @return True if the break was successful, false otherwise */
+  /**
+   * @return True if the break was successful, false otherwise
+   */
   @Nonnull
   private static BlockBreakResult breakAndUseEnergy(
       @Nonnull ServerLevel worldIn,
@@ -125,48 +127,38 @@ public class ItemMultiTool extends PowerModItem {
       return BlockBreakResult.FAIL_REMOVE;
     }
 
-    boolean result = PlayerInteractionUtil.tryHarvestBlock(player, worldIn, blockPos);
+    boolean result = worldIn.destroyBlock(blockPos, true, player);
+    //    boolean result = PlayerInteractionUtil.tryHarvestBlock(player, worldIn, blockPos);
     return result ? BlockBreakResult.SUCCESS : BlockBreakResult.FAIL_REMOVE;
   }
 
   @OnlyIn(Dist.CLIENT)
   private static void leftClickOnBlockClient(BlockPos pos) {
     PacketDistributor.sendToServer(new LeftClickBlockMessage(pos));
-    //            PlayerEntitySP player = Minecraft.getMinecraft().player;
-    //            drawParticleStreamTo(player, hitVec,
-    //     EnumParticleTypes.SMOKE_NORMAL);//EnumParticleTypes.TOWN_AURA
   }
 
   public static void leftClickOnBlockServer(
-          @Nonnull ServerPlayer player, LeftClickBlockMessage message) {
+      @Nonnull ServerPlayer player, LeftClickBlockMessage message) {
     BlockPos pos = message.getPos();
     ServerLevel world = ((ServerLevel) player.level());
-    ItemStack itemStack = player.getItemInHand(InteractionHand.MAIN_HAND);
-    if (!itemStack.is(ModItems.multiTool) || world.isEmptyBlock(pos)) {
+    ItemStack multiToolItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+    if (!multiToolItem.is(ModItems.multiTool) || world.isEmptyBlock(pos)) {
       return;
     }
 
     player.startUsingItem(InteractionHand.MAIN_HAND);
 
     if (player.isShiftKeyDown()) {
-      CompoundTag tag = (CompoundTag) itemStack.save(player.registryAccess());
-      if (tag instanceof CompoundTag) {
-        tag = new CompoundTag();
-      }
       BlockState state = world.getBlockState(pos);
       Item item = Item.byBlock(state.getBlock());
-      ItemStack stackToPlace = new ItemStack(() -> item, 1);
-      CompoundTag blockTag = new CompoundTag();
-      stackToPlace.save(player.registryAccess(),blockTag);
-      tag.put("Item", blockTag);
-//      itemStack.setTag(tag);
-      Component component = stackToPlace.getDisplayName();
+      multiToolItem.set(ModItems.SELECTED_ITEM, BuiltInRegistries.ITEM.getKey(item));
       player.displayClientMessage(
-          Component.literal("Bound tool to ").append(component), true);
+          Component.literal("Bound tool to ").append(item.getDescription()), true);
     } else {
-      IEnergyStorage opEnergy = itemStack.getCapability(Capabilities.EnergyStorage.ITEM);
+      IEnergyStorage opEnergy = multiToolItem.getCapability(Capabilities.EnergyStorage.ITEM);
       if (opEnergy == null) {
-        Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + itemStack.getAttributeModifiers());
+        Overloaded.logger.warn(
+            "MultiTool has no Energy Capability? NBT: " + multiToolItem.getAttributeModifiers());
         return;
       }
 
@@ -178,9 +170,12 @@ public class ItemMultiTool extends PowerModItem {
       CommonSideEvents.uuid = player.getUUID();
 
       IEnergyStorage energy = opEnergy;
-      HolderLookup.RegistryLookup<Enchantment> registry = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
-      int efficiency = itemStack.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY));
-      int unbreaking = itemStack.getEnchantmentLevel(registry.getOrThrow(Enchantments.UNBREAKING));
+      HolderLookup.RegistryLookup<Enchantment> registry =
+          world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+      int efficiency =
+          multiToolItem.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY));
+      int unbreaking =
+          multiToolItem.getEnchantmentLevel(registry.getOrThrow(Enchantments.UNBREAKING));
       switch (breakAndUseEnergy(world, pos, energy, player, efficiency, unbreaking)) {
         case FAIL_REMOVE:
           player.displayClientMessage(
@@ -203,46 +198,55 @@ public class ItemMultiTool extends PowerModItem {
     }
   }
 
-//  @Override
-//  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-//    return enchantment != null && enchantment.category == EnchantmentType.DIGGER;
-//  }
-//
-//  @Override
-//  public int getItemEnchantability(ItemStack stack) {
-//    return 15;
-//  }
-//
-//  @Override
-//  public boolean isEnchantable(@Nonnull ItemStack stack) {
-//    return stack.getCount() == 1;
-//  }
+  //  @Override
+  //  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+  //    return enchantment != null && enchantment.category == EnchantmentType.DIGGER;
+  //  }
+  //
+  //  @Override
+  //  public int getItemEnchantability(ItemStack stack) {
+  //    return 15;
+  //  }
+  //
+  //  @Override
+  //  public boolean isEnchantable(@Nonnull ItemStack stack) {
+  //    return stack.getCount() == 1;
+  //  }
 
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-//    ModelResourceLocation location =
-//        new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
-//    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/item/multi_tool.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+    //    ModelResourceLocation location =
+    //        new ModelResourceLocation(new ResourceLocation(MODID, "multi_tool"), null);
+    //    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/item/multi_tool.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+  public void appendHoverText(
+      ItemStack stack,
+      TooltipContext context,
+      List<Component> tooltipComponents,
+      TooltipFlag tooltipFlag) {
     tooltipComponents.add(Component.literal("Assist Mode: " + getAssistMode().getName()));
     super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
   }
 
   @Override
   public boolean mineBlock(
-      ItemStack stack, @Nonnull Level worldIn, @Nonnull BlockState state, @Nonnull BlockPos pos, @Nonnull LivingEntity entityLiving) {
+      ItemStack stack,
+      @Nonnull Level worldIn,
+      @Nonnull BlockState state,
+      @Nonnull BlockPos pos,
+      @Nonnull LivingEntity entityLiving) {
     IEnergyStorage storage = stack.getCapability(Capabilities.EnergyStorage.ITEM, null);
 
     if (storage != null) {
-      HolderLookup.RegistryLookup<Enchantment> registry = worldIn.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+      HolderLookup.RegistryLookup<Enchantment> registry =
+          worldIn.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
       int efficiency = stack.getEnchantmentLevel(registry.getOrThrow(Enchantments.EFFICIENCY));
       int unbreaking = stack.getEnchantmentLevel(registry.getOrThrow(Enchantments.UNBREAKING));
       float breakCost =
@@ -252,8 +256,7 @@ public class ItemMultiTool extends PowerModItem {
               unbreaking,
               entityLiving == null ? 10 : getDistance(entityLiving, pos));
 
-      storage
-          .extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
+      storage.extractEnergy((int) Math.min(Integer.MAX_VALUE, breakCost), false);
     }
 
     return super.mineBlock(stack, worldIn, state, pos, entityLiving);
@@ -276,10 +279,25 @@ public class ItemMultiTool extends PowerModItem {
 
   @Override
   public InteractionResult useOn(UseOnContext context) {
-   if (context.getLevel().isClientSide) {
-     BlockHitResult result =
+    if (context.getLevel().isClientSide) {
+      PacketDistributor.sendToServer(
+          new RightClickBlockMessage(
+              context.getClickedPos(),
+              context.getClickedFace(),
+              (float) context.getClickLocation().x,
+              (float) context.getClickLocation().y,
+              (float) context.getClickLocation().z));
+    }
+    return InteractionResult.SUCCESS;
+  }
+
+  @Override
+  public InteractionResultHolder<ItemStack> use(
+      Level level, Player player, InteractionHand usedHand) {
+    if (level.isClientSide) {
+      BlockHitResult result =
           PlayerInteractionUtil.getBlockPlayerLookingAtClient(
-              context.getPlayer(), Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
+              player, Minecraft.getInstance().getTimer().getGameTimeDeltaTicks());
       if (result.getType() == HitResult.Type.BLOCK) {
         PacketDistributor.sendToServer(
             new RightClickBlockMessage(
@@ -290,7 +308,7 @@ public class ItemMultiTool extends PowerModItem {
                 (float) result.getLocation().z - result.getBlockPos().getZ()));
       }
     }
-   return InteractionResult.SUCCESS;
+    return InteractionResultHolder.success(player.getItemInHand(usedHand));
   }
 
   public static void rightClickWithItem(
@@ -308,14 +326,15 @@ public class ItemMultiTool extends PowerModItem {
       return;
     }
 
-    ItemStack blockStack = getSelectedBlockItemStack(worldIn.registryAccess(), multiTool);
+    Optional<Item> itemOp = getSelectedBlockItem(multiTool);
 
-    if (blockStack.isEmpty()) {
+    if (itemOp.isEmpty()) {
       player.displayClientMessage(Component.literal("No block type selected to place."), true);
       return;
     }
 
-    if (!(blockStack.getItem() instanceof BlockItem)) {
+    Item item = itemOp.get();
+    if (!(item instanceof BlockItem)) {
       player.displayClientMessage(
           Component.literal("No valid block type selected to place."), true);
       return;
@@ -323,15 +342,15 @@ public class ItemMultiTool extends PowerModItem {
 
     IEnergyStorage opEnergy = multiTool.getCapability(Capabilities.EnergyStorage.ITEM);
     if (opEnergy == null) {
-      Overloaded.logger.warn("MultiTool has no Energy Capability? NBT: " + multiTool.save(player.registryAccess()));
+      Overloaded.logger.warn(
+          "MultiTool has no Energy Capability? NBT: " + multiTool.save(player.registryAccess()));
       return;
     }
 
     Vec3i sideVector = sideHit.getNormal();
     BlockPos.MutableBlockPos newPosition = pos.offset(sideVector).mutable();
 
-    switch (placeBlock(
-        blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)) {
+    switch (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)) {
       case FAIL_PREREQUISITE:
         player.displayClientMessage(Component.literal("Do not have the required items"), true);
         return;
@@ -353,48 +372,42 @@ public class ItemMultiTool extends PowerModItem {
         case UP:
           while (newPosition.getY() < playerPos.getY()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
         case DOWN:
           while (newPosition.getY() > playerPos.getY()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
         case NORTH:
           while (newPosition.getZ() > playerPos.getZ()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
         case SOUTH:
           while (newPosition.getZ() < playerPos.getZ()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
         case EAST:
           while (newPosition.getX() < playerPos.getX()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
         case WEST:
           while (newPosition.getX() > playerPos.getX()) {
             newPosition.move(sideHit);
-            if (placeBlock(
-                    blockStack, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
+            if (placeBlock(item, player, worldIn, newPosition, sideHit, opEnergy, hitX, hitY, hitZ)
                 != BlockPlaceResult.SUCCESS) break;
           }
           break;
@@ -404,47 +417,37 @@ public class ItemMultiTool extends PowerModItem {
 
   @Override
   public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) {
-    return !player.isCrouching();
+    return !player.isShiftKeyDown();
   }
 
   @Nonnull
-  public static ItemStack getSelectedBlockItemStack(RegistryAccess registryAccess, ItemStack multiTool) {
-    Tag tag = multiTool.save(registryAccess);
-
-    if (tag == null || !(tag instanceof  CompoundTag tagCompound) || !tagCompound.contains("Item")) {
-      return ItemStack.EMPTY;
-    }
-
-    CompoundTag itemTag = tagCompound.getCompound("Item");
-    return ItemStack.parse(registryAccess,itemTag).orElse(ItemStack.EMPTY);
+  public static Optional<Item> getSelectedBlockItem(ItemStack multiTool) {
+    return BuiltInRegistries.ITEM.getOptional(multiTool.get(ModItems.SELECTED_ITEM));
   }
 
-//  @Override
+  //  @Override
   public boolean canHarvestBlock(ItemStack stack, BlockState state) {
     return true;
   }
 
-//  @Override
-//  @Nonnull
-//  public ITextComponent getName(@Nonnull ItemStack stack) {
-//    ITextComponent text = super.getName(stack);
-//    text.getStyle().applyFormat(TextFormatting.GOLD);
-//    return text;
-//  }
+  //  @Override
+  //  @Nonnull
+  //  public ITextComponent getName(@Nonnull ItemStack stack) {
+  //    ITextComponent text = super.getName(stack);
+  //    text.getStyle().applyFormat(TextFormatting.GOLD);
+  //    return text;
+  //  }
 
-  @EventBusSubscriber(
-      value = Dist.CLIENT,
-      modid = MODID,
-      bus = EventBusSubscriber.Bus.GAME)
+  @EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = EventBusSubscriber.Bus.GAME)
   public static class ClientSideEvents {
     @SubscribeEvent
     public static void leftClickBlock(@Nonnull LeftClickBlock event) {
-      if (event.getEntity().is(Minecraft.getInstance().player)) {
+      if (!event.getEntity().is(Minecraft.getInstance().player)) {
         return;
       }
 
       ItemStack stack = event.getItemStack();
-      if (stack.getItem().equals(ModItems.multiTool)) {
+      if (stack.is(ModItems.multiTool)) {
         leftClickOnBlockClient(event.getPos());
       }
     }
@@ -456,7 +459,7 @@ public class ItemMultiTool extends PowerModItem {
 
       ItemStack stack = event.getItemStack();
 
-      if (stack.getItem().equals(ModItems.multiTool)) {
+      if (stack.is(ModItems.multiTool)) {
         Player entityLiving = event.getEntity();
         BlockHitResult result =
             PlayerInteractionUtil.getBlockPlayerLookingAtClient(
@@ -477,11 +480,11 @@ public class ItemMultiTool extends PowerModItem {
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void teleportDrops(@Nonnull EntityJoinLevelEvent event) {
-      if (!enabled ||
-          event.getLevel().isClientSide() ||
-          !event.getEntity().blockPosition().equals(pos) ||
-          !(event.getEntity() instanceof ItemEntity) ||
-          uuid == null) {
+      if (!enabled
+          || event.getLevel().isClientSide()
+          || !event.getEntity().blockPosition().equals(pos)
+          || !(event.getEntity() instanceof ItemEntity)
+          || uuid == null) {
         return;
       }
 

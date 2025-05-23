@@ -17,6 +17,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -87,6 +88,15 @@ public class ModItems {
                   genericDataBuilder
                       .persistent(GenericDataStorage.CODEC)
                       .networkSynchronized(GenericDataStorage.STREAM_CODEC));
+
+  public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>>
+      SELECTED_ITEM =
+          DATA_COMPONENTS.registerComponentType(
+              "selected_item",
+              builder ->
+                  builder
+                      .persistent(ResourceLocation.CODEC)
+                      .networkSynchronized(ResourceLocation.STREAM_CODEC));
 
   public static void addToSecondaryInit(IModRegistrable item) {
     registerList.add(item);
