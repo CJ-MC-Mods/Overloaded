@@ -13,12 +13,13 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class ItemSettingEditor extends ModItem {
 
-  public ItemSettingEditor() {
-    super(new Properties().stacksTo(1));
+  public ItemSettingEditor(Properties properties) {
+    super(properties.stacksTo(1));
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level worldIn, Player player, InteractionHand hand) {
+  public InteractionResultHolder<ItemStack> use(
+      Level worldIn, Player player, InteractionHand hand) {
     if (worldIn.isClientSide) {
       OverloadedGuiHandler.openMultiArmorGUI();
     }
@@ -29,12 +30,12 @@ public class ItemSettingEditor extends ModItem {
   @OnlyIn(Dist.CLIENT)
   @Override
   public void registerModel() {
-//    ModelResourceLocation location =
-//        new ModelResourceLocation(new ResourceLocation(MODID, "settings_editor"), null);
-//    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/item/settings_editor.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
+    //    ModelResourceLocation location =
+    //        new ModelResourceLocation(new ResourceLocation(MODID, "settings_editor"), null);
+    //    //        ModelLoader.setCustomModelResourceLocation(this, 0, location);
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/item/settings_editor.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.itemResolution);
   }
 }

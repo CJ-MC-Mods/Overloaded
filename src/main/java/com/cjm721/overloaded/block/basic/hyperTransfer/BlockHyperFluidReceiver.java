@@ -19,7 +19,7 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
 
   @Override
   @Nonnull
-  protected String getType() {
+  public String getType() {
     return "Fluid";
   }
 
@@ -31,10 +31,10 @@ public class BlockHyperFluidReceiver extends AbstractBlockHyperReceiver {
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-//    super.registerModel();
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/block/hyper_fluid_receiver.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+    //    super.registerModel();
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/block/hyper_fluid_receiver.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

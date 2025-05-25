@@ -19,7 +19,7 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
 
   @Override
   @Nonnull
-  protected String getType() {
+  public String getType() {
     return "Energy";
   }
 
@@ -31,10 +31,10 @@ public class BlockHyperEnergyReceiver extends AbstractBlockHyperReceiver {
   @Override
   @OnlyIn(Dist.CLIENT)
   public void registerModel() {
-//    super.registerModel();
-//
-//    ImageUtil.registerDynamicTexture(
-//        new ResourceLocation(MODID, "textures/block/hyper_energy_receiver.png"),
-//        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
+    //    super.registerModel();
+    //
+    //    ImageUtil.registerDynamicTexture(
+    //        new ResourceLocation(MODID, "textures/block/hyper_energy_receiver.png"),
+    //        OverloadedConfig.INSTANCE.textureResolutions.blockResolution);
   }
 }

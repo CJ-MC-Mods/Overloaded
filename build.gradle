@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.0.10"
+    }
+}
+
 plugins {
     id 'java-library'
     id 'eclipse'
@@ -6,8 +12,8 @@ plugins {
     id 'net.neoforged.gradle.userdev' version '7.0.170'
 }
 
-idea{
-    module{
+idea {
+    module {
         for (String excludeDirName in ["runs", "out", "ouput", "logs", "gradle"]) {
             File excludeDir = new File(projectDir, excludeDirName)
             excludeDirs.add(excludeDir)

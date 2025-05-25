@@ -1,11 +1,15 @@
 package com.cjm721.overloaded.tile.hyperTransfer.base;
 
+import com.cjm721.overloaded.Overloaded;
+import com.cjm721.overloaded.item.functional.ItemLinkingCard;
 import com.cjm721.overloaded.storage.IHyperHandler;
 import com.cjm721.overloaded.storage.IHyperType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +21,8 @@ import net.neoforged.neoforge.capabilities.BlockCapability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IHyperHandler<T>>
     extends BlockEntity {
@@ -28,9 +34,14 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   private final BlockCapability<H, Direction> capability;
 
-  protected AbstractTileHyperSender(BlockEntityType<?> type, BlockCapability<H, Direction> capability,BlockPos pos, BlockState state) {
-    super(type, pos,state);
+  protected AbstractTileHyperSender(
+      BlockEntityType<?> type,
+      BlockCapability<H, Direction> capability,
+      BlockPos pos,
+      BlockState state) {
+    super(type, pos, state);
     this.capability = capability;
+    this.delayTicks = ThreadLocalRandom.current().nextInt();
   }
 
   @Override
@@ -45,7 +56,6 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     }
   }
 
-
   @Override
   protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
     super.loadAdditional(compound, registries);
@@ -56,29 +66,39 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       int z = compound.getInt("Z");
 
       partnerBlockPos = new BlockPos(x, y, z);
-      partnerWorldID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.tryParse(compound.getString("WORLD")));
+      partnerWorldID =
+          ResourceKey.create(
+              Registries.DIMENSION, ResourceLocation.tryParse(compound.getString("WORLD")));
     }
   }
 
-  /** Like the old updateEntity(), except more generic. */
-  public void tick() {
-    if (getLevel().isClientSide) return;
+  @SuppressWarnings("unchecked") // Should already be checked by base Minecraft Code
+  public static <T extends BlockEntity> void tick(
+      Level level, BlockPos blockPos, BlockState blockState, T t) {
+    if (level.isClientSide) return;
 
-    if (delayTicks % 20 == 0) {
-      if (partnerBlockPos == null) return;
+    if (!(t instanceof AbstractTileHyperSender)) {
+      Overloaded.logger.error(
+          "BlockEntity is not an AbstractTileHyperSender when expected. Pos: " + blockPos);
+      return;
+    }
+    AbstractTileHyperSender blockEntity = (AbstractTileHyperSender) t;
 
-      AbstractTileHyperReceiver<T, H> partner = findPartner();
+    if (blockEntity.delayTicks % 20 == 0) {
+      if (blockEntity.partnerBlockPos == null) return;
+
+      AbstractTileHyperReceiver<?, ?> partner = blockEntity.findPartner();
       if (partner != null) {
-        send(partner);
+        blockEntity.send(partner);
       }
     }
-    delayTicks++;
+    blockEntity.delayTicks++;
   }
 
   @Nullable
   private AbstractTileHyperReceiver<T, H> findPartner() {
     Level world = this.getLevel().getServer().getLevel(partnerWorldID);
-    if (world != null && world.hasChunkAt(partnerBlockPos)) {
+    if (world != null && world.isLoaded(partnerBlockPos)) {
       BlockEntity partnerTE = world.getBlockEntity(partnerBlockPos);
 
       if (partnerTE == null || !isCorrectPartnerType(partnerTE)) {
@@ -99,7 +119,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
         continue;
       }
 
-      H cap = level.getCapability(capability,te.getBlockPos(), side.getOpposite());
+      H cap = partner.getLevel().getCapability(capability, te.getBlockPos(), side.getOpposite());
 
       if (cap == null) {
         continue;
@@ -113,7 +133,7 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       @Nonnull AbstractTileHyperReceiver<T, H> partner,
       @Nonnull BlockEntity te,
       @Nonnull Direction side) {
-    H handler = level.getCapability(capability,te.getBlockPos(), side.getOpposite());
+    H handler = level.getCapability(capability, te.getBlockPos(), side.getOpposite());
     if (handler == null) {
       return;
     }
@@ -123,10 +143,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
       T leftOvers = partner.receive(itemStack);
       if (leftOvers.getAmount() != itemStack.getAmount()) {
         T tookOut =
-            handler
-                .take(
-                    generate(itemStack.getAmount().longValue() - leftOvers.getAmount().longValue()),
-                    true);
+            handler.take(
+                generate(itemStack.getAmount().longValue() - leftOvers.getAmount().longValue()),
+                true);
         if (tookOut.getAmount().longValue()
             != itemStack.getAmount().longValue() - leftOvers.getAmount().longValue()) {
           throw new RuntimeException("IHyperHandler Take was not consistent");
@@ -140,9 +159,9 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
 
   protected abstract boolean isCorrectPartnerType(BlockEntity te);
 
-  public void setPartnerInfo(String registryLocation, BlockPos partnerPos) {
-    this.partnerWorldID = ResourceKey.create(Registries.DIMENSION, ResourceLocation.tryParse(registryLocation));
-    this.partnerBlockPos = partnerPos;
+  public void setPartnerInfo(ItemLinkingCard.DimensionLocation location) {
+    this.partnerWorldID = ResourceKey.create(Registries.DIMENSION, location.level());
+    this.partnerBlockPos = location.pos();
   }
 
   @Nonnull
@@ -150,7 +169,10 @@ public abstract class AbstractTileHyperSender<T extends IHyperType, H extends IH
     if (partnerBlockPos != null) {
       return String.format(
           "Bound to Receiver at %s %d,%d,%d",
-          partnerWorldID.location(), partnerBlockPos.getX(), partnerBlockPos.getY(), partnerBlockPos.getZ());
+          partnerWorldID.location(),
+          partnerBlockPos.getX(),
+          partnerBlockPos.getY(),
+          partnerBlockPos.getZ());
     }
     return "Not bound to anything";
   }

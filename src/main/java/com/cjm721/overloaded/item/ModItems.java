@@ -12,14 +12,19 @@ import com.cjm721.overloaded.item.functional.armor.ItemMultiLeggings;
 import com.cjm721.overloaded.storage.GenericDataStorage;
 import com.cjm721.overloaded.storage.itemwrapper.EnergyStored;
 import com.cjm721.overloaded.util.IModRegistrable;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.util.FriendlyByteBufUtil;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -60,10 +65,10 @@ public class ModItems {
       registerItem("multi_leggings", ItemMultiLeggings::new, Item.Properties::new);
   public static DeferredItem<ItemMultiBoots> customBoots =
       registerItem("multi_boots", ItemMultiBoots::new, Item.Properties::new);
+  public static DeferredItem<ItemSettingEditor> settingsEditor =
+      registerItem("settings_editor", ItemSettingEditor::new, Item.Properties::new);
 
   private static final List<IModRegistrable> registerList = new LinkedList<>();
-
-  private static ItemSettingEditor settingsEditor;
 
   public static final DeferredRegister.DataComponents DATA_COMPONENTS =
       DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, MODID);
@@ -97,6 +102,23 @@ public class ModItems {
                   builder
                       .persistent(ResourceLocation.CODEC)
                       .networkSynchronized(ResourceLocation.STREAM_CODEC));
+
+  public static final DeferredHolder<
+          DataComponentType<?>, DataComponentType<ItemLinkingCard.DimensionLocation>>
+      CROSS_LEVEL_POSITION =
+          DATA_COMPONENTS.registerComponentType(
+              "cross_level_position",
+              builder ->
+                  builder
+                      .persistent(ItemLinkingCard.DimensionLocation.CODEC)
+                      .networkSynchronized(ItemLinkingCard.DimensionLocation.STREAM_CODEC));
+
+  public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>>
+      HYPER_BOUND_TYPE =
+          DATA_COMPONENTS.registerComponentType(
+              "hyper_bound_type",
+              builder ->
+                  builder.persistent(Codec.STRING).networkSynchronized(ByteBufCodecs.STRING_UTF8));
 
   public static void addToSecondaryInit(IModRegistrable item) {
     registerList.add(item);

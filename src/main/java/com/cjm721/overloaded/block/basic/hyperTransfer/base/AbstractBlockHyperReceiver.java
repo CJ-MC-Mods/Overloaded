@@ -4,7 +4,6 @@ import com.cjm721.overloaded.item.ModItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,19 +21,24 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
     super(materialIn);
   }
 
-
   @Override
-  protected ItemInteractionResult useItemOn(ItemStack heldItem, BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult rayTraceResult) {
+  protected ItemInteractionResult useItemOn(
+      ItemStack heldItem,
+      BlockState state,
+      Level world,
+      BlockPos pos,
+      Player player,
+      InteractionHand hand,
+      BlockHitResult rayTraceResult) {
     if (heldItem.getItem().equals(ModItems.linkingCard)) {
-      CompoundTag tag = null;//heldItem.save();
+      CompoundTag tag = null; // heldItem.save();
       if (tag == null) {
         tag = new CompoundTag();
       }
 
-
       ResourceLocation worldId = world.dimension().location();
       writeNodeData(tag, worldId, pos);
-//      heldItem.setTag(tag);
+      //      heldItem.setTag(tag);
 
       if (world.isClientSide) {
         player.displayClientMessage(
@@ -45,11 +49,12 @@ public abstract class AbstractBlockHyperReceiver extends AbstractBlockHyperNode 
 
       return ItemInteractionResult.CONSUME;
     } else {
-      return super.useItemOn(heldItem,state, world, pos, player, hand, rayTraceResult);
+      return super.useItemOn(heldItem, state, world, pos, player, hand, rayTraceResult);
     }
   }
 
-  private void writeNodeData(@Nonnull CompoundTag tag, ResourceLocation worldId, @Nonnull BlockPos pos) {
+  private void writeNodeData(
+      @Nonnull CompoundTag tag, ResourceLocation worldId, @Nonnull BlockPos pos) {
     tag.putInt("X", pos.getX());
     tag.putInt("Y", pos.getY());
     tag.putInt("Z", pos.getZ());

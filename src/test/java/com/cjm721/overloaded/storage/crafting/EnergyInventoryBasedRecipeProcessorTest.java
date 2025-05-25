@@ -24,14 +24,6 @@ public class EnergyInventoryBasedRecipeProcessorTest {
     processor =
         new EnergyInventoryBasedRecipeProcessor(null, 0, MAX_SLOTS, () -> {}) {
           @Override
-          public Tag serializeNBT(HolderLookup.Provider provider) {
-            return null;
-          }
-
-          @Override
-          public void deserializeNBT(HolderLookup.Provider provider, Tag nbt) {}
-
-          @Override
           int energyCostPerRecipeOperation(RecipeHolder<SmeltingRecipe> recipe) {
             return 0;
           }

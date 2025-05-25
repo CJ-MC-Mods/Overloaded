@@ -14,10 +14,9 @@ public abstract class AbstractBlockHyperNode extends ModBlock implements EntityB
   }
 
   @Nonnull
-  protected abstract String getType();
+  public abstract String getType();
 
   @OnlyIn(Dist.CLIENT)
   @Override
-  public void registerModel() {
-  }
+  public void registerModel() {}
 }
