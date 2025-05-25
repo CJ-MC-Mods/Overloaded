@@ -1,3 +1,8 @@
+**Version: 0.0.100 (ALPHA)**
+
+* Updating to 1.21.1. Basically all code touched. Still lots of bugs.
+
+------------------------------------------------------------------
 **Version: 0.0.99 (BETA)**
 
 * Fix Fluid Storage interactions with AE2 (Fixes #118).
@@ -17,14 +22,14 @@
 **Version: 0.0.96 (BETA)**
 
 * Update mappings usage.
-* Change Multi-Armor Max Health to be based on set instead of per item. Seems bug with vanilla MC with not syncing hp 
+* Change Multi-Armor Max Health to be based on set instead of per item. Seems bug with vanilla MC with not syncing hp
   correctly. So instead of tracking armor equip / dequip just making it like flying. In effect fixes #111. Think this
   is realted to Vanilla Bug MC-17876.
 
 ------------------------------------------------------------------
 **Version: 0.0.95 (BETA)**
 
-* Add side base filtering for instant furnace. Top: Insert Only, Bottom: Output Only, Rest: Any (Fixes #109) 
+* Add side base filtering for instant furnace. Top: Insert Only, Bottom: Output Only, Rest: Any (Fixes #109)
 
 ------------------------------------------------------------------
 **Version: 0.0.94 (BETA)**
@@ -182,7 +187,7 @@
 -------------------------------------------------------------------
 **Version: 0.0.70 (BETA)**
 
-* Fixed some GUI bugs with the Instant Furnace 
+* Fixed some GUI bugs with the Instant Furnace
 * Instant Furnace now has recipe
 * ItemInterface now drops its item again on break
 
@@ -264,7 +269,7 @@
 * Initial 1.14 Port
 * Many Features are Missing
 * Textures are Missing
-* Will be reworking storage containers so do not expect them to keep contents between updates 
+* Will be reworking storage containers so do not expect them to keep contents between updates
 
 -------------------------------------------------------------------
 **Version: 0.0.58 (RELEASE)**
@@ -295,9 +300,11 @@
 **Version: 0.0.54 (RELEASE)**
 
 * Update to new Forge and Mapping snapshots.
-* Fix default compressed netherrack looking like Cobblestone. Will have to manually reset config to see change (or apply change yourself).
+* Fix default compressed netherrack looking like Cobblestone. Will have to manually reset config to see change (or apply
+  change yourself).
 * Improve Multi-Armor rendering on Non-player entities
-* Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance decrease. Default to disabled. 
+* Add config entry to make Infinity Container have two slots. This is to help with Vanilla but is a performance
+  decrease. Default to disabled.
 * Update invalid fingerprint message to say report to cjm721
 * Forgot to do sided checks for some Tile Entities (cause weirdness in single player only)
 * Wrote a test (Really wish I could write tests for everything, but Minecraft makes it very annoying)
@@ -314,19 +321,19 @@
 * Multi-Tool now gives better error message when unable to break / place
 * Multi-Tool now also respect's server's range limits
 * Code Cleanup
-  * Dynamic Registration now in single place
-  * Abstracted multi-armor rendering
+    * Dynamic Registration now in single place
+    * Abstracted multi-armor rendering
 * **New config entry for item texture size**. Before item texture size was tied to block resolution
 * Config is now synced from server to client
-* Config rewrite - physical files are the same though   
+* Config rewrite - physical files are the same though
 * Can now upload to Curse from command line (No mod changes)
 * Forge version compiled against bumped up to 2611, should still be compatible with old versions
 
 -------------------------------------------------------------------
 **Version: 0.0.51 (RELEASE)**
 
-* Enable ground speed modifier again. (Why can't flight and walk speed be done the same way... 
-to many one offs for my liking, although I like how ground speed is done now, might make some more features out of it) 
+* Enable ground speed modifier again. (Why can't flight and walk speed be done the same way...
+  to many one offs for my liking, although I like how ground speed is done now, might make some more features out of it)
 
 -------------------------------------------------------------------
 **Version: 0.0.50.1 (RELEASE)**
@@ -344,41 +351,45 @@ Mostly quality of life changes / just getting the code base in a better state.
 * Changelog will now be appended with previous info (pulled changelogs from last two days also)
 * Added One Probe Integration for Item Interface / Player Interface / Hyper * Senders / Infinity Capacitor
 * Linking Card will no longer forget the receiver when binding
-* Nether Star Block is now Ore Dictionaryed to blockNetherStar 
-* Code Cleanup using IDEA's automated tasks 
+* Nether Star Block is now Ore Dictionaryed to blockNetherStar
+* Code Cleanup using IDEA's automated tasks
 * Added charged variants of all powered items to creative menu.
 
 Fixed:
+
 * NPE if you somehow placed a Player Interface without setting the placer
 
 -------------------------------------------------------------------
 **Version: 0.0.49 (RELEASE)**
 
 * Multi-Armor Settings Editor Implemented (+Recipe)
-  * Right Click in GUI to change to more precise input mode for sliders.
+    * Right Click in GUI to change to more precise input mode for sliders.
 * Multi-Armor Changes
-  * Ground speed increase now uses power
-    * Has config options for balancing
-  * Flight has additional config options for balancing.
-  * Max Speed limits are also in config
-  * Most features can now be enabled/disabled via the settings editor.
-  * Settings are saved to the helmet.
-  
+    * Ground speed increase now uses power
+        * Has config options for balancing
+    * Flight has additional config options for balancing.
+    * Max Speed limits are also in config
+    * Most features can now be enabled/disabled via the settings editor.
+    * Settings are saved to the helmet.
+
 Fixed:
+
 * Compressed Block now have blast resistance that corresponds to their hardness.
 
 -------------------------------------------------------------------
 **Version: 0.0.48 (BETA)**
 
-Making build as beta as most likely will also push an update within next 24 hours to move settings GUI out of Dev Mode. All changes should be stable.
+Making build as beta as most likely will also push an update within next 24 hours to move settings GUI out of Dev Mode.
+All changes should be stable.
 
 * Railgun implemented and moved out of dev only mode
-  * Has recipe (that needs balancing)
-    * Many config options for balancing
-    * Sneak Scroll to change by Power Delta
-      * Ctrl + Sneak to change by 100 * Power Delta
+    * Has recipe (that needs balancing)
+        * Many config options for balancing
+        * Sneak Scroll to change by Power Delta
+            * Ctrl + Sneak to change by 100 * Power Delta
 * Cleaned up Generic Data Storage to be more efficient and persist settings (used by armor and railgun)
 * Cleaned up locale file as it had old entires
 
 Dev Mode:
+
 * Working on Settings GUI for the Multi-Armor
