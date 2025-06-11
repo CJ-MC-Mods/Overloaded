@@ -1,10 +1,12 @@
 package com.cjm721.overloaded.storage;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -50,6 +52,17 @@ public class GenericDataStorage implements IGenericDataStorage {
       Map<String, Boolean> booleanMap,
       Map<String, Double> doubleMap,
       Map<String, Float> floatMap) {
+
+    public GenericData(
+        Map<String, Integer> integerMap,
+        Map<String, Boolean> booleanMap,
+        Map<String, Double> doubleMap,
+        Map<String, Float> floatMap) {
+      this.integerMap = new HashMap<>(integerMap);
+      this.booleanMap = new HashMap<>(booleanMap);
+      this.doubleMap = new HashMap<>(doubleMap);
+      this.floatMap = new HashMap<>(floatMap);
+    }
 
     public GenericData() {
       this(new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());

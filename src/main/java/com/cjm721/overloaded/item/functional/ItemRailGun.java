@@ -233,6 +233,7 @@ public class ItemRailGun extends PowerModItem {
 
     player.displayClientMessage(
         Component.literal("Power usage set to: " + NumberFormat.getInstance().format(power)), true);
+    player.getInventory().setChanged();
   }
 
   //  @EventBusSubscriber(value = Dist.CLIENT, modid = MODID, bus = EventBusSubscriber.Bus.GAME)
